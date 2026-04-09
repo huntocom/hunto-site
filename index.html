@@ -1801,18 +1801,24 @@ function pdView(v){
 // STUDIO
 // ════════════════════════════════
 function initStudio(){
+  // Always set thumbnails
+  document.getElementById("sth-f-img").src=IMG_F;
+  document.getElementById("sth-b-img").src=IMG_B;
   if(!studioInited){
-    document.getElementById("s-shirt").src=IMG_F;
-    document.getElementById("sth-f-img").src=IMG_F;
-    document.getElementById("sth-b-img").src=IMG_B;
     studioInited=true;
   }
   sPanel("products",document.getElementById("sib-products"));
   initKeyField();
+  // Reset designs
+  sDesigns.front=null; sDesigns.back=null;
   buildSGarments();
   buildSColors();
   buildSSizes();
-  sApplyTint();
+  // Load initial shirt photo
+  const initPhoto = getShirtPhotoUrl(sState.product.id, sState.color.n, "front");
+  const shirtEl = document.getElementById("s-shirt");
+  shirtEl.src = initPhoto;
+  shirtEl.onerror = ()=>{ shirtEl.src=IMG_F; };
   sUpdateAll();
 }
 
@@ -1882,24 +1888,29 @@ function sApplyTint(){
   if(!shirtImg) return;
 
   const photoUrl = getShirtPhotoUrl(sState.product.id, c.n, sView);
-
-  shirtImg.style.opacity = "0.3";
-  shirtImg.style.mixBlendMode = "normal";
-  shirtImg.style.filter = "none";
-
   const bg = document.getElementById("s-shirt-color-bg");
-  if(bg) bg.style.background = "transparent";
 
-  // Load real colored shirt photo
-  shirtImg.src = photoUrl;
-  shirtImg.onload = () => { shirtImg.style.opacity = "1"; };
-  shirtImg.onerror = () => {
-    // Fallback: white shirt + color multiply
-    shirtImg.src = sView === "back" ? IMG_B : IMG_F;
+  if(photoUrl === IMG_F || photoUrl === IMG_B){
+    // No real photo — use multiply blend fallback
+    shirtImg.src = photoUrl;
     shirtImg.style.opacity = "1";
-    if(bg) bg.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
     shirtImg.style.mixBlendMode = (c.h==="#ffffff"||c.h==="#fff") ? "normal" : "multiply";
-  };
+    if(bg) bg.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
+  } else {
+    // Load real colored shirt photo
+    shirtImg.style.opacity = "0.3";
+    shirtImg.style.mixBlendMode = "normal";
+    shirtImg.style.filter = "none";
+    if(bg) bg.style.background = "transparent";
+    shirtImg.src = photoUrl;
+    shirtImg.onload = ()=>{ shirtImg.style.opacity="1"; };
+    shirtImg.onerror = ()=>{
+      shirtImg.src = sView==="back" ? IMG_B : IMG_F;
+      shirtImg.style.opacity = "1";
+      shirtImg.style.mixBlendMode = (c.h==="#ffffff"||c.h==="#fff") ? "normal" : "multiply";
+      if(bg) bg.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
+    };
+  }
 
   // Update design blend mode for dark shirts
   ["front","back"].forEach(side=>{
