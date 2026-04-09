@@ -625,17 +625,8 @@ footer{background:#111;padding:56px 32px 28px}
   filter:drop-shadow(0 12px 36px rgba(0,0,0,.12));
   transition:opacity .2s;display:block;
 }
-.s-shirt-tint{
-  position:absolute;inset:0;
-  mix-blend-mode:multiply;
-  pointer-events:none;
-  transition:background .25s;
-  /* Clip to shirt image bounds only */
-  border-radius:0;
-}
 .s-shirt-stage{
   position:relative;z-index:1;
-  isolation:isolate;
   display:inline-block;
 }
 .s-dzone{
@@ -1453,8 +1444,7 @@ footer{background:#111;padding:56px 32px 28px}
     <div class="s-canvas">
       <div class="s-ntf" id="s-ntf"></div>
       <div class="s-shirt-stage">
-        <img class="s-shirt-img" id="s-shirt" src="" alt="Garment">
-        <div class="s-shirt-tint" id="s-tint"></div>
+        <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="position:relative;z-index:1">
         <div class="float-pills" id="s-floats">
           <button class="float-pill" onclick="sPanel('text',document.getElementById('sib-text'))">
             <span class="float-pill-icon">T</span> Add Text
@@ -1879,18 +1869,44 @@ function sPickSz(s){
 }
 
 function sApplyTint(){
-  const t=document.getElementById("s-tint");
-  const c=sState.color;
-  // Only tint if not white — multiply blend makes color appear on shirt
-  if(t) t.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
+  const c = sState.color;
+  const img = document.getElementById("s-shirt");
+  if(!img) return;
+
+  if(c.h === "#ffffff" || c.h === "#fff"){
+    // White — no tint needed, show natural shirt
+    img.style.filter = "none";
+  } else {
+    // Convert hex color to hue rotation + other filters
+    // Parse the hex color
+    const r = parseInt(c.h.slice(1,3),16)/255;
+    const g = parseInt(c.h.slice(3,5),16)/255;
+    const b = parseInt(c.h.slice(5,7),16)/255;
+    const max = Math.max(r,g,b), min = Math.min(r,g,b);
+    let h=0, s=0, l=(max+min)/2;
+    if(max !== min){
+      const d = max-min;
+      s = l>0.5 ? d/(2-max-min) : d/(max+min);
+      switch(max){
+        case r: h=((g-b)/d+(g<b?6:0))/6; break;
+        case g: h=((b-r)/d+2)/6; break;
+        case b: h=((r-g)/d+4)/6; break;
+      }
+    }
+    const hue = Math.round(h*360);
+    const sat = Math.round(s*100);
+    const bright = Math.round(l*100);
+    
+    // Apply filter to shirt image only
+    img.style.filter = `sepia(1) saturate(${sat*3}%) hue-rotate(${hue-30}deg) brightness(${bright<30?0.4:bright<50?0.7:1})`;
+  }
+
   // Update design blend mode for dark shirts
   ["front","back"].forEach(side=>{
     const dz=document.getElementById("s-dzone-"+side);
     if(dz){
-      const img=dz.querySelector("img");
-      if(img){
-        img.style.mixBlendMode = isDark(c.h) ? "screen" : "multiply";
-      }
+      const dimg=dz.querySelector("img");
+      if(dimg) dimg.style.mixBlendMode = isDark(c.h) ? "screen" : "multiply";
     }
   });
 }
