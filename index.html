@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v2.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1624,6 +1625,8 @@ const PLACEMENTS = {
 // ════════════════════════════════
 const pdpState = {product:PRODUCTS[0],color:PRODUCTS[0].colors[0],view:"front"};
 const sState   = {product:PRODUCTS[0],color:PRODUCTS[0].colors[0],sz:"M",place:"fc",view:"front",keith:false,hasDesign:false};
+let sView = "front";
+const sDesigns = {front:null, back:null};
 let activePanelId = "products";
 let studioInited = false;
 
@@ -1856,19 +1859,27 @@ function sPickProduct(id){
 }
 
 function buildSColors(){
+  try{
   const wrap=document.getElementById("s-color-dots");
-  if(!wrap)return;
-  wrap.innerHTML=sState.product.colors.map(c=>`
+  if(!wrap){console.error("s-color-dots not found");return;}
+  if(!sState.product){console.error("sState.product undefined");return;}
+  if(!sState.product.colors){console.error("no colors");return;}
+  wrap.innerHTML=sState.product.colors.map((c,i)=>`
     <div class="s-cdot${c.n===sState.color.n?" on":""}"
       style="background:${c.h};${c.l?"outline:1.5px solid #ddd":""}"
       title="${c.n}"
-      onclick="sPickColor('${c.n}')"></div>`).join("");
+      onclick="sPickColorIdx(${i})"></div>`).join("");
   const nm=document.getElementById("s-color-current");
   if(nm)nm.textContent=sState.color.n;
+  }catch(e){console.error("buildSColors error:",e);}
 }
 
 function sPickColor(name){
-  sState.color=sState.product.colors.find(c=>c.n===name);
+  sState.color=sState.product.colors.find(c=>c.n===name)||sState.color;
+  buildSColors();sApplyTint();sUpdateAll();
+}
+function sPickColorIdx(idx){
+  sState.color=sState.product.colors[idx]||sState.color;
   buildSColors();sApplyTint();sUpdateAll();
 }
 
@@ -2798,6 +2809,7 @@ function removeBackground(imageUrl, callback){
 // REAL SHIRT PHOTOS - GitHub CDN
 // ════════════════════════════════
 const SHIRT_PHOTOS_8000 = {
+    "White": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17927_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17927_b_fl.jpg"},
     "Ash": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17902_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17902_b_fl.jpg"},
     "Azalea": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17903_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17903_b_fl.jpg"},
     "Black": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17904_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17904_b_fl.jpg"},
@@ -2842,6 +2854,7 @@ const SHIRT_PHOTOS_8000 = {
 
 function getShirtPhotoUrl(productId, colorName, view){
   if(productId === "8000"){
+    if(colorName === "White") return view === "back" ? IMG_B : IMG_F;
     const entry = SHIRT_PHOTOS_8000[colorName];
     if(entry) return view === "back" ? entry.b : entry.f;
   }
