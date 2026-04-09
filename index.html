@@ -1450,8 +1450,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div class="s-ntf" id="s-ntf"></div>
       <div class="s-shirt-stage">
         <div id="s-shirt-wrap" style="position:relative;display:inline-block;">
-          <img class="s-shirt-img" id="s-shirt" src="" alt="Garment">
-          <div id="s-tint" style="position:absolute;inset:0;mix-blend-mode:multiply;pointer-events:none;transition:background .3s;border-radius:0;"></div>
+          <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="transition:filter .3s">
         </div>
         <div class="float-pills" id="s-floats">
           <button class="float-pill" onclick="sPanel('text',document.getElementById('sib-text'))">
@@ -1878,13 +1877,36 @@ function sPickSz(s){
 
 function sApplyTint(){
   const c = sState.color;
-  const tint = document.getElementById("s-tint");
-  if(tint){
-    // Apply color ONLY inside the shirt-wrap div
-    // multiply blend makes white shirt areas take on the color
-    tint.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
+  const shirtImg = document.getElementById("s-shirt");
+  if(!shirtImg) return;
+
+  if(c.h === "#ffffff" || c.h === "#fff"){
+    shirtImg.style.filter = "none";
+  } else {
+    // Convert hex to HSL for CSS filter
+    const hex = c.h.replace("#","");
+    const r = parseInt(hex.slice(0,2),16)/255;
+    const g = parseInt(hex.slice(2,4),16)/255;  
+    const b = parseInt(hex.slice(4,6),16)/255;
+    const max=Math.max(r,g,b), min=Math.min(r,g,b);
+    let h=0,s=0,l=(max+min)/2;
+    if(max!==min){
+      const d=max-min;
+      s=l>0.5?d/(2-max-min):d/(max+min);
+      if(max===r) h=((g-b)/d+(g<b?6:0))/6;
+      else if(max===g) h=((b-r)/d+2)/6;
+      else h=((r-g)/d+4)/6;
+    }
+    const hDeg = Math.round(h*360);
+    const sPct = Math.round(s*100);
+    const lPct = Math.round(l*100);
+    // sepia converts to brown, then hue-rotate shifts to target color
+    // saturate boosts the color, brightness adjusts for dark colors
+    const bri = lPct < 20 ? 0.3 : lPct < 35 ? 0.55 : lPct < 50 ? 0.75 : 1.0;
+    shirtImg.style.filter = `sepia(1) hue-rotate(${hDeg-25}deg) saturate(${Math.max(sPct*4,200)}%) brightness(${bri})`;
   }
-  // Update design blend mode for dark vs light shirts
+
+  // Update design blend mode
   ["front","back"].forEach(side=>{
     const dz=document.getElementById("s-dzone-"+side);
     if(dz){
