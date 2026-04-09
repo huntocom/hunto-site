@@ -1878,22 +1878,29 @@ function sPickSz(s){
 
 function sApplyTint(){
   const c = sState.color;
-  const bg = document.getElementById("s-shirt-color-bg");
   const shirtImg = document.getElementById("s-shirt");
-  if(!bg || !shirtImg) return;
+  if(!shirtImg) return;
 
-  if(c.h === "#ffffff" || c.h === "#fff"){
-    // White shirt — no background color needed
-    bg.style.background = "#ffffff";
+  // Try to load real photo for this color
+  const photoUrl = getShirtPhotoUrl(sState.product.id, c.n, sView);
+  
+  // Load real photo — fallback to white + color bg if it fails
+  const testImg = new Image();
+  testImg.onload = () => {
+    shirtImg.src = photoUrl;
     shirtImg.style.mixBlendMode = "normal";
-  } else {
-    // Set background to shirt color
-    // Shirt photo (white) sits on top with multiply blend
-    // White pixels become transparent → shows color below
-    // Dark pixels stay dark → creates realistic shirt texture
-    bg.style.background = c.h;
-    shirtImg.style.mixBlendMode = "multiply";
-  }
+    shirtImg.style.filter = "none";
+    const bg = document.getElementById("s-shirt-color-bg");
+    if(bg) bg.style.background = "transparent";
+  };
+  testImg.onerror = () => {
+    // Real photo failed — use color background + multiply blend
+    shirtImg.src = sView === "back" ? IMG_B : IMG_F;
+    const bg = document.getElementById("s-shirt-color-bg");
+    if(bg) bg.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
+    shirtImg.style.mixBlendMode = (c.h==="#ffffff"||c.h==="#fff") ? "normal" : "multiply";
+  };
+  testImg.src = photoUrl;
 
   // Update design blend mode
   ["front","back"].forEach(side=>{
@@ -1931,8 +1938,10 @@ function sSetView(v){
 
   const img=document.getElementById("s-shirt");
   img.style.opacity=".15";
-  img.src=v==="back"?IMG_B:IMG_F;
+  const photoUrl = getShirtPhotoUrl(sState.product.id, sState.color.n, v);
+  img.src = photoUrl;
   img.onload=()=>{img.style.opacity="1"};
+  img.onerror=()=>{ img.src = v==="back"?IMG_B:IMG_F; img.style.opacity="1"; };
   sUpdateAll();
 }
 
@@ -2771,6 +2780,49 @@ function removeBackground(imageUrl, callback){
   };
 
   img.src = imageUrl;
+}
+
+
+// ════════════════════════════════
+// REAL SHIRT PHOTOS PER COLOR
+// ════════════════════════════════
+const SHIRT_PHOTOS = {
+  "8000": {
+    "White":       "https://www.ssactivewear.com/images/color/17927_f.jpg",
+    "Black":       "https://www.ssactivewear.com/images/color/17904_f.jpg",
+    "Ash":         "https://www.ssactivewear.com/images/color/17902_f.jpg",
+    "Azalea":      "https://www.ssactivewear.com/images/color/17903_f.jpg",
+    "Carolina Blue":"https://www.ssactivewear.com/images/color/17905_f.jpg",
+    "Daisy":       "https://www.ssactivewear.com/images/color/17906_f.jpg",
+    "Dark Heather":"https://www.ssactivewear.com/images/color/17908_f.jpg",
+    "Forest Green":"https://www.ssactivewear.com/images/color/17913_f.jpg",
+    "Gold":        "https://www.ssactivewear.com/images/color/17914_f.jpg",
+    "Heliconia":   "https://www.ssactivewear.com/images/color/17916_f.jpg",
+    "Irish Green": "https://www.ssactivewear.com/images/color/17917_f.jpg",
+    "Kelly":       "https://www.ssactivewear.com/images/color/17919_f.jpg",
+    "Light Blue":  "https://www.ssactivewear.com/images/color/17920_f.jpg",
+    "Light Pink":  "https://www.ssactivewear.com/images/color/17921_f.jpg",
+    "Maroon":      "https://www.ssactivewear.com/images/color/17923_f.jpg",
+    "Navy":        "https://www.ssactivewear.com/images/color/17924_f.jpg",
+    "Orange":      "https://www.ssactivewear.com/images/color/17925_f.jpg",
+    "Purple":      "https://www.ssactivewear.com/images/color/17926_f.jpg",
+    "Red":         "https://www.ssactivewear.com/images/color/32135_f.jpg",
+    "Royal":       "https://www.ssactivewear.com/images/color/32136_f.jpg",
+    "Safety Green":"https://www.ssactivewear.com/images/color/32137_f.jpg",
+    "Sand":        "https://www.ssactivewear.com/images/color/32139_f.jpg",
+    "Sapphire":    "https://www.ssactivewear.com/images/color/32140_f.jpg",
+    "Sport Grey":  "https://www.ssactivewear.com/images/color/17924_f.jpg"
+  }
+};
+
+// Get real shirt photo URL for current product + color
+function getShirtPhotoUrl(productId, colorName, view){
+  const photos = SHIRT_PHOTOS[productId];
+  if(photos && photos[colorName]){
+    // Swap _f to _b for back view
+    return view === "back" ? photos[colorName].replace("_f.jpg","_b.jpg") : photos[colorName];
+  }
+  return view === "back" ? IMG_B : IMG_F; // fallback to our uploaded photos
 }
 
 // ════════════════════════════════
