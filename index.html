@@ -1864,11 +1864,13 @@ function buildSColors(){
   if(!wrap){console.error("s-color-dots not found");return;}
   if(!sState.product){console.error("sState.product undefined");return;}
   if(!sState.product.colors){console.error("no colors");return;}
-  wrap.innerHTML=sState.product.colors.map((c,i)=>`
-    <div class="s-cdot${c.n===sState.color.n?" on":""}"
+  wrap.innerHTML=sState.product.colors.map(c=>{
+    const nm = c.n.replace(/'/g, "\'");
+    return `<div class="s-cdot${c.n===sState.color.n?" on":""}"
       style="background:${c.h};${c.l?"outline:1.5px solid #ddd":""}"
       title="${c.n}"
-      onclick="sPickColorIdx(${i})"></div>`).join("");
+      onclick="sPickColor('${nm}')"></div>`;
+  }).join("");
   const nm=document.getElementById("s-color-current");
   if(nm)nm.textContent=sState.color.n;
   }catch(e){console.error("buildSColors error:",e);}
