@@ -1881,28 +1881,27 @@ function sApplyTint(){
   const shirtImg = document.getElementById("s-shirt");
   if(!shirtImg) return;
 
-  // Try to load real photo for this color
   const photoUrl = getShirtPhotoUrl(sState.product.id, c.n, sView);
-  
-  // Load real photo — fallback to white + color bg if it fails
-  const testImg = new Image();
-  testImg.onload = () => {
-    shirtImg.src = photoUrl;
-    shirtImg.style.mixBlendMode = "normal";
-    shirtImg.style.filter = "none";
-    const bg = document.getElementById("s-shirt-color-bg");
-    if(bg) bg.style.background = "transparent";
-  };
-  testImg.onerror = () => {
-    // Real photo failed — use color background + multiply blend
+
+  shirtImg.style.opacity = "0.3";
+  shirtImg.style.mixBlendMode = "normal";
+  shirtImg.style.filter = "none";
+
+  const bg = document.getElementById("s-shirt-color-bg");
+  if(bg) bg.style.background = "transparent";
+
+  // Load real colored shirt photo
+  shirtImg.src = photoUrl;
+  shirtImg.onload = () => { shirtImg.style.opacity = "1"; };
+  shirtImg.onerror = () => {
+    // Fallback: white shirt + color multiply
     shirtImg.src = sView === "back" ? IMG_B : IMG_F;
-    const bg = document.getElementById("s-shirt-color-bg");
+    shirtImg.style.opacity = "1";
     if(bg) bg.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
     shirtImg.style.mixBlendMode = (c.h==="#ffffff"||c.h==="#fff") ? "normal" : "multiply";
   };
-  testImg.src = photoUrl;
 
-  // Update design blend mode
+  // Update design blend mode for dark shirts
   ["front","back"].forEach(side=>{
     const dz=document.getElementById("s-dzone-"+side);
     if(dz){
@@ -1940,8 +1939,8 @@ function sSetView(v){
   img.style.opacity=".15";
   const photoUrl = getShirtPhotoUrl(sState.product.id, sState.color.n, v);
   img.src = photoUrl;
-  img.onload=()=>{img.style.opacity="1"};
-  img.onerror=()=>{ img.src = v==="back"?IMG_B:IMG_F; img.style.opacity="1"; };
+  img.onload=()=>{img.style.opacity="1";};
+  img.onerror=()=>{img.src=v==="back"?IMG_B:IMG_F;img.style.opacity="1";};
   sUpdateAll();
 }
 
@@ -2783,46 +2782,59 @@ function removeBackground(imageUrl, callback){
 }
 
 
+
 // ════════════════════════════════
-// REAL SHIRT PHOTOS PER COLOR
+// REAL SHIRT PHOTOS - GitHub CDN
 // ════════════════════════════════
-const SHIRT_PHOTOS = {
-  "8000": {
-    "White":       "https://www.ssactivewear.com/images/color/17927_f.jpg",
-    "Black":       "https://www.ssactivewear.com/images/color/17904_f.jpg",
-    "Ash":         "https://www.ssactivewear.com/images/color/17902_f.jpg",
-    "Azalea":      "https://www.ssactivewear.com/images/color/17903_f.jpg",
-    "Carolina Blue":"https://www.ssactivewear.com/images/color/17905_f.jpg",
-    "Daisy":       "https://www.ssactivewear.com/images/color/17906_f.jpg",
-    "Dark Heather":"https://www.ssactivewear.com/images/color/17908_f.jpg",
-    "Forest Green":"https://www.ssactivewear.com/images/color/17913_f.jpg",
-    "Gold":        "https://www.ssactivewear.com/images/color/17914_f.jpg",
-    "Heliconia":   "https://www.ssactivewear.com/images/color/17916_f.jpg",
-    "Irish Green": "https://www.ssactivewear.com/images/color/17917_f.jpg",
-    "Kelly":       "https://www.ssactivewear.com/images/color/17919_f.jpg",
-    "Light Blue":  "https://www.ssactivewear.com/images/color/17920_f.jpg",
-    "Light Pink":  "https://www.ssactivewear.com/images/color/17921_f.jpg",
-    "Maroon":      "https://www.ssactivewear.com/images/color/17923_f.jpg",
-    "Navy":        "https://www.ssactivewear.com/images/color/17924_f.jpg",
-    "Orange":      "https://www.ssactivewear.com/images/color/17925_f.jpg",
-    "Purple":      "https://www.ssactivewear.com/images/color/17926_f.jpg",
-    "Red":         "https://www.ssactivewear.com/images/color/32135_f.jpg",
-    "Royal":       "https://www.ssactivewear.com/images/color/32136_f.jpg",
-    "Safety Green":"https://www.ssactivewear.com/images/color/32137_f.jpg",
-    "Sand":        "https://www.ssactivewear.com/images/color/32139_f.jpg",
-    "Sapphire":    "https://www.ssactivewear.com/images/color/32140_f.jpg",
-    "Sport Grey":  "https://www.ssactivewear.com/images/color/17924_f.jpg"
-  }
+const SHIRT_PHOTOS_8000 = {
+    "Ash": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17902_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17902_b_fl.jpg"},
+    "Azalea": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17903_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17903_b_fl.jpg"},
+    "Black": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17904_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17904_b_fl.jpg"},
+    "Carolina Blue": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17905_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17905_b_fl.jpg"},
+    "Daisy": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17906_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17906_b_fl.jpg"},
+    "Dark Heather": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17908_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17908_b_fl.jpg"},
+    "Dark Maroon": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17909_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17909_b_fl.jpg"},
+    "Heliconia": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17910_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17910_b_fl.jpg"},
+    "Electric Green": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17912_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17912_b_fl.jpg"},
+    "Forest Green": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17913_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17913_b_fl.jpg"},
+    "Gold": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17914_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17914_b_fl.jpg"},
+    "Graphite Heather": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17915_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17915_b_fl.jpg"},
+    "Irish Green": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17917_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17917_b_fl.jpg"},
+    "Jade Dome": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17918_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17918_b_fl.jpg"},
+    "Kelly": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17919_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17919_b_fl.jpg"},
+    "Light Blue": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17920_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17920_b_fl.jpg"},
+    "Light Pink": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17921_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17921_b_fl.jpg"},
+    "Lime": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17922_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17922_b_fl.jpg"},
+    "Maroon": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17923_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17923_b_fl.jpg"},
+    "Navy": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17924_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17924_b_fl.jpg"},
+    "Orange": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17926_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/17926_b_fl.jpg"},
+    "Gravel": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/27413_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/27413_b_fl.jpg"},
+    "Dark Navy": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/27414_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/27414_b_fl.jpg"},
+    "Deep Royal": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/27415_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/27415_b_fl.jpg"},
+    "Safety Orange": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/29849_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/29849_b_fl.jpg"},
+    "Red": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/32135_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/32135_b_fl.jpg"},
+    "Safety Green": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/32137_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/32137_b_fl.jpg"},
+    "Tennessee Orange": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/37322_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/37322_b_fl.jpg"},
+    "Sport Grey": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/46133_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/46133_b_fl.jpg"},
+    "Texas Orange": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66703_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66703_b_fl.jpg"},
+    "Scarlet Red": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66704_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66704_b_fl.jpg"},
+    "Dark Green": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66707_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66707_b_fl.jpg"},
+    "Dark Chocolate": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66709_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66709_b_fl.jpg"},
+    "Orchid": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66711_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66711_b_fl.jpg"},
+    "Sapphire": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66716_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66716_b_fl.jpg"},
+    "Sand": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66717_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66717_b_fl.jpg"},
+    "Heather Dark Navy": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66719_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66719_b_fl.jpg"},
+    "Heather Deep Royal": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66721_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66721_b_fl.jpg"},
+    "Heather Scarlet": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66724_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66724_b_fl.jpg"},
+    "Royal": {f:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66725_f_fl.jpg", b:"https://raw.githubusercontent.com/huntocom/hunto-site/main/66725_b_fl.jpg"}
 };
 
-// Get real shirt photo URL for current product + color
 function getShirtPhotoUrl(productId, colorName, view){
-  const photos = SHIRT_PHOTOS[productId];
-  if(photos && photos[colorName]){
-    // Swap _f to _b for back view
-    return view === "back" ? photos[colorName].replace("_f.jpg","_b.jpg") : photos[colorName];
+  if(productId === "8000"){
+    const entry = SHIRT_PHOTOS_8000[colorName];
+    if(entry) return view === "back" ? entry.b : entry.f;
   }
-  return view === "back" ? IMG_B : IMG_F; // fallback to our uploaded photos
+  return view === "back" ? IMG_B : IMG_F;
 }
 
 // ════════════════════════════════
