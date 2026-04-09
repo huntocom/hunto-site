@@ -1449,8 +1449,9 @@ footer{background:#111;padding:56px 32px 28px}
     <div class="s-canvas">
       <div class="s-ntf" id="s-ntf"></div>
       <div class="s-shirt-stage">
-        <div id="s-shirt-wrap" style="position:relative;display:inline-block;">
-          <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="transition:filter .3s">
+        <div id="s-shirt-wrap" style="position:relative;display:inline-block;background:#fff;border-radius:8px;">
+          <div id="s-shirt-color-bg" style="position:absolute;inset:0;border-radius:8px;transition:background .3s;z-index:0;"></div>
+          <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="position:relative;z-index:1;mix-blend-mode:multiply;filter:none;">
         </div>
         <div class="float-pills" id="s-floats">
           <button class="float-pill" onclick="sPanel('text',document.getElementById('sib-text'))">
@@ -1877,33 +1878,21 @@ function sPickSz(s){
 
 function sApplyTint(){
   const c = sState.color;
+  const bg = document.getElementById("s-shirt-color-bg");
   const shirtImg = document.getElementById("s-shirt");
-  if(!shirtImg) return;
+  if(!bg || !shirtImg) return;
 
   if(c.h === "#ffffff" || c.h === "#fff"){
-    shirtImg.style.filter = "none";
+    // White shirt — no background color needed
+    bg.style.background = "#ffffff";
+    shirtImg.style.mixBlendMode = "normal";
   } else {
-    // Convert hex to HSL for CSS filter
-    const hex = c.h.replace("#","");
-    const r = parseInt(hex.slice(0,2),16)/255;
-    const g = parseInt(hex.slice(2,4),16)/255;  
-    const b = parseInt(hex.slice(4,6),16)/255;
-    const max=Math.max(r,g,b), min=Math.min(r,g,b);
-    let h=0,s=0,l=(max+min)/2;
-    if(max!==min){
-      const d=max-min;
-      s=l>0.5?d/(2-max-min):d/(max+min);
-      if(max===r) h=((g-b)/d+(g<b?6:0))/6;
-      else if(max===g) h=((b-r)/d+2)/6;
-      else h=((r-g)/d+4)/6;
-    }
-    const hDeg = Math.round(h*360);
-    const sPct = Math.round(s*100);
-    const lPct = Math.round(l*100);
-    // sepia converts to brown, then hue-rotate shifts to target color
-    // saturate boosts the color, brightness adjusts for dark colors
-    const bri = lPct < 20 ? 0.3 : lPct < 35 ? 0.55 : lPct < 50 ? 0.75 : 1.0;
-    shirtImg.style.filter = `sepia(1) hue-rotate(${hDeg-25}deg) saturate(${Math.max(sPct*4,200)}%) brightness(${bri})`;
+    // Set background to shirt color
+    // Shirt photo (white) sits on top with multiply blend
+    // White pixels become transparent → shows color below
+    // Dark pixels stay dark → creates realistic shirt texture
+    bg.style.background = c.h;
+    shirtImg.style.mixBlendMode = "multiply";
   }
 
   // Update design blend mode
