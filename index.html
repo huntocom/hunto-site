@@ -1626,7 +1626,8 @@ const PLACEMENTS = {
 const pdpState = {product:PRODUCTS[0],color:PRODUCTS[0].colors[0],view:"front"};
 const sState   = {product:PRODUCTS[0],color:PRODUCTS[0].colors[0],sz:"M",place:"fc",view:"front",keith:false,hasDesign:false};
 let sView = "front";
-const sDesigns = {front:null, back:null};
+const sLayers = {front:[], back:[]};
+let layerCounter = 0;
 let activePanelId = "products";
 let studioInited = false;
 
@@ -1949,18 +1950,17 @@ function sSetView(v){
   if(vb)vb.classList.toggle("on",v==="back");
 
   // Show correct design zone
-  const dzf = document.getElementById("s-dzone-front");
-  const dzb = document.getElementById("s-dzone-back");
   const paf = document.getElementById("print-area-front");
   const pab = document.getElementById("print-area-back");
-  if(dzf) dzf.style.display = sDesigns.front ? (v==="front" ? "block" : "none") : "none";
-  if(dzb) dzb.style.display = sDesigns.back  ? (v==="back"  ? "block" : "none") : "none";
   if(paf) paf.style.display = v==="front" ? "" : "none";
   if(pab) pab.style.display = v==="back"  ? "" : "none";
-
-  // Show/hide float pills based on whether current side has a design
+  // Show/hide image layers per side
+  document.querySelectorAll("[data-type='image']").forEach(el => {
+    el.style.display = el.dataset.side === v ? "block" : "none";
+  });
+  // Show/hide float pills
   const fp = document.getElementById("s-floats");
-  if(fp) fp.classList.toggle("hidden", !!sDesigns[v]);
+  if(fp) fp.classList.toggle("hidden", (sLayers[v]||[]).length > 0);
 
   const img=document.getElementById("s-shirt");
   img.style.opacity=".15";
@@ -2439,322 +2439,205 @@ function handleUpload(e){
 }
 
 function applyDesign(src){
-  // Save design to current view (front or back)
   const side = sView === "back" ? "back" : "front";
-  sDesigns[side] = src;
-  renderDesignZone(side);
+  const id = "layer-" + (++layerCounter);
+  sLayers[side].push({id, src, type:"image"});
+  addImageLayer(side, id, src);
   sState.hasDesign = true;
-  const fp=document.getElementById("s-floats");
-  if(fp)fp.classList.add("hidden");
+  const fp = document.getElementById("s-floats");
+  if(fp) fp.classList.add("hidden");
 }
 
-function renderDesignZone(side){
-  const dz = document.getElementById("s-dzone-" + side);
-  const pa = document.getElementById("print-area-" + side);
-  if(!dz || !sDesigns[side]) return;
-
-  // Place design centered in print area initially
-  const paLeft = 50; // percent based, will be calculated
+function addImageLayer(side, id, src){
   const wrap = document.getElementById("s-shirt-wrap");
-  const wrapW = wrap ? wrap.offsetWidth : 680;
-  const designW = 260;
-  const designH = 260;
+  if(!wrap) return;
+  const wrapW = wrap.offsetWidth;
+  const layerW = 220, layerH = 220;
   const printAreaTop = 185;
   const printAreaLeft = (wrapW - 280) / 2;
-  const initLeft = printAreaLeft + (280 - designW) / 2;
-  const initTop = printAreaTop + (320 - designH) / 2;
-
-  dz.style.width = designW + "px";
-  dz.style.height = designH + "px";
-  dz.style.left = initLeft + "px";
-  dz.style.top = initTop + "px";
-  dz.style.display = "block";
-
-  dz.innerHTML=`
-    <img src="${sDesigns[side]}" id="design-img-${side}" style="
-      width:100%;height:100%;
-      object-fit:contain;object-position:center;
-      display:block;mix-blend-mode:normal;
-      pointer-events:none;
-    ">
-    <div onclick="clearCurrentDesign()" style="
-      position:absolute;top:-14px;left:-14px;width:26px;height:26px;
-      background:#fff;border-radius:50%;border:1.5px solid #ddd;
-      display:none;align-items:center;justify-content:center;
-      cursor:pointer;z-index:10;font-size:12px;
-      box-shadow:0 2px 6px rgba(0,0,0,.15);" title="Delete">🗑</div>
-    <div id="rotate-handle-${side}" style="
-      position:absolute;top:-14px;right:-14px;width:26px;height:26px;
-      background:#fff;border-radius:50%;border:1.5px solid #ddd;
-      display:none;align-items:center;justify-content:center;
-      cursor:grab;z-index:10;font-size:13px;
-      box-shadow:0 2px 6px rgba(0,0,0,.15);" title="Rotate">↺</div>
-    <div id="resize-handle-${side}" style="
-      position:absolute;bottom:-14px;right:-14px;width:26px;height:26px;
-      background:#4a9eff;border-radius:50%;
-      display:none;align-items:center;justify-content:center;
-      cursor:se-resize;z-index:10;font-size:12px;color:#fff;
-      box-shadow:0 2px 6px rgba(0,0,0,.2);" title="Resize">⤡</div>
-    <div onclick="toggleLayerMenu('${side}')" id="layer-btn-${side}" style="
-      position:absolute;bottom:-14px;left:-14px;width:26px;height:26px;
-      background:#fff;border-radius:50%;border:1.5px solid #ddd;
-      display:none;align-items:center;justify-content:center;
-      cursor:pointer;z-index:10;font-size:13px;color:#555;
-      box-shadow:0 2px 6px rgba(0,0,0,.15);" title="Layering">🔲</div>
-    <!-- Layering menu -->
-    <div id="layer-menu-${side}" style="
-      display:none;position:absolute;bottom:20px;left:-14px;
-      background:#fff;border-radius:12px;
-      box-shadow:0 8px 24px rgba(0,0,0,.15);
-      border:1px solid #e8e8e8;z-index:20;
-      min-width:180px;overflow:hidden;">
-      <div onclick="layerAction('bringToFront','${side}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f5f5f5;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">🔼 Bring to Front</div>
-      <div onclick="layerAction('sendToBack','${side}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f5f5f5;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">🔽 Send to Back</div>
-      <div onclick="layerAction('copyToBack','${side}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;display:flex;align-items:center;gap:10px;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">📋 Copy to Back</div>
-    </div>
-    <!-- Selection border - hidden by default -->
-    <div id="dz-border-${side}" style="position:absolute;inset:-2px;border:2px dashed transparent;pointer-events:none;border-radius:2px;transition:border-color .15s;"></div>
-    <!-- Handles - hidden by default -->
-    <div id="dz-handles-${side}" style="display:none;pointer-events:none;position:absolute;inset:0;">
-      <!-- handles are positioned relative to dz, enabled via pointer-events on click -->
+  const initLeft = printAreaLeft + (280 - layerW) / 2;
+  const initTop = printAreaTop + (320 - layerH) / 2;
+  const dz = document.createElement("div");
+  dz.id = id;
+  dz.dataset.side = side;
+  dz.dataset.type = "image";
+  dz.style.cssText = "position:absolute;z-index:"+(3+layerCounter)+";width:"+layerW+"px;height:"+layerH+"px;left:"+initLeft+"px;top:"+initTop+"px;cursor:move;";
+  dz.innerHTML = `
+    <img src="${src}" style="width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:normal;pointer-events:none;">
+    <div class="layer-handles" style="display:none;">
+      <div onclick="removeLayer('${id}')" style="position:absolute;top:-14px;left:-14px;width:26px;height:26px;background:#fff;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:12px;box-shadow:0 2px 6px rgba(0,0,0,.15);">🗑</div>
+      <div id="rh-${id}" style="position:absolute;top:-14px;right:-14px;width:26px;height:26px;background:#fff;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;cursor:grab;z-index:10;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.15);">↺</div>
+      <div id="rzh-${id}" style="position:absolute;bottom:-14px;right:-14px;width:26px;height:26px;background:#4a9eff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:se-resize;z-index:10;font-size:12px;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);">⤡</div>
+      <div onclick="toggleLayerMenuNew('${id}')" style="position:absolute;bottom:-14px;left:-14px;width:26px;height:26px;background:#fff;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:13px;color:#555;box-shadow:0 2px 6px rgba(0,0,0,.15);">🔲</div>
+      <div id="lm-${id}" style="display:none;position:absolute;bottom:20px;left:-14px;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);border:1px solid #e8e8e8;z-index:20;min-width:180px;overflow:hidden;">
+        <div onclick="moveLayerUp('${id}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;border-bottom:1px solid #f5f5f5;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">🔼 Bring Forward</div>
+        <div onclick="moveLayerDown('${id}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;border-bottom:1px solid #f5f5f5;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">🔽 Send Backward</div>
+        <div onclick="copyLayerToBack('${id}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">📋 Copy to Back</div>
+      </div>
+      <div style="position:absolute;inset:-2px;border:2px dashed rgba(74,158,255,.6);pointer-events:none;border-radius:2px;"></div>
     </div>
   `;
-
-  // Show/hide handles and border on click
+  wrap.appendChild(dz);
+  makeLayerDraggable(dz);
+  makeLayerResizable(dz, id);
+  makeLayerRotatable(dz, id);
   dz.addEventListener("click", function(e){
     e.stopPropagation();
-    selectDesign(side);
-  });
-
-  // Hide on outside click
-  if(!window._dzOutsideHandler){
-    window._dzOutsideHandler = true;
-    document.addEventListener("click", function(){
-      deselectAllDesigns();
-    });
-  }
-
-  dz.style.background="transparent";
-  dz.style.cursor="move";
-  makeDraggable(dz, side);
-  makeResizable(dz, side);
-  makeRotatable(dz, side);
-}
-
-function selectDesign(side){
-  deselectAllDesigns();
-  const dz = document.getElementById("s-dzone-"+side);
-  const border = document.getElementById("dz-border-"+side);
-  if(border) border.style.borderColor = "rgba(74,158,255,.7)";
-  if(dz) dz.querySelectorAll("[title]").forEach(el => {
-    el.style.display = "flex";
+    selectLayer(id);
   });
 }
 
-function deselectAllDesigns(){
-  ["front","back"].forEach(s=>{
-    const border = document.getElementById("dz-border-"+s);
-    if(border) border.style.borderColor = "transparent";
-    const dz = document.getElementById("s-dzone-"+s);
-    if(dz) dz.querySelectorAll("[title]").forEach(el => el.style.display = "none");
-  });
-}
-
-function toggleLayerMenu(side){
-  const menu = document.getElementById("layer-menu-"+side);
-  if(!menu) return;
-  menu.style.display = menu.style.display === "none" ? "block" : "none";
-  // Close when clicking outside
-  setTimeout(()=>{
-    document.addEventListener("click", function close(e){
-      if(!menu.contains(e.target)){
-        menu.style.display = "none";
-        document.removeEventListener("click", close);
-      }
-    });
-  }, 0);
-}
-
-function layerAction(action, side){
-  const menu = document.getElementById("layer-menu-"+side);
-  if(menu) menu.style.display = "none";
-  const dz = document.getElementById("s-dzone-"+side);
+function selectLayer(id){
+  deselectAllLayers();
+  const dz = document.getElementById(id);
   if(!dz) return;
+  const handles = dz.querySelector(".layer-handles");
+  if(handles) handles.style.display = "block";
+}
 
-  if(action === "bringToFront"){
-    dz.style.zIndex = "10";
-    sNtf("Brought to front!");
-  } else if(action === "sendToBack"){
-    dz.style.zIndex = "2";
-    sNtf("Sent to back!");
-  } else if(action === "copyToBack"){
-    const otherSide = side === "front" ? "back" : "front";
-    sDesigns[otherSide] = sDesigns[side];
-    renderDesignZone(otherSide);
-    sNtf("Design copied to " + otherSide + "!");
+function deselectAllLayers(){
+  document.querySelectorAll(".layer-handles").forEach(h => h.style.display = "none");
+  document.querySelectorAll("[id^='lm-']").forEach(m => m.style.display = "none");
+}
+
+function removeLayer(id){
+  const el = document.getElementById(id);
+  const side = el ? el.dataset.side : sView;
+  if(el) el.remove();
+  sLayers[side] = (sLayers[side]||[]).filter(l => l.id !== id);
+  const total = (sLayers.front||[]).length + (sLayers.back||[]).length;
+  if(total === 0){
+    sState.hasDesign = false;
+    const fp = document.getElementById("s-floats");
+    if(fp) fp.classList.remove("hidden");
   }
 }
 
-function makeRotatable(dz, side){
-  const handle = document.getElementById("rotate-handle-"+side);
-  if(!handle) return;
-  let startAngle = 0;
-  let currentRotation = 0;
-
-  handle.addEventListener("mousedown", function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    const dzRect = dz.getBoundingClientRect();
-    const centerX = dzRect.left + dzRect.width/2;
-    const centerY = dzRect.top + dzRect.height/2;
-    startAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180/Math.PI - currentRotation;
-
-    function onMove(e){
-      const dzRect = dz.getBoundingClientRect();
-      const cx = dzRect.left + dzRect.width/2;
-      const cy = dzRect.top + dzRect.height/2;
-      currentRotation = Math.atan2(e.clientY - cy, e.clientX - cx) * 180/Math.PI - startAngle;
-      const img = document.getElementById("design-img-"+side);
-      if(img) img.style.transform = `rotate(${currentRotation}deg)`;
-      // sync slider
-      const slider = document.getElementById("design-rotate");
-      const valEl = document.getElementById("rotate-val");
-      if(slider) slider.value = Math.round(currentRotation);
-      if(valEl) valEl.textContent = Math.round(currentRotation) + "°";
-    }
-
-    function onUp(){
-      document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseup", onUp);
-    }
-
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseup", onUp);
-  });
+function toggleLayerMenuNew(id){
+  const menu = document.getElementById("lm-"+id);
+  if(!menu) return;
+  const isVisible = menu.style.display === "block";
+  document.querySelectorAll("[id^='lm-']").forEach(m => m.style.display = "none");
+  if(!isVisible){ menu.style.display = "block"; }
 }
 
-function makeDraggable(dz, side){
-  let startX, startY, startLeft, startTop;
+function moveLayerUp(id){
+  const el = document.getElementById(id);
+  if(el) el.style.zIndex = (parseInt(el.style.zIndex)||3) + 1;
+  document.querySelectorAll("[id^='lm-']").forEach(m => m.style.display = "none");
+}
 
+function moveLayerDown(id){
+  const el = document.getElementById(id);
+  if(el) el.style.zIndex = Math.max(3, (parseInt(el.style.zIndex)||3) - 1);
+  document.querySelectorAll("[id^='lm-']").forEach(m => m.style.display = "none");
+}
+
+function copyLayerToBack(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const src = el.querySelector("img") ? el.querySelector("img").src : null;
+  if(!src) return;
+  const otherSide = el.dataset.side === "front" ? "back" : "front";
+  const newId = "layer-" + (++layerCounter);
+  if(!sLayers[otherSide]) sLayers[otherSide] = [];
+  sLayers[otherSide].push({id:newId, src, type:"image"});
+  const prevView = sView;
+  sView = otherSide;
+  addImageLayer(otherSide, newId, src);
+  sView = prevView;
+  document.querySelectorAll("[id^='lm-']").forEach(m => m.style.display = "none");
+  sNtf("Design copied to " + otherSide + "!");
+}
+
+function makeLayerDraggable(dz){
+  let startX, startY, startLeft, startTop;
   function onDown(e){
-    if(e.target.id === "resize-handle-"+side) return;
+    if(e.target.closest("[onclick]") || e.target.closest("[id^='rh-']") || e.target.closest("[id^='rzh-']")) return;
     e.preventDefault();
     const pt = e.touches ? e.touches[0] : e;
     const wrap = document.getElementById("s-shirt-wrap");
     const wrapRect = wrap.getBoundingClientRect();
     const dzRect = dz.getBoundingClientRect();
-    startX = pt.clientX;
-    startY = pt.clientY;
+    startX = pt.clientX; startY = pt.clientY;
     startLeft = dzRect.left - wrapRect.left;
     startTop = dzRect.top - wrapRect.top;
     dz.style.left = startLeft + "px";
     dz.style.top = startTop + "px";
-    dz.style.transform = "none";
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onUp);
     document.addEventListener("touchmove", onMove, {passive:false});
     document.addEventListener("touchend", onUp);
   }
-
   function onMove(e){
     e.preventDefault();
     const pt = e.touches ? e.touches[0] : e;
-    const dzW = dz.offsetWidth;
-    const dzH = dz.offsetHeight;
-    let newLeft = startLeft + (pt.clientX - startX);
-    let newTop = startTop + (pt.clientY - startY);
+    const newLeft = startLeft + (pt.clientX - startX);
+    const newTop = startTop + (pt.clientY - startY);
     dz.style.left = newLeft + "px";
     dz.style.top = newTop + "px";
-
-    // Check against fixed print area
-    const pa = document.getElementById("print-area-" + side);
+    const pa = document.getElementById("print-area-" + dz.dataset.side);
     if(pa){
-      const paL = pa.offsetLeft;
-      const paT = pa.offsetTop;
-      const paR = paL + pa.offsetWidth;
-      const paB = paT + pa.offsetHeight;
-      const outside = newLeft < paL || newTop < paT || newLeft + dzW > paR || newTop + dzH > paB;
+      const outside = newLeft<pa.offsetLeft||newTop<pa.offsetTop||newLeft+dz.offsetWidth>pa.offsetLeft+pa.offsetWidth||newTop+dz.offsetHeight>pa.offsetTop+pa.offsetHeight;
       pa.style.borderColor = outside ? "rgba(255,80,80,.8)" : "rgba(74,158,255,.4)";
       showBoundingWarning(outside);
     }
   }
-
   function onUp(){
     document.removeEventListener("mousemove", onMove);
     document.removeEventListener("mouseup", onUp);
     document.removeEventListener("touchmove", onMove);
     document.removeEventListener("touchend", onUp);
-    const pa = document.getElementById("print-area-" + side);
+    const pa = document.getElementById("print-area-" + dz.dataset.side);
     if(pa) pa.style.borderColor = "transparent";
     showBoundingWarning(false);
   }
-
   dz.addEventListener("mousedown", onDown);
   dz.addEventListener("touchstart", onDown, {passive:false});
 }
 
-function showBoundingWarning(show){
-  let warn = document.getElementById("bounding-warning");
-  if(!warn){
-    warn = document.createElement("div");
-    warn.id = "bounding-warning";
-    warn.style.cssText = `
-      position:absolute;top:12px;left:50%;transform:translateX(-50%);
-      background:rgba(0,0,0,0.75);color:#fff;
-      font-size:12px;font-weight:600;
-      padding:8px 16px;border-radius:20px;
-      pointer-events:none;z-index:20;
-      white-space:nowrap;display:none;
-    `;
-    warn.textContent = "⚠ Keep your design inside the print area";
-    const wrap = document.getElementById("s-shirt-wrap");
-    if(wrap) wrap.appendChild(warn);
-  }
-  warn.style.display = show ? "block" : "none";
-}
-
-function makeResizable(dz, side){
-  const handle = document.getElementById("resize-handle-"+side);
+function makeLayerResizable(dz, id){
+  const handle = document.getElementById("rzh-"+id);
   if(!handle) return;
-  let startX, startY, startW, startH;
-
+  let startX, startW, startH;
   handle.addEventListener("mousedown", function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    startX = e.clientX;
-    startY = e.clientY;
-    startW = dz.offsetWidth;
-    startH = dz.offsetHeight;
-    document.addEventListener("mousemove", onResize);
-    document.addEventListener("mouseup", stopResize);
+    e.preventDefault(); e.stopPropagation();
+    startX=e.clientX; startW=dz.offsetWidth; startH=dz.offsetHeight;
+    function onResize(e){ const dx=e.clientX-startX; dz.style.width=Math.max(60,startW+dx)+"px"; dz.style.height=Math.max(60,startH+dx)+"px"; }
+    function stopResize(){ document.removeEventListener("mousemove",onResize); document.removeEventListener("mouseup",stopResize); }
+    document.addEventListener("mousemove",onResize); document.addEventListener("mouseup",stopResize);
   });
-
-  function onResize(e){
-    const dx = e.clientX - startX;
-    const wrap = document.getElementById("s-shirt-wrap");
-    const maxW = wrap.offsetWidth - dz.offsetLeft;
-    const maxH = wrap.offsetHeight - dz.offsetTop;
-    const newW = Math.max(80, Math.min(maxW, startW + dx));
-    const newH = Math.max(80, Math.min(maxH, startH + dx));
-    dz.style.width = newW + "px";
-    dz.style.height = newH + "px";
-  }
-
-  function stopResize(){
-    document.removeEventListener("mousemove", onResize);
-    document.removeEventListener("mouseup", stopResize);
-  }
 }
+
+function makeLayerRotatable(dz, id){
+  const handle = document.getElementById("rh-"+id);
+  if(!handle) return;
+  let currentRot = 0;
+  handle.addEventListener("mousedown", function(e){
+    e.preventDefault(); e.stopPropagation();
+    const r = dz.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const startAngle = Math.atan2(e.clientY-cy,e.clientX-cx)*180/Math.PI - currentRot;
+    function onMove(e){
+      const r=dz.getBoundingClientRect();
+      currentRot = Math.atan2(e.clientY-r.top-r.height/2,e.clientX-r.left-r.width/2)*180/Math.PI - startAngle;
+      const img=dz.querySelector("img");
+      if(img) img.style.transform="rotate("+currentRot+"deg)";
+    }
+    function onUp(){ document.removeEventListener("mousemove",onMove); document.removeEventListener("mouseup",onUp); }
+    document.addEventListener("mousemove",onMove); document.addEventListener("mouseup",onUp);
+  });
+}
+
+document.addEventListener("click", deselectAllLayers);
+
+function renderDesignZone(side){ /* handled by addImageLayer */ }
 
 function clearCurrentDesign(){
   const side = sView === "back" ? "back" : "front";
-  sDesigns[side] = null;
-  const dz = document.getElementById("s-dzone-" + side);
-  if(dz){
-    dz.innerHTML = '<div class="s-dzone-border"></div><div class="dzone-label">15" × 17" print area</div>';
-  }
-  // Show float pills if both sides empty
-  if(!sDesigns.front && !sDesigns.back){
+  (sLayers[side]||[]).slice().forEach(l => removeLayer(l.id));
+  sLayers[side] = [];
+  if((sLayers.front||[]).length === 0 && (sLayers.back||[]).length === 0){
     const fp=document.getElementById("s-floats");
     if(fp)fp.classList.remove("hidden");
     sState.hasDesign = false;
@@ -2789,13 +2672,13 @@ function sUpdateAll(){
   const bs=document.getElementById("s-bot-sz");if(bs)bs.textContent=sState.sz;
   const pl={fc:"Front Center",lc:"Left Chest",fb:"Full Back"}[sState.place];
   const cl=document.getElementById("s-canvas-label");
-  const frontStatus = sDesigns.front ? "✓ Front" : "Front: empty";
-  const backStatus  = sDesigns.back  ? "✓ Back"  : "Back: empty";
+  const frontStatus = (sLayers.front||[]).length > 0 ? "✓ Front" : "Front: empty";
+  const backStatus  = (sLayers.back||[]).length  > 0 ? "✓ Back"  : "Back: empty";
   if(cl)cl.textContent=(sView==="back"?"Back":"Front")+" — "+sState.product.id+" · "+sState.color.n+" · "+sState.sz+" · "+frontStatus+" · "+backStatus;
 }
 
 function sNext(){
-  if(!sState.hasDesign){sNtf("Add a design first — generate AI art or upload your image!");return;}
+  if(!sState.hasDesign && (sLayers.front||[]).length===0){sNtf("Add a design first — generate AI art or upload your image!");return;}
   // SHOPIFY: window.location.href = "https://hunto.myshopify.com/cart/...";
   sNtf("Proceeding to Quantity & Sizes...");
 }
