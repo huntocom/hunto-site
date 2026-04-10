@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v2.2 -->
+<!-- v2.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -767,11 +767,13 @@ footer{background:#111;padding:56px 32px 28px}
   width:20px;height:20px;
   background:#ff4444;color:#fff;
   border-radius:50%;font-size:12px;
-  font-weight:700;display:flex;
+  font-weight:700;display:none;
   align-items:center;justify-content:center;
   cursor:pointer;z-index:11;
   box-shadow:0 2px 6px rgba(0,0,0,.2);
 }
+.txt-layer.selected .txt-delete-btn{display:flex;}
+.txt-layer-btn{position:absolute;top:-14px;left:-14px;width:22px;height:22px;background:#fff;border-radius:50%;border:1.5px solid #ddd;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:11;font-size:11px;box-shadow:0 2px 6px rgba(0,0,0,.15);}
 /* SPIN */
 .spin{display:inline-block;width:14px;height:14px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle}
 @keyframes sp{to{transform:rotate(360deg)}}
@@ -895,7 +897,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
     <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v2.2</span>
+  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v2.4</span>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -2484,22 +2486,8 @@ function addImageLayer(side, id, src){
   dz.id = id;
   dz.dataset.side = side;
   dz.dataset.type = "image";
-  dz.style.cssText = "position:absolute;z-index:"+(3+layerCounter)+";width:"+layerW+"px;height:"+layerH+"px;left:"+initLeft+"px;top:"+initTop+"px;cursor:move;";
-  dz.innerHTML = `
-    <img src="${src}" style="width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:normal;pointer-events:none;">
-    <div class="layer-handles" style="display:none;">
-      <div onclick="removeLayer('${id}')" style="position:absolute;top:-14px;left:-14px;width:26px;height:26px;background:#fff;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:12px;box-shadow:0 2px 6px rgba(0,0,0,.15);">🗑</div>
-      <div id="rh-${id}" style="position:absolute;top:-14px;right:-14px;width:26px;height:26px;background:#fff;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;cursor:grab;z-index:10;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.15);">↺</div>
-      <div id="rzh-${id}" style="position:absolute;bottom:-14px;right:-14px;width:26px;height:26px;background:#4a9eff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:se-resize;z-index:10;font-size:12px;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);">⤡</div>
-      <div onclick="toggleLayerMenuNew('${id}')" style="position:absolute;bottom:-14px;left:-14px;width:26px;height:26px;background:#fff;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:13px;color:#555;box-shadow:0 2px 6px rgba(0,0,0,.15);">🔲</div>
-      <div id="lm-${id}" style="display:none;position:fixed;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);border:1px solid #e8e8e8;z-index:9999;min-width:180px;overflow:hidden;">
-        <div onclick="moveLayerUp('${id}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;border-bottom:1px solid #f5f5f5;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">🔼 Bring Forward</div>
-        <div onclick="moveLayerDown('${id}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;border-bottom:1px solid #f5f5f5;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">🔽 Send Backward</div>
-        <div onclick="copyLayerToBack('${id}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">📋 Copy to Back</div>
-      </div>
-      <div style="position:absolute;inset:-2px;border:2px dashed rgba(74,158,255,.6);pointer-events:none;border-radius:2px;"></div>
-    </div>
-  `;
+  dz.style.cssText = "position:absolute;z-index:"+(3+layerCounter)+";width:"+layerW+"px;height:"+layerH+"px;left:"+initLeft+"px;top:"+initTop+"px;cursor:move;outline:2px dashed transparent;transition:outline-color .15s;";
+  dz.innerHTML = '<img src="'+src+'" style="width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:normal;pointer-events:none;">';
   wrap.appendChild(dz);
   makeLayerDraggable(dz);
   makeLayerResizable(dz, id);
@@ -2510,17 +2498,73 @@ function addImageLayer(side, id, src){
   });
 }
 
+
+let selectedLayerId = null;
+
 function selectLayer(id){
   deselectAllLayers();
+  selectedLayerId = id;
   const dz = document.getElementById(id);
   if(!dz) return;
-  const handles = dz.querySelector(".layer-handles");
-  if(handles) handles.style.display = "block";
+  dz.style.outline = "2px dashed rgba(74,158,255,.7)";
+  showLayerToolbar(id);
 }
 
 function deselectAllLayers(){
-  document.querySelectorAll(".layer-handles").forEach(h => h.style.display = "none");
-  document.querySelectorAll("[id^='lm-']").forEach(m => m.style.display = "none");
+  selectedLayerId = null;
+  document.querySelectorAll("[data-type='image']").forEach(el => {
+    el.style.outline = "2px dashed transparent";
+    const rzh = document.getElementById("rzh-"+el.id);
+    if(rzh) rzh.style.display = "none";
+  });
+  hideLayerToolbar();
+}
+
+function showLayerToolbar(id){
+  hideLayerToolbar();
+  const dz = document.getElementById(id);
+  if(!dz) return;
+  // Show resize handle
+  const rzh = document.getElementById("rzh-"+id);
+  if(rzh) rzh.style.display = "block";
+
+  const dzRect = dz.getBoundingClientRect();
+
+  const tb = document.createElement("div");
+  tb.id = "layer-toolbar";
+  tb.style.cssText = "position:fixed;z-index:9999;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.18);border:1px solid #e8e8e8;display:flex;align-items:center;gap:0;overflow:hidden;";
+  tb.style.top = (dzRect.bottom + 8) + "px";
+  tb.style.left = (dzRect.left + dzRect.width/2) + "px";
+  tb.style.transform = "translateX(-50%)";
+
+  const btns = [
+    {icon:"🗑", label:"Delete", action:`removeLayer('${id}')`},
+    {icon:"🔼", label:"Forward", action:`moveLayerUp('${id}')`},
+    {icon:"🔽", label:"Backward", action:`moveLayerDown('${id}')`},
+    {icon:"📋", label:"Copy Back", action:`copyLayerToBack('${id}')`},
+    {icon:"↺", label:"Rotate ↻", action:`startQuickRotate('${id}')`},
+  ];
+
+  btns.forEach((b,i) => {
+    const btn = document.createElement("button");
+    btn.style.cssText = "border:none;background:transparent;padding:8px 12px;cursor:pointer;font-size:12px;font-weight:600;color:#333;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:Inter,sans-serif;"+(i>0?"border-left:1px solid #f0f0f0":"");
+    btn.innerHTML = '<span style="font-size:15px">'+b.icon+'</span><span style="font-size:9px;color:#888">'+b.label+'</span>';
+    btn.onclick = (e) => { e.stopPropagation(); eval(b.action); };
+    btn.onmouseover = () => btn.style.background = "#f8fbff";
+    btn.onmouseout = () => btn.style.background = "transparent";
+    tb.appendChild(btn);
+  });
+
+  document.body.appendChild(tb);
+}
+
+function hideLayerToolbar(){
+  const tb = document.getElementById("layer-toolbar");
+  if(tb) tb.remove();
+}
+
+function startQuickRotate(id){
+  sNtf("Drag the image corner to rotate!");
 }
 
 function removeLayer(id){
@@ -2609,6 +2653,7 @@ function makeLayerDraggable(dz){
     const newTop = startTop + (pt.clientY - startY);
     dz.style.left = newLeft + "px";
     dz.style.top = newTop + "px";
+    updateToolbarPosition(dz.id);
     const pa = document.getElementById("print-area-" + dz.dataset.side);
     if(pa){
       const outside = newLeft<pa.offsetLeft||newTop<pa.offsetTop||newLeft+dz.offsetWidth>pa.offsetLeft+pa.offsetWidth||newTop+dz.offsetHeight>pa.offsetTop+pa.offsetHeight;
@@ -2630,39 +2675,45 @@ function makeLayerDraggable(dz){
 }
 
 function makeLayerResizable(dz, id){
-  const handle = document.getElementById("rzh-"+id);
-  if(!handle) return;
+  // Add a visible resize handle in bottom-right corner
+  const handle = document.createElement("div");
+  handle.style.cssText = "position:absolute;bottom:-6px;right:-6px;width:14px;height:14px;background:#4a9eff;border-radius:3px;cursor:se-resize;z-index:10;display:none;";
+  handle.id = "rzh-"+id;
+  dz.appendChild(handle);
+
   let startX, startW, startH;
   handle.addEventListener("mousedown", function(e){
     e.preventDefault(); e.stopPropagation();
     startX=e.clientX; startW=dz.offsetWidth; startH=dz.offsetHeight;
-    function onResize(e){ const dx=e.clientX-startX; dz.style.width=Math.max(60,startW+dx)+"px"; dz.style.height=Math.max(60,startH+dx)+"px"; }
+    function onResize(e){ const dx=e.clientX-startX; dz.style.width=Math.max(60,startW+dx)+"px"; dz.style.height=Math.max(60,startH+dx)+"px"; updateToolbarPosition(id); }
     function stopResize(){ document.removeEventListener("mousemove",onResize); document.removeEventListener("mouseup",stopResize); }
     document.addEventListener("mousemove",onResize); document.addEventListener("mouseup",stopResize);
   });
 }
 
 function makeLayerRotatable(dz, id){
-  const handle = document.getElementById("rh-"+id);
-  if(!handle) return;
-  let currentRot = 0;
-  handle.addEventListener("mousedown", function(e){
-    e.preventDefault(); e.stopPropagation();
-    const r = dz.getBoundingClientRect();
-    const cx=r.left+r.width/2, cy=r.top+r.height/2;
-    const startAngle = Math.atan2(e.clientY-cy,e.clientX-cx)*180/Math.PI - currentRot;
-    function onMove(e){
-      const r=dz.getBoundingClientRect();
-      currentRot = Math.atan2(e.clientY-r.top-r.height/2,e.clientX-r.left-r.width/2)*180/Math.PI - startAngle;
-      const img=dz.querySelector("img");
-      if(img) img.style.transform="rotate("+currentRot+"deg)";
-    }
-    function onUp(){ document.removeEventListener("mousemove",onMove); document.removeEventListener("mouseup",onUp); }
-    document.addEventListener("mousemove",onMove); document.addEventListener("mouseup",onUp);
-  });
+  // Rotation handled via toolbar button
+  dz.dataset.rotation = "0";
 }
 
-document.addEventListener("click", deselectAllLayers);
+function updateToolbarPosition(id){
+  const tb = document.getElementById("layer-toolbar");
+  const dz = document.getElementById(id);
+  if(!tb || !dz) return;
+  const dzRect = dz.getBoundingClientRect();
+  tb.style.top = (dzRect.bottom + 8) + "px";
+  tb.style.left = (dzRect.left + dzRect.width/2) + "px";
+}
+
+document.addEventListener("click", function(){
+  deselectAllLayers();
+  document.querySelectorAll(".txt-layer").forEach(el=>{
+    el.classList.remove("selected");
+    const lb=el.querySelector(".txt-layer-btn");
+    if(lb) lb.style.display="none";
+  });
+  hideLayerToolbar();
+});
 
 function renderDesignZone(side){ /* handled by addImageLayer */ }
 
@@ -2841,6 +2892,8 @@ function txtPlace(){
 
   const wrap = document.getElementById("s-shirt-wrap");
   document.querySelectorAll(".txt-layer").forEach(el=>el.classList.remove("selected"));
+  deselectAllLayers();
+  hideLayerToolbar();
 
   const id="txtlayer-"+(++textLayerCount);
   const div=document.createElement("div");
@@ -2859,52 +2912,53 @@ function txtPlace(){
   applyTxtStyle(div);
   div.textContent=txtState.upper?raw.toUpperCase():raw;
 
-  // Delete button
-  const del=document.createElement("div");
-  del.className="txt-delete-btn";
-  del.innerHTML="×";
-  del.onclick=(e)=>{e.stopPropagation();div.remove();};
-  div.appendChild(del);
-
-  // Layer menu button (shown on select)
-  const layerBtn=document.createElement("div");
-  layerBtn.style.cssText="position:absolute;top:-14px;left:-14px;width:22px;height:22px;background:#fff;border-radius:50%;border:1.5px solid #ddd;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:11;font-size:11px;box-shadow:0 2px 6px rgba(0,0,0,.15);";
-  layerBtn.innerHTML="🔲";
-  layerBtn.onclick=(e)=>{
-    e.stopPropagation();
-    const menu=document.getElementById("tlm-"+id);
-    if(!menu)return;
-    const vis=menu.style.display==="block";
-    document.querySelectorAll("[id^='tlm-'],[id^='lm-']").forEach(m=>m.style.display="none");
-    if(!vis) menu.style.display="block";
-  };
-  div.appendChild(layerBtn);
-
-  // Layer menu
-  const layerMenu=document.createElement("div");
-  layerMenu.id="tlm-"+id;
-  layerMenu.style.cssText="display:none;position:absolute;top:22px;left:-14px;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);border:1px solid #e8e8e8;z-index:20;min-width:160px;overflow:hidden;";
-  layerMenu.innerHTML="<div onclick=\"var el=document.getElementById('"+id+"');el.style.zIndex=String(parseInt(el.style.zIndex||3)+1);document.getElementById('tlm-"+id+"').style.display='none';\" style=\"padding:10px 14px;font-size:13px;font-weight:600;color:#111;cursor:pointer;border-bottom:1px solid #f5f5f5;\" onmouseover=\"this.style.background='#f8fbff'\" onmouseout=\"this.style.background='#fff'\">\uD83D\uDD3C Bring Forward</div><div onclick=\"var el=document.getElementById('"+id+"');el.style.zIndex=String(Math.max(3,parseInt(el.style.zIndex||3)-1));document.getElementById('tlm-"+id+"').style.display='none';\" style=\"padding:10px 14px;font-size:13px;font-weight:600;color:#111;cursor:pointer;\" onmouseover=\"this.style.background='#f8fbff'\" onmouseout=\"this.style.background='#fff'\">\uD83D\uDD3D Send Backward</div>";
-  div.appendChild(layerMenu);
-
   div.addEventListener("mousedown", txtDragStart);
   div.addEventListener("touchstart", txtDragStartTouch, {passive:false});
   div.addEventListener("click",(e)=>{
     e.stopPropagation();
-    document.querySelectorAll(".txt-layer").forEach(el=>{
-      el.classList.remove("selected");
-      const lb=el.querySelector("div[style*='top:-14px;left:-14px']");
-      if(lb) lb.style.display="none";
-    });
+    deselectAllLayers();
+    document.querySelectorAll(".txt-layer").forEach(el=>el.classList.remove("selected"));
     div.classList.add("selected");
-    layerBtn.style.display="flex";
+    showTextToolbar(id);
     if(div.dataset.color) txtSetColor(div.dataset.color);
   });
 
   wrap.appendChild(div);
+  showTextToolbar(id);
   sNtf("Text placed! Drag to reposition.");
 }
 
+function showTextToolbar(id){
+  hideLayerToolbar();
+  const div = document.getElementById(id);
+  if(!div) return;
+  const dzRect = div.getBoundingClientRect();
+
+  const tb = document.createElement("div");
+  tb.id = "layer-toolbar";
+  tb.style.cssText = "position:fixed;z-index:9999;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.18);border:1px solid #e8e8e8;display:flex;align-items:center;gap:0;overflow:hidden;";
+  tb.style.top = (dzRect.bottom + 8) + "px";
+  tb.style.left = (dzRect.left + dzRect.width/2) + "px";
+  tb.style.transform = "translateX(-50%)";
+
+  const btns = [
+    {icon:"🗑", label:"Delete", fn:()=>{ div.remove(); hideLayerToolbar(); }},
+    {icon:"🔼", label:"Forward", fn:()=>{ div.style.zIndex=String(parseInt(div.style.zIndex||3)+1); }},
+    {icon:"🔽", label:"Backward", fn:()=>{ div.style.zIndex=String(Math.max(3,parseInt(div.style.zIndex||3)-1)); }},
+  ];
+
+  btns.forEach((b,i)=>{
+    const btn=document.createElement("button");
+    btn.style.cssText="border:none;background:transparent;padding:8px 12px;cursor:pointer;font-size:12px;font-weight:600;color:#333;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:Inter,sans-serif;"+(i>0?"border-left:1px solid #f0f0f0":"");
+    btn.innerHTML='<span style="font-size:15px">'+b.icon+'</span><span style="font-size:9px;color:#888">'+b.label+'</span>';
+    btn.onclick=(e)=>{ e.stopPropagation(); b.fn(); };
+    btn.onmouseover=()=>btn.style.background="#f8fbff";
+    btn.onmouseout=()=>btn.style.background="transparent";
+    tb.appendChild(btn);
+  });
+
+  document.body.appendChild(tb);
+}
 function txtClear(){
   document.querySelectorAll(".txt-layer").forEach(el=>el.remove());
   sNtf("Text cleared.");
