@@ -1362,44 +1362,21 @@ footer{background:#111;padding:56px 32px 28px}
       <!-- UPLOAD -->
       <div id="sp-upload" style="display:none">
         <div class="s-panel-hdr">
-          <div><div class="s-panel-title">Upload Artwork</div><div class="s-panel-sub">Use your own image or photo</div></div>
+          <div><div class="s-panel-title">Upload Artwork</div><div class="s-panel-sub">Use your own image or logo</div></div>
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
         </div>
         <div class="s-panel-body">
-
-          <!-- Photo to AI — prominent feature -->
-          <div style="background:linear-gradient(135deg,#f0f7ff,#e8f3ff);border-radius:14px;padding:16px;margin-bottom:14px;border:1.5px solid #c8deff;">
-            <div style="font-size:13px;font-weight:800;color:#111;margin-bottom:4px">✦ Turn Your Photo into AI Art</div>
-            <div style="font-size:12px;color:#666;margin-bottom:12px;line-height:1.5">Upload any photo — your pet, face, logo — and AI will transform it into a unique shirt design</div>
-            <div class="upload-zone" onclick="document.getElementById('s-file').click()" style="background:#fff;margin-bottom:0">
-              <div class="upload-zone-icon">📸</div>
-              <div class="upload-zone-title">Upload a Photo</div>
-              <div class="upload-zone-sub">JPG or PNG · Pet, person, logo, anything</div>
-            </div>
-          </div>
-
-          <!-- Divider -->
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-            <div style="flex:1;height:1px;background:#eee"></div>
-            <span style="font-size:11px;color:#bbb;font-weight:600">OR UPLOAD ARTWORK DIRECTLY</span>
-            <div style="flex:1;height:1px;background:#eee"></div>
-          </div>
-
           <div class="upload-zone" onclick="document.getElementById('s-file').click()">
             <div class="upload-zone-icon">↑</div>
-            <div class="upload-zone-title">Upload Existing Artwork</div>
-            <div class="upload-zone-sub">PNG with transparent background recommended</div>
+            <div class="upload-zone-title">Click to upload your artwork</div>
+            <div class="upload-zone-sub">PNG, JPG · Transparent PNG recommended</div>
+            <div class="upload-zone-sub" style="margin-top:3px">Min 1500px for best print quality</div>
           </div>
-
           <input type="file" id="s-file" accept="image/*" style="display:none" onchange="handleUpload(event)">
-
-          <div id="upload-edit-section" style="display:none;margin-top:14px">
-            <div style="font-size:13px;font-weight:800;color:#111;margin-bottom:8px">Photo uploaded! ✓</div>
-            <div style="font-size:12px;color:#888;margin-bottom:8px;line-height:1.5">Describe how to transform it into a shirt design:</div>
-            <textarea class="ai-ta" id="edit-prompt" placeholder="e.g. my dog as a cartoon mascot, vintage style, bold graphic art, watercolor painting..." style="height:80px"></textarea>
-            <button onclick="aiEditUpload()" id="ai-edit-btn" class="ai-gen-btn" style="margin-top:8px">✦ Transform with AI</button>
-            <div style="margin-top:8px;font-size:11px;color:#bbb;text-align:center">— or —</div>
-            <button onclick="applyUploadDirect()" style="width:100%;height:38px;background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;color:#555;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;font-family:Inter,sans-serif">Use photo as-is</button>
+          <div style="margin-top:12px;padding:10px 12px;background:#f8fbff;border-radius:10px;border:1px solid #d8e8ff">
+            <div style="font-size:12px;color:#666;line-height:1.6">
+              💡 <strong>Pro tip:</strong> Upload a PNG with a transparent background for the cleanest result on any shirt color.
+            </div>
           </div>
         </div>
       </div>
@@ -2453,59 +2430,12 @@ function handleUpload(e){
   const r=new FileReader();
   r.onload=ev=>{
     uploadedImageBase64 = ev.target.result;
-    // Show the edit section
-    const sec = document.getElementById("upload-edit-section");
-    if(sec) sec.style.display="block";
-    sNtf("Photo loaded — transform it or use as-is!");
+    applyDesign(uploadedImageBase64);
+    sState.hasDesign=true;
+    sNtf("✓ Artwork placed on shirt!");
+    showDesignEditTools();
   };
   r.readAsDataURL(f);
-}
-
-function applyUploadDirect(){
-  if(!uploadedImageBase64) return;
-  applyDesign(uploadedImageBase64);
-  sState.hasDesign=true;
-  sNtf("Image placed on shirt!");
-}
-
-async function aiEditUpload(){
-  if(!uploadedImageBase64){sNtf("Upload a photo first!");return;}
-  const prompt=(document.getElementById("edit-prompt")||{}).value||"";
-  if(!prompt.trim()){sNtf("Describe how to transform it first!");return;}
-
-  const btn=document.getElementById("ai-edit-btn");
-  btn.disabled=true;
-  btn.innerHTML='<span class="spin"></span> Transforming with GPT-4o...';
-
-  try{
-    const SERVER="https://hunto-server-production.up.railway.app";
-    const res=await fetch(SERVER+"/edit",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({prompt, imageBase64: uploadedImageBase64})
-    });
-    if(!res.ok){
-      const err=await res.json();
-      throw new Error(err.error||"Server error "+res.status);
-    }
-    const contentType=res.headers.get("content-type")||"";
-    if(contentType.includes("image")){
-      const blob=await res.blob();
-      const url=URL.createObjectURL(blob);
-      applyDesign(url);
-    } else {
-      const data=await res.json();
-      applyDesign(data.url);
-    }
-    sState.hasDesign=true;
-    sNtf("✓ AI transformation placed on shirt!");
-    btn.disabled=false;
-    btn.innerHTML="✦ Transform Again";
-  }catch(err){
-    btn.disabled=false;
-    btn.innerHTML="✦ Transform with AI";
-    sNtf("Error: "+err.message);
-  }
 }
 
 function applyDesign(src){
