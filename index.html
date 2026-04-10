@@ -2384,15 +2384,13 @@ function applyDesign(src){
 function renderDesignZone(side){
   const dz = document.getElementById("s-dzone-" + side);
   if(!dz || !sDesigns[side]) return;
-  const dark = isDark(sState.color.h);
-  const blend = dark ? "screen" : "multiply";
   dz.innerHTML=`
     <div class="s-dzone-border"></div>
     <div class="dzone-label">15" × 17" print area</div>
     <img src="${sDesigns[side]}" style="
       width:100%;height:100%;
       object-fit:contain;object-position:center;
-      display:block;mix-blend-mode:${blend};
+      display:block;mix-blend-mode:normal;
     ">`;
   dz.style.background="transparent";
 }
