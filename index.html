@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v2.7 -->
+<!-- v2.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -897,7 +897,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
     <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v2.7</span>
+  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v2.9</span>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -1191,6 +1191,11 @@ footer{background:#111;padding:56px 32px 28px}
         <span class="s-ibtn-label">Size</span>
       </button>
       <div class="s-ibtn-sep"></div>
+      <button class="s-ibtn" id="sib-names" onclick="sPanel('names',this)">
+        <span class="s-ibtn-icon">🏷</span>
+        <span class="s-ibtn-label">Names &amp; #s</span>
+      </button>
+      <div class="s-ibtn-sep"></div>
       <button class="s-ibtn" id="sib-keith" onclick="sPanel('keith',this)">
         <span class="s-ibtn-icon">✏</span>
         <span class="s-ibtn-label">Keith</span>
@@ -1450,6 +1455,73 @@ footer{background:#111;padding:56px 32px 28px}
       </div>
 
       <!-- KEITH -->
+      <!-- NAMES & NUMBERS PANEL -->
+      <div id="sp-names" style="display:none">
+        <div class="s-panel-hdr">
+          <div><div class="s-panel-title">Names &amp; Numbers</div><div class="s-panel-sub">Team &amp; bulk personalization</div></div>
+          <button class="s-panel-x" onclick="sClosePanel()">×</button>
+        </div>
+        <div class="s-panel-body" style="padding-bottom:0">
+
+          <!-- Options row -->
+          <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#555;cursor:pointer">
+              <input type="checkbox" id="nn-names" checked onchange="nnUpdatePricing()" style="accent-color:#4a9eff"> Names
+            </label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#555;cursor:pointer">
+              <input type="checkbox" id="nn-numbers" checked onchange="nnUpdatePricing()" style="accent-color:#4a9eff"> Numbers
+            </label>
+          </div>
+
+          <!-- Font & Color row -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+            <div>
+              <div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Font</div>
+              <select id="nn-font" style="width:100%;padding:7px 8px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:12px;font-weight:600;font-family:Inter,sans-serif;color:#333;background:#fff">
+                <option>Inter</option>
+                <option>Bebas Neue</option>
+                <option>Oswald</option>
+                <option>Anton</option>
+                <option>Russo One</option>
+                <option>Squada One</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Color</div>
+              <select id="nn-color" style="width:100%;padding:7px 8px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:12px;font-weight:600;font-family:Inter,sans-serif;color:#333;background:#fff">
+                <option value="#111111">Black</option>
+                <option value="#ffffff">White</option>
+                <option value="#dc2626">Red</option>
+                <option value="#2563eb">Navy Blue</option>
+                <option value="#16a34a">Green</option>
+                <option value="#f59e0b">Gold</option>
+                <option value="#9333ea">Purple</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Pricing info -->
+          <div id="nn-pricing" style="background:#f0f7ff;border-radius:10px;padding:10px 12px;font-size:11px;color:#555;margin-bottom:12px;line-height:1.7;font-weight:500">
+            Names +$4 · Numbers +$3 · Both +$6 per shirt
+          </div>
+
+          <!-- Roster table -->
+          <div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Roster</div>
+          <div id="nn-roster" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;max-height:260px;overflow-y:auto;padding-right:2px"></div>
+
+          <button onclick="nnAddRow()" style="width:100%;padding:9px;border:1.5px dashed #c8deff;border-radius:10px;background:#f8fbff;color:#4a9eff;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;margin-bottom:12px">+ Add Person</button>
+
+          <!-- Summary -->
+          <div id="nn-summary" style="background:#f5f5f5;border-radius:10px;padding:10px 12px;font-size:12px;color:#555;margin-bottom:12px;display:none">
+            <div style="font-weight:700;color:#111;margin-bottom:4px">Order Summary</div>
+            <div id="nn-summary-text"></div>
+          </div>
+
+          <button onclick="nnSave()" style="width:100%;padding:11px;background:#4a9eff;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;margin-bottom:16px">Save Roster ✓</button>
+
+        </div>
+      </div>
+
       <div id="sp-keith" style="display:none">
         <div class="s-panel-hdr">
           <div><div class="s-panel-title">Keith's Edit</div><div class="s-panel-sub">Designer print optimization</div></div>
@@ -1853,7 +1925,7 @@ function initStudio(){
 function sPanel(id,btn){
   document.querySelectorAll(".s-ibtn").forEach(b=>b.classList.remove("on"));
   if(btn)btn.classList.add("on");
-  ["products","text","ai","upload","color","size","keith"].forEach(p=>{
+  ["products","text","ai","upload","color","size","keith","names"].forEach(p=>{
     const el=document.getElementById("sp-"+p);
     if(el)el.style.display=p===id?"block":"none";
   });
@@ -2895,8 +2967,110 @@ function sNtf(msg){
   setTimeout(()=>n.classList.remove("on"),2400);
 }
 
+
 // ════════════════════════════════
-// HERO TYPING
+// NAMES & NUMBERS
+// ════════════════════════════════
+let nnRoster = []; // [{name, number, size}]
+let nnRowCount = 0;
+
+function nnAddRow(name='', number='', size='M'){
+  nnRowCount++;
+  const id = 'nnr-' + nnRowCount;
+  const hasNames = document.getElementById('nn-names')?.checked;
+  const hasNums  = document.getElementById('nn-numbers')?.checked;
+  const roster   = document.getElementById('nn-roster');
+  if(!roster) return;
+
+  const row = document.createElement('div');
+  row.id = id;
+  row.style.cssText = 'display:grid;gap:6px;background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;padding:8px 10px;position:relative;';
+  row.style.gridTemplateColumns = [hasNames, hasNums].filter(Boolean).length === 2 ? '1fr 80px 60px 28px' : '1fr 60px 28px';
+
+  const personNum = nnRowCount;
+
+  row.innerHTML = `
+    ${hasNames ? `<input id="${id}-name" placeholder="Name" value="${name}"
+      style="padding:6px 8px;border:1.5px solid #e8e8e8;border-radius:7px;font-size:13px;font-weight:600;font-family:Inter,sans-serif;color:#111;outline:none;width:100%"
+      oninput="nnSync()">` : ''}
+    ${hasNums ? `<input id="${id}-number" placeholder="#" value="${number}" type="number" min="0" max="999"
+      style="padding:6px 8px;border:1.5px solid #e8e8e8;border-radius:7px;font-size:13px;font-weight:600;font-family:Inter,sans-serif;color:#111;outline:none;width:100%;text-align:center"
+      oninput="nnSync()">` : ''}
+    <select id="${id}-size"
+      style="padding:6px 4px;border:1.5px solid #e8e8e8;border-radius:7px;font-size:12px;font-weight:700;font-family:Inter,sans-serif;color:#333;background:#fff;width:100%"
+      onchange="nnSync()">
+      ${['XS','S','M','L','XL','2XL','3XL'].map(s=>`<option${s===size?' selected':''}>${s}</option>`).join('')}
+    </select>
+    <button onclick="nnRemoveRow('${id}')"
+      style="background:#fff0f0;border:none;border-radius:7px;color:#dc2626;font-size:16px;font-weight:700;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;width:28px;height:28px;align-self:center">×</button>
+  `;
+
+  roster.appendChild(row);
+  nnSync();
+}
+
+function nnRemoveRow(id){
+  const el = document.getElementById(id);
+  if(el) el.remove();
+  nnSync();
+}
+
+function nnSync(){
+  const hasNames = document.getElementById('nn-names')?.checked;
+  const hasNums  = document.getElementById('nn-numbers')?.checked;
+  nnRoster = [];
+  document.querySelectorAll('[id^="nnr-"]').forEach(row => {
+    const nameEl   = row.querySelector('[id$="-name"]');
+    const numEl    = row.querySelector('[id$="-number"]');
+    const sizeEl   = row.querySelector('[id$="-size"]');
+    nnRoster.push({
+      name:   nameEl  ? nameEl.value.trim()  : '',
+      number: numEl   ? numEl.value.trim()   : '',
+      size:   sizeEl  ? sizeEl.value         : 'M',
+    });
+  });
+
+  // Update summary
+  const summary = document.getElementById('nn-summary');
+  const summaryText = document.getElementById('nn-summary-text');
+  if(nnRoster.length > 0 && summary && summaryText){
+    const price = hasNames && hasNums ? 6 : hasNames ? 4 : hasNums ? 3 : 0;
+    const total = nnRoster.length * price;
+    summaryText.innerHTML = `${nnRoster.length} shirts × $${price}/shirt personalization = <strong style="color:#111">+$${total}</strong>`;
+    summary.style.display = 'block';
+  } else if(summary){
+    summary.style.display = 'none';
+  }
+}
+
+function nnUpdatePricing(){
+  const hasNames = document.getElementById('nn-names')?.checked;
+  const hasNums  = document.getElementById('nn-numbers')?.checked;
+  const el = document.getElementById('nn-pricing');
+  if(!el) return;
+  if(hasNames && hasNums) el.textContent = 'Names + Numbers: +$6 per shirt';
+  else if(hasNames)       el.textContent = 'Names only: +$4 per shirt';
+  else if(hasNums)        el.textContent = 'Numbers only: +$3 per shirt';
+  else                    el.textContent = 'Select at least Names or Numbers above';
+  nnSync();
+}
+
+function nnSave(){
+  nnSync();
+  if(nnRoster.length === 0){ sNtf('Add at least one person first!'); return; }
+  const hasNames = document.getElementById('nn-names')?.checked;
+  const hasNums  = document.getElementById('nn-numbers')?.checked;
+  const font  = document.getElementById('nn-font')?.value || 'Inter';
+  const color = document.getElementById('nn-color')?.value || '#111111';
+
+  // Store to localStorage for order
+  const nnData = { hasNames, hasNums, font, color, roster: nnRoster };
+  localStorage.setItem('hunto_names_numbers', JSON.stringify(nnData));
+
+  sNtf(`✓ Roster saved! ${nnRoster.length} shirt${nnRoster.length>1?'s':''} personalized`);
+}
+
+
 // ════════════════════════════════
 const phrases=["neon wolf howling at the moon...","vintage eagle with lightning bolts...","japanese koi watercolor splash...","retro 80s sunset with palm trees...","skull with roses fine line tattoo...","astronaut surfing a wave in space..."];
 let pi=0,ci=0,del=false;
@@ -3070,6 +3244,7 @@ function showTextToolbar(id){
     {icon:"🗑", label:"Delete", fn:()=>{ div.remove(); hideLayerToolbar(); }},
     {icon:"🔼", label:"Forward", fn:()=>{ moveLayerUp(id); }},
     {icon:"🔽", label:"Backward", fn:()=>{ moveLayerDown(id); }},
+    {icon:"↺", label:"Rotate", fn:()=>{ quickRotate(id); }},
   ];
 
   btns.forEach((b,i)=>{
