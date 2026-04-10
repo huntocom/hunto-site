@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v2.4 -->
+<!-- v2.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -2517,6 +2517,9 @@ function deselectAllLayers(){
     const rzh = document.getElementById("rzh-"+el.id);
     if(rzh) rzh.style.display = "none";
   });
+  document.querySelectorAll("[data-type='text']").forEach(el => {
+    el.classList.remove("selected");
+  });
   hideLayerToolbar();
 }
 
@@ -2598,15 +2601,41 @@ function toggleLayerMenuNew(id){
   }
 }
 
+// ── Unified layer z-order (images + text treated as one stack) ──
+function getAllLayersSorted(){
+  const els = Array.from(document.querySelectorAll(
+    "#s-shirt-wrap [data-type='image'], #s-shirt-wrap [data-type='text']"
+  ));
+  els.sort((a,b) => (parseInt(a.style.zIndex)||3) - (parseInt(b.style.zIndex)||3));
+  return els;
+}
+
+function reindexLayers(els){
+  // Assign clean sequential z-indices starting at 3
+  els.forEach((el, i) => { el.style.zIndex = String(3 + i); });
+}
+
 function moveLayerUp(id){
-  const el = document.getElementById(id);
-  if(el) el.style.zIndex = (parseInt(el.style.zIndex)||3) + 1;
+  const layers = getAllLayersSorted();
+  const idx = layers.findIndex(el => el.id === id);
+  if(idx < 0 || idx === layers.length - 1) return; // already on top
+  // Swap with the layer above
+  const tmp = layers[idx];
+  layers[idx] = layers[idx + 1];
+  layers[idx + 1] = tmp;
+  reindexLayers(layers);
   document.querySelectorAll("[id^='lm-']").forEach(m => m.style.display = "none");
 }
 
 function moveLayerDown(id){
-  const el = document.getElementById(id);
-  if(el) el.style.zIndex = Math.max(3, (parseInt(el.style.zIndex)||3) - 1);
+  const layers = getAllLayersSorted();
+  const idx = layers.findIndex(el => el.id === id);
+  if(idx <= 0) return; // already at bottom
+  // Swap with the layer below
+  const tmp = layers[idx];
+  layers[idx] = layers[idx - 1];
+  layers[idx - 1] = tmp;
+  reindexLayers(layers);
   document.querySelectorAll("[id^='lm-']").forEach(m => m.style.display = "none");
 }
 
@@ -2943,8 +2972,8 @@ function showTextToolbar(id){
 
   const btns = [
     {icon:"🗑", label:"Delete", fn:()=>{ div.remove(); hideLayerToolbar(); }},
-    {icon:"🔼", label:"Forward", fn:()=>{ div.style.zIndex=String(parseInt(div.style.zIndex||3)+1); }},
-    {icon:"🔽", label:"Backward", fn:()=>{ div.style.zIndex=String(Math.max(3,parseInt(div.style.zIndex||3)-1)); }},
+    {icon:"🔼", label:"Forward", fn:()=>{ moveLayerUp(id); }},
+    {icon:"🔽", label:"Backward", fn:()=>{ moveLayerDown(id); }},
   ];
 
   btns.forEach((b,i)=>{
