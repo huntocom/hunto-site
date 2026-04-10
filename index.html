@@ -1434,10 +1434,10 @@ footer{background:#111;padding:56px 32px 28px}
         <div id="s-shirt-wrap" style="position:relative;display:inline-block;background:#fff;border-radius:8px;">
           <div id="s-shirt-color-bg" style="display:none;"></div>
           <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="position:relative;z-index:1;mix-blend-mode:normal;filter:none;">
-          <div class="s-dzone" id="s-dzone-front" style="width:240px;height:272px;top:140px;left:50%;transform:translateX(-50%);position:absolute;z-index:2;">
+          <div class="s-dzone" id="s-dzone-front" style="width:200px;height:220px;top:160px;left:50%;transform:translateX(-50%);position:absolute;z-index:2;">
             <div class="s-dzone-border"></div>
           </div>
-          <div class="s-dzone" id="s-dzone-back" style="width:240px;height:272px;top:140px;left:50%;transform:translateX(-50%);display:none;position:absolute;z-index:2;">
+          <div class="s-dzone" id="s-dzone-back" style="width:200px;height:220px;top:160px;left:50%;transform:translateX(-50%);display:none;position:absolute;z-index:2;">
             <div class="s-dzone-border"></div>
           </div>
         </div>
@@ -2419,14 +2419,101 @@ function renderDesignZone(side){
   const dz = document.getElementById("s-dzone-" + side);
   if(!dz || !sDesigns[side]) return;
   dz.innerHTML=`
-    <div class="s-dzone-border"></div>
-    <div class="dzone-label">15" × 17" print area</div>
-    <img src="${sDesigns[side]}" style="
+    <img src="${sDesigns[side]}" id="design-img-${side}" style="
       width:100%;height:100%;
       object-fit:contain;object-position:center;
       display:block;mix-blend-mode:normal;
-    ">`;
+      pointer-events:none;
+    ">
+    <div id="resize-handle-${side}" style="
+      position:absolute;bottom:-10px;right:-10px;
+      width:22px;height:22px;
+      background:#4a9eff;border-radius:50%;
+      cursor:se-resize;z-index:10;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 2px 6px rgba(0,0,0,.3);
+    ">⤡</div>`;
   dz.style.background="transparent";
+  dz.style.cursor="move";
+  makeDraggable(dz, side);
+  makeResizable(dz, side);
+}
+
+function makeDraggable(dz, side){
+  let startX, startY, startLeft, startTop;
+  const wrap = document.getElementById("s-shirt-wrap");
+
+  function onDown(e){
+    if(e.target.id === "resize-handle-"+side) return;
+    e.preventDefault();
+    const pt = e.touches ? e.touches[0] : e;
+    startX = pt.clientX;
+    startY = pt.clientY;
+    startLeft = parseInt(dz.style.left)||0;
+    startTop = parseInt(dz.style.top)||0;
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+    document.addEventListener("touchmove", onMove, {passive:false});
+    document.addEventListener("touchend", onUp);
+  }
+
+  function onMove(e){
+    e.preventDefault();
+    const pt = e.touches ? e.touches[0] : e;
+    const dx = pt.clientX - startX;
+    const dy = pt.clientY - startY;
+    const wrapW = wrap.offsetWidth;
+    const wrapH = wrap.offsetHeight;
+    const dzW = dz.offsetWidth;
+    const dzH = dz.offsetHeight;
+    let newLeft = startLeft + dx;
+    let newTop = startTop + dy;
+    newLeft = Math.max(0, Math.min(wrapW - dzW, newLeft));
+    newTop = Math.max(0, Math.min(wrapH - dzH, newTop));
+    dz.style.left = newLeft + "px";
+    dz.style.top = newTop + "px";
+    dz.style.transform = "none";
+  }
+
+  function onUp(){
+    document.removeEventListener("mousemove", onMove);
+    document.removeEventListener("mouseup", onUp);
+    document.removeEventListener("touchmove", onMove);
+    document.removeEventListener("touchend", onUp);
+  }
+
+  dz.addEventListener("mousedown", onDown);
+  dz.addEventListener("touchstart", onDown, {passive:false});
+}
+
+function makeResizable(dz, side){
+  const handle = document.getElementById("resize-handle-"+side);
+  if(!handle) return;
+  let startX, startY, startW, startH;
+
+  handle.addEventListener("mousedown", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    startX = e.clientX;
+    startY = e.clientY;
+    startW = dz.offsetWidth;
+    startH = dz.offsetHeight;
+    document.addEventListener("mousemove", onResize);
+    document.addEventListener("mouseup", stopResize);
+  });
+
+  function onResize(e){
+    const dx = e.clientX - startX;
+    const newW = Math.max(80, startW + dx);
+    const newH = Math.max(80, startH + dx);
+    dz.style.width = newW + "px";
+    dz.style.height = newH + "px";
+  }
+
+  function stopResize(){
+    document.removeEventListener("mousemove", onResize);
+    document.removeEventListener("mouseup", stopResize);
+  }
 }
 
 function clearCurrentDesign(){
