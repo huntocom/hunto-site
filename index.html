@@ -760,7 +760,7 @@ footer{background:#111;padding:56px 32px 28px}
   line-height:1.2;
 }
 .txt-layer.selected{border-color:rgba(74,158,255,.7)}
-.txt-layer:hover{border-color:rgba(74,158,255,.4)}
+.txt-layer:hover{border-color:rgba(74,158,255,.3)}
 .txt-delete-btn{
   position:absolute;
   top:-10px;right:-10px;
@@ -1366,18 +1366,37 @@ footer{background:#111;padding:56px 32px 28px}
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
         </div>
         <div class="s-panel-body">
+
+          <!-- Photo to AI — prominent feature -->
+          <div style="background:linear-gradient(135deg,#f0f7ff,#e8f3ff);border-radius:14px;padding:16px;margin-bottom:14px;border:1.5px solid #c8deff;">
+            <div style="font-size:13px;font-weight:800;color:#111;margin-bottom:4px">✦ Turn Your Photo into AI Art</div>
+            <div style="font-size:12px;color:#666;margin-bottom:12px;line-height:1.5">Upload any photo — your pet, face, logo — and AI will transform it into a unique shirt design</div>
+            <div class="upload-zone" onclick="document.getElementById('s-file').click()" style="background:#fff;margin-bottom:0">
+              <div class="upload-zone-icon">📸</div>
+              <div class="upload-zone-title">Upload a Photo</div>
+              <div class="upload-zone-sub">JPG or PNG · Pet, person, logo, anything</div>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <div style="flex:1;height:1px;background:#eee"></div>
+            <span style="font-size:11px;color:#bbb;font-weight:600">OR UPLOAD ARTWORK DIRECTLY</span>
+            <div style="flex:1;height:1px;background:#eee"></div>
+          </div>
+
           <div class="upload-zone" onclick="document.getElementById('s-file').click()">
             <div class="upload-zone-icon">↑</div>
-            <div class="upload-zone-title">Click to upload your image</div>
-            <div class="upload-zone-sub">PNG or JPG · Artwork or photo</div>
-            <div class="upload-zone-sub" style="margin-top:3px">Auto-optimized for DTF print quality</div>
+            <div class="upload-zone-title">Upload Existing Artwork</div>
+            <div class="upload-zone-sub">PNG with transparent background recommended</div>
           </div>
+
           <input type="file" id="s-file" accept="image/*" style="display:none" onchange="handleUpload(event)">
 
           <div id="upload-edit-section" style="display:none;margin-top:14px">
-            <div style="font-size:11px;font-weight:700;color:#4a9eff;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">✦ AI Transform with GPT-4o</div>
-            <div style="font-size:12px;color:#888;margin-bottom:8px;line-height:1.5">Describe how to transform your photo into a shirt design</div>
-            <textarea class="ai-ta" id="edit-prompt" placeholder="e.g. turn into bold graphic art, cartoon style, vintage poster..." style="height:70px"></textarea>
+            <div style="font-size:13px;font-weight:800;color:#111;margin-bottom:8px">Photo uploaded! ✓</div>
+            <div style="font-size:12px;color:#888;margin-bottom:8px;line-height:1.5">Describe how to transform it into a shirt design:</div>
+            <textarea class="ai-ta" id="edit-prompt" placeholder="e.g. my dog as a cartoon mascot, vintage style, bold graphic art, watercolor painting..." style="height:80px"></textarea>
             <button onclick="aiEditUpload()" id="ai-edit-btn" class="ai-gen-btn" style="margin-top:8px">✦ Transform with AI</button>
             <div style="margin-top:8px;font-size:11px;color:#bbb;text-align:center">— or —</div>
             <button onclick="applyUploadDirect()" style="width:100%;height:38px;background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;color:#555;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;font-family:Inter,sans-serif">Use photo as-is</button>
@@ -2531,39 +2550,119 @@ function renderDesignZone(side){
     <div onclick="clearCurrentDesign()" style="
       position:absolute;top:-14px;left:-14px;width:26px;height:26px;
       background:#fff;border-radius:50%;border:1.5px solid #ddd;
-      display:flex;align-items:center;justify-content:center;
+      display:none;align-items:center;justify-content:center;
       cursor:pointer;z-index:10;font-size:12px;
       box-shadow:0 2px 6px rgba(0,0,0,.15);" title="Delete">🗑</div>
     <div id="rotate-handle-${side}" style="
       position:absolute;top:-14px;right:-14px;width:26px;height:26px;
       background:#fff;border-radius:50%;border:1.5px solid #ddd;
-      display:flex;align-items:center;justify-content:center;
+      display:none;align-items:center;justify-content:center;
       cursor:grab;z-index:10;font-size:13px;
       box-shadow:0 2px 6px rgba(0,0,0,.15);" title="Rotate">↺</div>
     <div id="resize-handle-${side}" style="
       position:absolute;bottom:-14px;right:-14px;width:26px;height:26px;
       background:#4a9eff;border-radius:50%;
-      display:flex;align-items:center;justify-content:center;
+      display:none;align-items:center;justify-content:center;
       cursor:se-resize;z-index:10;font-size:12px;color:#fff;
       box-shadow:0 2px 6px rgba(0,0,0,.2);" title="Resize">⤡</div>
-    <div onclick="copyToBack('${side}')" style="
+    <div onclick="toggleLayerMenu('${side}')" id="layer-btn-${side}" style="
       position:absolute;bottom:-14px;left:-14px;width:26px;height:26px;
       background:#fff;border-radius:50%;border:1.5px solid #ddd;
-      display:flex;align-items:center;justify-content:center;
-      cursor:pointer;z-index:10;font-size:11px;font-weight:700;color:#555;
-      box-shadow:0 2px 6px rgba(0,0,0,.15);" title="Copy to Back">⬚</div>
+      display:none;align-items:center;justify-content:center;
+      cursor:pointer;z-index:10;font-size:13px;color:#555;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);" title="Layering">🔲</div>
+    <!-- Layering menu -->
+    <div id="layer-menu-${side}" style="
+      display:none;position:absolute;bottom:20px;left:-14px;
+      background:#fff;border-radius:12px;
+      box-shadow:0 8px 24px rgba(0,0,0,.15);
+      border:1px solid #e8e8e8;z-index:20;
+      min-width:180px;overflow:hidden;">
+      <div onclick="layerAction('bringToFront','${side}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f5f5f5;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">🔼 Bring to Front</div>
+      <div onclick="layerAction('sendToBack','${side}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f5f5f5;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">🔽 Send to Back</div>
+      <div onclick="layerAction('copyToBack','${side}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;display:flex;align-items:center;gap:10px;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">📋 Copy to Back</div>
+    </div>
+    <!-- Selection border - hidden by default -->
+    <div id="dz-border-${side}" style="position:absolute;inset:-2px;border:2px dashed transparent;pointer-events:none;border-radius:2px;transition:border-color .15s;"></div>
+    <!-- Handles - hidden by default -->
+    <div id="dz-handles-${side}" style="display:none;pointer-events:none;position:absolute;inset:0;">
+      <!-- handles are positioned relative to dz, enabled via pointer-events on click -->
+    </div>
   `;
 
+  // Show/hide handles and border on click
+  dz.addEventListener("click", function(e){
+    e.stopPropagation();
+    selectDesign(side);
+  });
+
+  // Hide on outside click
+  if(!window._dzOutsideHandler){
+    window._dzOutsideHandler = true;
+    document.addEventListener("click", function(){
+      deselectAllDesigns();
+    });
+  }
+
+  dz.style.background="transparent";
+  dz.style.cursor="move";
   makeDraggable(dz, side);
   makeResizable(dz, side);
   makeRotatable(dz, side);
 }
 
-function copyToBack(side){
-  const otherSide = side === "front" ? "back" : "front";
-  sDesigns[otherSide] = sDesigns[side];
-  renderDesignZone(otherSide);
-  sNtf("Design copied to " + otherSide + "!");
+function selectDesign(side){
+  deselectAllDesigns();
+  const dz = document.getElementById("s-dzone-"+side);
+  const border = document.getElementById("dz-border-"+side);
+  if(border) border.style.borderColor = "rgba(74,158,255,.7)";
+  if(dz) dz.querySelectorAll("[title]").forEach(el => {
+    el.style.display = "flex";
+  });
+}
+
+function deselectAllDesigns(){
+  ["front","back"].forEach(s=>{
+    const border = document.getElementById("dz-border-"+s);
+    if(border) border.style.borderColor = "transparent";
+    const dz = document.getElementById("s-dzone-"+s);
+    if(dz) dz.querySelectorAll("[title]").forEach(el => el.style.display = "none");
+  });
+}
+
+function toggleLayerMenu(side){
+  const menu = document.getElementById("layer-menu-"+side);
+  if(!menu) return;
+  menu.style.display = menu.style.display === "none" ? "block" : "none";
+  // Close when clicking outside
+  setTimeout(()=>{
+    document.addEventListener("click", function close(e){
+      if(!menu.contains(e.target)){
+        menu.style.display = "none";
+        document.removeEventListener("click", close);
+      }
+    });
+  }, 0);
+}
+
+function layerAction(action, side){
+  const menu = document.getElementById("layer-menu-"+side);
+  if(menu) menu.style.display = "none";
+  const dz = document.getElementById("s-dzone-"+side);
+  if(!dz) return;
+
+  if(action === "bringToFront"){
+    dz.style.zIndex = "10";
+    sNtf("Brought to front!");
+  } else if(action === "sendToBack"){
+    dz.style.zIndex = "2";
+    sNtf("Sent to back!");
+  } else if(action === "copyToBack"){
+    const otherSide = side === "front" ? "back" : "front";
+    sDesigns[otherSide] = sDesigns[side];
+    renderDesignZone(otherSide);
+    sNtf("Design copied to " + otherSide + "!");
+  }
 }
 
 function makeRotatable(dz, side){
@@ -2973,18 +3072,34 @@ function txtDragStart(e){
 
 function txtDragMove(e){
   if(!dragTxt)return;
-  const stage=document.getElementById("s-shirt").parentElement;
-  const stageRect=stage.getBoundingClientRect();
-  let x=e.clientX-stageRect.left-dragOffX;
-  let y=e.clientY-stageRect.top-dragOffY;
-  dragTxt.style.left=x+"px";
-  dragTxt.style.top=y+"px";
+  const wrap = document.getElementById("s-shirt-wrap");
+  const wrapRect = wrap.getBoundingClientRect();
+  let x = e.clientX - wrapRect.left - dragOffX;
+  let y = e.clientY - wrapRect.top - dragOffY;
+  dragTxt.style.left = x + "px";
+  dragTxt.style.top = y + "px";
+
+  // Check against print area
+  const side = sView === "back" ? "back" : "front";
+  const pa = document.getElementById("print-area-" + side);
+  if(pa){
+    const paL = pa.offsetLeft, paT = pa.offsetTop;
+    const paR = paL + pa.offsetWidth, paB = paT + pa.offsetHeight;
+    const elW = dragTxt.offsetWidth, elH = dragTxt.offsetHeight;
+    const outside = x < paL || y < paT || x + elW > paR || y + elH > paB;
+    pa.style.borderColor = outside ? "rgba(255,80,80,.8)" : "rgba(74,158,255,.4)";
+    showBoundingWarning(outside);
+  }
 }
 
 function txtDragEnd(){
   dragTxt=null;
   document.removeEventListener("mousemove",txtDragMove);
   document.removeEventListener("mouseup",txtDragEnd);
+  const side = sView === "back" ? "back" : "front";
+  const pa = document.getElementById("print-area-" + side);
+  if(pa) pa.style.borderColor = "transparent";
+  showBoundingWarning(false);
 }
 
 // Touch drag
@@ -2994,15 +3109,15 @@ function txtDragStartTouch(e){
   const el=e.currentTarget;
   document.querySelectorAll(".txt-layer").forEach(x=>x.classList.remove("selected"));
   el.classList.add("selected");
-  const stage=document.getElementById("s-shirt").parentElement;
-  const stageRect=stage.getBoundingClientRect();
+  const wrap=document.getElementById("s-shirt-wrap");
+  const wrapRect=wrap.getBoundingClientRect();
   const elRect=el.getBoundingClientRect();
   dragTxt=el;
   dragOffX=touch.clientX-elRect.left;
   dragOffY=touch.clientY-elRect.top;
   el.style.transform="none";
-  el.style.left=(elRect.left-stageRect.left)+"px";
-  el.style.top=(elRect.top-stageRect.top)+"px";
+  el.style.left=(elRect.left-wrapRect.left)+"px";
+  el.style.top=(elRect.top-wrapRect.top)+"px";
   document.addEventListener("touchmove",txtDragMoveTouch,{passive:false});
   document.addEventListener("touchend",txtDragEndTouch);
 }
@@ -3011,10 +3126,22 @@ function txtDragMoveTouch(e){
   e.preventDefault();
   if(!dragTxt)return;
   const touch=e.touches[0];
-  const stage=document.getElementById("s-shirt").parentElement;
-  const sr=stage.getBoundingClientRect();
-  dragTxt.style.left=(touch.clientX-sr.left-dragOffX)+"px";
-  dragTxt.style.top=(touch.clientY-sr.top-dragOffY)+"px";
+  const wrap=document.getElementById("s-shirt-wrap");
+  const wr=wrap.getBoundingClientRect();
+  const x=touch.clientX-wr.left-dragOffX;
+  const y=touch.clientY-wr.top-dragOffY;
+  dragTxt.style.left=x+"px";
+  dragTxt.style.top=y+"px";
+
+  // Check print area
+  const side = sView === "back" ? "back" : "front";
+  const pa = document.getElementById("print-area-" + side);
+  if(pa){
+    const paL=pa.offsetLeft,paT=pa.offsetTop,paR=paL+pa.offsetWidth,paB=paT+pa.offsetHeight;
+    const outside = x<paL||y<paT||x+dragTxt.offsetWidth>paR||y+dragTxt.offsetHeight>paB;
+    pa.style.borderColor = outside?"rgba(255,80,80,.8)":"rgba(74,158,255,.4)";
+    showBoundingWarning(outside);
+  }
 }
 
 function txtDragEndTouch(){
