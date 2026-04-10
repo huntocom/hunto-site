@@ -1434,6 +1434,12 @@ footer{background:#111;padding:56px 32px 28px}
         <div id="s-shirt-wrap" style="position:relative;display:inline-block;background:#fff;border-radius:8px;">
           <div id="s-shirt-color-bg" style="display:none;"></div>
           <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="position:relative;z-index:1;mix-blend-mode:normal;filter:none;">
+          <div class="s-dzone" id="s-dzone-front" style="width:240px;height:272px;top:140px;left:50%;transform:translateX(-50%);position:absolute;z-index:2;">
+            <div class="s-dzone-border"></div>
+          </div>
+          <div class="s-dzone" id="s-dzone-back" style="width:240px;height:272px;top:140px;left:50%;transform:translateX(-50%);display:none;position:absolute;z-index:2;">
+            <div class="s-dzone-border"></div>
+          </div>
         </div>
         <div class="float-pills" id="s-floats">
           <button class="float-pill" onclick="sPanel('text',document.getElementById('sib-text'))">
@@ -1445,12 +1451,6 @@ footer{background:#111;padding:56px 32px 28px}
           <button class="float-pill" onclick="sPanel('upload',document.getElementById('sib-upload'))">
             <span class="float-pill-icon">↑</span> Upload Art
           </button>
-        </div>
-        <div class="s-dzone" id="s-dzone-front" style="width:240px;height:272px;top:140px;left:50%;transform:translateX(-50%)">
-          <div class="s-dzone-border"></div>
-        </div>
-        <div class="s-dzone" id="s-dzone-back" style="width:240px;height:272px;top:140px;left:50%;transform:translateX(-50%);display:none">
-          <div class="s-dzone-border"></div>
         </div>
       </div>
       <div class="s-canvas-label" id="s-canvas-label">Front — Gildan 8000 · White · M</div>
