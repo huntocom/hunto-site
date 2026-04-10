@@ -1451,7 +1451,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div class="s-ntf" id="s-ntf"></div>
       <div class="s-shirt-stage">
         <div id="s-shirt-wrap" style="position:relative;display:inline-block;background:#fff;border-radius:8px;">
-          <div id="s-shirt-color-bg" style="position:absolute;inset:0;border-radius:8px;transition:background .3s;z-index:0;"></div>
+          <div id="s-shirt-color-bg" style="display:none;"></div>
           <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="position:relative;z-index:1;mix-blend-mode:normal;filter:none;">
         </div>
         <div class="float-pills" id="s-floats">
@@ -1818,6 +1818,7 @@ function initStudio(){
   // Load initial shirt photo
   const initPhoto = getShirtPhotoUrl(sState.product.id, sState.color.n, "front");
   const shirtEl = document.getElementById("s-shirt");
+  shirtEl.style.mixBlendMode = "normal";
   shirtEl.src = initPhoto;
   shirtEl.onerror = ()=>{ shirtEl.src=IMG_F; };
   sUpdateAll();
@@ -1959,6 +1960,7 @@ function sSetView(v){
 
   const img=document.getElementById("s-shirt");
   img.style.opacity=".15";
+  img.style.mixBlendMode="normal";
   const photoUrl = getShirtPhotoUrl(sState.product.id, sState.color.n, v);
   img.src = photoUrl;
   img.onload=()=>{img.style.opacity="1";};
@@ -2838,13 +2840,13 @@ const SHIRT_PHOTOS_8000 = {
     "Purple":            {f:BASE+"purplefront.jpg",           b:BASE+"purpleback.jpg"},
     "Red":               {f:BASE+"redfront.jpg",              b:BASE+"redback.jpg"},
     "Royal":             {f:BASE+"royalfront.jpg",            b:BASE+"royalback.jpg"},
-    "Safety Green":      {f:BASE+"SAFTEYGREENFONT.jpg",       b:BASE+"SAFTEYGREENBACK.jpg"},
+    "Safety Green":      {f:BASE+"SAFETYGREENFRONT.jpg",      b:BASE+"SAFETYGREENBACK.jpg"},
     "Safety Orange":     {f:BASE+"SAFTEYORANGEFRONT.jpg",     b:BASE+"SAFTEYORANGEBACK.jpg"},
     "Sand":              {f:BASE+"SANDFRONT.jpg",             b:BASE+"SANDBACK.jpg"},
     "Sapphire":          {f:BASE+"SAPHIREFRONT.jpg",          b:BASE+"SAPHIREBACK.jpg"},
-    "Scarlet Red":       {f:BASE+"SCARLETTSREDFRONTI.jpg",    b:BASE+"SCARLETTSREDBACK.jpg"},
+    "Scarlet Red":       {f:BASE+"SCARLETREDFRONT.jpg",       b:BASE+"SCARLETREDBACK.jpg"},
     "Sport Grey":        {f:BASE+"SPORTGREYFRONT.jpg",        b:BASE+"SPORTGREYBACK.jpg"},
-    "Tennessee Orange":  {f:BASE+"TENESSEEORANGEFRONT.jpg",   b:BASE+"TENESSEEORANGEBACK.jpg"},
+    "Tennessee Orange":  {f:BASE+"TENNESSEEORANGEFRONT.jpg",  b:BASE+"TENNESSEEORANGEBACK.jpg"},
     "Texas Orange":      {f:BASE+"TEXASORANGEFRONT.jpg",      b:BASE+"TEXASORANGEBACK.jpg"},
     "White":             {f:BASE+"WHITEFRONT.jpg",            b:BASE+"WHITEBACK.jpg"},
     "Heather Dark Navy": {f:BASE+"heatherdarknavyfront.jpg",  b:BASE+"heatherdarknavyback.jpg"},
