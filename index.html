@@ -2530,8 +2530,8 @@ function makeDraggable(dz, side){
     const pt = e.touches ? e.touches[0] : e;
     startX = pt.clientX;
     startY = pt.clientY;
-    startLeft = parseInt(dz.style.left)||0;
-    startTop = parseInt(dz.style.top)||0;
+    startLeft = dz.offsetLeft;
+    startTop = dz.offsetTop;
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onUp);
     document.addEventListener("touchmove", onMove, {passive:false});
@@ -2541,16 +2541,14 @@ function makeDraggable(dz, side){
   function onMove(e){
     e.preventDefault();
     const pt = e.touches ? e.touches[0] : e;
-    const dx = pt.clientX - startX;
-    const dy = pt.clientY - startY;
     const wrap = document.getElementById("s-shirt-wrap");
     const wrapW = wrap.offsetWidth;
     const wrapH = wrap.offsetHeight;
     const dzW = dz.offsetWidth;
     const dzH = dz.offsetHeight;
-    let newLeft = startLeft + dx;
-    let newTop = startTop + dy;
-    // Constrain within shirt wrap
+    let newLeft = startLeft + (pt.clientX - startX);
+    let newTop = startTop + (pt.clientY - startY);
+    // Hard constrain within wrap
     newLeft = Math.max(0, Math.min(wrapW - dzW, newLeft));
     newTop = Math.max(0, Math.min(wrapH - dzH, newTop));
     dz.style.left = newLeft + "px";
@@ -2587,8 +2585,11 @@ function makeResizable(dz, side){
 
   function onResize(e){
     const dx = e.clientX - startX;
-    const newW = Math.max(80, startW + dx);
-    const newH = Math.max(80, startH + dx);
+    const wrap = document.getElementById("s-shirt-wrap");
+    const maxW = wrap.offsetWidth - dz.offsetLeft;
+    const maxH = wrap.offsetHeight - dz.offsetTop;
+    const newW = Math.max(80, Math.min(maxW, startW + dx));
+    const newH = Math.max(80, Math.min(maxH, startH + dx));
     dz.style.width = newW + "px";
     dz.style.height = newH + "px";
   }
