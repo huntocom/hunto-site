@@ -1908,11 +1908,11 @@ function sApplyTint(){
     shirtImg.style.mixBlendMode = (c.h==="#ffffff"||c.h==="#fff") ? "normal" : "multiply";
     if(bg) bg.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
   } else {
-    // Load real colored shirt photo
+    // Load real colored shirt photo — always white bg + multiply blend
     shirtImg.style.opacity = "0.3";
-    shirtImg.style.mixBlendMode = "normal";
+    shirtImg.style.mixBlendMode = "multiply";
     shirtImg.style.filter = "none";
-    if(bg) bg.style.background = "transparent";
+    if(bg) bg.style.background = "#ffffff";
     shirtImg.src = photoUrl;
     shirtImg.onload = ()=>{ shirtImg.style.opacity="1"; };
     shirtImg.onerror = ()=>{
