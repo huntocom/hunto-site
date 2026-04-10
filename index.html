@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hunto — Wear What You Imagine</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Oswald:wght@400;700&family=Raleway:wght@400;700;900&family=Permanent+Marker&family=Russo+One&family=Pacifico&family=Righteous&family=Satisfy&family=Lobster&family=Anton&family=Black+Han+Sans&family=Bungee&family=Alfa+Slab+One&family=Squada+One&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════
    RESET & BASE
@@ -1228,14 +1228,36 @@ footer{background:#111;padding:56px 32px 28px}
           <select id="txt-font" onchange="txtUpdate()"
             style="width:100%;padding:9px 12px;border:1.5px solid #e8e8e8;border-radius:10px;
             font-size:13px;outline:none;background:#fff;cursor:pointer;color:#111;font-family:Inter,sans-serif">
-            <option value="Inter">Inter — Clean Sans-Serif</option>
-            <option value="'Bebas Neue',Impact,sans-serif">Bebas Neue — Bold Block</option>
-            <option value="Georgia,serif">Georgia — Classic Serif</option>
-            <option value="'Courier New',monospace">Courier — Typewriter</option>
-            <option value="'Arial Black',sans-serif">Arial Black — Heavy</option>
-            <option value="'Brush Script MT',cursive">Brush Script — Handwritten</option>
-            <option value="'Times New Roman',serif">Times New Roman — Formal</option>
-            <option value="Verdana,sans-serif">Verdana — Rounded</option>
+            <optgroup label="— Sans Serif —">
+              <option value="Inter">Inter — Clean Modern</option>
+              <option value="'Arial Black',sans-serif">Arial Black — Heavy</option>
+              <option value="Verdana,sans-serif">Verdana — Rounded</option>
+            </optgroup>
+            <optgroup label="— Bold / Impact —">
+              <option value="'Bebas Neue',sans-serif">Bebas Neue — Bold Block</option>
+              <option value="'Anton',sans-serif">Anton — Ultra Bold</option>
+              <option value="'Russo One',sans-serif">Russo One — Strong</option>
+              <option value="'Oswald',sans-serif">Oswald — Condensed Bold</option>
+              <option value="'Bungee',sans-serif">Bungee — Street Bold</option>
+              <option value="'Squada One',sans-serif">Squada One — Square</option>
+              <option value="'Alfa Slab One',serif">Alfa Slab — Slab Bold</option>
+              <option value="'Righteous',sans-serif">Righteous — Retro Bold</option>
+            </optgroup>
+            <optgroup label="— Script / Handwritten —">
+              <option value="'Permanent Marker',cursive">Permanent Marker — Marker</option>
+              <option value="'Pacifico',cursive">Pacifico — Fun Script</option>
+              <option value="'Lobster',cursive">Lobster — Elegant Script</option>
+              <option value="'Satisfy',cursive">Satisfy — Flowing Script</option>
+              <option value="'Brush Script MT',cursive">Brush Script — Classic</option>
+            </optgroup>
+            <optgroup label="— Serif —">
+              <option value="Georgia,serif">Georgia — Classic Serif</option>
+              <option value="'Times New Roman',serif">Times New Roman — Formal</option>
+            </optgroup>
+            <optgroup label="— Other —">
+              <option value="'Courier New',monospace">Courier — Typewriter</option>
+              <option value="'Raleway',sans-serif">Raleway — Elegant</option>
+            </optgroup>
           </select>
 
           <div class="s-label" style="margin-top:16px">Size</div>
@@ -2469,7 +2491,7 @@ function addImageLayer(side, id, src){
       <div id="rh-${id}" style="position:absolute;top:-14px;right:-14px;width:26px;height:26px;background:#fff;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;cursor:grab;z-index:10;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.15);">↺</div>
       <div id="rzh-${id}" style="position:absolute;bottom:-14px;right:-14px;width:26px;height:26px;background:#4a9eff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:se-resize;z-index:10;font-size:12px;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);">⤡</div>
       <div onclick="toggleLayerMenuNew('${id}')" style="position:absolute;bottom:-14px;left:-14px;width:26px;height:26px;background:#fff;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:13px;color:#555;box-shadow:0 2px 6px rgba(0,0,0,.15);">🔲</div>
-      <div id="lm-${id}" style="display:none;position:absolute;bottom:20px;left:-14px;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);border:1px solid #e8e8e8;z-index:20;min-width:180px;overflow:hidden;">
+      <div id="lm-${id}" style="display:none;position:fixed;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);border:1px solid #e8e8e8;z-index:9999;min-width:180px;overflow:hidden;">
         <div onclick="moveLayerUp('${id}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;border-bottom:1px solid #f5f5f5;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">🔼 Bring Forward</div>
         <div onclick="moveLayerDown('${id}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;border-bottom:1px solid #f5f5f5;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">🔽 Send Backward</div>
         <div onclick="copyLayerToBack('${id}')" style="padding:10px 16px;font-size:13px;font-weight:600;color:#111;cursor:pointer;" onmouseover="this.style.background='#f8fbff'" onmouseout="this.style.background='#fff'">📋 Copy to Back</div>
@@ -2515,10 +2537,20 @@ function removeLayer(id){
 
 function toggleLayerMenuNew(id){
   const menu = document.getElementById("lm-"+id);
+  const btn = document.getElementById("layer-" + id.split("layer-")[1])?.querySelector("[onclick*='toggleLayerMenuNew']");
   if(!menu) return;
   const isVisible = menu.style.display === "block";
-  document.querySelectorAll("[id^='lm-']").forEach(m => m.style.display = "none");
-  if(!isVisible){ menu.style.display = "block"; }
+  document.querySelectorAll("[id^='lm-'],[id^='tlm-']").forEach(m => m.style.display = "none");
+  if(!isVisible){
+    // Position near the layer element
+    const el = document.getElementById(id);
+    if(el){
+      const rect = el.getBoundingClientRect();
+      menu.style.top = (rect.bottom + 4) + "px";
+      menu.style.left = rect.left + "px";
+    }
+    menu.style.display = "block";
+  }
 }
 
 function moveLayerUp(id){
@@ -2804,14 +2836,9 @@ function txtUpdate(){
 
 function txtPlace(){
   const raw=(document.getElementById("txt-input")||{value:""}).value.trim();
-  if(!raw){
-    sNtf("Enter some text first!");
-    return;
-  }
-  const stage=document.getElementById("s-shirt").parentElement;
-  const stageRect=stage.getBoundingClientRect();
+  if(!raw){ sNtf("Enter some text first!"); return; }
 
-  // Deselect any existing selection
+  const wrap = document.getElementById("s-shirt-wrap");
   document.querySelectorAll(".txt-layer").forEach(el=>el.classList.remove("selected"));
 
   const id="txtlayer-"+(++textLayerCount);
@@ -2820,12 +2847,13 @@ function txtPlace(){
   div.id=id;
   div.dataset.color=txtState.color;
   div.dataset.align=txtState.align;
-
-  // Position in center of visible shirt area
-  div.style.top="210px";
+  div.dataset.side = sView === "back" ? "back" : "front";
+  div.dataset.type = "text";
+  div.style.top="300px";
   div.style.left="50%";
   div.style.transform="translateX(-50%)";
   div.style.minWidth="60px";
+  div.style.zIndex = String(3 + layerCounter);
 
   applyTxtStyle(div);
   div.textContent=txtState.upper?raw.toUpperCase():raw;
@@ -2837,24 +2865,42 @@ function txtPlace(){
   del.onclick=(e)=>{e.stopPropagation();div.remove();};
   div.appendChild(del);
 
-  // Make draggable
+  // Layer menu button (shown on select)
+  const layerBtn=document.createElement("div");
+  layerBtn.style.cssText="position:absolute;top:-14px;left:-14px;width:22px;height:22px;background:#fff;border-radius:50%;border:1.5px solid #ddd;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:11;font-size:11px;box-shadow:0 2px 6px rgba(0,0,0,.15);";
+  layerBtn.innerHTML="🔲";
+  layerBtn.onclick=(e)=>{
+    e.stopPropagation();
+    const menu=document.getElementById("tlm-"+id);
+    if(!menu)return;
+    const vis=menu.style.display==="block";
+    document.querySelectorAll("[id^='tlm-'],[id^='lm-']").forEach(m=>m.style.display="none");
+    if(!vis) menu.style.display="block";
+  };
+  div.appendChild(layerBtn);
+
+  // Layer menu
+  const layerMenu=document.createElement("div");
+  layerMenu.id="tlm-"+id;
+  layerMenu.style.cssText="display:none;position:absolute;top:22px;left:-14px;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);border:1px solid #e8e8e8;z-index:20;min-width:160px;overflow:hidden;";
+  layerMenu.innerHTML="<div onclick=\"var el=document.getElementById('"+id+"');el.style.zIndex=String(parseInt(el.style.zIndex||3)+1);document.getElementById('tlm-"+id+"').style.display='none';\" style=\"padding:10px 14px;font-size:13px;font-weight:600;color:#111;cursor:pointer;border-bottom:1px solid #f5f5f5;\" onmouseover=\"this.style.background='#f8fbff'\" onmouseout=\"this.style.background='#fff'\">\uD83D\uDD3C Bring Forward</div><div onclick=\"var el=document.getElementById('"+id+"');el.style.zIndex=String(Math.max(3,parseInt(el.style.zIndex||3)-1));document.getElementById('tlm-"+id+"').style.display='none';\" style=\"padding:10px 14px;font-size:13px;font-weight:600;color:#111;cursor:pointer;\" onmouseover=\"this.style.background='#f8fbff'\" onmouseout=\"this.style.background='#fff'\">\uD83D\uDD3D Send Backward</div>";
+  div.appendChild(layerMenu);
+
   div.addEventListener("mousedown", txtDragStart);
   div.addEventListener("touchstart", txtDragStartTouch, {passive:false});
-
-  // Click to select
   div.addEventListener("click",(e)=>{
     e.stopPropagation();
-    document.querySelectorAll(".txt-layer").forEach(el=>el.classList.remove("selected"));
+    document.querySelectorAll(".txt-layer").forEach(el=>{
+      el.classList.remove("selected");
+      const lb=el.querySelector("div[style*='top:-14px;left:-14px']");
+      if(lb) lb.style.display="none";
+    });
     div.classList.add("selected");
-    // Sync controls to this layer
+    layerBtn.style.display="flex";
     if(div.dataset.color) txtSetColor(div.dataset.color);
   });
 
-  stage.appendChild(div);
-
-  // Show float pills still (or hide if we count this as a "design")
-  // don't hide floats for text - user might still want AI art too
-
+  wrap.appendChild(div);
   sNtf("Text placed! Drag to reposition.");
 }
 
