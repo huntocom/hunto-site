@@ -615,14 +615,14 @@ footer{background:#111;padding:56px 32px 28px}
 
 /* Canvas */
 .s-canvas{
-  flex:1;background:#ffffff;
+  flex:1;background:#f5f5f5;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   position:relative;overflow:hidden;
 }
 .s-shirt-stage{position:relative;z-index:1;isolation:isolate;}
 .s-shirt-img{
-  width:520px;height:auto;object-fit:contain;
+  width:680px;height:auto;object-fit:contain;
   filter:none;
   transition:opacity .2s;display:block;
 }
@@ -845,7 +845,7 @@ footer{background:#111;padding:56px 32px 28px}
     max-height:280px;
   }
   .s-canvas{min-height:360px}
-  .s-shirt-img{width:320px}
+  .s-shirt-img{width:400px}
   .s-thumbs{
     width:100%;flex-direction:row;
     border-left:none;border-top:1px solid #e8e8e8;
@@ -1331,6 +1331,26 @@ footer{background:#111;padding:56px 32px 28px}
             <span class="ai-chip" onclick="setP('vintage american eagle bold')">Eagle</span>
           </div>
           <button class="ai-gen-btn" id="ai-gen-btn" onclick="aiGen()">✦ Generate Design</button>
+
+          <!-- DESIGN EDIT TOOLS -->
+          <div id="design-edit-tools" style="display:none;margin-top:16px;border-top:1px solid #f0f0f0;padding-top:16px">
+            <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#111;margin-bottom:12px">Edit Design</div>
+            <div style="margin-bottom:12px">
+              <div style="font-size:11px;font-weight:700;color:#888;margin-bottom:6px;display:flex;justify-content:space-between"><span>SIZE</span><span id="size-val">100%</span></div>
+              <input type="range" id="design-size" min="30" max="200" value="100" step="1" style="width:100%;accent-color:#4a9eff" oninput="applyDesignTransform()">
+            </div>
+            <div style="margin-bottom:12px">
+              <div style="font-size:11px;font-weight:700;color:#888;margin-bottom:6px;display:flex;justify-content:space-between"><span>ROTATE</span><span id="rotate-val">0°</span></div>
+              <input type="range" id="design-rotate" min="-180" max="180" value="0" step="1" style="width:100%;accent-color:#4a9eff" oninput="applyDesignTransform()">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px">
+              <button onclick="flipDesign()" style="padding:8px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fff;font-size:12px;font-weight:600;color:#555;cursor:pointer;font-family:Inter,sans-serif">↔ Flip</button>
+              <button onclick="centerDesign()" style="padding:8px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fff;font-size:12px;font-weight:600;color:#555;cursor:pointer;font-family:Inter,sans-serif">⊕ Center</button>
+              <button onclick="resetDesignTransform()" style="padding:8px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fff;font-size:12px;font-weight:600;color:#555;cursor:pointer;font-family:Inter,sans-serif">↺ Reset</button>
+              <button onclick="clearCurrentDesign()" style="padding:8px;border:1.5px solid #fecaca;border-radius:8px;background:#fff5f5;font-size:12px;font-weight:600;color:#dc2626;cursor:pointer;font-family:Inter,sans-serif">🗑 Remove</button>
+            </div>
+          </div>
+
           <div style="margin-top:16px;padding:12px;background:#f8fbff;border-radius:10px;border:1px solid #d8e8ff">
             <div style="font-size:12px;font-weight:700;color:#4a9eff;margin-bottom:4px">✏ Keith's Designer Edit — +$20</div>
             <div style="font-size:12px;color:#888;line-height:1.5;margin-bottom:8px">Our in-house designer optimizes your art for perfect DTF printing.</div>
@@ -1431,13 +1451,13 @@ footer{background:#111;padding:56px 32px 28px}
     <div class="s-canvas">
       <div class="s-ntf" id="s-ntf"></div>
       <div class="s-shirt-stage">
-        <div id="s-shirt-wrap" style="position:relative;display:inline-block;background:#fff;border-radius:8px;">
+        <div id="s-shirt-wrap" style="position:relative;display:inline-block;background:#fff;border-radius:8px;overflow:hidden;">
           <div id="s-shirt-color-bg" style="display:none;"></div>
           <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="position:relative;z-index:1;mix-blend-mode:normal;filter:none;">
-          <div class="s-dzone" id="s-dzone-front" style="width:200px;height:220px;top:160px;left:50%;transform:translateX(-50%);position:absolute;z-index:2;">
+          <div class="s-dzone" id="s-dzone-front" style="width:280px;height:320px;top:185px;left:50%;transform:translateX(-50%);position:absolute;z-index:2;">
             <div class="s-dzone-border"></div>
           </div>
-          <div class="s-dzone" id="s-dzone-back" style="width:200px;height:220px;top:160px;left:50%;transform:translateX(-50%);display:none;position:absolute;z-index:2;">
+          <div class="s-dzone" id="s-dzone-back" style="width:280px;height:320px;top:185px;left:50%;transform:translateX(-50%);display:none;position:absolute;z-index:2;">
             <div class="s-dzone-border"></div>
           </div>
         </div>
@@ -2022,6 +2042,7 @@ async function aiGen(){
     sNtf("✓ Clean design placed on shirt!");
     btn.disabled = false;
     btn.innerHTML = "✦ Regenerate Design";
+    showDesignEditTools();
   } catch(err){
     btn.disabled=false;
     btn.innerHTML="✦ Generate Design";
@@ -2343,7 +2364,68 @@ function drawThemeArt(ctx, theme, mc, ac, glow, rnd){
   }
 }
 
-let uploadedImageBase64 = null;
+let designFlipped = false;
+
+function applyDesignTransform(){
+  const side = sView === "back" ? "back" : "front";
+  const dz = document.getElementById("s-dzone-" + side);
+  if(!dz) return;
+  const img = dz.querySelector("img");
+  if(!img) return;
+
+  const size = document.getElementById("design-size").value;
+  const rotate = document.getElementById("design-rotate").value;
+  document.getElementById("size-val").textContent = size + "%";
+  document.getElementById("rotate-val").textContent = rotate + "°";
+
+  const scale = size / 100;
+  const flip = designFlipped ? " scaleX(-1)" : "";
+  img.style.transform = `scale(${scale}) rotate(${rotate}deg)${flip}`;
+  img.style.transformOrigin = "center center";
+}
+
+function flipDesign(){
+  designFlipped = !designFlipped;
+  applyDesignTransform();
+}
+
+function centerDesign(){
+  const side = sView === "back" ? "back" : "front";
+  const dz = document.getElementById("s-dzone-" + side);
+  const wrap = document.getElementById("s-shirt-wrap");
+  if(!dz || !wrap) return;
+  const wrapW = wrap.offsetWidth;
+  const wrapH = wrap.offsetHeight;
+  const dzW = dz.offsetWidth;
+  const dzH = dz.offsetHeight;
+  dz.style.left = ((wrapW - dzW) / 2) + "px";
+  dz.style.top = ((wrapH - dzH) / 2) + "px";
+  dz.style.transform = "none";
+}
+
+function resetDesignTransform(){
+  designFlipped = false;
+  document.getElementById("design-size").value = 100;
+  document.getElementById("design-rotate").value = 0;
+  document.getElementById("size-val").textContent = "100%";
+  document.getElementById("rotate-val").textContent = "0°";
+  const side = sView === "back" ? "back" : "front";
+  const dz = document.getElementById("s-dzone-" + side);
+  if(dz){
+    const img = dz.querySelector("img");
+    if(img) img.style.transform = "";
+    dz.style.width = "280px";
+    dz.style.height = "320px";
+    dz.style.left = "50%";
+    dz.style.top = "185px";
+    dz.style.transform = "translateX(-50%)";
+  }
+}
+
+function showDesignEditTools(){
+  const tools = document.getElementById("design-edit-tools");
+  if(tools) tools.style.display = "block";
+}
 
 function handleUpload(e){
   const f=(e.target.files||[])[0];if(!f)return;
@@ -2441,7 +2523,6 @@ function renderDesignZone(side){
 
 function makeDraggable(dz, side){
   let startX, startY, startLeft, startTop;
-  const wrap = document.getElementById("s-shirt-wrap");
 
   function onDown(e){
     if(e.target.id === "resize-handle-"+side) return;
@@ -2462,12 +2543,14 @@ function makeDraggable(dz, side){
     const pt = e.touches ? e.touches[0] : e;
     const dx = pt.clientX - startX;
     const dy = pt.clientY - startY;
+    const wrap = document.getElementById("s-shirt-wrap");
     const wrapW = wrap.offsetWidth;
     const wrapH = wrap.offsetHeight;
     const dzW = dz.offsetWidth;
     const dzH = dz.offsetHeight;
     let newLeft = startLeft + dx;
     let newTop = startTop + dy;
+    // Constrain within shirt wrap
     newLeft = Math.max(0, Math.min(wrapW - dzW, newLeft));
     newTop = Math.max(0, Math.min(wrapH - dzH, newTop));
     dz.style.left = newLeft + "px";
