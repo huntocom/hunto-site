@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v2.6 -->
+<!-- v2.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -897,7 +897,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
     <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v2.6</span>
+  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v2.7</span>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -2564,16 +2564,51 @@ function showLayerToolbar(id){
 function hideLayerToolbar(){
   const tb = document.getElementById("layer-toolbar");
   if(tb) tb.remove();
+  // Also remove any rotate handles
+  document.querySelectorAll("[id^='rot-handle-']").forEach(h => h.remove());
 }
 
 function quickRotate(id){
+  // Toggle a drag-rotate handle on the layer
   const el = document.getElementById(id);
   if(!el) return;
-  const current = parseFloat(el.dataset.rotation || "0");
-  const next = (current + 15) % 360;
-  el.dataset.rotation = String(next);
-  el.style.transform = `rotate(${next}deg)`;
-  updateToolbarPosition(id);
+
+  const existingHandle = document.getElementById("rot-handle-"+id);
+  if(existingHandle){ existingHandle.remove(); return; }
+
+  // Create rotate handle above the element
+  const handle = document.createElement("div");
+  handle.id = "rot-handle-"+id;
+  handle.style.cssText = "position:absolute;top:-28px;left:50%;transform:translateX(-50%);width:22px;height:22px;background:#4a9eff;border-radius:50%;cursor:grab;z-index:9999;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(74,158,255,.5);font-size:12px;color:#fff;user-select:none;";
+  handle.textContent = "↺";
+  handle.title = "Drag to rotate";
+  el.appendChild(handle);
+
+  handle.addEventListener("mousedown", function(e){
+    e.preventDefault(); e.stopPropagation();
+    handle.style.cursor = "grabbing";
+    const elRect = el.getBoundingClientRect();
+    const cx = elRect.left + elRect.width / 2;
+    const cy = elRect.top + elRect.height / 2;
+
+    function onMove(e){
+      const angle = Math.atan2(e.clientY - cy, e.clientX - cx) * (180 / Math.PI) + 90;
+      el.dataset.rotation = String(angle);
+      // Preserve any existing translate for text layers
+      const base = el.dataset.type === "text" ? "" : "";
+      el.style.transform = `rotate(${angle}deg)`;
+      updateToolbarPosition(id);
+    }
+    function onUp(){
+      handle.style.cursor = "grab";
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+    }
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+  });
+
+  sNtf("Drag the blue handle to rotate");
 }
 
 function quickSize(id){
@@ -3011,6 +3046,9 @@ function txtPlace(){
   });
 
   wrap.appendChild(div);
+  // Hide the float pills (Add Text / AI Art / Upload Art)
+  const fp = document.getElementById("s-floats");
+  if(fp) fp.classList.add("hidden");
   showTextToolbar(id);
   sNtf("Text placed! Drag to reposition.");
 }
