@@ -2368,9 +2368,7 @@ let designFlipped = false;
 
 function applyDesignTransform(){
   const side = sView === "back" ? "back" : "front";
-  const dz = document.getElementById("s-dzone-" + side);
-  if(!dz) return;
-  const img = dz.querySelector("img");
+  const img = document.getElementById("design-img-" + side);
   if(!img) return;
 
   const size = document.getElementById("design-size").value;
@@ -2501,24 +2499,100 @@ function renderDesignZone(side){
   const dz = document.getElementById("s-dzone-" + side);
   if(!dz || !sDesigns[side]) return;
   dz.innerHTML=`
+    <div style="position:absolute;inset:0;border:2px dashed rgba(74,158,255,.6);pointer-events:none;z-index:1;"></div>
     <img src="${sDesigns[side]}" id="design-img-${side}" style="
       width:100%;height:100%;
       object-fit:contain;object-position:center;
       display:block;mix-blend-mode:normal;
       pointer-events:none;
     ">
-    <div id="resize-handle-${side}" style="
-      position:absolute;bottom:-10px;right:-10px;
-      width:22px;height:22px;
-      background:#4a9eff;border-radius:50%;
-      cursor:se-resize;z-index:10;
+    <!-- Top left: Delete -->
+    <div onclick="clearCurrentDesign()" style="
+      position:absolute;top:-14px;left:-14px;
+      width:28px;height:28px;background:#fff;
+      border-radius:50%;border:1.5px solid #ddd;
       display:flex;align-items:center;justify-content:center;
-      box-shadow:0 2px 6px rgba(0,0,0,.3);
-    ">⤡</div>`;
+      cursor:pointer;z-index:10;font-size:13px;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);
+    " title="Delete">🗑</div>
+    <!-- Top right: Rotate handle -->
+    <div id="rotate-handle-${side}" style="
+      position:absolute;top:-14px;right:-14px;
+      width:28px;height:28px;background:#fff;
+      border-radius:50%;border:1.5px solid #ddd;
+      display:flex;align-items:center;justify-content:center;
+      cursor:grab;z-index:10;font-size:13px;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);
+    " title="Rotate">↺</div>
+    <!-- Bottom right: Resize handle -->
+    <div id="resize-handle-${side}" style="
+      position:absolute;bottom:-14px;right:-14px;
+      width:28px;height:28px;background:#4a9eff;
+      border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      cursor:se-resize;z-index:10;font-size:13px;color:#fff;
+      box-shadow:0 2px 6px rgba(0,0,0,.2);
+    " title="Resize">⤡</div>
+    <!-- Bottom left: Copy to back -->
+    <div onclick="copyToBack('${side}')" style="
+      position:absolute;bottom:-14px;left:-14px;
+      width:28px;height:28px;background:#fff;
+      border-radius:50%;border:1.5px solid #ddd;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;z-index:10;font-size:11px;font-weight:700;color:#555;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);
+    " title="Copy to Back">⬚</div>
+  `;
   dz.style.background="transparent";
   dz.style.cursor="move";
   makeDraggable(dz, side);
   makeResizable(dz, side);
+  makeRotatable(dz, side);
+}
+
+function copyToBack(side){
+  const otherSide = side === "front" ? "back" : "front";
+  sDesigns[otherSide] = sDesigns[side];
+  renderDesignZone(otherSide);
+  sNtf("Design copied to " + otherSide + "!");
+}
+
+function makeRotatable(dz, side){
+  const handle = document.getElementById("rotate-handle-"+side);
+  if(!handle) return;
+  let startAngle = 0;
+  let currentRotation = 0;
+
+  handle.addEventListener("mousedown", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    const dzRect = dz.getBoundingClientRect();
+    const centerX = dzRect.left + dzRect.width/2;
+    const centerY = dzRect.top + dzRect.height/2;
+    startAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180/Math.PI - currentRotation;
+
+    function onMove(e){
+      const dzRect = dz.getBoundingClientRect();
+      const cx = dzRect.left + dzRect.width/2;
+      const cy = dzRect.top + dzRect.height/2;
+      currentRotation = Math.atan2(e.clientY - cy, e.clientX - cx) * 180/Math.PI - startAngle;
+      const img = document.getElementById("design-img-"+side);
+      if(img) img.style.transform = `rotate(${currentRotation}deg)`;
+      // sync slider
+      const slider = document.getElementById("design-rotate");
+      const valEl = document.getElementById("rotate-val");
+      if(slider) slider.value = Math.round(currentRotation);
+      if(valEl) valEl.textContent = Math.round(currentRotation) + "°";
+    }
+
+    function onUp(){
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+    }
+
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+  });
 }
 
 function makeDraggable(dz, side){
@@ -2528,10 +2602,16 @@ function makeDraggable(dz, side){
     if(e.target.id === "resize-handle-"+side) return;
     e.preventDefault();
     const pt = e.touches ? e.touches[0] : e;
+    const wrap = document.getElementById("s-shirt-wrap");
+    const wrapRect = wrap.getBoundingClientRect();
+    const dzRect = dz.getBoundingClientRect();
     startX = pt.clientX;
     startY = pt.clientY;
-    startLeft = dz.offsetLeft;
-    startTop = dz.offsetTop;
+    startLeft = dzRect.left - wrapRect.left;
+    startTop = dzRect.top - wrapRect.top;
+    dz.style.left = startLeft + "px";
+    dz.style.top = startTop + "px";
+    dz.style.transform = "none";
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onUp);
     document.addEventListener("touchmove", onMove, {passive:false});
@@ -2548,12 +2628,12 @@ function makeDraggable(dz, side){
     const dzH = dz.offsetHeight;
     let newLeft = startLeft + (pt.clientX - startX);
     let newTop = startTop + (pt.clientY - startY);
-    // Hard constrain within wrap
-    newLeft = Math.max(0, Math.min(wrapW - dzW, newLeft));
-    newTop = Math.max(0, Math.min(wrapH - dzH, newTop));
     dz.style.left = newLeft + "px";
     dz.style.top = newTop + "px";
-    dz.style.transform = "none";
+
+    // Show warning if outside bounds
+    const outside = newLeft < 0 || newTop < 0 || newLeft + dzW > wrapW || newTop + dzH > wrapH;
+    showBoundingWarning(outside);
   }
 
   function onUp(){
@@ -2561,10 +2641,31 @@ function makeDraggable(dz, side){
     document.removeEventListener("mouseup", onUp);
     document.removeEventListener("touchmove", onMove);
     document.removeEventListener("touchend", onUp);
+    showBoundingWarning(false);
   }
 
   dz.addEventListener("mousedown", onDown);
   dz.addEventListener("touchstart", onDown, {passive:false});
+}
+
+function showBoundingWarning(show){
+  let warn = document.getElementById("bounding-warning");
+  if(!warn){
+    warn = document.createElement("div");
+    warn.id = "bounding-warning";
+    warn.style.cssText = `
+      position:absolute;top:12px;left:50%;transform:translateX(-50%);
+      background:rgba(0,0,0,0.75);color:#fff;
+      font-size:12px;font-weight:600;
+      padding:8px 16px;border-radius:20px;
+      pointer-events:none;z-index:20;
+      white-space:nowrap;display:none;
+    `;
+    warn.textContent = "⚠ Keep your design inside the print area";
+    const wrap = document.getElementById("s-shirt-wrap");
+    if(wrap) wrap.appendChild(warn);
+  }
+  warn.style.display = show ? "block" : "none";
 }
 
 function makeResizable(dz, side){
