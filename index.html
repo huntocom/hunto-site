@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3.0 -->
+<!-- v3.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -897,7 +897,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
     <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.0</span>
+  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.2</span>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -1221,124 +1221,170 @@ footer{background:#111;padding:56px 32px 28px}
       <!-- TEXT -->
       <div id="sp-text" style="display:none">
         <div class="s-panel-hdr">
-          <div><div class="s-panel-title">Add Text</div><div class="s-panel-sub">Type and style your text</div></div>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Text Editor</div>
+            <div class="s-panel-title">Edit Your Text</div>
+          </div>
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
         </div>
-        <div class="s-panel-body">
+        <div class="s-panel-body" style="padding-top:0">
 
-          <div class="s-label">Your text</div>
-          <input id="txt-input" type="text" placeholder="e.g. HUNTO, Class of 2025..."
-            style="width:100%;padding:10px 12px;border:1.5px solid #e8e8e8;border-radius:10px;
-            font-size:14px;outline:none;transition:border-color .2s;font-family:Inter,sans-serif;color:#111"
-            oninput="txtUpdate()" onfocus="this.style.borderColor='#4a9eff'" onblur="this.style.borderColor='#e8e8e8'">
+          <!-- Textarea -->
+          <textarea id="txt-input" placeholder="Type your text here..."
+            style="width:100%;padding:12px 14px;border:2px solid #4a9eff;border-radius:12px;
+            font-size:15px;outline:none;font-family:Inter,sans-serif;color:#111;
+            resize:none;height:90px;line-height:1.5;margin-bottom:14px;box-sizing:border-box"
+            oninput="txtUpdate()"></textarea>
 
-          <div class="s-label" style="margin-top:16px">Font</div>
-          <select id="txt-font" onchange="txtUpdate()"
-            style="width:100%;padding:9px 12px;border:1.5px solid #e8e8e8;border-radius:10px;
-            font-size:13px;outline:none;background:#fff;cursor:pointer;color:#111;font-family:Inter,sans-serif">
-            <optgroup label="— Sans Serif —">
-              <option value="Inter">Inter — Clean Modern</option>
-              <option value="'Arial Black',sans-serif">Arial Black — Heavy</option>
-              <option value="Verdana,sans-serif">Verdana — Rounded</option>
-            </optgroup>
-            <optgroup label="— Bold / Impact —">
-              <option value="'Bebas Neue',sans-serif">Bebas Neue — Bold Block</option>
-              <option value="'Anton',sans-serif">Anton — Ultra Bold</option>
-              <option value="'Russo One',sans-serif">Russo One — Strong</option>
-              <option value="'Oswald',sans-serif">Oswald — Condensed Bold</option>
-              <option value="'Bungee',sans-serif">Bungee — Street Bold</option>
-              <option value="'Squada One',sans-serif">Squada One — Square</option>
-              <option value="'Alfa Slab One',serif">Alfa Slab — Slab Bold</option>
-              <option value="'Righteous',sans-serif">Righteous — Retro Bold</option>
-            </optgroup>
-            <optgroup label="— Script / Handwritten —">
-              <option value="'Permanent Marker',cursive">Permanent Marker — Marker</option>
-              <option value="'Pacifico',cursive">Pacifico — Fun Script</option>
-              <option value="'Lobster',cursive">Lobster — Elegant Script</option>
-              <option value="'Satisfy',cursive">Satisfy — Flowing Script</option>
-              <option value="'Brush Script MT',cursive">Brush Script — Classic</option>
-            </optgroup>
-            <optgroup label="— Serif —">
-              <option value="Georgia,serif">Georgia — Classic Serif</option>
-              <option value="'Times New Roman',serif">Times New Roman — Formal</option>
-            </optgroup>
-            <optgroup label="— Other —">
-              <option value="'Courier New',monospace">Courier — Typewriter</option>
-              <option value="'Raleway',sans-serif">Raleway — Elegant</option>
-            </optgroup>
-          </select>
-
-          <div class="s-label" style="margin-top:16px">Size</div>
-          <div style="display:flex;align-items:center;gap:10px">
-            <input type="range" id="txt-size" min="12" max="96" value="36" step="2"
-              style="flex:1;accent-color:#4a9eff" oninput="txtUpdate();document.getElementById('txt-size-val').textContent=this.value+'px'">
-            <span id="txt-size-val" style="font-size:12px;font-weight:700;color:#888;width:36px;text-align:right">36px</span>
+          <!-- Action buttons row -->
+          <div style="display:flex;gap:6px;margin-bottom:18px;justify-content:space-between">
+            <!-- Center -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtCenterOnShirt()">
+              <div style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s" onmouseover="this.style.borderColor='#4a9eff'" onmouseout="this.style.borderColor='#e8e8e8'">⊕</div>
+              <span style="font-size:9px;font-weight:700;color:#999">Center</span>
+            </div>
+            <!-- Bold -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtToggle('bold')">
+              <div id="txt-bold-btn" style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;transition:all .15s">B</div>
+              <span style="font-size:9px;font-weight:700;color:#999">Bold</span>
+            </div>
+            <!-- Italic -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtToggle('italic')">
+              <div id="txt-italic-btn" style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-style:italic;font-family:Georgia,serif;transition:all .15s">I</div>
+              <span style="font-size:9px;font-weight:700;color:#999">Italic</span>
+            </div>
+            <!-- Flip -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtFlipSelected()">
+              <div style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s" onmouseover="this.style.borderColor='#4a9eff'" onmouseout="this.style.borderColor='#e8e8e8'">⇌</div>
+              <span style="font-size:9px;font-weight:700;color:#999">Flip</span>
+            </div>
+            <!-- CAPS -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtToggle('upper')">
+              <div id="txt-upper-btn" style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;letter-spacing:.04em;transition:all .15s">AA</div>
+              <span style="font-size:9px;font-weight:700;color:#999">Caps</span>
+            </div>
           </div>
 
-          <div class="s-label" style="margin-top:16px">Style</div>
-          <div style="display:flex;gap:6px">
-            <button id="txt-bold-btn" onclick="txtToggle('bold')"
-              style="flex:1;height:36px;border:1.5px solid #e8e8e8;border-radius:8px;
-              font-size:14px;font-weight:900;background:#fff;cursor:pointer;
-              transition:all .15s;font-family:Inter,sans-serif;color:#555">B</button>
-            <button id="txt-italic-btn" onclick="txtToggle('italic')"
-              style="flex:1;height:36px;border:1.5px solid #e8e8e8;border-radius:8px;
-              font-size:14px;font-style:italic;font-weight:700;background:#fff;cursor:pointer;
-              transition:all .15s;font-family:Georgia,serif;color:#555">I</button>
-            <button id="txt-upper-btn" onclick="txtToggle('upper')"
-              style="flex:1;height:36px;border:1.5px solid #e8e8e8;border-radius:8px;
-              font-size:11px;font-weight:700;background:#fff;cursor:pointer;
-              transition:all .15s;letter-spacing:.05em;font-family:Inter,sans-serif;color:#555">AA</button>
+          <!-- Font row -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid #f0f0f0;cursor:pointer" onclick="document.getElementById('txt-font-wrap').style.display=document.getElementById('txt-font-wrap').style.display==='none'?'block':'none'">
+            <span style="font-size:13px;font-weight:600;color:#333">Font</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span id="txt-font-label" style="font-size:13px;font-weight:700;color:#111">Bebas Neue</span>
+              <span style="color:#bbb">›</span>
+            </div>
+          </div>
+          <div id="txt-font-wrap" style="display:none;margin-bottom:8px">
+            <select id="txt-font" onchange="txtUpdate();txtUpdateFontLabel()"
+              style="width:100%;padding:9px 12px;border:1.5px solid #e8e8e8;border-radius:10px;
+              font-size:13px;outline:none;background:#fff;cursor:pointer;color:#111;font-family:Inter,sans-serif">
+              <optgroup label="— Bold / Impact —">
+                <option value="'Bebas Neue',sans-serif">Bebas Neue</option>
+                <option value="'Anton',sans-serif">Anton</option>
+                <option value="'Russo One',sans-serif">Russo One</option>
+                <option value="'Oswald',sans-serif">Oswald</option>
+                <option value="'Bungee',sans-serif">Bungee</option>
+                <option value="'Squada One',sans-serif">Squada One</option>
+                <option value="'Righteous',sans-serif">Righteous</option>
+              </optgroup>
+              <optgroup label="— Sans Serif —">
+                <option value="Inter">Inter</option>
+                <option value="'Arial Black',sans-serif">Arial Black</option>
+              </optgroup>
+              <optgroup label="— Script —">
+                <option value="'Permanent Marker',cursive">Permanent Marker</option>
+                <option value="'Pacifico',cursive">Pacifico</option>
+                <option value="'Lobster',cursive">Lobster</option>
+                <option value="'Satisfy',cursive">Satisfy</option>
+              </optgroup>
+              <optgroup label="— Serif —">
+                <option value="Georgia,serif">Georgia</option>
+                <option value="'Times New Roman',serif">Times New Roman</option>
+              </optgroup>
+            </select>
           </div>
 
-          <div class="s-label" style="margin-top:16px">Alignment</div>
-          <div style="display:flex;gap:6px">
-            <button onclick="txtAlign('left')" id="txt-align-left"
-              style="flex:1;height:36px;border:1.5px solid #e8e8e8;border-radius:8px;
-              font-size:16px;background:#fff;cursor:pointer;transition:all .15s;">&#8676;</button>
-            <button onclick="txtAlign('center')" id="txt-align-center"
-              style="flex:1;height:36px;border:1.5px solid #4a9eff;border-radius:8px;
-              font-size:16px;background:#f0f7ff;cursor:pointer;transition:all .15s;">&#8285;</button>
-            <button onclick="txtAlign('right')" id="txt-align-right"
-              style="flex:1;height:36px;border:1.5px solid #e8e8e8;border-radius:8px;
-              font-size:16px;background:#fff;cursor:pointer;transition:all .15s;">&#8677;</button>
+          <!-- Color row -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid #f0f0f0;cursor:pointer" onclick="document.getElementById('txt-color-wrap').style.display=document.getElementById('txt-color-wrap').style.display==='none'?'block':'none'">
+            <span style="font-size:13px;font-weight:600;color:#333">Color</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span id="txt-color-name" style="font-size:13px;font-weight:700;color:#111">Black</span>
+              <div id="txt-color-preview" style="width:26px;height:26px;background:#111111;border-radius:6px;border:1.5px solid rgba(0,0,0,.1)"></div>
+              <span style="color:#bbb">›</span>
+            </div>
+          </div>
+          <div id="txt-color-wrap" style="display:none;margin-bottom:8px">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px" id="txt-color-swatches"></div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:11px;font-weight:600;color:#bbb">Custom:</span>
+              <input type="color" id="txt-color-custom" value="#111111" oninput="txtSetColor(this.value)"
+                style="width:32px;height:32px;border:1.5px solid #e8e8e8;border-radius:6px;cursor:pointer;padding:2px">
+            </div>
           </div>
 
-          <div class="s-label" style="margin-top:16px">Text Color</div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px" id="txt-color-swatches"></div>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-            <span style="font-size:11px;font-weight:600;color:#bbb">Custom:</span>
-            <input type="color" id="txt-color-custom" value="#111111" oninput="txtSetColor(this.value)"
-              style="width:32px;height:32px;border:1.5px solid #e8e8e8;border-radius:6px;cursor:pointer;padding:2px">
+          <!-- Outline row -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid #f0f0f0;cursor:pointer" onclick="document.getElementById('txt-outline-wrap').style.display=document.getElementById('txt-outline-wrap').style.display==='none'?'block':'none'">
+            <span style="font-size:13px;font-weight:600;color:#333">Outline</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span id="txt-outline-label" style="font-size:13px;font-weight:700;color:#aaa">None</span>
+              <div id="txt-outline-preview" style="width:26px;height:26px;background:#fff;border-radius:6px;border:2px solid #e8e8e8"></div>
+              <span style="color:#bbb">›</span>
+            </div>
+          </div>
+          <div id="txt-outline-wrap" style="display:none;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <span style="font-size:12px;font-weight:600;color:#888;width:44px">Width</span>
+              <input type="range" id="txt-stroke" min="0" max="6" value="0" step="0.5"
+                style="flex:1;accent-color:#4a9eff" oninput="txtUpdate();txtUpdateOutlineLabel()">
+              <span style="font-size:12px;font-weight:700;color:#888;width:24px;text-align:right" id="txt-stroke-val">0</span>
+            </div>
+            <select id="txt-stroke-color" onchange="txtUpdate();txtUpdateOutlineLabel()"
+              style="width:100%;padding:8px 12px;border:1.5px solid #e8e8e8;border-radius:8px;
+              font-size:12px;outline:none;background:#fff;cursor:pointer;color:#111;font-family:Inter,sans-serif">
+              <option value="#ffffff">White outline</option>
+              <option value="#000000">Black outline</option>
+              <option value="#4a9eff">Blue outline</option>
+              <option value="#f05a28">Orange outline</option>
+            </select>
           </div>
 
-          <div class="s-label" style="margin-top:16px">Outline</div>
-          <div style="display:flex;align-items:center;gap:10px">
-            <input type="range" id="txt-stroke" min="0" max="6" value="0" step="0.5"
-              style="flex:1;accent-color:#4a9eff" oninput="txtUpdate()">
-            <span style="font-size:12px;font-weight:700;color:#888;width:24px;text-align:right" id="txt-stroke-val">0</span>
+          <!-- Size slider -->
+          <div style="display:flex;align-items:center;padding:11px 0;border-top:1px solid #f0f0f0;gap:12px">
+            <span style="font-size:13px;font-weight:600;color:#333;width:56px">Size</span>
+            <input type="range" id="txt-size" min="12" max="120" value="36" step="2"
+              style="flex:1;accent-color:#4a9eff" oninput="txtUpdate();document.getElementById('txt-size-val').textContent=this.value">
+            <input type="number" id="txt-size-val" value="36" min="12" max="120"
+              style="width:46px;padding:4px 6px;border:1.5px solid #e8e8e8;border-radius:7px;font-size:12px;font-weight:700;color:#333;text-align:center;font-family:Inter,sans-serif;outline:none"
+              oninput="document.getElementById('txt-size').value=this.value;txtUpdate()">
           </div>
-          <select id="txt-stroke-color" onchange="txtUpdate()"
-            style="width:100%;padding:8px 12px;border:1.5px solid #e8e8e8;border-radius:8px;
-            font-size:12px;outline:none;background:#fff;cursor:pointer;color:#111;margin-top:6px;font-family:Inter,sans-serif">
-            <option value="#ffffff">White outline</option>
-            <option value="#000000">Black outline</option>
-            <option value="#4a9eff">Blue outline</option>
-            <option value="#f05a28">Orange outline</option>
-          </select>
 
+          <!-- Rotate slider -->
+          <div style="display:flex;align-items:center;padding:11px 0;border-top:1px solid #f0f0f0;gap:12px">
+            <span style="font-size:13px;font-weight:600;color:#333;width:56px">Rotate</span>
+            <input type="range" id="txt-rotate" min="-180" max="180" value="0"
+              style="flex:1;accent-color:#4a9eff" oninput="txtApplyRotate();document.getElementById('txt-rotate-val').textContent=this.value">
+            <input type="number" id="txt-rotate-val" value="0" min="-180" max="180"
+              style="width:46px;padding:4px 6px;border:1.5px solid #e8e8e8;border-radius:7px;font-size:12px;font-weight:700;color:#333;text-align:center;font-family:Inter,sans-serif;outline:none"
+              oninput="document.getElementById('txt-rotate').value=this.value;txtApplyRotate()">
+          </div>
+
+          <!-- Spacing slider -->
+          <div style="display:flex;align-items:center;padding:11px 0;border-top:1px solid #f0f0f0;gap:12px">
+            <span style="font-size:13px;font-weight:600;color:#333;width:56px">Spacing</span>
+            <input type="range" id="txt-spacing" min="-5" max="30" value="0"
+              style="flex:1;accent-color:#4a9eff" oninput="txtApplySpacing();document.getElementById('txt-spacing-val').textContent=this.value">
+            <input type="number" id="txt-spacing-val" value="0"
+              style="width:46px;padding:4px 6px;border:1.5px solid #e8e8e8;border-radius:7px;font-size:12px;font-weight:700;color:#333;text-align:center;font-family:Inter,sans-serif;outline:none"
+              oninput="document.getElementById('txt-spacing').value=this.value;txtApplySpacing()">
+          </div>
+
+          <!-- Place button -->
           <button onclick="txtPlace()"
-            style="width:100%;height:42px;background:#4a9eff;border:none;border-radius:10px;
-            color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;
-            transition:background .15s;font-family:Inter,sans-serif">
-            Place Text on Shirt
+            style="width:100%;height:46px;background:#4a9eff;border:none;border-radius:12px;
+            color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:16px;
+            transition:background .15s;font-family:Inter,sans-serif;box-shadow:0 3px 12px rgba(74,158,255,.3)">
+            Place Text on Shirt →
           </button>
-          <button onclick="txtClear()"
-            style="width:100%;height:36px;background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;
-            color:#888;font-size:12px;font-weight:600;cursor:pointer;margin-top:6px;
-            transition:all .15s;font-family:Inter,sans-serif">
-            Clear Text
-          </button>
+
 
         </div>
       </div>
@@ -1590,6 +1636,25 @@ footer{background:#111;padding:56px 32px 28px}
     <!-- CANVAS -->
     <div class="s-canvas">
       <div class="s-ntf" id="s-ntf"></div>
+
+      <!-- Floating left controls -->
+      <div style="position:absolute;left:14px;top:14px;z-index:100;display:flex;flex-direction:column;gap:6px;">
+        <button onclick="historyUndo()" id="undo-btn" title="Undo"
+          style="display:flex;align-items:center;gap:7px;padding:8px 14px;background:rgba(255,255,255,.95);border:1px solid #e8e8e8;border-radius:10px;font-size:12px;font-weight:700;color:#555;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap;opacity:.4;transition:opacity .15s"
+          disabled>
+          <span style="font-size:15px">↩</span> UNDO
+        </button>
+        <button onclick="historyRedo()" id="redo-btn" title="Redo"
+          style="display:flex;align-items:center;gap:7px;padding:8px 14px;background:rgba(255,255,255,.95);border:1px solid #e8e8e8;border-radius:10px;font-size:12px;font-weight:700;color:#555;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap;opacity:.4;transition:opacity .15s"
+          disabled>
+          <span style="font-size:15px">↪</span> REDO
+        </button>
+        <button onclick="historyStartOver()" title="Start Over"
+          style="display:flex;align-items:center;justify-content:center;padding:8px 14px;background:rgba(255,255,255,.95);border:1px solid #e8e8e8;border-radius:10px;font-size:12px;font-weight:700;color:#555;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap;text-align:center;line-height:1.3">
+          START<br>OVER
+        </button>
+      </div>
+
       <div class="s-shirt-stage">
         <div id="s-shirt-wrap" style="position:relative;display:inline-block;background:#fff;border-radius:8px;overflow:hidden;">
           <div id="s-shirt-color-bg" style="display:none;"></div>
@@ -2616,6 +2681,7 @@ function addImageLayer(side, id, src){
     e.stopPropagation();
     selectLayer(id);
   });
+  historySnapshot();
 }
 
 
@@ -2792,6 +2858,7 @@ function removeLayer(id){
     const fp = document.getElementById("s-floats");
     if(fp) fp.classList.remove("hidden");
   }
+  historySnapshot();
 }
 
 function toggleLayerMenuNew(id){
@@ -3018,7 +3085,104 @@ function sNtf(msg){
 
 
 // ════════════════════════════════
-// NAMES & NUMBERS
+// UNDO / REDO HISTORY
+// ════════════════════════════════
+let historyStack = [];
+let historyIndex = -1;
+
+function historySnapshot(){
+  const wrap = document.getElementById('s-shirt-wrap');
+  if(!wrap) return;
+  // Capture all layers (image + text) as serializable state
+  const layers = Array.from(wrap.querySelectorAll("[data-type='image'],[data-type='text']")).map(el => ({
+    id: el.id,
+    type: el.dataset.type,
+    side: el.dataset.side,
+    html: el.outerHTML,
+    zIndex: el.style.zIndex,
+  }));
+  // Trim redo history past current index
+  historyStack = historyStack.slice(0, historyIndex + 1);
+  historyStack.push(layers);
+  if(historyStack.length > 40) historyStack.shift();
+  historyIndex = historyStack.length - 1;
+  historyUpdateBtns();
+}
+
+function historyUndo(){
+  if(historyIndex <= 0) return;
+  historyIndex--;
+  historyRestore(historyStack[historyIndex]);
+  historyUpdateBtns();
+}
+
+function historyRedo(){
+  if(historyIndex >= historyStack.length - 1) return;
+  historyIndex++;
+  historyRestore(historyStack[historyIndex]);
+  historyUpdateBtns();
+}
+
+function historyRestore(layers){
+  const wrap = document.getElementById('s-shirt-wrap');
+  if(!wrap) return;
+  // Remove all existing design layers
+  wrap.querySelectorAll("[data-type='image'],[data-type='text']").forEach(el => el.remove());
+  // Rebuild from snapshot
+  layers.forEach(l => {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = l.html;
+    const el = tmp.firstElementChild;
+    if(!el) return;
+    wrap.appendChild(el);
+    if(l.type === 'image'){
+      makeLayerDraggable(el);
+      makeLayerResizable(el, l.id);
+      el.addEventListener('click', function(e){ e.stopPropagation(); selectLayer(l.id); });
+    } else {
+      el.addEventListener('mousedown', txtDragStart);
+      el.addEventListener('touchstart', txtDragStartTouch, {passive:false});
+      el.addEventListener('click',(e)=>{
+        e.stopPropagation();
+        deselectAllLayers();
+        document.querySelectorAll('.txt-layer').forEach(x=>x.classList.remove('selected'));
+        el.classList.add('selected');
+        showTextToolbar(l.id);
+      });
+    }
+  });
+  deselectAllLayers();
+  hideLayerToolbar();
+  const fp = document.getElementById('s-floats');
+  if(fp) fp.classList.toggle('hidden', layers.length > 0);
+}
+
+function historyStartOver(){
+  if(!confirm('Clear all designs and start fresh?')) return;
+  const wrap = document.getElementById('s-shirt-wrap');
+  if(wrap) wrap.querySelectorAll("[data-type='image'],[data-type='text']").forEach(el=>el.remove());
+  sLayers = {front:[], back:[]};
+  sState.hasDesign = false;
+  layerCounter = 0;
+  textLayerCount = 0;
+  historyStack = [];
+  historyIndex = -1;
+  const fp = document.getElementById('s-floats');
+  if(fp) fp.classList.remove('hidden');
+  deselectAllLayers();
+  hideLayerToolbar();
+  historyUpdateBtns();
+  sNtf('Canvas cleared — fresh start!');
+}
+
+function historyUpdateBtns(){
+  const ub = document.getElementById('undo-btn');
+  const rb = document.getElementById('redo-btn');
+  if(ub){ const can = historyIndex > 0; ub.disabled=!can; ub.style.opacity=can?'1':'.4'; }
+  if(rb){ const can = historyIndex < historyStack.length-1; rb.disabled=!can; rb.style.opacity=can?'1':'.4'; }
+}
+
+
 // ════════════════════════════════
 let nnRoster = [];
 let nnRowCount = 0;
@@ -3367,6 +3531,7 @@ function txtPlace(){
   // Hide the float pills (Add Text / AI Art / Upload Art)
   const fp = document.getElementById("s-floats");
   if(fp) fp.classList.add("hidden");
+  historySnapshot();
   showTextToolbar(id);
   sNtf("Text placed! Drag to reposition.");
 }
@@ -3403,10 +3568,81 @@ function showTextToolbar(id){
 
   document.body.appendChild(tb);
 }
-function txtClear(){
-  document.querySelectorAll(".txt-layer").forEach(el=>el.remove());
-  sNtf("Text cleared.");
+function txtUpdateFontLabel(){
+  const sel = document.getElementById('txt-font');
+  const label = document.getElementById('txt-font-label');
+  if(sel && label){
+    const opt = sel.options[sel.selectedIndex];
+    label.textContent = opt ? opt.text.split(' —')[0] : 'Bebas Neue';
+  }
 }
+
+function txtUpdateOutlineLabel(){
+  const strokeEl = document.getElementById('txt-stroke');
+  const colorEl  = document.getElementById('txt-stroke-color');
+  const label    = document.getElementById('txt-outline-label');
+  const preview  = document.getElementById('txt-outline-preview');
+  const val = parseFloat(strokeEl?.value || 0);
+  if(val === 0){
+    if(label) label.textContent = 'None';
+    if(preview){ preview.style.border = '2px solid #e8e8e8'; preview.style.background = '#fff'; }
+  } else {
+    const col = colorEl?.value || '#000000';
+    if(label){ label.textContent = val+'px'; label.style.color='#333'; }
+    if(preview){ preview.style.border = `3px solid ${col}`; preview.style.background = '#fff'; }
+  }
+}
+
+function txtApplyRotate(){
+  const val = parseInt(document.getElementById('txt-rotate')?.value || 0);
+  const sel = document.querySelector('.txt-layer.selected');
+  if(sel){
+    sel.dataset.rotation = String(val);
+    sel.style.transform = `rotate(${val}deg)`;
+  }
+}
+
+function txtApplySpacing(){
+  const val = parseInt(document.getElementById('txt-spacing')?.value || 0);
+  const sel = document.querySelector('.txt-layer.selected');
+  if(sel) sel.style.letterSpacing = val + 'px';
+}
+
+function txtCenterOnShirt(){
+  const sel = document.querySelector('.txt-layer.selected');
+  const wrap = document.getElementById('s-shirt-wrap');
+  if(!sel || !wrap) return;
+  const ww = wrap.offsetWidth;
+  sel.style.left = (ww / 2) + 'px';
+  sel.style.transform = 'translateX(-50%)';
+  sNtf('Text centered!');
+}
+
+function txtFlipSelected(){
+  const sel = document.querySelector('.txt-layer.selected');
+  if(!sel) return;
+  const cur = sel.style.transform || '';
+  if(cur.includes('scaleX(-1)')){
+    sel.style.transform = cur.replace(' scaleX(-1)','').replace('scaleX(-1)','');
+  } else {
+    sel.style.transform = (cur || '') + ' scaleX(-1)';
+  }
+}
+
+// Update color preview swatch when color changes
+const _origTxtSetColor = txtSetColor;
+function txtSetColor(c){
+  _origTxtSetColor(c);
+  const preview = document.getElementById('txt-color-preview');
+  const name    = document.getElementById('txt-color-name');
+  if(preview) preview.style.background = c;
+  if(name){
+    const map = {'#ffffff':'White','#111111':'Black','#333333':'Dark Gray','#4a9eff':'Blue','#dc2626':'Red','#16a34a':'Green','#f59e0b':'Gold','#9333ea':'Purple','#ec4899':'Pink','#f05a28':'Orange'};
+    name.textContent = map[c] || c;
+  }
+}
+
+
 
 // ── DRAG ────────────────────────
 function txtDragStart(e){
