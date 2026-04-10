@@ -1321,34 +1321,6 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
         <div class="s-panel-body">
 
-          <div id="api-key-section" style="margin-bottom:14px;padding:12px;background:#f8fbff;border-radius:10px;border:1.5px solid #d8e8ff">
-            
-            <div style="font-size:11px;font-weight:700;color:#4a9eff;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em">🔑 OpenAI Key</div>
-            <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px">
-              <input type="password" id="openai-key" placeholder="sk-..."
-                style="flex:1;padding:8px 10px;border:1.5px solid #e8e8e8;border-radius:8px;
-                font-size:12px;outline:none;font-family:monospace;color:#111;background:#fff"
-                oninput="saveKey(this.value)"
-                onfocus="this.style.borderColor='#4a9eff'"
-                onblur="this.style.borderColor='#e8e8e8'">
-              <button onclick="clearKey()" style="width:32px;height:32px;border:1.5px solid #eee;border-radius:8px;background:#fff;color:#aaa;font-size:14px;cursor:pointer;flex-shrink:0">×</button>
-            </div>
-            <div id="key-status" style="font-size:10px;color:#aaa;margin-bottom:8px;font-weight:500">No key saved</div>
-
-            <div style="font-size:11px;font-weight:700;color:#22c55e;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em">✂ Remove.bg Key</div>
-            <div style="display:flex;gap:6px;align-items:center">
-              <input type="password" id="rmbg-key" placeholder="Paste remove.bg key..."
-                style="flex:1;padding:8px 10px;border:1.5px solid #e8e8e8;border-radius:8px;
-                font-size:12px;outline:none;font-family:monospace;color:#111;background:#fff"
-                oninput="saveRmbgKey(this.value)"
-                onfocus="this.style.borderColor='#22c55e'"
-                onblur="this.style.borderColor='#e8e8e8'">
-              <button onclick="clearRmbgKey()" style="width:32px;height:32px;border:1.5px solid #eee;border-radius:8px;background:#fff;color:#aaa;font-size:14px;cursor:pointer;flex-shrink:0">×</button>
-            </div>
-            <div id="rmbg-status" style="font-size:10px;color:#aaa;margin-top:5px;font-weight:500">No key saved — get free key at remove.bg</div>
-
-          </div>
-
           <textarea class="ai-ta" id="ai-prompt" placeholder="e.g. neon wolf howling at the moon, cyberpunk style..."></textarea>
           <div class="ai-chips">
             <span class="ai-chip" onclick="setP('neon wolf howling at the moon')">Neon wolf</span>
@@ -1370,17 +1342,26 @@ footer{background:#111;padding:56px 32px 28px}
       <!-- UPLOAD -->
       <div id="sp-upload" style="display:none">
         <div class="s-panel-hdr">
-          <div><div class="s-panel-title">Upload Artwork</div><div class="s-panel-sub">Use your own image</div></div>
+          <div><div class="s-panel-title">Upload Artwork</div><div class="s-panel-sub">Use your own image or photo</div></div>
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
         </div>
         <div class="s-panel-body">
           <div class="upload-zone" onclick="document.getElementById('s-file').click()">
             <div class="upload-zone-icon">↑</div>
             <div class="upload-zone-title">Click to upload your image</div>
-            <div class="upload-zone-sub">PNG or JPG · Min 1500px recommended</div>
+            <div class="upload-zone-sub">PNG or JPG · Artwork or photo</div>
             <div class="upload-zone-sub" style="margin-top:3px">Auto-optimized for DTF print quality</div>
           </div>
           <input type="file" id="s-file" accept="image/*" style="display:none" onchange="handleUpload(event)">
+
+          <div id="upload-edit-section" style="display:none;margin-top:14px">
+            <div style="font-size:11px;font-weight:700;color:#4a9eff;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">✦ AI Transform with GPT-4o</div>
+            <div style="font-size:12px;color:#888;margin-bottom:8px;line-height:1.5">Describe how to transform your photo into a shirt design</div>
+            <textarea class="ai-ta" id="edit-prompt" placeholder="e.g. turn into bold graphic art, cartoon style, vintage poster..." style="height:70px"></textarea>
+            <button onclick="aiEditUpload()" id="ai-edit-btn" class="ai-gen-btn" style="margin-top:8px">✦ Transform with AI</button>
+            <div style="margin-top:8px;font-size:11px;color:#bbb;text-align:center">— or —</div>
+            <button onclick="applyUploadDirect()" style="width:100%;height:38px;background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;color:#555;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;font-family:Inter,sans-serif">Use photo as-is</button>
+          </div>
         </div>
       </div>
 
@@ -1998,11 +1979,6 @@ async function aiGen(){
   if(!p.trim()){sNtf("Enter a description first");return;}
 
   const key = getKey();
-  if(!key){
-    sNtf("Paste your OpenAI key in the box above first!");
-    document.getElementById("openai-key").focus();
-    return;
-  }
 
   const btn=document.getElementById("ai-gen-btn");
   btn.disabled=true;
@@ -2364,11 +2340,66 @@ function drawThemeArt(ctx, theme, mc, ac, glow, rnd){
   }
 }
 
+let uploadedImageBase64 = null;
+
 function handleUpload(e){
   const f=(e.target.files||[])[0];if(!f)return;
   const r=new FileReader();
-  r.onload=ev=>{applyDesign(ev.target.result);sState.hasDesign=true;sNtf("Image placed on shirt!");};
+  r.onload=ev=>{
+    uploadedImageBase64 = ev.target.result;
+    // Show the edit section
+    const sec = document.getElementById("upload-edit-section");
+    if(sec) sec.style.display="block";
+    sNtf("Photo loaded — transform it or use as-is!");
+  };
   r.readAsDataURL(f);
+}
+
+function applyUploadDirect(){
+  if(!uploadedImageBase64) return;
+  applyDesign(uploadedImageBase64);
+  sState.hasDesign=true;
+  sNtf("Image placed on shirt!");
+}
+
+async function aiEditUpload(){
+  if(!uploadedImageBase64){sNtf("Upload a photo first!");return;}
+  const prompt=(document.getElementById("edit-prompt")||{}).value||"";
+  if(!prompt.trim()){sNtf("Describe how to transform it first!");return;}
+
+  const btn=document.getElementById("ai-edit-btn");
+  btn.disabled=true;
+  btn.innerHTML='<span class="spin"></span> Transforming with GPT-4o...';
+
+  try{
+    const SERVER="https://hunto-server-production.up.railway.app";
+    const res=await fetch(SERVER+"/edit",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({prompt, imageBase64: uploadedImageBase64})
+    });
+    if(!res.ok){
+      const err=await res.json();
+      throw new Error(err.error||"Server error "+res.status);
+    }
+    const contentType=res.headers.get("content-type")||"";
+    if(contentType.includes("image")){
+      const blob=await res.blob();
+      const url=URL.createObjectURL(blob);
+      applyDesign(url);
+    } else {
+      const data=await res.json();
+      applyDesign(data.url);
+    }
+    sState.hasDesign=true;
+    sNtf("✓ AI transformation placed on shirt!");
+    btn.disabled=false;
+    btn.innerHTML="✦ Transform Again";
+  }catch(err){
+    btn.disabled=false;
+    btn.innerHTML="✦ Transform with AI";
+    sNtf("Error: "+err.message);
+  }
 }
 
 function applyDesign(src){
@@ -2813,12 +2844,12 @@ const SHIRT_PHOTOS_8000 = {
     "Ash":               {f:BASE+"ASHFRONT.jpg",              b:BASE+"ASHBACK.jpg"},
     "Azalea":            {f:BASE+"AZALAFRONT.jpg",            b:BASE+"AZALABACK.jpg"},
     "Black":             {f:BASE+"BLACKFRONT.jpg",            b:BASE+"BLACKBACK.jpg"},
-    "Carolina Blue":     {f:BASE+"CAROLINABLUEFRONT.jpg",     b:BASE+"CAROLINABLUEBACK.jpg"},
+    "Carolina Blue":     {f:BASE+"CARONLINABLUEFRONT.jpg",    b:BASE+"CAROLINABLUEBACK.jpg"},
     "Daisy":             {f:BASE+"DAISEYFRONT.jpg",           b:BASE+"DAISEYBACK.jpg"},
     "Dark Heather":      {f:BASE+"DARKHEATHERFRONT.jpg",      b:BASE+"DARKHEATHERBACK.jpg"},
     "Dark Maroon":       {f:BASE+"DARKMAROONFRONT.jpg",       b:BASE+"DARKMAROONBACK.jpg"},
     "Dark Navy":         {f:BASE+"DARKNAVYFRONT.jpg",         b:BASE+"DARKNAVYBACK.jpg"},
-    "Deep Royal":        {f:BASE+"DEEPROYALFRONT.jpg",        b:BASE+"DEEPROYALBACK.jpg"},
+    "Deep Royal":        {f:BASE+"DEEPROYAL FRONT.jpg",       b:BASE+"DEEPROYALBACK.jpg"},
     "Electric Green":    {f:BASE+"ELECTRICGREENFRONT.jpg",    b:BASE+"ELECTRICGREENBACK.jpg"},
     "Forest Green":      {f:BASE+"FORRESTGREENFRONT.jpg",     b:BASE+"FORRESTGREENBACK.jpg"},
     "Gold":              {f:BASE+"GOLDFRONT.jpg",             b:BASE+"GOLDBACK.jpg"},
@@ -2839,11 +2870,11 @@ const SHIRT_PHOTOS_8000 = {
     "Red":               {f:BASE+"redfront.jpg",              b:BASE+"redback.jpg"},
     "Royal":             {f:BASE+"royalfront.jpg",            b:BASE+"royalback.jpg"},
     "Safety Green":      {f:BASE+"SAFETYGREENFRONT.jpg",      b:BASE+"SAFETYGREENBACK.jpg"},
-    "Safety Orange":     {f:BASE+"SAFTEYORANGEFRONT.jpg",     b:BASE+"SAFTEYORANGEBACK.jpg"},
+    "Safety Orange":     {f:BASE+"SAFTEYORANGEFRONT.jpg",     b:BASE+"SAFTEYORAGEBACK.jpg"},
     "Sand":              {f:BASE+"SANDFRONT.jpg",             b:BASE+"SANDBACK.jpg"},
     "Sapphire":          {f:BASE+"SAPHIREFRONT.jpg",          b:BASE+"SAPHIREBACK.jpg"},
-    "Scarlet Red":       {f:BASE+"SCARLETREDFRONT.jpg",       b:BASE+"SCARLETREDBACK.jpg"},
-    "Sport Grey":        {f:BASE+"SPORTGREYFRONT.jpg",        b:BASE+"SPORTGREYBACK.jpg"},
+    "Scarlet Red":       {f:BASE+"SCARLETREDFRONT.jpg",       b:BASE+"SCARLETREDBACK..pg.jpg"},
+    "Sport Grey":        {f:BASE+"SPORTGREYFRONT.pg.jpg",     b:BASE+"SPORTGREYBACK.jpg"},
     "Tennessee Orange":  {f:BASE+"TENNESSEEORANGEFRONT.jpg",  b:BASE+"TENNESSEEORANGEBACK.jpg"},
     "Texas Orange":      {f:BASE+"TEXASORANGEFRONT.jpg",      b:BASE+"TEXASORANGEBACK.jpg"},
     "White":             {f:BASE+"WHITEFRONT.jpg",            b:BASE+"WHITEBACK.jpg"},
