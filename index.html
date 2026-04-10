@@ -1452,7 +1452,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div class="s-shirt-stage">
         <div id="s-shirt-wrap" style="position:relative;display:inline-block;background:#fff;border-radius:8px;">
           <div id="s-shirt-color-bg" style="position:absolute;inset:0;border-radius:8px;transition:background .3s;z-index:0;"></div>
-          <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="position:relative;z-index:1;mix-blend-mode:multiply;filter:none;">
+          <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="position:relative;z-index:1;mix-blend-mode:normal;filter:none;">
         </div>
         <div class="float-pills" id="s-floats">
           <button class="float-pill" onclick="sPanel('text',document.getElementById('sib-text'))">
@@ -1908,9 +1908,9 @@ function sApplyTint(){
     shirtImg.style.mixBlendMode = (c.h==="#ffffff"||c.h==="#fff") ? "normal" : "multiply";
     if(bg) bg.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
   } else {
-    // Load real colored shirt photo — always white bg + multiply blend
+    // Real photo — always normal blend, white background
     shirtImg.style.opacity = "0.3";
-    shirtImg.style.mixBlendMode = "multiply";
+    shirtImg.style.mixBlendMode = "normal";
     shirtImg.style.filter = "none";
     if(bg) bg.style.background = "#ffffff";
     shirtImg.src = photoUrl;
