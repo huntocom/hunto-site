@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v2.5 -->
+<!-- v2.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -897,7 +897,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
     <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v2.5</span>
+  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v2.6</span>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -2544,8 +2544,8 @@ function showLayerToolbar(id){
     {icon:"🗑", label:"Delete", action:`removeLayer('${id}')`},
     {icon:"🔼", label:"Forward", action:`moveLayerUp('${id}')`},
     {icon:"🔽", label:"Backward", action:`moveLayerDown('${id}')`},
-    {icon:"📋", label:"Copy Back", action:`copyLayerToBack('${id}')`},
-    {icon:"↺", label:"Rotate ↻", action:`startQuickRotate('${id}')`},
+    {icon:"⤡", label:"Size", action:`quickSize('${id}')`},
+    {icon:"↺", label:"Rotate", action:`quickRotate('${id}')`},
   ];
 
   btns.forEach((b,i) => {
@@ -2566,8 +2566,64 @@ function hideLayerToolbar(){
   if(tb) tb.remove();
 }
 
+function quickRotate(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const current = parseFloat(el.dataset.rotation || "0");
+  const next = (current + 15) % 360;
+  el.dataset.rotation = String(next);
+  el.style.transform = `rotate(${next}deg)`;
+  updateToolbarPosition(id);
+}
+
+function quickSize(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+
+  // Remove any existing size popup
+  const existing = document.getElementById("size-popup");
+  if(existing){ existing.remove(); return; }
+
+  const rect = el.getBoundingClientRect();
+  const popup = document.createElement("div");
+  popup.id = "size-popup";
+  popup.style.cssText = "position:fixed;z-index:10000;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.18);border:1px solid #e8e8e8;padding:12px 16px;display:flex;flex-direction:column;gap:8px;min-width:180px;";
+  popup.style.top = (rect.top - 90) + "px";
+  popup.style.left = (rect.left + rect.width/2) + "px";
+  popup.style.transform = "translateX(-50%)";
+
+  const currentW = el.offsetWidth;
+  popup.innerHTML = `
+    <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;">Size</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <input id="size-slider" type="range" min="60" max="600" value="${currentW}"
+        style="flex:1;accent-color:#4a9eff;"
+        oninput="doQuickSize('${id}', this.value)">
+      <span id="size-slider-val" style="font-size:12px;font-weight:700;color:#333;min-width:36px;">${currentW}px</span>
+    </div>
+    <div style="display:flex;gap:6px;">
+      ${[80,140,200,280,360].map(s=>`<button onclick="doQuickSize('${id}',${s})" style="flex:1;padding:4px 0;font-size:10px;font-weight:700;border:1.5px solid #e8e8e8;border-radius:6px;background:#fff;cursor:pointer;">${s}</button>`).join("")}
+    </div>`;
+
+  popup.addEventListener("click", e => e.stopPropagation());
+  document.body.appendChild(popup);
+}
+
+function doQuickSize(id, val){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const v = parseInt(val);
+  el.style.width = v + "px";
+  el.style.height = v + "px";
+  const sl = document.getElementById("size-slider");
+  const slv = document.getElementById("size-slider-val");
+  if(sl) sl.value = v;
+  if(slv) slv.textContent = v + "px";
+  updateToolbarPosition(id);
+}
+
 function startQuickRotate(id){
-  sNtf("Drag the image corner to rotate!");
+  quickRotate(id);
 }
 
 function removeLayer(id){
@@ -2742,6 +2798,8 @@ document.addEventListener("click", function(){
     if(lb) lb.style.display="none";
   });
   hideLayerToolbar();
+  const sp = document.getElementById("size-popup");
+  if(sp) sp.remove();
 });
 
 function renderDesignZone(side){ /* handled by addImageLayer */ }
