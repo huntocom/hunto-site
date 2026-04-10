@@ -1454,12 +1454,12 @@ footer{background:#111;padding:56px 32px 28px}
         <div id="s-shirt-wrap" style="position:relative;display:inline-block;background:#fff;border-radius:8px;overflow:hidden;">
           <div id="s-shirt-color-bg" style="display:none;"></div>
           <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="position:relative;z-index:1;mix-blend-mode:normal;filter:none;">
-          <div class="s-dzone" id="s-dzone-front" style="width:280px;height:320px;top:185px;left:50%;transform:translateX(-50%);position:absolute;z-index:2;">
-            <div class="s-dzone-border"></div>
-          </div>
-          <div class="s-dzone" id="s-dzone-back" style="width:280px;height:320px;top:185px;left:50%;transform:translateX(-50%);display:none;position:absolute;z-index:2;">
-            <div class="s-dzone-border"></div>
-          </div>
+          <!-- Fixed print area boxes - stationary, only show border when design bleeds outside -->
+          <div id="print-area-front" style="width:280px;height:320px;top:185px;left:50%;transform:translateX(-50%);position:absolute;z-index:2;pointer-events:none;border:2px dashed transparent;transition:border-color .2s;"></div>
+          <div id="print-area-back" style="width:280px;height:320px;top:185px;left:50%;transform:translateX(-50%);position:absolute;z-index:2;pointer-events:none;border:2px dashed transparent;display:none;"></div>
+          <!-- Draggable design elements -->
+          <div id="s-dzone-front" style="position:absolute;z-index:3;display:none;cursor:move;"></div>
+          <div id="s-dzone-back" style="position:absolute;z-index:3;display:none;cursor:move;"></div>
         </div>
         <div class="float-pills" id="s-floats">
           <button class="float-pill" onclick="sPanel('text',document.getElementById('sib-text'))">
@@ -1955,8 +1955,12 @@ function sSetView(v){
   // Show correct design zone
   const dzf = document.getElementById("s-dzone-front");
   const dzb = document.getElementById("s-dzone-back");
-  if(dzf) dzf.style.display = v==="front" ? "" : "none";
-  if(dzb) dzb.style.display = v==="back"  ? "" : "none";
+  const paf = document.getElementById("print-area-front");
+  const pab = document.getElementById("print-area-back");
+  if(dzf) dzf.style.display = sDesigns.front ? (v==="front" ? "block" : "none") : "none";
+  if(dzb) dzb.style.display = sDesigns.back  ? (v==="back"  ? "block" : "none") : "none";
+  if(paf) paf.style.display = v==="front" ? "" : "none";
+  if(pab) pab.style.display = v==="back"  ? "" : "none";
 
   // Show/hide float pills based on whether current side has a design
   const fp = document.getElementById("s-floats");
@@ -2497,54 +2501,59 @@ function applyDesign(src){
 
 function renderDesignZone(side){
   const dz = document.getElementById("s-dzone-" + side);
+  const pa = document.getElementById("print-area-" + side);
   if(!dz || !sDesigns[side]) return;
+
+  // Place design centered in print area initially
+  const paLeft = 50; // percent based, will be calculated
+  const wrap = document.getElementById("s-shirt-wrap");
+  const wrapW = wrap ? wrap.offsetWidth : 680;
+  const designW = 260;
+  const designH = 260;
+  const printAreaTop = 185;
+  const printAreaLeft = (wrapW - 280) / 2;
+  const initLeft = printAreaLeft + (280 - designW) / 2;
+  const initTop = printAreaTop + (320 - designH) / 2;
+
+  dz.style.width = designW + "px";
+  dz.style.height = designH + "px";
+  dz.style.left = initLeft + "px";
+  dz.style.top = initTop + "px";
+  dz.style.display = "block";
+
   dz.innerHTML=`
-    <div style="position:absolute;inset:0;border:2px dashed rgba(74,158,255,.6);pointer-events:none;z-index:1;"></div>
     <img src="${sDesigns[side]}" id="design-img-${side}" style="
       width:100%;height:100%;
       object-fit:contain;object-position:center;
       display:block;mix-blend-mode:normal;
       pointer-events:none;
     ">
-    <!-- Top left: Delete -->
     <div onclick="clearCurrentDesign()" style="
-      position:absolute;top:-14px;left:-14px;
-      width:28px;height:28px;background:#fff;
-      border-radius:50%;border:1.5px solid #ddd;
+      position:absolute;top:-14px;left:-14px;width:26px;height:26px;
+      background:#fff;border-radius:50%;border:1.5px solid #ddd;
       display:flex;align-items:center;justify-content:center;
-      cursor:pointer;z-index:10;font-size:13px;
-      box-shadow:0 2px 6px rgba(0,0,0,.15);
-    " title="Delete">🗑</div>
-    <!-- Top right: Rotate handle -->
+      cursor:pointer;z-index:10;font-size:12px;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);" title="Delete">🗑</div>
     <div id="rotate-handle-${side}" style="
-      position:absolute;top:-14px;right:-14px;
-      width:28px;height:28px;background:#fff;
-      border-radius:50%;border:1.5px solid #ddd;
+      position:absolute;top:-14px;right:-14px;width:26px;height:26px;
+      background:#fff;border-radius:50%;border:1.5px solid #ddd;
       display:flex;align-items:center;justify-content:center;
       cursor:grab;z-index:10;font-size:13px;
-      box-shadow:0 2px 6px rgba(0,0,0,.15);
-    " title="Rotate">↺</div>
-    <!-- Bottom right: Resize handle -->
+      box-shadow:0 2px 6px rgba(0,0,0,.15);" title="Rotate">↺</div>
     <div id="resize-handle-${side}" style="
-      position:absolute;bottom:-14px;right:-14px;
-      width:28px;height:28px;background:#4a9eff;
-      border-radius:50%;
+      position:absolute;bottom:-14px;right:-14px;width:26px;height:26px;
+      background:#4a9eff;border-radius:50%;
       display:flex;align-items:center;justify-content:center;
-      cursor:se-resize;z-index:10;font-size:13px;color:#fff;
-      box-shadow:0 2px 6px rgba(0,0,0,.2);
-    " title="Resize">⤡</div>
-    <!-- Bottom left: Copy to back -->
+      cursor:se-resize;z-index:10;font-size:12px;color:#fff;
+      box-shadow:0 2px 6px rgba(0,0,0,.2);" title="Resize">⤡</div>
     <div onclick="copyToBack('${side}')" style="
-      position:absolute;bottom:-14px;left:-14px;
-      width:28px;height:28px;background:#fff;
-      border-radius:50%;border:1.5px solid #ddd;
+      position:absolute;bottom:-14px;left:-14px;width:26px;height:26px;
+      background:#fff;border-radius:50%;border:1.5px solid #ddd;
       display:flex;align-items:center;justify-content:center;
       cursor:pointer;z-index:10;font-size:11px;font-weight:700;color:#555;
-      box-shadow:0 2px 6px rgba(0,0,0,.15);
-    " title="Copy to Back">⬚</div>
+      box-shadow:0 2px 6px rgba(0,0,0,.15);" title="Copy to Back">⬚</div>
   `;
-  dz.style.background="transparent";
-  dz.style.cursor="move";
+
   makeDraggable(dz, side);
   makeResizable(dz, side);
   makeRotatable(dz, side);
@@ -2621,9 +2630,6 @@ function makeDraggable(dz, side){
   function onMove(e){
     e.preventDefault();
     const pt = e.touches ? e.touches[0] : e;
-    const wrap = document.getElementById("s-shirt-wrap");
-    const wrapW = wrap.offsetWidth;
-    const wrapH = wrap.offsetHeight;
     const dzW = dz.offsetWidth;
     const dzH = dz.offsetHeight;
     let newLeft = startLeft + (pt.clientX - startX);
@@ -2631,9 +2637,17 @@ function makeDraggable(dz, side){
     dz.style.left = newLeft + "px";
     dz.style.top = newTop + "px";
 
-    // Show warning if outside bounds
-    const outside = newLeft < 0 || newTop < 0 || newLeft + dzW > wrapW || newTop + dzH > wrapH;
-    showBoundingWarning(outside);
+    // Check against fixed print area
+    const pa = document.getElementById("print-area-" + side);
+    if(pa){
+      const paL = pa.offsetLeft;
+      const paT = pa.offsetTop;
+      const paR = paL + pa.offsetWidth;
+      const paB = paT + pa.offsetHeight;
+      const outside = newLeft < paL || newTop < paT || newLeft + dzW > paR || newTop + dzH > paB;
+      pa.style.borderColor = outside ? "rgba(255,80,80,.8)" : "rgba(74,158,255,.4)";
+      showBoundingWarning(outside);
+    }
   }
 
   function onUp(){
@@ -2641,6 +2655,8 @@ function makeDraggable(dz, side){
     document.removeEventListener("mouseup", onUp);
     document.removeEventListener("touchmove", onMove);
     document.removeEventListener("touchend", onUp);
+    const pa = document.getElementById("print-area-" + side);
+    if(pa) pa.style.borderColor = "transparent";
     showBoundingWarning(false);
   }
 
