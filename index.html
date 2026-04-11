@@ -1062,12 +1062,12 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-item">
     <button class="mega-nav-btn" onclick="goShop('Ladies')">Women's <span class="chevron">▾</span></button>
     <div class="mega-dropdown">
-      <button onclick="goShop('Ladies');shopState.search='Women T-Shirt';shopFetch()">Women's T-Shirts</button>
-      <button onclick="goShop('Ladies');shopState.search='Women Hoodie';shopFetch()">Women's Hoodies</button>
-      <button onclick="goShop('Ladies');shopState.search='Women Polo';shopFetch()">Women's Polos</button>
-      <button onclick="goShop('Ladies');shopState.search='Women Jacket';shopFetch()">Women's Outerwear</button>
+      <button onclick="shopState.category='';shopState.search='Women T-Shirt';goShop('Ladies')">Women's T-Shirts</button>
+      <button onclick="shopState.category='';shopState.search='Women Hoodie';goShop('Ladies')">Women's Hoodies</button>
+      <button onclick="shopState.category='';shopState.search='Women Polo';goShop('Ladies')">Women's Polos</button>
+      <button onclick="shopState.category='';shopState.search='Women Jacket';goShop('Ladies')">Women's Outerwear</button>
       <div class="mega-dropdown-sep"></div>
-      <button onclick="goShop('Ladies')" style="color:#4a9eff;font-weight:700">View All Women's →</button>
+      <button onclick="shopState.search='';goShop('Ladies')" style="color:#4a9eff;font-weight:700">View All Women's →</button>
     </div>
   </div>
 
@@ -4534,7 +4534,16 @@ let shopState = {
 async function goShop(category) {
   showPage("shop");
   document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("on"));
-  if(category!==undefined) shopState.category=category||"";
+  if(category !== undefined){
+    shopState.category = category || "";
+    if(category.toLowerCase() === 'ladies'){
+      shopState.category = "";
+      if(!shopState.search) shopState.search = "Women";
+    }
+  }
+  // Update search input to reflect current search
+  const searchEl = document.getElementById("shop-search");
+  if(searchEl) searchEl.value = shopState.search || "";
   await shopLoadCatalog();
   shopRenderCats(); shopRenderBrands();
 }
