@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3.5 -->
+<!-- v3.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -952,7 +952,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
     <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.5</span>
+  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.6</span>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -2102,23 +2102,44 @@ function hPickColor(pid,name,dot){
 // ════════════════════════════════
 function buildPDP(){
   const p=pdpState.product;
-  document.getElementById("pdp-img").src=IMG_F;
-  document.getElementById("pdth-f-img").src=IMG_F;
-  document.getElementById("pdth-b-img").src=IMG_B;
-  document.getElementById("pdp-tint").style.background="transparent";
-  document.getElementById("pdp-title").textContent=p.fullTitle;
-  document.getElementById("pdp-subtitle").textContent=p.subtitle;
+  const c=pdpState.color||p.colors[0];
 
-  // Style selector (tee↔tee, hoodie↔hoodie)
-  const isHoodie=p.id==="18500"||p.id==="SF500";
-  const related=PRODUCTS.filter(x=>(x.id==="18500"||x.id==="SF500")===isHoodie);
-  document.getElementById("pdp-styles").innerHTML=related.map(r=>`
-    <div class="style-opt${r.id===p.id?" on":""}" onclick="pdSwitchStyle('${r.id}')">
-      <div class="style-opt-name">${r.tag}</div>
-      <div class="style-opt-desc">${r.fabric}</div>
-      <div class="style-opt-badge">No Minimum</div>
-      <div class="style-opt-price">From $${r.price} / ${isHoodie?"hoodie":"shirt"}</div>
-    </div>`).join("");
+  // Image — use color-specific front image if available, else fallback
+  const frontImg = c?.front || c?.front || IMG_F;
+  const backImg  = c?.back  || IMG_B;
+  document.getElementById("pdp-img").src = frontImg;
+  document.getElementById("pdth-f-img").src = frontImg;
+  document.getElementById("pdth-b-img").src = backImg;
+  document.getElementById("pdp-tint").style.background = "transparent";
+
+  // Title — handle both PRODUCTS format and S&S format
+  const title = p.fullTitle || p.name || p.title || "Custom Apparel";
+  const subtitle = p.subtitle || p.description_short || (p.brand ? `${p.brand} · ${p.styleNumber||p.id||""}` : "");
+  document.getElementById("pdp-title").textContent = title;
+  document.getElementById("pdp-subtitle").textContent = subtitle;
+
+  // Style selector — only show for hardcoded PRODUCTS
+  const stylesEl = document.getElementById("pdp-styles");
+  if(p.id && PRODUCTS.find(x=>x.id===p.id)){
+    const isHoodie=p.id==="18500"||p.id==="SF500";
+    const related=PRODUCTS.filter(x=>(x.id==="18500"||x.id==="SF500")===isHoodie);
+    stylesEl.innerHTML=related.map(r=>`
+      <div class="style-opt${r.id===p.id?" on":""}" onclick="pdSwitchStyle('${r.id}')">
+        <div class="style-opt-name">${r.tag}</div>
+        <div class="style-opt-desc">${r.fabric}</div>
+        <div class="style-opt-badge">No Minimum</div>
+        <div class="style-opt-price">From $${r.price} / ${isHoodie?"hoodie":"shirt"}</div>
+      </div>`).join("");
+  } else {
+    // S&S product — show simple product info instead
+    stylesEl.innerHTML = `
+      <div class="style-opt on">
+        <div class="style-opt-name">${p.brand||""}</div>
+        <div class="style-opt-desc">${p.base_category||""}</div>
+        <div class="style-opt-badge">No Minimum</div>
+        <div class="style-opt-price">From $${p.price||p.base_retail||0}</div>
+      </div>`;
+  }
 
   buildPDPColors();
 }
@@ -2131,21 +2152,38 @@ function pdSwitchStyle(id){
 
 function buildPDPColors(){
   const p=pdpState.product, c=pdpState.color;
-  document.getElementById("pdp-colors").innerHTML=p.colors.map(x=>`
-    <div class="pdp-cdot${x.n===c.n?" on":""}"
-      style="background:${x.h};${x.l?"outline:1px solid #ddd":""}"
-      ${x.l?'data-light="1"':""}
-      title="${x.n}"
-      onclick="pdPickColor('${x.n}')"></div>`).join("");
+  if(!c||!p.colors) return;
+  // Support both {n,h,l} (hardcoded) and {name,hex,front,back} (S&S) formats
+  const cn = c.n||c.name||"";
+  const ch = c.h||c.hex||"#888";
+  const cl = c.l||(ch.toLowerCase()==="#ffffff");
+
+  document.getElementById("pdp-colors").innerHTML=p.colors.map(x=>{
+    const xn=x.n||x.name||""; const xh=x.h||x.hex||"#888"; const xl=x.l||(xh.toLowerCase()==="#ffffff");
+    return `<div class="pdp-cdot${xn===cn?" on":""}"
+      style="background:${xh};${xl?"outline:1px solid #ddd":""}"
+      ${xl?'data-light="1"':""} title="${xn}"
+      onclick="pdPickColor('${xn.replace(/'/g,"\\'")}')"></div>`;
+  }).join("");
+
   const sw=document.getElementById("pdp-swatch");
-  sw.style.background=c.h;
-  sw.style.outline=c.l?"1px solid #ddd":"none";
-  document.getElementById("pdp-cname").textContent=c.n.toUpperCase();
-  document.getElementById("pdp-tint").style.background=c.h==="#ffffff"?"transparent":c.h;
+  if(sw){sw.style.background=ch;sw.style.outline=cl?"1px solid #ddd":"none";}
+  const cname=document.getElementById("pdp-cname");
+  if(cname) cname.textContent=cn.toUpperCase();
+  document.getElementById("pdp-tint").style.background=ch==="#ffffff"||ch==="#FFFFFF"?"transparent":ch;
+
+  // Update main image to color-specific photo
+  const imgEl=document.getElementById("pdp-img");
+  if(imgEl&&(c.front||c.back)){
+    imgEl.style.opacity=".3";
+    imgEl.src=pdpState.view==="back"?(c.back||c.front):(c.front||c.back);
+    imgEl.onload=()=>{imgEl.style.opacity="1";};
+  }
 }
 
 function pdPickColor(name){
-  pdpState.color=pdpState.product.colors.find(c=>c.n===name);
+  const colors=pdpState.product.colors||[];
+  pdpState.color=colors.find(c=>(c.n||c.name)===name)||colors[0];
   buildPDPColors();
 }
 
@@ -2154,8 +2192,14 @@ function pdView(v){
   document.getElementById("pdth-f").classList.toggle("on",v==="front");
   document.getElementById("pdth-b").classList.toggle("on",v==="back");
   const img=document.getElementById("pdp-img");
+  const c=pdpState.color;
   img.style.opacity=".2";
-  img.src=v==="back"?IMG_B:IMG_F;
+  // Use S&S color photos if available, else fallback
+  if(c&&(c.front||c.back)){
+    img.src=v==="back"?(c.back||c.front):(c.front||c.back);
+  } else {
+    img.src=v==="back"?IMG_B:IMG_F;
+  }
   img.onload=()=>{img.style.opacity="1"};
 }
 
