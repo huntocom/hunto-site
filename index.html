@@ -1117,7 +1117,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.1</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.2</span>
   </div>
 
 </nav>
@@ -2354,9 +2354,10 @@ function buildPDP(){
   document.getElementById("pdp-title").textContent = title;
   document.getElementById("pdp-subtitle").textContent = subtitle;
 
-  // Style selector — only show for hardcoded PRODUCTS
+  // Style selector — only show for hardcoded PRODUCTS (never for S&S)
   const stylesEl = document.getElementById("pdp-styles");
-  if(p.id && PRODUCTS.find(x=>x.id===p.id)){
+  const isSSProduct = !!p.styleId;
+  if(!isSSProduct && p.id && PRODUCTS.find(x=>x.id===p.id)){
     const isHoodie=p.id==="18500"||p.id==="SF500";
     const related=PRODUCTS.filter(x=>(x.id==="18500"||x.id==="SF500")===isHoodie);
     stylesEl.innerHTML=related.map(r=>`
@@ -2367,13 +2368,14 @@ function buildPDP(){
         <div class="style-opt-price">From $${r.price} / ${isHoodie?"hoodie":"shirt"}</div>
       </div>`).join("");
   } else {
-    // S&S product — show simple product info instead
+    // S&S product — show brand + category info
+    const price = parseFloat(p.price||p.base_retail||0).toFixed(2);
     stylesEl.innerHTML = `
-      <div class="style-opt on">
+      <div class="style-opt on" style="cursor:default">
         <div class="style-opt-name">${p.brand||""}</div>
-        <div class="style-opt-desc">${p.base_category||""}</div>
+        <div class="style-opt-desc">${p.base_category||p.baseCategory||""}</div>
         <div class="style-opt-badge">No Minimum</div>
-        <div class="style-opt-price">From $${p.price||p.base_retail||0}</div>
+        <div class="style-opt-price">From $${price}</div>
       </div>`;
   }
 
@@ -2500,14 +2502,16 @@ function pdView(v){
   document.getElementById("pdth-b").classList.toggle("on",v==="back");
   const img=document.getElementById("pdp-img");
   const c=pdpState.color;
-  img.style.opacity=".2";
-  // Use S&S color photos if available, else fallback
-  if(c&&(c.front||c.back)){
-    img.src=v==="back"?(c.back||c.front):(c.front||c.back);
+  const styleImg = pdpState.product?.image || "";
+  // Use S&S color photos if available, else style image, else hardcoded fallback
+  let src;
+  if(c?.front||c?.back){
+    src = v==="back" ? (c.back||c.front) : (c.front||c.back);
   } else {
-    img.src=v==="back"?IMG_B:IMG_F;
+    src = styleImg || (v==="back"?IMG_B:IMG_F);
   }
-  img.onload=()=>{img.style.opacity="1"};
+  img.src = src;
+  img.style.opacity = "1";
 }
 
 // ════════════════════════════════
@@ -2694,14 +2698,13 @@ function sSetView(v){
   if(fp) fp.classList.toggle("hidden", (sLayers[v]||[]).length > 0);
 
   const img=document.getElementById("s-shirt");
-  img.style.opacity=".15";
   img.style.mixBlendMode="normal";
+  img.style.opacity="1";
   const ssPhoto = v==="back" ? (c?.back||c?.front) : (c?.front||c?.back);
   const styleImg = sState.product?.image;
   const photoUrl = ssPhoto || styleImg || getShirtPhotoUrl(sState.product.id, c?.n||c?.name, v);
   img.src = photoUrl;
-  img.onload=()=>{img.style.opacity="1";};
-  img.onerror=()=>{img.src=v==="back"?IMG_B:IMG_F;img.style.opacity="1";};
+  img.onerror=()=>{ img.src = styleImg || (v==="back"?IMG_B:IMG_F); };
   sUpdateAll();
 }
 
@@ -4158,45 +4161,54 @@ async function shopOpenProduct(styleId){
   try {
     const res=await fetch(`${SERVER}/catalog/product/${styleId}`);
     const p=await res.json();
+    if(p.error){console.error("Product not found:",styleId);return;}
     shopOpenPDP(p);
   } catch(err){console.error("Product load error:",err);}
 }
 
 function shopOpenPDP(p){
+  // Map colors — handle both {name,hex} and {n,h} formats
   const colors=(p.colors||[]).map(c=>({
-    n:c.name, h:c.hex||"#888",
-    l:(c.hex||"").toLowerCase()==="#ffffff",
-    front:c.front, back:c.back,
-  }));
+    n:    c.name  || c.n  || "",
+    h:    c.hex   || c.h  || "#888888",
+    l:    (c.hex||c.h||"").toLowerCase()==="#ffffff",
+    front:  c.front  || null,
+    back:   c.back   || null,
+    swatch: c.swatch || null,
+  })).filter(c=>c.n);
 
-  // Use style image as fallback when color photos not synced yet
   const styleImg = p.image || null;
 
   pdpState.product={
-    id:p.style_number, name:p.title||p.name,
-    price:parseFloat(p.base_retail)||0,
-    colors, sizes:p.sizes||["S","M","L","XL","2XL"],
-    skus:p.skus||[], styleId:p.style_id,
-    description:p.description,
-    brand:p.brand, base_category:p.base_category,
-    base_retail:p.base_retail, image:styleImg,
+    id:           p.style_number || p.id,
+    name:         p.title || p.name,
+    price:        parseFloat(p.base_retail || p.price || 0),
+    colors,
+    sizes:        p.sizes || ["S","M","L","XL","2XL"],
+    skus:         p.skus || [],
+    styleId:      p.style_id,
+    description:  p.description,
+    brand:        p.brand,
+    base_category: p.base_category || p.baseCategory,
+    base_retail:  p.base_retail,
+    image:        styleImg,
   };
-  pdpState.color=colors[0]||{n:"White",h:"#ffffff",l:true};
-  pdpState.view="front";
 
-  // Set main image — prefer color photo, fallback to style image
-  const imgEl=document.getElementById("pdp-img");
+  pdpState.color = colors[0] || {n:"White",h:"#ffffff",l:true};
+  pdpState.view  = "front";
+
   const frontImg = colors[0]?.front || styleImg || "";
   const backImg  = colors[0]?.back  || styleImg || "";
-  if(imgEl){ imgEl.src=frontImg; imgEl.style.opacity="1"; }
 
-  // Thumbnails
-  const fImg=document.getElementById("pdth-f-img");
-  const bImg=document.getElementById("pdth-b-img");
-  if(fImg) fImg.src=frontImg;
-  if(bImg) bImg.src=backImg||frontImg;
+  const imgEl  = document.getElementById("pdp-img");
+  const fThumb = document.getElementById("pdth-f-img");
+  const bThumb = document.getElementById("pdth-b-img");
+  if(imgEl)  { imgEl.src=frontImg; imgEl.style.opacity="1"; }
+  if(fThumb) fThumb.src=frontImg;
+  if(bThumb) bThumb.src=backImg||frontImg;
 
-  buildPDP(); showPage("pdp");
+  buildPDP();
+  showPage("pdp");
 }
 
 function shopDesignNow(styleId){
