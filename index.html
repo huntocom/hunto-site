@@ -4158,22 +4158,18 @@ function shopFilterPrice(val){shopState.price=val;shopFetch();}
 function shopSort(val){shopState.sort=val;shopFetch();}
 
 async function shopOpenProduct(styleId){
+  if(!styleId){ console.error("No styleId"); return; }
+  showPage("pdp");
+  document.getElementById("pdp-title").textContent="Loading...";
   try {
     const res=await fetch(`${SERVER}/catalog/product/${styleId}`);
     const p=await res.json();
-    if(p.error){console.error("Product not found:",styleId);return;}
-    // If no colors came back, try fetching from products endpoint
-    if((!p.colors||p.colors.length===0) && p.style_id){
-      try {
-        const cr=await fetch(`${SERVER}/catalog/products?limit=1&styleid=${p.style_id}`);
-        const cd=await cr.json();
-        if(cd.products&&cd.products[0]&&cd.products[0].colors){
-          p.colors=cd.products[0].colors;
-        }
-      } catch(e){}
-    }
+    if(p.error){ document.getElementById("pdp-title").textContent="Product not found"; return; }
     shopOpenPDP(p);
-  } catch(err){console.error("Product load error:",err);}
+  } catch(err){
+    console.error("Product load error:",err);
+    document.getElementById("pdp-title").textContent="Could not load product";
+  }
 }
 
 function shopOpenPDP(p){
