@@ -2620,7 +2620,7 @@ function buildPDP(){
     if(imgEl){ imgEl.src=pdpState.view==="back"?IMG_B:IMG_F; imgEl.style.opacity="1"; imgEl.style.mixBlendMode=ch==="#ffffff"||ch==="white"?"normal":"multiply"; }
     if(tintEl) tintEl.style.background="transparent";
     const container=imgEl?.parentElement;
-    if(container) container.style.background=ch==="#ffffff"?"#f8f9fb":ch;
+    if(container) container.style.background="#f8f9fb";
   }
 
   // Thumbnail rail
@@ -2820,7 +2820,7 @@ function pdPickColor(name){
     if(img){ img.src=baseImg; img.style.opacity="1"; img.style.mixBlendMode=ch==="#ffffff"||ch==="white"?"normal":"multiply"; }
     if(tint) tint.style.background="transparent";
     const container=img?.parentElement;
-    if(container) container.style.background=ch==="#ffffff"?"#f8f9fb":ch;
+    if(container) container.style.background="#f8f9fb";
   }
 
   // Update thumbnails
