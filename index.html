@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3.4 -->
+<!-- v3.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -952,7 +952,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
     <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.4</span>
+  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.5</span>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -3558,28 +3558,34 @@ async function shopLoadCatalog() {
   document.getElementById("shop-grid").innerHTML="";
   document.getElementById("shop-empty").style.display="none";
   try {
-    let page=1, all=[];
-    while(true){
-      const params=new URLSearchParams({page,limit:100});
-      if(shopState.category) params.set("category",shopState.category);
-      const res=await fetch(`${SERVER}/catalog/products?${params}`);
-      const data=await res.json();
-      if(!data.products||!data.products.length) break;
-      all=all.concat(data.products);
-      if(page>=data.pages) break;
-      page++;
+    // Load just first page instantly — no more loop
+    const params=new URLSearchParams({page:1,limit:shopState.limit});
+    if(shopState.category) params.set("category",shopState.category);
+    if(shopState.brand)    params.set("brand",shopState.brand);
+    if(shopState.search)   params.set("search",shopState.search);
+    const res=await fetch(`${SERVER}/catalog/products?${params}`);
+    const data=await res.json();
+    shopState.total=data.total||0;
+    shopState.totalPages=data.pages||1;
+    shopState.currentPage=1;
+    shopState.displayed=data.products||[];
+
+    // Get brands for sidebar
+    const brandSet=new Set((data.products||[]).map(p=>p.brand).filter(Boolean));
+    if(shopState.brands.length===0){
+      // Load brands separately
+      const brandRes=await fetch(`${SERVER}/catalog/brands`);
+      const brandData=await brandRes.json();
+      shopState.brands=(brandData.brands||[]).map(b=>b.name).filter(Boolean).sort();
     }
-    shopState.allProducts=all;
-    const brandSet=new Set(all.map(p=>p.brand).filter(Boolean));
-    shopState.brands=[...brandSet].sort();
   } catch(err) {
     console.error("Shop load error:",err);
-    document.getElementById("shop-loading").innerHTML='<div style="color:#dc2626;font-size:14px;font-weight:600">⚠ Catalog is still syncing — check back in a few minutes!<br><br><button onclick="shopLoadCatalog()" style="padding:10px 20px;background:#4a9eff;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700">Retry</button></div>';
+    document.getElementById("shop-loading").innerHTML='<div style="color:#dc2626;font-size:14px;font-weight:600">⚠ Could not load catalog. <button onclick="shopLoadCatalog()" style="padding:8px 16px;background:#4a9eff;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;margin-left:8px">Retry</button></div>';
     shopState.loading=false; return;
   }
   shopState.loading=false;
   document.getElementById("shop-loading").style.display="none";
-  shopApplyFilters(); shopRenderGrid(); shopRenderCats(); shopRenderBrands();
+  shopRenderGrid(); shopRenderCats(); shopRenderBrands();
 }
 
 function shopApplyFilters(){
@@ -3602,11 +3608,11 @@ function shopRenderGrid(){
   const count=document.getElementById("shop-count");
   const empty=document.getElementById("shop-empty");
   const lm=document.getElementById("shop-load-more");
-  count.textContent=`${shopState.total} product${shopState.total!==1?"s":""}`;
-  if(!shopState.displayed.length){grid.innerHTML="";empty.style.display="block";lm.style.display="none";return;}
+  count.textContent=`${(shopState.total||0).toLocaleString()} product${shopState.total!==1?"s":""}`;
+  if(!shopState.displayed||!shopState.displayed.length){grid.innerHTML="";empty.style.display="block";lm.style.display="none";return;}
   empty.style.display="none";
   grid.innerHTML=shopState.displayed.map(p=>shopCardHTML(p)).join("");
-  lm.style.display=shopState.displayed.length<shopState.total?"inline-block":"none";
+  lm.style.display=shopState.currentPage<shopState.totalPages?"inline-block":"none";
 }
 
 function shopCardHTML(p){
@@ -3629,10 +3635,50 @@ function shopCardHTML(p){
   </div>`;
 }
 
-function shopLoadMore(){
-  shopState.displayed=shopState.filtered.slice(0,shopState.displayed.length+shopState.limit);
+async function shopLoadMore(){
+  if(shopState.loading) return;
+  shopState.loading=true;
+  const btn=document.getElementById("shop-load-more");
+  if(btn){btn.textContent="Loading...";btn.disabled=true;}
+  try {
+    const nextPage=(shopState.currentPage||1)+1;
+    const params=new URLSearchParams({page:nextPage,limit:shopState.limit});
+    if(shopState.category) params.set("category",shopState.category);
+    if(shopState.brand)    params.set("brand",shopState.brand);
+    if(shopState.search)   params.set("search",shopState.search);
+    const res=await fetch(`${SERVER}/catalog/products?${params}`);
+    const data=await res.json();
+    shopState.displayed=(shopState.displayed||[]).concat(data.products||[]);
+    shopState.currentPage=nextPage;
+  } catch(err){console.error("Load more error:",err);}
+  shopState.loading=false;
+  if(btn){btn.textContent="Load More Products";btn.disabled=false;}
   shopRenderGrid();
 }
+
+async function shopFetch(){
+  shopState.loading=true;
+  document.getElementById("shop-loading").style.display="block";
+  document.getElementById("shop-grid").innerHTML="";
+  document.getElementById("shop-empty").style.display="none";
+  try {
+    const params=new URLSearchParams({page:1,limit:shopState.limit});
+    if(shopState.category) params.set("category",shopState.category);
+    if(shopState.brand)    params.set("brand",shopState.brand);
+    if(shopState.search)   params.set("search",shopState.search);
+    const res=await fetch(`${SERVER}/catalog/products?${params}`);
+    const data=await res.json();
+    shopState.total=data.total||0;
+    shopState.totalPages=data.pages||1;
+    shopState.currentPage=1;
+    shopState.displayed=data.products||[];
+  } catch(err){console.error("Shop fetch error:",err);}
+  shopState.loading=false;
+  document.getElementById("shop-loading").style.display="none";
+  shopRenderGrid();
+}
+
+
 
 function shopRenderCats(){
   const wrap=document.getElementById("shop-cats");if(!wrap)return;
@@ -3669,8 +3715,8 @@ function shopRenderBrands(){
 }
 
 function shopSetCategory(cat){
-  shopState.category=cat; shopState.brand=""; shopState.page=1;
-  shopApplyFilters(); shopRenderGrid(); shopRenderCats(); shopRenderBrands();
+  shopState.category=cat; shopState.brand=""; shopState.currentPage=1;
+  shopFetch(); shopRenderCats(); shopRenderBrands();
 }
 
 function shopSetBrand(brand,checked){
@@ -3678,16 +3724,16 @@ function shopSetBrand(brand,checked){
   document.querySelectorAll("#shop-brands input[type=checkbox]").forEach(cb=>{
     cb.checked=cb.closest("label").textContent.trim()===brand&&checked;
   });
-  shopApplyFilters(); shopRenderGrid();
+  shopFetch();
 }
 
 let shopSearchTimer;
 function shopSearch(val){
   clearTimeout(shopSearchTimer);
-  shopSearchTimer=setTimeout(()=>{shopState.search=val;shopApplyFilters();shopRenderGrid();},300);
+  shopSearchTimer=setTimeout(()=>{shopState.search=val;shopState.currentPage=1;shopFetch();},400);
 }
-function shopFilterPrice(val){shopState.price=val;shopApplyFilters();shopRenderGrid();}
-function shopSort(val){shopState.sort=val;shopApplyFilters();shopRenderGrid();}
+function shopFilterPrice(val){shopState.price=val;shopFetch();}
+function shopSort(val){shopState.sort=val;shopFetch();}
 
 async function shopOpenProduct(styleId){
   try {
