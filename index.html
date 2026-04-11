@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3.7 -->
+<!-- v4.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -952,7 +952,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
     <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.7</span>
+  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v4.0</span>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -1279,6 +1279,45 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
 
   </div>
+
+  <!-- ── Product Details Section (below fold) ── -->
+  <div id="pdp-details" style="max-width:1300px;margin:0 auto;padding:48px 32px 80px;display:none">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px">
+
+      <!-- Left: Description -->
+      <div>
+        <h2 style="font-size:22px;font-weight:800;color:#111;letter-spacing:-.5px;margin-bottom:16px">Product Description</h2>
+        <div id="pdp-description" style="font-size:14px;color:#555;line-height:1.8"></div>
+
+        <div style="margin-top:28px">
+          <h3 style="font-size:16px;font-weight:700;color:#111;margin-bottom:10px">Available Sizes</h3>
+          <div id="pdp-sizes-list" style="font-size:14px;color:#555;line-height:1.8"></div>
+        </div>
+      </div>
+
+      <!-- Right: Details -->
+      <div>
+        <h2 style="font-size:22px;font-weight:800;color:#111;letter-spacing:-.5px;margin-bottom:16px">Product Details</h2>
+
+        <div id="pdp-specs" style="display:flex;flex-direction:column;gap:14px;margin-bottom:28px"></div>
+
+        <!-- Brand info -->
+        <div id="pdp-brand-section" style="background:#f8fbff;border-radius:16px;padding:24px;margin-top:8px">
+          <div id="pdp-brand-logo" style="margin-bottom:12px"></div>
+          <div id="pdp-brand-name" style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px"></div>
+          <div id="pdp-brand-desc" style="font-size:13px;color:#666;line-height:1.7"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related categories -->
+    <div style="margin-top:40px;padding-top:32px;border-top:1px solid #f0f0f0">
+      <h3 style="font-size:15px;font-weight:700;color:#333;margin-bottom:14px">More from this category</h3>
+      <div id="pdp-related-cats" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+    </div>
+
+  </div>
 </div>
 
 <!-- ████ STUDIO PAGE ████ -->
@@ -1338,6 +1377,10 @@ footer{background:#111;padding:56px 32px 28px}
       <button class="s-ibtn" id="sib-size" onclick="sPanel('size',this)">
         <span class="s-ibtn-icon">📐</span>
         <span class="s-ibtn-label">Size</span>
+      </button>
+      <button class="s-ibtn" id="sib-qty" onclick="sPanel('qty',this)">
+        <span class="s-ibtn-icon">🛒</span>
+        <span class="s-ibtn-label">Quantities</span>
       </button>
       <div class="s-ibtn-sep"></div>
       <button class="s-ibtn" id="sib-names" onclick="sPanel('names',this)">
@@ -1650,6 +1693,31 @@ footer{background:#111;padding:56px 32px 28px}
       </div>
 
       <!-- KEITH -->
+      <!-- QUANTITIES PANEL -->
+      <div id="sp-qty" style="display:none">
+        <div class="s-panel-hdr">
+          <div><div class="s-panel-title">Quantities</div><div class="s-panel-sub">How many of each size?</div></div>
+          <button class="s-panel-x" onclick="sClosePanel()">×</button>
+        </div>
+        <div class="s-panel-body">
+          <div style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.6">Enter quantities for each size. No minimums — order as few or as many as you need.</div>
+          <div id="qty-grid" style="display:flex;flex-direction:column;gap:8px"></div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid #f0f0f0">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span style="font-size:13px;font-weight:700;color:#333">Total Units</span>
+              <span id="qty-total" style="font-size:18px;font-weight:900;color:#111">0</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:13px;font-weight:700;color:#333">Total Price</span>
+              <span id="qty-price" style="font-size:18px;font-weight:900;color:#4a9eff">$0.00</span>
+            </div>
+          </div>
+          <button onclick="sClosePanel()" style="width:100%;margin-top:16px;padding:12px;background:#4a9eff;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">
+            Save Quantities ✓
+          </button>
+        </div>
+      </div>
+
       <!-- NAMES & NUMBERS PANEL -->
       <div id="sp-names" style="display:none">
         <div class="s-panel-hdr">
@@ -2144,9 +2212,79 @@ function buildPDP(){
   }
 
   buildPDPColors();
+  buildPDPDetails();
 }
 
-function pdSwitchStyle(id){
+function buildPDPDetails(){
+  const p = pdpState.product;
+  const detailsEl = document.getElementById("pdp-details");
+  if(!detailsEl) return;
+
+  // Show details section only for S&S products with description
+  if(!p.description && !p.styleId){ detailsEl.style.display="none"; return; }
+  detailsEl.style.display="block";
+
+  // Description
+  const descEl = document.getElementById("pdp-description");
+  if(descEl) descEl.innerHTML = p.description || "";
+
+  // Sizes
+  const sizesEl = document.getElementById("pdp-sizes-list");
+  if(sizesEl){
+    const sizes = p.sizes || [];
+    sizesEl.innerHTML = sizes.length
+      ? `<div><strong>Adult:</strong> ${sizes.join(" - ")} <span style="color:#4a9eff;cursor:pointer;font-weight:600" onclick="sPanel('qty',document.getElementById('sib-qty'));openPDPStudio()">Sizing Details</span></div>`
+      : "";
+  }
+
+  // Specs
+  const specsEl = document.getElementById("pdp-specs");
+  if(specsEl){
+    const specs = [
+      p.base_category ? {icon:"🏷", label:"Category", val:p.base_category} : null,
+      p.brand         ? {icon:"✦",  label:"Brand",    val:p.brand} : null,
+      {icon:"🎨", label:"Colors", val:`${(p.colors||[]).length} colors available`},
+      {icon:"📐", label:"Sizes",  val:(p.sizes||[]).join(", ")||"See sizing"},
+    ].filter(Boolean);
+    specsEl.innerHTML = specs.map(s=>`
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0">
+        <span style="font-size:18px;width:28px;text-align:center">${s.icon}</span>
+        <span style="font-size:13px;font-weight:600;color:#888;width:80px">${s.label}</span>
+        <span style="font-size:14px;font-weight:600;color:#333">${s.val}</span>
+      </div>`).join("");
+  }
+
+  // Brand section
+  const brandNameEl = document.getElementById("pdp-brand-name");
+  const brandDescEl = document.getElementById("pdp-brand-desc");
+  if(brandNameEl) brandNameEl.textContent = p.brand || "";
+  if(brandDescEl){
+    const brandDescs = {
+      "Gildan": "Gildan is one of the world's leading manufacturers of branded basic apparel, sold in over 60 countries. Known for consistent quality and an enormous range of styles and colors.",
+      "Bella+Canvas": "Bella+Canvas creates fashion-forward basics with premium ring-spun cotton. Favored by designers and brands for their flattering fits and exceptional print quality.",
+      "Comfort Colors": "Comfort Colors garment-dyes their tees after construction, creating a uniquely soft, lived-in feel with rich, vibrant colors that only get better with each wash.",
+      "Hanes": "Hanes has been America's go-to for comfortable, affordable basics for over a century. Trusted for everyday wear and bulk custom orders.",
+      "Next Level": "Next Level Apparel crafts fashion-forward basics using premium fabrics. Their modern fits and soft hand feel make them a favorite for retail-quality custom printing.",
+      "Independent Trading": "Independent Trading Company produces premium fleece and outerwear designed for the custom apparel market — known for heavyweight quality at accessible prices.",
+      "Carhartt": "Carhartt is a trusted name in durable workwear and rugged apparel, built for performance and reliability. A favorite among professionals and outdoor enthusiasts.",
+    };
+    brandDescEl.textContent = brandDescs[p.brand] || `${p.brand} apparel — customize with your own design using our AI art generator or upload your own artwork.`;
+  }
+
+  // Related categories
+  const catEl = document.getElementById("pdp-related-cats");
+  if(catEl && p.brand){
+    const cats = ["T-Shirts","Hoodies","Sweatshirts","Long Sleeve","Polos","Headwear","Bags"];
+    catEl.innerHTML = [`All ${p.brand}`, ...cats].map(c=>
+      `<button onclick="goShop('${c==='All '+p.brand?'':c}');${c==='All '+p.brand?`shopState.brand='${p.brand}';shopFetch();shopRenderBrands()`:''}"
+        style="padding:8px 18px;border:1.5px solid #e8e8e8;border-radius:20px;background:#fff;font-size:13px;font-weight:600;color:#555;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s"
+        onmouseover="this.style.borderColor='#4a9eff';this.style.color='#4a9eff'"
+        onmouseout="this.style.borderColor='#e8e8e8';this.style.color='#555'">${c}</button>`
+    ).join("");
+  }
+}
+
+
   pdpState.product=PRODUCTS.find(p=>p.id===id);
   pdpState.color=pdpState.product.colors[0];
   buildPDP();
@@ -2243,12 +2381,13 @@ function initStudio(){
 function sPanel(id,btn){
   document.querySelectorAll(".s-ibtn").forEach(b=>b.classList.remove("on"));
   if(btn)btn.classList.add("on");
-  ["products","text","ai","upload","color","size","keith","names"].forEach(p=>{
+  ["products","text","ai","upload","color","size","keith","names","qty"].forEach(p=>{
     const el=document.getElementById("sp-"+p);
     if(el)el.style.display=p===id?"block":"none";
   });
   document.getElementById("s-panel").style.display="flex";
   activePanelId=id;
+  if(id==="qty") buildQtyGrid();
 }
 function sClosePanel(){
   document.getElementById("s-panel").style.display="none";
@@ -2258,7 +2397,25 @@ function sClosePanel(){
 }
 
 function buildSGarments(){
-  document.getElementById("s-garments").innerHTML=PRODUCTS.map(p=>`
+  const el = document.getElementById("s-garments");
+  if(!el) return;
+
+  // If this is an S&S product (has styleId), show its info — no switcher
+  if(sState.product.styleId){
+    el.innerHTML = `
+      <div class="s-gcard on" style="cursor:default">
+        <div class="s-gcard-name">${sState.product.brand||""} — ${sState.product.name||sState.product.title||""}</div>
+        <div class="s-gcard-sub">${sState.product.base_category||sState.product.baseCategory||""}</div>
+        <div class="s-gcard-price">From $${parseFloat(sState.product.price||sState.product.base_retail||0).toFixed(2)}</div>
+      </div>
+      <button onclick="goShop('')" style="width:100%;margin-top:10px;padding:9px;border:1.5px dashed #c8deff;border-radius:10px;background:#f8fbff;color:#4a9eff;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">
+        ← Browse All Products
+      </button>`;
+    return;
+  }
+
+  // Hardcoded Gildan products — show switcher as before
+  el.innerHTML=PRODUCTS.map(p=>`
     <div class="s-gcard${p.id===sState.product.id?" on":""}" onclick="sPickProduct('${p.id}')">
       <div class="s-gcard-name">Gildan ${p.id} — ${p.name}</div>
       <div class="s-gcard-sub">${p.oz} · ${p.fabric}</div>
@@ -2277,23 +2434,21 @@ function sPickProduct(id){
 function buildSColors(){
   try{
   const wrap=document.getElementById("s-color-dots");
-  if(!wrap){console.error("s-color-dots not found");return;}
-  if(!sState.product){console.error("sState.product undefined");return;}
-  if(!sState.product.colors){console.error("no colors");return;}
+  if(!wrap||!sState.product||!sState.product.colors) return;
+  const curName = sState.color?.n||sState.color?.name||"";
   wrap.innerHTML=sState.product.colors.map(c=>{
-    const nm = c.n.replace(/'/g, "\'");
-    return `<div class="s-cdot${c.n===sState.color.n?" on":""}"
-      style="background:${c.h};${c.l?"outline:1.5px solid #ddd":""}"
-      title="${c.n}"
-      onclick="sPickColor('${nm}')"></div>`;
+    const cn=c.n||c.name||""; const ch=c.h||c.hex||"#888"; const cl=c.l||(ch.toLowerCase()==="#ffffff");
+    return `<div class="s-cdot${cn===curName?" on":""}"
+      style="background:${ch};${cl?"outline:1.5px solid #ddd":""}"
+      title="${cn}" onclick="sPickColor('${cn.replace(/'/g,"\\'")}')"></div>`;
   }).join("");
   const nm=document.getElementById("s-color-current");
-  if(nm)nm.textContent=sState.color.n;
+  if(nm) nm.textContent=curName;
   }catch(e){console.error("buildSColors error:",e);}
 }
 
 function sPickColor(name){
-  sState.color=sState.product.colors.find(c=>c.n===name)||sState.color;
+  sState.color=sState.product.colors.find(c=>(c.n||c.name)===name)||sState.color;
   buildSColors();sApplyTint();sUpdateAll();
 }
 function sPickColorIdx(idx){
@@ -2315,39 +2470,37 @@ function sApplyTint(){
   const c = sState.color;
   const shirtImg = document.getElementById("s-shirt");
   if(!shirtImg) return;
-
-  const photoUrl = getShirtPhotoUrl(sState.product.id, c.n, sView);
   const bg = document.getElementById("s-shirt-color-bg");
 
-  if(photoUrl === IMG_F || photoUrl === IMG_B){
-    // No real photo — use multiply blend fallback
-    shirtImg.src = photoUrl;
-    shirtImg.style.opacity = "1";
-    shirtImg.style.mixBlendMode = (c.h==="#ffffff"||c.h==="#fff") ? "normal" : "multiply";
-    if(bg) bg.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
-  } else {
-    // Real photo — always normal blend, white background
+  // Use S&S color-specific photo if available
+  const ssPhoto = sView==="back" ? (c.back||c.front) : (c.front||c.back);
+  const photoUrl = ssPhoto || getShirtPhotoUrl(sState.product.id, c.n||c.name, sView);
+
+  if(ssPhoto || (photoUrl !== IMG_F && photoUrl !== IMG_B)){
+    // Real photo — normal blend
     shirtImg.style.opacity = "0.3";
     shirtImg.style.mixBlendMode = "normal";
     shirtImg.style.filter = "none";
     if(bg) bg.style.background = "#ffffff";
-    shirtImg.src = photoUrl;
+    shirtImg.src = ssPhoto || photoUrl;
     shirtImg.onload = ()=>{ shirtImg.style.opacity="1"; };
     shirtImg.onerror = ()=>{
       shirtImg.src = sView==="back" ? IMG_B : IMG_F;
       shirtImg.style.opacity = "1";
-      shirtImg.style.mixBlendMode = (c.h==="#ffffff"||c.h==="#fff") ? "normal" : "multiply";
-      if(bg) bg.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
     };
+  } else {
+    // Fallback — multiply blend with color tint
+    shirtImg.src = photoUrl;
+    shirtImg.style.opacity = "1";
+    shirtImg.style.mixBlendMode = (c.h==="#ffffff"||c.h==="#fff") ? "normal" : "multiply";
+    if(bg) bg.style.background = (c.h==="#ffffff"||c.h==="#fff") ? "transparent" : c.h;
   }
 
-  // Update design blend mode for dark shirts
+  // Update design blend mode for dark colors
+  const hex = c.h||c.hex||"#ffffff";
   ["front","back"].forEach(side=>{
     const dz=document.getElementById("s-dzone-"+side);
-    if(dz){
-      const img=dz.querySelector("img");
-      if(img) img.style.mixBlendMode = isDark(c.h) ? "screen" : "multiply";
-    }
+    if(dz){ const img=dz.querySelector("img"); if(img) img.style.mixBlendMode = isDark(hex) ? "screen" : "multiply"; }
   });
 }
 
@@ -2381,7 +2534,10 @@ function sSetView(v){
   const img=document.getElementById("s-shirt");
   img.style.opacity=".15";
   img.style.mixBlendMode="normal";
-  const photoUrl = getShirtPhotoUrl(sState.product.id, sState.color.n, v);
+  // Use S&S color photo if available, else fallback
+  const c = sState.color;
+  const ssPhoto = v==="back" ? (c?.back||c?.front) : (c?.front||c?.back);
+  const photoUrl = ssPhoto || getShirtPhotoUrl(sState.product.id, c?.n||c?.name, v);
   img.src = photoUrl;
   img.onload=()=>{img.style.opacity="1";};
   img.onerror=()=>{img.src=v==="back"?IMG_B:IMG_F;img.style.opacity="1";};
@@ -3389,6 +3545,53 @@ function historyUpdateBtns(){
 }
 
 
+// ════════════════════════════════
+// ════════════════════════════════
+// QUANTITIES
+// ════════════════════════════════
+let qtyState = {};
+
+function buildQtyGrid(){
+  const sizes = sState.product.sizes || ["S","M","L","XL","2XL","3XL"];
+  const price  = parseFloat(sState.product.price || sState.product.base_retail || 0);
+  const grid   = document.getElementById("qty-grid");
+  if(!grid) return;
+  grid.innerHTML = sizes.map(s => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f8f8f8;border-radius:10px;">
+      <span style="font-size:14px;font-weight:700;color:#333;width:48px">${s}</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button onclick="qtyAdj('${s}',-1)" style="width:32px;height:32px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#555">−</button>
+        <span id="qty-${s}" style="font-size:16px;font-weight:800;color:#111;min-width:28px;text-align:center">${qtyState[s]||0}</span>
+        <button onclick="qtyAdj('${s}',1)" style="width:32px;height:32px;border:1.5px solid #4a9eff;border-radius:8px;background:#f0f7ff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#4a9eff">+</button>
+      </div>
+      <span style="font-size:12px;color:#aaa;width:48px;text-align:right">$${price.toFixed(2)}</span>
+    </div>`).join("");
+  qtyUpdateTotals();
+}
+
+function qtyAdj(size, delta){
+  qtyState[size] = Math.max(0, (qtyState[size]||0) + delta);
+  const el = document.getElementById("qty-"+size);
+  if(el) el.textContent = qtyState[size];
+  qtyUpdateTotals();
+}
+
+function qtyUpdateTotals(){
+  const price = parseFloat(sState.product.price || sState.product.base_retail || 0);
+  const total = Object.values(qtyState).reduce((a,b)=>a+b,0);
+  const cost  = Object.entries(qtyState).reduce((a,[s,q])=>{
+    let p=price;
+    if(s==="2XL")p+=3;if(s==="3XL")p+=5;if(s==="4XL")p+=7;if(s==="5XL")p+=9;
+    return a+p*q;
+  },0);
+  const tEl=document.getElementById("qty-total");
+  const pEl=document.getElementById("qty-price");
+  if(tEl) tEl.textContent=total;
+  if(pEl) pEl.textContent="$"+cost.toFixed(2);
+}
+
+// ════════════════════════════════
+// NAMES & NUMBERS
 // ════════════════════════════════
 let nnRoster = [];
 let nnRowCount = 0;
