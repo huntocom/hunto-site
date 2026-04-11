@@ -430,7 +430,7 @@ footer{background:#111;padding:56px 32px 28px}
 /* ══════════════════════════════════════════
    STUDIO PAGE
 ══════════════════════════════════════════ */
-.studio-page{display:flex;flex-direction:column;height:calc(100vh - 60px);overflow:hidden}
+.studio-page{display:flex;flex-direction:column;height:calc(100vh - 110px);overflow:hidden}
 
 /* Studio top bar */
 .studio-topbar{
@@ -935,42 +935,207 @@ footer{background:#111;padding:56px 32px 28px}
 </head>
 <body>
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-logo" onclick="goHome()">HU<em>N</em>TO</div>
-  <div class="nav-links">
-    <button class="nav-link on" onclick="goHome()">Home</button>
-    <button class="nav-link" onclick="goShop('')">Shop</button>
-    <button class="nav-link" onclick="goShop('T-Shirts')">T-Shirts</button>
-    <button class="nav-link" onclick="goShop('Fleece')">Hoodies</button>
-    <button class="nav-link" onclick="openStudio(null)">Design Studio</button>
+<!-- NAV CSS -->
+<style>
+/* ── Top bar ── */
+.topbar{background:#f0f7ff;border-bottom:1px solid #dce8ff;padding:7px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#4a9eff;font-weight:600}
+.topbar-left{display:flex;align-items:center;gap:6px}
+.topbar-left span{cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.topbar-right{display:flex;align-items:center;gap:20px;font-size:11px;color:#888;font-weight:500}
+
+/* ── Main header ── */
+.main-header{background:#fff;border-bottom:1px solid #e8e8e8;padding:0 24px;height:64px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:300;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.hdr-logo{font-size:26px;font-weight:900;color:#111;letter-spacing:-1px;cursor:pointer;flex-shrink:0;margin-right:8px}
+.hdr-logo em{color:#4a9eff;font-style:normal}
+.hdr-search{flex:1;max-width:480px;position:relative}
+.hdr-search input{width:100%;padding:10px 16px 10px 40px;border:1.5px solid #e8e8e8;border-radius:24px;font-size:13px;font-family:Inter,sans-serif;outline:none;background:#f8f8f8;transition:all .2s;box-sizing:border-box}
+.hdr-search input:focus{border-color:#4a9eff;background:#fff;box-shadow:0 0 0 3px rgba(74,158,255,.1)}
+.hdr-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#aaa;font-size:14px}
+.hdr-actions{margin-left:auto;display:flex;align-items:center;gap:20px}
+.hdr-action{display:flex;flex-direction:column;align-items:center;font-size:11px;color:#888;font-weight:600;cursor:pointer;gap:2px;transition:color .15s}
+.hdr-action:hover{color:#4a9eff}
+.hdr-action-icon{font-size:18px}
+.hdr-action-sub{font-size:10px;color:#bbb;font-weight:400}
+.hdr-design-btn{height:40px;padding:0 22px;background:#4a9eff;color:#fff;border:none;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;transition:all .15s;box-shadow:0 3px 10px rgba(74,158,255,.3)}
+.hdr-design-btn:hover{background:#2d8df5;transform:translateY(-1px)}
+
+/* ── Mega nav bar ── */
+.mega-nav{background:#fff;border-bottom:2px solid #e8e8e8;padding:0 24px;display:flex;align-items:center;gap:0;position:sticky;top:64px;z-index:299}
+.mega-nav-item{position:relative}
+.mega-nav-btn{height:46px;padding:0 16px;border:none;background:transparent;font-size:13px;font-weight:600;color:#333;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px;transition:color .15s;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-2px}
+.mega-nav-btn:hover,.mega-nav-btn.on{color:#4a9eff;border-bottom-color:#4a9eff}
+.mega-nav-btn .chevron{font-size:9px;transition:transform .2s}
+.mega-nav-item:hover .chevron{transform:rotate(180deg)}
+.mega-nav-item:hover .mega-dropdown{display:block}
+.mega-dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #e8e8e8;border-radius:0 12px 12px 12px;box-shadow:0 8px 32px rgba(0,0,0,.12);min-width:220px;padding:12px 0;z-index:400}
+.mega-dropdown a,.mega-dropdown button{display:block;width:100%;padding:9px 20px;font-size:13px;font-weight:500;color:#444;text-align:left;background:none;border:none;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s;text-decoration:none;box-sizing:border-box}
+.mega-dropdown a:hover,.mega-dropdown button:hover{background:#f0f7ff;color:#4a9eff}
+.mega-dropdown-sep{height:1px;background:#f0f0f0;margin:6px 12px}
+.mega-dropdown-header{padding:8px 20px 4px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em}
+.mega-nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.nav-stars-sm{color:#f59e0b;font-size:11px}
+
+/* ── Mobile header ── */
+@media(max-width:768px){
+  .topbar{display:none}
+  .hdr-search{max-width:none;flex:1}
+  .hdr-actions .hdr-action{display:none}
+  .mega-nav{display:none}
+  .mobile-hdr-menu{display:flex}
+}
+.mobile-hdr-menu{display:none;align-items:center;justify-content:center;width:40px;height:40px;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px}
+.mobile-hdr-menu span{width:22px;height:2px;background:#333;border-radius:2px}
+</style>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    ✦ Welcome! <span onclick="openStudio(null)">Pick up designing where you left off →</span>
   </div>
-  <div class="nav-right">
-    <div class="nav-reviews">
-      <span class="nav-stars">★★★★★</span>
-      <span>28,000+ reviews</span>
+  <div class="topbar-right">
+    <span>Free Shipping on All Orders</span>
+    <span>·</span>
+    <span>No Minimums</span>
+    <span>·</span>
+    <span>Ships in 48hrs</span>
+  </div>
+</div>
+
+<!-- MAIN HEADER -->
+<header class="main-header">
+  <div class="hdr-logo" onclick="goHome()">HU<em>N</em>TO</div>
+
+  <div class="hdr-search">
+    <span class="hdr-search-icon">🔍</span>
+    <input type="text" placeholder="Search for t-shirts, hoodies, and more..."
+      oninput="shopSearchHeader(this.value)"
+      onfocus="if(this.value.length>0)goShop('')"
+      onkeydown="if(event.key==='Enter'){goShop('');shopSearch(this.value)}">
+  </div>
+
+  <div class="hdr-actions">
+    <div class="hdr-action" onclick="alert('Live chat coming soon!')">
+      <span class="hdr-action-icon">💬</span>
+      <span>Live Chat</span>
+      <span class="hdr-action-sub">Chat 24/7</span>
     </div>
-    <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
-    <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v4.0</span>
+    <div class="hdr-action" onclick="alert('Call us: coming soon!')">
+      <span class="hdr-action-icon">📞</span>
+      <span>(800) HUNTO</span>
+      <span class="hdr-action-sub">Talk with an expert</span>
+    </div>
+    <div class="hdr-action" onclick="alert('My Account coming soon!')">
+      <span class="hdr-action-icon">👤</span>
+      <span>My Account</span>
+    </div>
+    <div class="hdr-action" onclick="alert('Cart coming soon!')">
+      <span class="hdr-action-icon">🛒</span>
+      <span>Cart</span>
+      <span class="hdr-action-sub">0 items</span>
+    </div>
+    <button class="hdr-design-btn" onclick="openStudio(null)">Start Designing →</button>
   </div>
-  <button class="hamburger" onclick="openMobileMenu()">
+
+  <button class="mobile-hdr-menu" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
   </button>
+</header>
+
+<!-- MEGA NAV -->
+<nav class="mega-nav">
+
+  <div class="mega-nav-item">
+    <button class="mega-nav-btn" onclick="goShop('T-Shirts')">T-Shirts <span class="chevron">▾</span></button>
+    <div class="mega-dropdown">
+      <div class="mega-dropdown-header">By Type</div>
+      <button onclick="goShop('T-Shirts - Core')">Short Sleeve T-Shirts <span style="background:#4a9eff;color:#fff;font-size:9px;padding:2px 6px;border-radius:8px;font-weight:700;margin-left:4px">Popular</span></button>
+      <button onclick="goShop('T-Shirts - Long Sleeve')">Long Sleeve T-Shirts</button>
+      <button onclick="goShop('T-Shirts - Premium')">Premium T-Shirts</button>
+      <div class="mega-dropdown-sep"></div>
+      <div class="mega-dropdown-header">By Gender</div>
+      <button onclick="goShop('T-Shirts')">Women's T-Shirts</button>
+      <button onclick="goShop('T-Shirts')">Kids' T-Shirts</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="goShop('T-Shirts')" style="color:#4a9eff;font-weight:700">View All T-Shirts →</button>
+    </div>
+  </div>
+
+  <div class="mega-nav-item">
+    <button class="mega-nav-btn" onclick="goShop('Fleece')">Sweatshirts <span class="chevron">▾</span></button>
+    <div class="mega-dropdown">
+      <button onclick="goShop('Fleece - Core - Hood')">Hoodies <span style="background:#4a9eff;color:#fff;font-size:9px;padding:2px 6px;border-radius:8px;font-weight:700;margin-left:4px">Popular</span></button>
+      <button onclick="goShop('Fleece - Core - Crew')">Crewneck Sweatshirts</button>
+      <button onclick="goShop('Fleece - Premium - Hood')">Premium Hoodies</button>
+      <button onclick="goShop('Fleece - Premium - Crew')">Premium Crewnecks</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="goShop('Fleece')" style="color:#4a9eff;font-weight:700">View All Sweatshirts →</button>
+    </div>
+  </div>
+
+  <div class="mega-nav-item">
+    <button class="mega-nav-btn" onclick="goShop('Polos')">Polo Shirts <span class="chevron">▾</span></button>
+    <div class="mega-dropdown">
+      <button onclick="goShop('Polos')">Performance Polos</button>
+      <button onclick="goShop('Polos')">Golf Polos</button>
+      <button onclick="goShop('Polos')">Premium Polos</button>
+      <button onclick="goShop('Polos')">Long Sleeve Polos</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="goShop('Polos')" style="color:#4a9eff;font-weight:700">View All Polos →</button>
+    </div>
+  </div>
+
+  <div class="mega-nav-item">
+    <button class="mega-nav-btn" onclick="goShop('Outerwear')">Outerwear <span class="chevron">▾</span></button>
+    <div class="mega-dropdown">
+      <button onclick="goShop('Outerwear')">Jackets</button>
+      <button onclick="goShop('Outerwear')">Soft Shell Jackets</button>
+      <button onclick="goShop('Outerwear')">Quarter Zips</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="goShop('Outerwear')" style="color:#4a9eff;font-weight:700">View All Outerwear →</button>
+    </div>
+  </div>
+
+  <div class="mega-nav-item">
+    <button class="mega-nav-btn">Brands <span class="chevron">▾</span></button>
+    <div class="mega-dropdown">
+      <button onclick="goShop('');shopState.brand='Gildan';shopFetch();shopRenderBrands()">Gildan</button>
+      <button onclick="goShop('');shopState.brand='Bella+Canvas';shopFetch();shopRenderBrands()">Bella + Canvas</button>
+      <button onclick="goShop('');shopState.brand='Comfort Colors';shopFetch();shopRenderBrands()">Comfort Colors</button>
+      <button onclick="goShop('');shopState.brand='Hanes';shopFetch();shopRenderBrands()">Hanes</button>
+      <button onclick="goShop('');shopState.brand='Next Level';shopFetch();shopRenderBrands()">Next Level</button>
+      <button onclick="goShop('');shopState.brand='Independent Trading';shopFetch();shopRenderBrands()">Independent Trading</button>
+      <button onclick="goShop('');shopState.brand='Carhartt';shopFetch();shopRenderBrands()">Carhartt</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="goShop('')" style="color:#4a9eff;font-weight:700">View All Brands →</button>
+    </div>
+  </div>
+
+  <div class="mega-nav-item">
+    <button class="mega-nav-btn" onclick="goShop('')">Best Sellers</button>
+  </div>
+
+  <div class="mega-nav-right">
+    <span class="nav-stars-sm">★★★★★</span>
+    <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.1</span>
+  </div>
+
 </nav>
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobile-menu">
   <button class="mobile-menu-close" onclick="closeMobileMenu()">×</button>
   <button class="mobile-nav-link" onclick="goHome();closeMobileMenu()">🏠 Home</button>
-  <button class="mobile-nav-link" onclick="goPDP('8000');closeMobileMenu()">👕 T-Shirts</button>
-  <button class="mobile-nav-link" onclick="goPDP('18500');closeMobileMenu()">🧥 Hoodies</button>
-  <button class="mobile-nav-link" onclick="closeMobileMenu()">❓ How It Works</button>
-  <button class="mobile-nav-link" onclick="closeMobileMenu()">ℹ About</button>
+  <button class="mobile-nav-link" onclick="goShop('T-Shirts');closeMobileMenu()">👕 T-Shirts</button>
+  <button class="mobile-nav-link" onclick="goShop('Fleece');closeMobileMenu()">🧥 Hoodies</button>
+  <button class="mobile-nav-link" onclick="goShop('Polos');closeMobileMenu()">👔 Polo Shirts</button>
+  <button class="mobile-nav-link" onclick="goShop('Outerwear');closeMobileMenu()">🧣 Outerwear</button>
+  <button class="mobile-nav-link" onclick="goShop('');closeMobileMenu()">🛍 All Products</button>
   <div style="margin-top:16px">
     <button style="width:100%;height:52px;background:#4a9eff;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;font-family:Inter,sans-serif" onclick="openStudio(null);closeMobileMenu()">Start Designing →</button>
   </div>
 </div>
+
 
 <!-- ████ HOME PAGE ████ -->
 <div id="page-home" class="page active">
@@ -3783,6 +3948,10 @@ function nnCloseRoster(){
   document.getElementById('nn-modal').style.display = 'none';
 }
 
+
+function shopSearchHeader(val){
+  if(val.length > 1) { goShop(''); shopSearch(val); }
+}
 
 // ════════════════════════════════
 // SHOP CATALOG
