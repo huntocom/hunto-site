@@ -3698,8 +3698,6 @@ function shopRenderCats(){
     `<button class="shop-cat-pill${shopState.category===c.value?" on":""}" onclick="shopSetCategory('${c.value}')">${c.label}</button>`
   ).join("");
 }
-  wrap.innerHTML=cats.map(c=>`<button class="shop-cat-pill${shopState.category===c.value?" on":""}" onclick="shopSetCategory('${c.value}')">${c.label}</button>`).join("");
-}
 
 function shopRenderBrands(){
   const wrap=document.getElementById("shop-brands");if(!wrap)return;
