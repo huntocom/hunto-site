@@ -2295,6 +2295,44 @@ const PLACEMENTS = {
 // ════════════════════════════════
 const pdpState = {product:PRODUCTS[0],color:PRODUCTS[0].colors[0],view:"front"};
 const sState   = {product:PRODUCTS[0],color:PRODUCTS[0].colors[0],sz:"M",place:"fc",view:"front",keith:false,hasDesign:false};
+// Multi-product support
+let sProducts = []; // [{product, color}]
+let sActiveIdx = 0;
+
+function sInitProducts(){
+  sProducts = [{product:sState.product, color:sState.color}];
+  sActiveIdx = 0;
+}
+function sSetActive(idx){
+  // Save current state
+  if(sProducts[sActiveIdx]){
+    sProducts[sActiveIdx].product = sState.product;
+    sProducts[sActiveIdx].color   = sState.color;
+  }
+  sActiveIdx = idx;
+  // Load selected product
+  sState.product = sProducts[idx].product;
+  sState.color   = sProducts[idx].color;
+  buildSGarments(); buildSColors(); buildSSizes();
+  sApplyTint(); sUpdateAll();
+}
+function sAddProduct(product, color){
+  sProducts.push({product, color});
+  sActiveIdx = sProducts.length - 1;
+  sState.product = product;
+  sState.color   = color;
+  buildSGarments(); buildSColors(); buildSSizes();
+  sApplyTint(); sUpdateAll();
+}
+function sRemoveProduct(idx){
+  if(sProducts.length <= 1) return;
+  sProducts.splice(idx, 1);
+  sActiveIdx = Math.min(sActiveIdx, sProducts.length-1);
+  sState.product = sProducts[sActiveIdx].product;
+  sState.color   = sProducts[sActiveIdx].color;
+  buildSGarments(); buildSColors(); buildSSizes();
+  sApplyTint(); sUpdateAll();
+}
 let sView = "front";
 const sLayers = {front:[], back:[]};
 let layerCounter = 0;
@@ -2316,10 +2354,37 @@ function showPage(id){
   history.replaceState(null, "", "#"+id);
 }
 function goHome(){showPage("home")}
-function goPDP(id){
+async function goPDP(id){
+  // Map hardcoded IDs to S&S style numbers to get real photos
+  const SS_STYLE_MAP = {
+    "8000":  "8000",   // Gildan DryBlend
+    "64000": "64000",  // Gildan Softstyle
+    "18500": "18500",  // Gildan Heavy Hoodie
+    "SF500": "SF500",  // Gildan Softstyle Hoodie
+  };
+
+  // Try to load from API first for real color photos
+  try {
+    // Search for the style by style number
+    const res = await fetch(`${SERVER}/catalog/products?search=${id}&brand=Gildan&limit=10`);
+    const data = await res.json();
+    const found = data.products?.find(p => p.style_number === id || p.style_number === ("G"+id));
+
+    if(found && found.colors && found.colors.length > 0){
+      // Load full product with SKUs
+      const fullRes = await fetch(`${SERVER}/catalog/product/${found.style_id}`);
+      const full = await fullRes.json();
+      if(!full.error && full.colors?.length > 0){
+        shopOpenPDP(full);
+        return;
+      }
+    }
+  } catch(e){ console.log("API load failed, using hardcoded:", e.message); }
+
+  // Fallback to hardcoded product
   pdpState.product = PRODUCTS.find(p=>p.id===id)||PRODUCTS[0];
-  pdpState.color    = pdpState.product.colors[0];
-  pdpState.view     = "front";
+  pdpState.color   = pdpState.product.colors[0];
+  pdpState.view    = "front";
   buildPDP();
   showPage("pdp");
 }
@@ -2661,6 +2726,7 @@ function initStudio(){
   document.getElementById("sth-b-img").src = ssBack  || IMG_B;
 
   if(!studioInited){ studioInited=true; }
+  sInitProducts(); // init multi-product array
   sPanel("products",document.getElementById("sib-products"));
   initKeyField();
   buildSGarments();
@@ -2697,28 +2763,37 @@ function sClosePanel(){
 
 function buildSGarments(){
   const el=document.getElementById("s-garments"); if(!el) return;
-  const p=sState.product, c=sState.color;
-  const cn=c?.n||c?.name||""; const ch=c?.h||c?.hex||"#888";
-  const img=c?.front||p?.image||(p?.id?getShirtPhotoUrl(p.id,cn,"front"):IMG_F);
-  el.innerHTML=`
-    <div style="border:1.5px solid #e8e8e8;border-radius:12px;overflow:hidden">
-      <div style="padding:10px 14px;background:#f8f8f8;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:12px;font-weight:700;color:#333">${p?.brand||"Gildan"} — ${p?.name||""}</span>
-        <button onclick="openProductModal()" style="font-size:11px;color:#4a9eff;font-weight:700;background:none;border:1px solid #c8deff;border-radius:6px;padding:3px 8px;cursor:pointer;font-family:Inter,sans-serif">Change</button>
+  // Initialize if empty
+  if(!sProducts.length) sInitProducts();
+
+  const cards = sProducts.map((sp,idx)=>{
+    const p=sp.product, c=sp.color;
+    const cn=c?.n||c?.name||""; const ch=c?.h||c?.hex||"#888";
+    const img=c?.front||p?.image||(p?.id?getShirtPhotoUrl(p.id,cn,"front"):IMG_F);
+    const isActive=idx===sActiveIdx;
+    return `<div onclick="sSetActive(${idx})" style="border:2px solid ${isActive?'#4a9eff':'#e8e8e8'};border-radius:12px;overflow:hidden;margin-bottom:10px;cursor:pointer;transition:all .15s;background:${isActive?'#f8fbff':'#fff'}">
+      <div style="padding:8px 12px;background:${isActive?'#e8f3ff':'#f8f8f8'};border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:11px;font-weight:700;color:${isActive?'#4a9eff':'#555'}">${isActive?'● ACTIVE':'○'} Product ${idx+1}</span>
+        <div style="display:flex;gap:6px">
+          <button onclick="event.stopPropagation();openProductModalFor(${idx})" style="font-size:10px;color:#4a9eff;font-weight:700;background:none;border:1px solid #c8deff;border-radius:5px;padding:2px 7px;cursor:pointer;font-family:Inter,sans-serif">Change</button>
+          ${sProducts.length>1?`<button onclick="event.stopPropagation();sRemoveProduct(${idx})" style="font-size:10px;color:#dc2626;font-weight:700;background:none;border:1px solid #fca5a5;border-radius:5px;padding:2px 6px;cursor:pointer;font-family:Inter,sans-serif">✕</button>`:""}
+        </div>
       </div>
-      <div style="padding:12px;display:flex;align-items:center;gap:12px">
-        <div style="width:60px;height:60px;border-radius:8px;overflow:hidden;background:#f8f8f8;flex-shrink:0">
+      <div style="padding:10px;display:flex;align-items:center;gap:10px">
+        <div style="width:52px;height:52px;border-radius:8px;overflow:hidden;background:#f8f8f8;flex-shrink:0">
           <img src="${img}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
         </div>
-        <div>
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
-            <div style="width:16px;height:16px;border-radius:3px;background:${ch};border:1px solid rgba(0,0,0,.1);flex-shrink:0"></div>
-            <span style="font-size:12px;font-weight:600;color:#333">${cn}</span>
+        <div style="min-width:0">
+          <div style="font-size:11px;color:#333;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p?.brand||"Gildan"} — ${p?.name||""}</div>
+          <div style="display:flex;align-items:center;gap:5px;margin-top:4px">
+            <div style="width:14px;height:14px;border-radius:3px;background:${ch};border:1px solid rgba(0,0,0,.1);flex-shrink:0"></div>
+            <span style="font-size:11px;color:#666">${cn}</span>
           </div>
-          <button onclick="sPanel('color',document.getElementById('sib-color'))" style="font-size:11px;color:#4a9eff;font-weight:700;background:none;border:1px solid #c8deff;border-radius:6px;padding:3px 10px;cursor:pointer;font-family:Inter,sans-serif">Change Color</button>
         </div>
       </div>
     </div>`;
+  }).join("");
+  el.innerHTML = cards;
 }
 
 // ── Product Modal ──────────────────────────────────────────
@@ -2730,11 +2805,22 @@ const MODAL_CATS=[
   {label:"Polos",value:"Polos"},{label:"Outerwear",value:"Outerwear"},
 ];
 
+let modalTargetIdx = -1; // -1 = add new, >= 0 = replace that index
+
 async function openProductModal(){
+  modalTargetIdx = -1; // add new
   document.getElementById("product-modal").style.display="block";
   document.body.style.overflow="hidden";
   renderModalCats();
   if(!modalState.loaded) await loadModalProducts();
+}
+async function openProductModalFor(idx){
+  modalTargetIdx = idx; // replace existing
+  document.getElementById("product-modal").style.display="block";
+  document.body.style.overflow="hidden";
+  renderModalCats();
+  modalState.loaded=false;
+  await loadModalProducts();
 }
 function closeProductModal(){
   document.getElementById("product-modal").style.display="none";
@@ -2797,9 +2883,17 @@ async function modalSelectProduct(styleId){
     const res=await fetch(`${SERVER}/catalog/product/${styleId}`);
     const p=await res.json(); if(p.error) return;
     const colors=(p.colors||[]).map(c=>({n:c.name||c.n||"",h:c.hex||c.h||"#888",l:(c.hex||"").toLowerCase()==="#ffffff",front:c.front,back:c.back})).filter(c=>c.n);
-    sState.product={id:p.style_number,name:p.title||p.name,price:parseFloat(p.base_retail||0),colors,sizes:p.sizes||["S","M","L","XL","2XL"],skus:p.skus||[],styleId:p.style_id,brand:p.brand,base_category:p.base_category,image:p.image};
-    sState.color=colors[0]||{n:"White",h:"#ffffff",l:true};
-    buildSGarments();buildSColors();buildSSizes();sApplyTint();sUpdateAll();
+    const product={id:p.style_number,name:p.title||p.name,price:parseFloat(p.base_retail||0),colors,sizes:p.sizes||["S","M","L","XL","2XL"],skus:p.skus||[],styleId:p.style_id,brand:p.brand,base_category:p.base_category,image:p.image};
+    const color=colors[0]||{n:"White",h:"#ffffff",l:true};
+
+    if(modalTargetIdx >= 0 && sProducts[modalTargetIdx]){
+      // Replace existing product
+      sProducts[modalTargetIdx]={product,color};
+      sSetActive(modalTargetIdx);
+    } else {
+      // Add new product
+      sAddProduct(product, color);
+    }
   } catch(e){console.error("Modal select:",e);}
 }
 
