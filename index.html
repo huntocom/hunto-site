@@ -1117,7 +1117,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.2</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.3</span>
   </div>
 
 </nav>
@@ -1385,55 +1385,79 @@ footer{background:#111;padding:56px 32px 28px}
 </div>
 
 <div id="page-pdp" class="page">
-  <div class="pdp-wrap">
 
-    <div class="pdp-thumbs">
-      <div class="pdp-thumb on" id="pdth-f" onclick="pdView('front')">
-        <img id="pdth-f-img" src="" alt="Front">
-      </div>
-      <div class="pdp-thumb" id="pdth-b" onclick="pdView('back')">
-        <img id="pdth-b-img" src="" alt="Back">
+  <!-- Back link -->
+  <div style="max-width:1400px;margin:0 auto;padding:12px 24px 0">
+    <button onclick="history.back()" style="background:none;border:none;font-size:13px;color:#888;cursor:pointer;font-family:Inter,sans-serif;font-weight:600;display:flex;align-items:center;gap:4px">← Back</button>
+  </div>
+
+  <div style="max-width:1400px;margin:0 auto;padding:16px 24px 48px;display:grid;grid-template-columns:80px 1fr 480px;gap:20px;align-items:start">
+
+    <!-- Thumbnail rail -->
+    <div id="pdp-thumb-rail" style="display:flex;flex-direction:column;gap:8px;position:sticky;top:124px"></div>
+
+    <!-- Main image -->
+    <div style="position:sticky;top:124px">
+      <div style="background:#f8f9fb;border-radius:20px;overflow:hidden;aspect-ratio:1;position:relative;display:flex;align-items:center;justify-content:center">
+        <img id="pdp-img" src="" alt="Product" style="width:100%;height:100%;object-fit:contain;display:block">
+        <div class="pdp-main-tint" id="pdp-tint"></div>
+        <div id="pdp-design-ph" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+          <div style="text-align:center;opacity:.15;font-size:clamp(28px,4vw,52px);font-weight:900;letter-spacing:-.02em;line-height:1.1;color:#000">YOUR<br>DESIGN<br>HERE</div>
+        </div>
+        <!-- Nav arrows -->
+        <button onclick="pdView('front')" id="pdv-f" style="position:absolute;bottom:16px;left:16px;padding:6px 14px;border:1.5px solid #e8e8e8;border-radius:20px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;color:#4a9eff;transition:all .15s">FRONT</button>
+        <button onclick="pdView('back')" id="pdv-b" style="position:absolute;bottom:16px;left:88px;padding:6px 14px;border:1.5px solid #e8e8e8;border-radius:20px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;color:#555;transition:all .15s">BACK</button>
       </div>
     </div>
 
-    <div class="pdp-main">
-      <img class="pdp-main-img" id="pdp-img" src="" alt="Product">
-      <div class="pdp-main-tint" id="pdp-tint"></div>
-      <div class="pdp-design-ph">YOUR<br>DESIGN<br>HERE</div>
-      <button class="pdp-arrow-btn" onclick="pdView(pdpState.view==='front'?'back':'front')">›</button>
-    </div>
-
-    <div class="pdp-info">
-      <div class="pdp-reviews-row">
-        <span class="pdp-stars">★★★★★</span>
-        <span class="pdp-review-ct">28,000+ 5-star reviews</span>
+    <!-- Product info -->
+    <div>
+      <!-- Reviews -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <span style="color:#f59e0b;font-size:16px">★★★★★</span>
+        <span style="font-size:13px;color:#888;font-weight:600">28,000+ 5-star reviews</span>
       </div>
-      <div class="pdp-title" id="pdp-title">Design Custom T-Shirts</div>
-      <div class="pdp-subtitle" id="pdp-subtitle">Design &amp; print customized t-shirts fast with no minimums.</div>
 
-      <div class="pdp-field-label">Choose Your Style:</div>
-      <div class="style-grid" id="pdp-styles"></div>
+      <!-- Title -->
+      <h1 id="pdp-title" style="font-size:clamp(24px,2.5vw,34px);font-weight:900;color:#111;letter-spacing:-.5px;margin-bottom:6px;line-height:1.15"></h1>
+      <div id="pdp-subtitle" style="font-size:14px;color:#888;margin-bottom:20px;font-weight:500"></div>
 
-      <div class="pdp-color-header">
-        <div class="pdp-field-label" style="margin:0">Selected Color:</div>
-        <div class="pdp-color-swatch" id="pdp-swatch" style="background:#fff;outline:1px solid #ddd"></div>
-        <div class="pdp-color-label" id="pdp-cname">WHITE</div>
+      <!-- Style switcher -->
+      <div id="pdp-styles" style="margin-bottom:24px"></div>
+
+      <!-- Color picker -->
+      <div style="margin-bottom:20px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <span style="font-size:13px;font-weight:700;color:#333">Color:</span>
+          <div id="pdp-swatch" style="width:20px;height:20px;border-radius:4px;border:1px solid #ddd;background:#fff"></div>
+          <span id="pdp-cname" style="font-size:13px;font-weight:700;color:#111"></span>
+          <span id="pdp-color-count" style="font-size:12px;color:#aaa;font-weight:500"></span>
+        </div>
+        <div id="pdp-colors" style="display:flex;flex-wrap:wrap;gap:5px;max-height:200px;overflow-y:auto;padding:4px 0"></div>
       </div>
-      <div class="pdp-color-grid" id="pdp-colors"></div>
 
-      <button class="pdp-cta" onclick="openPDPStudio()">✏ Start Designing</button>
+      <!-- CTA -->
+      <button class="pdp-cta" onclick="openPDPStudio()" style="margin-bottom:16px">✏ Start Designing</button>
 
-      <div class="ship-cards">
+      <!-- Explore more -->
+      <div id="pdp-explore" style="text-align:center;margin-bottom:20px">
+        <span style="font-size:13px;color:#aaa;font-weight:500">Looking for something different? </span>
+        <button onclick="goShop('')" style="background:none;border:none;font-size:13px;color:#4a9eff;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;text-decoration:underline;text-underline-offset:2px">Browse 3,000+ products →</button>
+      </div>
+
+      <!-- Shipping cards -->
+      <div class="ship-cards" style="margin-bottom:16px">
         <div class="ship-card">
           <span class="ship-icon">📦</span>
-          <div><div class="ship-label">Free Shipping</div><div class="ship-date">Wed Apr 22</div></div>
+          <div><div class="ship-label">Free Shipping</div><div class="ship-date" id="pdp-free-ship">Wed Apr 22</div></div>
         </div>
         <div class="ship-card">
           <span class="ship-icon">🚀</span>
-          <div><div class="ship-label">Rush Shipping</div><div class="ship-date">Mon Apr 13</div></div>
+          <div><div class="ship-label">Rush Shipping</div><div class="ship-date" id="pdp-rush-ship">Mon Apr 13</div></div>
         </div>
       </div>
 
+      <!-- Trust badges -->
       <div class="pdp-trust">
         <div class="pdp-trust-item"><span class="pdp-check">✓</span> No minimums</div>
         <div class="pdp-trust-item"><span class="pdp-check">✓</span> In-house DTF</div>
@@ -1441,48 +1465,48 @@ footer{background:#111;padding:56px 32px 28px}
         <div class="pdp-trust-item"><span class="pdp-check">✓</span> Free shipping</div>
         <div class="pdp-trust-item"><span class="pdp-check">✓</span> Keith's edit +$20</div>
       </div>
-    </div>
 
-  </div>
-
-  <!-- ── Product Details Section (below fold) ── -->
-  <div id="pdp-details" style="max-width:1300px;margin:0 auto;padding:48px 32px 80px;display:none">
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px">
-
-      <!-- Left: Description -->
-      <div>
-        <h2 style="font-size:22px;font-weight:800;color:#111;letter-spacing:-.5px;margin-bottom:16px">Product Description</h2>
-        <div id="pdp-description" style="font-size:14px;color:#555;line-height:1.8"></div>
-
-        <div style="margin-top:28px">
-          <h3 style="font-size:16px;font-weight:700;color:#111;margin-bottom:10px">Available Sizes</h3>
-          <div id="pdp-sizes-list" style="font-size:14px;color:#555;line-height:1.8"></div>
+      <!-- Quantity pricing table -->
+      <div style="margin-top:20px;background:#f8f9fb;border-radius:14px;padding:16px;display:none" id="pdp-qty-table">
+        <div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Volume Pricing</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center">
+          <div><div style="font-size:11px;color:#aaa">1+</div><div id="pdp-price-1" style="font-size:14px;font-weight:800;color:#111"></div></div>
+          <div><div style="font-size:11px;color:#aaa">6+</div><div id="pdp-price-6" style="font-size:14px;font-weight:800;color:#111"></div></div>
+          <div><div style="font-size:11px;color:#aaa">12+</div><div id="pdp-price-12" style="font-size:14px;font-weight:800;color:#111"></div></div>
+          <div><div style="font-size:11px;color:#aaa">24+</div><div id="pdp-price-24" style="font-size:14px;font-weight:800;color:#111"></div></div>
+          <div><div style="font-size:11px;color:#aaa">50+</div><div id="pdp-price-50" style="font-size:14px;font-weight:800;color:#4a9eff"></div></div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Right: Details -->
+  <!-- Product Details Section -->
+  <div id="pdp-details" style="max-width:1400px;margin:0 auto;padding:0 24px 80px;display:none">
+    <div style="border-top:2px solid #f0f0f0;padding-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:48px">
       <div>
-        <h2 style="font-size:22px;font-weight:800;color:#111;letter-spacing:-.5px;margin-bottom:16px">Product Details</h2>
-
-        <div id="pdp-specs" style="display:flex;flex-direction:column;gap:14px;margin-bottom:28px"></div>
-
-        <!-- Brand info -->
-        <div id="pdp-brand-section" style="background:#f8fbff;border-radius:16px;padding:24px;margin-top:8px">
-          <div id="pdp-brand-logo" style="margin-bottom:12px"></div>
-          <div id="pdp-brand-name" style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px"></div>
+        <h2 style="font-size:20px;font-weight:800;color:#111;margin-bottom:14px">Product Description</h2>
+        <div id="pdp-description" style="font-size:14px;color:#555;line-height:1.8"></div>
+        <div style="margin-top:24px">
+          <h3 style="font-size:15px;font-weight:700;color:#111;margin-bottom:8px">Available Sizes</h3>
+          <div id="pdp-sizes-list" style="font-size:14px;color:#555"></div>
+        </div>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:800;color:#111;margin-bottom:14px">Product Details</h2>
+        <div id="pdp-specs"></div>
+        <div id="pdp-brand-section" style="background:#f8fbff;border-radius:14px;padding:20px;margin-top:16px">
+          <div id="pdp-brand-logo" style="margin-bottom:10px"></div>
+          <div id="pdp-brand-name" style="font-size:15px;font-weight:800;color:#111;margin-bottom:6px"></div>
           <div id="pdp-brand-desc" style="font-size:13px;color:#666;line-height:1.7"></div>
         </div>
       </div>
     </div>
-
-    <!-- Related categories -->
-    <div style="margin-top:40px;padding-top:32px;border-top:1px solid #f0f0f0">
-      <h3 style="font-size:15px;font-weight:700;color:#333;margin-bottom:14px">More from this category</h3>
+    <div style="margin-top:32px;padding-top:24px;border-top:1px solid #f0f0f0">
+      <h3 style="font-size:14px;font-weight:700;color:#333;margin-bottom:12px">More products</h3>
       <div id="pdp-related-cats" style="display:flex;gap:8px;flex-wrap:wrap"></div>
     </div>
-
   </div>
+
 </div>
 
 <!-- ████ STUDIO PAGE ████ -->
@@ -2336,48 +2360,78 @@ function hPickColor(pid,name,dot){
 // PDP
 // ════════════════════════════════
 function buildPDP(){
-  const p=pdpState.product;
-  const c=pdpState.color||p.colors[0];
-
-  // Image — use color-specific front image if available, else style image, else fallback
-  const c0 = pdpState.color||p.colors?.[0];
-  const frontImg = c0?.front || p.image || IMG_F;
-  const backImg  = c0?.back  || p.image || IMG_B;
-  document.getElementById("pdp-img").src = frontImg;
-  document.getElementById("pdth-f-img").src = frontImg;
-  document.getElementById("pdth-b-img").src = backImg;
-  document.getElementById("pdp-tint").style.background = "transparent";
-
-  // Title — handle both PRODUCTS format and S&S format
-  const title = p.fullTitle || p.name || p.title || "Custom Apparel";
-  const subtitle = p.subtitle || p.description_short || (p.brand ? `${p.brand} · ${p.styleNumber||p.id||""}` : "");
-  document.getElementById("pdp-title").textContent = title;
-  document.getElementById("pdp-subtitle").textContent = subtitle;
-
-  // Style selector — only show for hardcoded PRODUCTS (never for S&S)
-  const stylesEl = document.getElementById("pdp-styles");
+  const p = pdpState.product;
+  const c = pdpState.color || p.colors?.[0];
   const isSSProduct = !!p.styleId;
-  if(!isSSProduct && p.id && PRODUCTS.find(x=>x.id===p.id)){
-    const isHoodie=p.id==="18500"||p.id==="SF500";
-    const related=PRODUCTS.filter(x=>(x.id==="18500"||x.id==="SF500")===isHoodie);
-    stylesEl.innerHTML=related.map(r=>`
-      <div class="style-opt${r.id===p.id?" on":""}" onclick="pdSwitchStyle('${r.id}')">
-        <div class="style-opt-name">${r.tag}</div>
-        <div class="style-opt-desc">${r.fabric}</div>
-        <div class="style-opt-badge">No Minimum</div>
-        <div class="style-opt-price">From $${r.price} / ${isHoodie?"hoodie":"shirt"}</div>
-      </div>`).join("");
-  } else {
-    // S&S product — show brand + category info
-    const price = parseFloat(p.price||p.base_retail||0).toFixed(2);
-    stylesEl.innerHTML = `
-      <div class="style-opt on" style="cursor:default">
+
+  // Images
+  const frontImg = c?.front || p.image || IMG_F;
+  const backImg  = c?.back  || p.image || IMG_B;
+  const imgEl = document.getElementById("pdp-img");
+  if(imgEl){ imgEl.src = pdpState.view==="back" ? backImg : frontImg; imgEl.style.opacity="1"; }
+  const tintEl = document.getElementById("pdp-tint");
+  if(tintEl) tintEl.style.background="transparent";
+
+  // Thumbnail rail
+  const rail = document.getElementById("pdp-thumb-rail");
+  if(rail){
+    rail.innerHTML = `
+      <div onclick="pdView('front')" style="width:72px;height:72px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid ${pdpState.view!=='back'?'#4a9eff':'#e8e8e8'};background:#f8f9fb;display:flex;align-items:center;justify-content:center">
+        <img src="${frontImg}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
+      </div>
+      <div onclick="pdView('back')" style="width:72px;height:72px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid ${pdpState.view==='back'?'#4a9eff':'#e8e8e8'};background:#f8f9fb;display:flex;align-items:center;justify-content:center">
+        <img src="${backImg}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
+      </div>`;
+  }
+
+  // Front/back button states
+  const fBtn=document.getElementById("pdv-f"),bBtn=document.getElementById("pdv-b");
+  if(fBtn){fBtn.style.color=pdpState.view!=="back"?"#4a9eff":"#555";fBtn.style.borderColor=pdpState.view!=="back"?"#4a9eff":"#e8e8e8";}
+  if(bBtn){bBtn.style.color=pdpState.view==="back"?"#4a9eff":"#555";bBtn.style.borderColor=pdpState.view==="back"?"#4a9eff":"#e8e8e8";}
+
+  // Title & subtitle
+  const title = p.fullTitle || p.name || p.title || "Custom Apparel";
+  const subtitle = p.subtitle || (p.brand ? `${p.brand} · ${p.id||""}` : "");
+  const titleEl=document.getElementById("pdp-title"); if(titleEl) titleEl.textContent=title;
+  const subEl=document.getElementById("pdp-subtitle"); if(subEl) subEl.textContent=subtitle;
+
+  // Style switcher
+  const stylesEl = document.getElementById("pdp-styles");
+  if(stylesEl){
+    if(!isSSProduct && p.id && PRODUCTS.find(x=>x.id===p.id)){
+      const isHoodie=p.id==="18500"||p.id==="SF500";
+      const related=PRODUCTS.filter(x=>(x.id==="18500"||x.id==="SF500")===isHoodie);
+      stylesEl.innerHTML=`<div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Choose Your Style</div><div class="style-grid">${related.map(r=>`
+        <div class="style-opt${r.id===p.id?" on":""}" onclick="pdSwitchStyle('${r.id}')">
+          <div class="style-opt-name">${r.tag}</div>
+          <div class="style-opt-desc">${r.fabric}</div>
+          <div class="style-opt-badge">No Minimum</div>
+          <div class="style-opt-price">From $${r.price} / ${isHoodie?"hoodie":"shirt"}</div>
+        </div>`).join("")}</div>`;
+    } else {
+      const price=parseFloat(p.price||p.base_retail||0).toFixed(2);
+      stylesEl.innerHTML=`<div class="style-grid"><div class="style-opt on" style="cursor:default">
         <div class="style-opt-name">${p.brand||""}</div>
         <div class="style-opt-desc">${p.base_category||p.baseCategory||""}</div>
         <div class="style-opt-badge">No Minimum</div>
         <div class="style-opt-price">From $${price}</div>
-      </div>`;
+      </div></div>`;
+    }
   }
+
+  // Volume pricing
+  const qtyTable=document.getElementById("pdp-qty-table");
+  if(qtyTable && !isSSProduct && p.price){
+    qtyTable.style.display="block";
+    const base=p.price;
+    [["pdp-price-1",0],["pdp-price-6",.05],["pdp-price-12",.1],["pdp-price-24",.15],["pdp-price-50",.2]].forEach(([id,disc])=>{
+      const el=document.getElementById(id); if(el) el.textContent="$"+(base*(1-disc)).toFixed(2);
+    });
+  } else if(qtyTable){ qtyTable.style.display="none"; }
+
+  // Explore link — hide for S&S products (they came from shop)
+  const exploreEl=document.getElementById("pdp-explore");
+  if(exploreEl) exploreEl.style.display=isSSProduct?"none":"block";
 
   buildPDPColors();
   buildPDPDetails();
@@ -2478,8 +2532,8 @@ function buildPDPColors(){
   if(sw){sw.style.background=ch;sw.style.outline=cl?"1px solid #ddd":"none";}
   const cname=document.getElementById("pdp-cname");
   if(cname) cname.textContent=cn.toUpperCase();
-  const tintEl = document.getElementById("pdp-tint");
-  if(tintEl) tintEl.style.background = "transparent";
+  const countEl=document.getElementById("pdp-color-count");
+  if(countEl) countEl.textContent=`(${p.colors.length} colors)`;
 
   // Update main image to color-specific photo
   const imgEl=document.getElementById("pdp-img");
@@ -2498,20 +2552,22 @@ function pdPickColor(name){
 
 function pdView(v){
   pdpState.view=v;
-  document.getElementById("pdth-f").classList.toggle("on",v==="front");
-  document.getElementById("pdth-b").classList.toggle("on",v==="back");
-  const img=document.getElementById("pdp-img");
   const c=pdpState.color;
-  const styleImg = pdpState.product?.image || "";
-  // Use S&S color photos if available, else style image, else hardcoded fallback
-  let src;
-  if(c?.front||c?.back){
-    src = v==="back" ? (c.back||c.front) : (c.front||c.back);
-  } else {
-    src = styleImg || (v==="back"?IMG_B:IMG_F);
+  const styleImg=pdpState.product?.image||"";
+  const src = v==="back" ? (c?.back||c?.front||styleImg||IMG_B) : (c?.front||c?.back||styleImg||IMG_F);
+  const img=document.getElementById("pdp-img");
+  if(img){ img.src=src; img.style.opacity="1"; }
+  // Update thumbnail borders
+  const rail=document.getElementById("pdp-thumb-rail");
+  if(rail){
+    const thumbs=rail.querySelectorAll("div");
+    if(thumbs[0]) thumbs[0].style.borderColor = v!=="back"?"#4a9eff":"#e8e8e8";
+    if(thumbs[1]) thumbs[1].style.borderColor = v==="back"?"#4a9eff":"#e8e8e8";
   }
-  img.src = src;
-  img.style.opacity = "1";
+  // Update front/back button styles
+  const fBtn=document.getElementById("pdv-f"),bBtn=document.getElementById("pdv-b");
+  if(fBtn){fBtn.style.color=v!=="back"?"#4a9eff":"#555";fBtn.style.borderColor=v!=="back"?"#4a9eff":"#e8e8e8";}
+  if(bBtn){bBtn.style.color=v==="back"?"#4a9eff":"#555";bBtn.style.borderColor=v==="back"?"#4a9eff":"#e8e8e8";}
 }
 
 // ════════════════════════════════
