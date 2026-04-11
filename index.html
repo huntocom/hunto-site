@@ -2284,7 +2284,7 @@ function buildPDPDetails(){
   }
 }
 
-
+function pdSwitchStyle(id){
   pdpState.product=PRODUCTS.find(p=>p.id===id);
   pdpState.color=pdpState.product.colors[0];
   buildPDP();
