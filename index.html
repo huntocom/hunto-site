@@ -2172,14 +2172,13 @@ function buildPDP(){
   const p=pdpState.product;
   const c=pdpState.color||p.colors[0];
 
-  // Image — use color-specific front image if available, else fallback
-  const frontImg = c?.front || c?.front || IMG_F;
-  const backImg  = c?.back  || IMG_B;
+  // Image — use color-specific front image if available, else style image, else fallback
+  const c0 = pdpState.color||p.colors?.[0];
+  const frontImg = c0?.front || p.image || IMG_F;
+  const backImg  = c0?.back  || p.image || IMG_B;
   document.getElementById("pdp-img").src = frontImg;
   document.getElementById("pdth-f-img").src = frontImg;
   document.getElementById("pdth-b-img").src = backImg;
-  // Tint — only apply for hardcoded products without real photos
-  const isSSProduct = !!(pdpState.color?.front || pdpState.color?.back);
   document.getElementById("pdp-tint").style.background = "transparent";
 
   // Title — handle both PRODUCTS format and S&S format
@@ -2364,17 +2363,13 @@ function initStudio(){
   buildSColors();
   buildSSizes();
 
-  // Load garment photo
+  // Load garment photo — S&S color photo → style image → hardcoded fallback
   const shirtEl = document.getElementById("s-shirt");
   shirtEl.style.mixBlendMode = "normal";
-  if(ssFront) {
-    shirtEl.src = ssFront;
-    shirtEl.onerror = ()=>{ shirtEl.src=IMG_F; };
-  } else {
-    const initPhoto = getShirtPhotoUrl(sState.product.id, sState.color.n, "front");
-    shirtEl.src = initPhoto;
-    shirtEl.onerror = ()=>{ shirtEl.src=IMG_F; };
-  }
+  const ssPhoto = sView==="back" ? (ssFront && ssBack ? ssBack : ssFront) : ssFront;
+  const styleImg = sState.product?.image;
+  shirtEl.src = ssPhoto || styleImg || getShirtPhotoUrl(sState.product.id, sState.color?.n||"", "front");
+  shirtEl.onerror = ()=>{ shirtEl.src = styleImg || IMG_F; };
   sUpdateAll();
 }
 
@@ -2472,9 +2467,9 @@ function sApplyTint(){
   if(!shirtImg) return;
   const bg = document.getElementById("s-shirt-color-bg");
 
-  // Use S&S color-specific photo if available
   const ssPhoto = sView==="back" ? (c.back||c.front) : (c.front||c.back);
-  const photoUrl = ssPhoto || getShirtPhotoUrl(sState.product.id, c.n||c.name, sView);
+  const styleImg = sState.product?.image;
+  const photoUrl = ssPhoto || styleImg || getShirtPhotoUrl(sState.product.id, c.n||c.name, sView);
 
   if(ssPhoto || (photoUrl !== IMG_F && photoUrl !== IMG_B)){
     // Real photo — normal blend
@@ -2534,10 +2529,9 @@ function sSetView(v){
   const img=document.getElementById("s-shirt");
   img.style.opacity=".15";
   img.style.mixBlendMode="normal";
-  // Use S&S color photo if available, else fallback
-  const c = sState.color;
   const ssPhoto = v==="back" ? (c?.back||c?.front) : (c?.front||c?.back);
-  const photoUrl = ssPhoto || getShirtPhotoUrl(sState.product.id, c?.n||c?.name, v);
+  const styleImg = sState.product?.image;
+  const photoUrl = ssPhoto || styleImg || getShirtPhotoUrl(sState.product.id, c?.n||c?.name, v);
   img.src = photoUrl;
   img.onload=()=>{img.style.opacity="1";};
   img.onerror=()=>{img.src=v==="back"?IMG_B:IMG_F;img.style.opacity="1";};
@@ -4003,16 +3997,34 @@ function shopOpenPDP(p){
     l:(c.hex||"").toLowerCase()==="#ffffff",
     front:c.front, back:c.back,
   }));
+
+  // Use style image as fallback when color photos not synced yet
+  const styleImg = p.image || null;
+
   pdpState.product={
     id:p.style_number, name:p.title||p.name,
     price:parseFloat(p.base_retail)||0,
     colors, sizes:p.sizes||["S","M","L","XL","2XL"],
-    skus:p.skus||[], styleId:p.style_id, description:p.description,
+    skus:p.skus||[], styleId:p.style_id,
+    description:p.description,
+    brand:p.brand, base_category:p.base_category,
+    base_retail:p.base_retail, image:styleImg,
   };
   pdpState.color=colors[0]||{n:"White",h:"#ffffff",l:true};
   pdpState.view="front";
+
+  // Set main image — prefer color photo, fallback to style image
   const imgEl=document.getElementById("pdp-img");
-  if(imgEl&&colors[0]?.front) imgEl.src=colors[0].front;
+  const frontImg = colors[0]?.front || styleImg || "";
+  const backImg  = colors[0]?.back  || styleImg || "";
+  if(imgEl){ imgEl.src=frontImg; imgEl.style.opacity="1"; }
+
+  // Thumbnails
+  const fImg=document.getElementById("pdth-f-img");
+  const bImg=document.getElementById("pdth-b-img");
+  if(fImg) fImg.src=frontImg;
+  if(bImg) bImg.src=backImg||frontImg;
+
   buildPDP(); showPage("pdp");
 }
 
