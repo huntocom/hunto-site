@@ -4162,6 +4162,16 @@ async function shopOpenProduct(styleId){
     const res=await fetch(`${SERVER}/catalog/product/${styleId}`);
     const p=await res.json();
     if(p.error){console.error("Product not found:",styleId);return;}
+    // If no colors came back, try fetching from products endpoint
+    if((!p.colors||p.colors.length===0) && p.style_id){
+      try {
+        const cr=await fetch(`${SERVER}/catalog/products?limit=1&styleid=${p.style_id}`);
+        const cd=await cr.json();
+        if(cd.products&&cd.products[0]&&cd.products[0].colors){
+          p.colors=cd.products[0].colors;
+        }
+      } catch(e){}
+    }
     shopOpenPDP(p);
   } catch(err){console.error("Product load error:",err);}
 }
