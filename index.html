@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3.6 -->
+<!-- v3.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -952,7 +952,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
     <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.6</span>
+  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.7</span>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -2110,6 +2110,8 @@ function buildPDP(){
   document.getElementById("pdp-img").src = frontImg;
   document.getElementById("pdth-f-img").src = frontImg;
   document.getElementById("pdth-b-img").src = backImg;
+  // Tint — only apply for hardcoded products without real photos
+  const isSSProduct = !!(pdpState.color?.front || pdpState.color?.back);
   document.getElementById("pdp-tint").style.background = "transparent";
 
   // Title — handle both PRODUCTS format and S&S format
@@ -2170,7 +2172,8 @@ function buildPDPColors(){
   if(sw){sw.style.background=ch;sw.style.outline=cl?"1px solid #ddd":"none";}
   const cname=document.getElementById("pdp-cname");
   if(cname) cname.textContent=cn.toUpperCase();
-  document.getElementById("pdp-tint").style.background=ch==="#ffffff"||ch==="#FFFFFF"?"transparent":ch;
+  const tintEl = document.getElementById("pdp-tint");
+  if(tintEl) tintEl.style.background = "transparent";
 
   // Update main image to color-specific photo
   const imgEl=document.getElementById("pdp-img");
@@ -2207,23 +2210,33 @@ function pdView(v){
 // STUDIO
 // ════════════════════════════════
 function initStudio(){
-  // Always set thumbnails
-  document.getElementById("sth-f-img").src=IMG_F;
-  document.getElementById("sth-b-img").src=IMG_B;
-  if(!studioInited){
-    studioInited=true;
-  }
+  // Check if this is an S&S product with real photos
+  const ssColor = sState.color;
+  const ssFront = ssColor?.front || ssColor?.front;
+  const ssBack  = ssColor?.back  || ssColor?.back;
+
+  // Set thumbnails
+  document.getElementById("sth-f-img").src = ssFront || IMG_F;
+  document.getElementById("sth-b-img").src = ssBack  || IMG_B;
+
+  if(!studioInited){ studioInited=true; }
   sPanel("products",document.getElementById("sib-products"));
   initKeyField();
   buildSGarments();
   buildSColors();
   buildSSizes();
-  // Load initial shirt photo
-  const initPhoto = getShirtPhotoUrl(sState.product.id, sState.color.n, "front");
+
+  // Load garment photo
   const shirtEl = document.getElementById("s-shirt");
   shirtEl.style.mixBlendMode = "normal";
-  shirtEl.src = initPhoto;
-  shirtEl.onerror = ()=>{ shirtEl.src=IMG_F; };
+  if(ssFront) {
+    shirtEl.src = ssFront;
+    shirtEl.onerror = ()=>{ shirtEl.src=IMG_F; };
+  } else {
+    const initPhoto = getShirtPhotoUrl(sState.product.id, sState.color.n, "front");
+    shirtEl.src = initPhoto;
+    shirtEl.onerror = ()=>{ shirtEl.src=IMG_F; };
+  }
   sUpdateAll();
 }
 
