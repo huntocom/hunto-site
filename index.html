@@ -3543,11 +3543,7 @@ async function goShop(category) {
   showPage("shop");
   document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("on"));
   if(category!==undefined) shopState.category=category||"";
-  if(!shopState.allProducts.length) {
-    await shopLoadCatalog();
-  } else {
-    shopApplyFilters(); shopRenderGrid();
-  }
+  await shopLoadCatalog();
   shopRenderCats(); shopRenderBrands();
 }
 
