@@ -1062,28 +1062,26 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-item">
     <button class="mega-nav-btn" onclick="goShop('Ladies')">Women's <span class="chevron">▾</span></button>
     <div class="mega-dropdown">
-      <button onclick="goShop('Ladies')">Women's T-Shirts</button>
-      <button onclick="goShop('Ladies')">Women's Hoodies</button>
-      <button onclick="goShop('Ladies')">Women's Polos</button>
-      <button onclick="goShop('Ladies')">Women's Outerwear</button>
+      <button onclick="goShop('Ladies');shopState.search='Women T-Shirt';shopFetch()">Women's T-Shirts</button>
+      <button onclick="goShop('Ladies');shopState.search='Women Hoodie';shopFetch()">Women's Hoodies</button>
+      <button onclick="goShop('Ladies');shopState.search='Women Polo';shopFetch()">Women's Polos</button>
+      <button onclick="goShop('Ladies');shopState.search='Women Jacket';shopFetch()">Women's Outerwear</button>
       <div class="mega-dropdown-sep"></div>
       <button onclick="goShop('Ladies')" style="color:#4a9eff;font-weight:700">View All Women's →</button>
     </div>
   </div>
 
   <div class="mega-nav-item">
-    <button class="mega-nav-btn" onclick="goShop('T-Shirts')">T-Shirts <span class="chevron">▾</span></button>
+    <button class="mega-nav-btn" onclick="goShop('T-Shirts - Core')">T-Shirts <span class="chevron">▾</span></button>
     <div class="mega-dropdown">
       <div class="mega-dropdown-header">By Type</div>
       <button onclick="goShop('T-Shirts - Core')">Short Sleeve T-Shirts <span style="background:#4a9eff;color:#fff;font-size:9px;padding:2px 6px;border-radius:8px;font-weight:700;margin-left:4px">Popular</span></button>
       <button onclick="goShop('T-Shirts - Long Sleeve')">Long Sleeve T-Shirts</button>
       <button onclick="goShop('T-Shirts - Premium')">Premium T-Shirts</button>
       <div class="mega-dropdown-sep"></div>
-      <div class="mega-dropdown-header">By Gender</div>
-      <button onclick="goShop('T-Shirts')">Women's T-Shirts</button>
-      <button onclick="goShop('T-Shirts')">Kids' T-Shirts</button>
+      <button onclick="goShop('Ladies')" >Women's T-Shirts</button>
       <div class="mega-dropdown-sep"></div>
-      <button onclick="goShop('T-Shirts')" style="color:#4a9eff;font-weight:700">View All T-Shirts →</button>
+      <button onclick="goShop('T-Shirts - Core')" style="color:#4a9eff;font-weight:700">View All T-Shirts →</button>
     </div>
   </div>
 
@@ -4673,18 +4671,18 @@ async function shopFetch(){
 function shopRenderCats(){
   const wrap=document.getElementById("shop-cats");if(!wrap)return;
   const cats=[
-    {label:"All",             value:""},
-    {label:"T-Shirts",        value:"T-Shirts"},
-    {label:"Long Sleeve",     value:"Long Sleeve"},
-    {label:"Hoodies",         value:"Fleece - Core - Hood"},
-    {label:"Premium Hoodies", value:"Fleece - Premium - Hood"},
-    {label:"Crewnecks",       value:"Fleece - Core - Crew"},
-    {label:"Premium Crew",    value:"Fleece - Premium - Crew"},
-    {label:"Women's",         value:"Ladies"},
-    {label:"Polos",           value:"Polos"},
-    {label:"Bottoms",         value:"Bottoms"},
-    {label:"Outerwear",       value:"Outerwear"},
-    {label:"Wovens",          value:"Wovens"},
+    {label:"All",              value:""},
+    {label:"T-Shirts",         value:"T-Shirts - Core"},
+    {label:"Premium T-Shirts", value:"T-Shirts - Premium"},
+    {label:"Long Sleeve",      value:"T-Shirts - Long Sleeve"},
+    {label:"Hoodies",          value:"Fleece - Core - Hood"},
+    {label:"Premium Hoodies",  value:"Fleece - Premium - Hood"},
+    {label:"Crewnecks",        value:"Fleece - Core - Crew"},
+    {label:"Premium Crew",     value:"Fleece - Premium - Crew"},
+    {label:"Women's",          value:"Ladies"},
+    {label:"Polos",            value:"Polos"},
+    {label:"Outerwear",        value:"Outerwear"},
+    {label:"Bottoms",          value:"Bottoms"},
   ];
   wrap.innerHTML=cats.map(c=>
     `<button class="shop-cat-pill${shopState.category===c.value?" on":""}" onclick="shopSetCategory('${c.value}')">${c.label}</button>`
