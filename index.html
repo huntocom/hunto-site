@@ -2355,12 +2355,11 @@ function showPage(id){
 }
 function goHome(){showPage("home")}
 async function goPDP(id){
-  // Known Gildan style_ids in our database
   const GILDAN_STYLE_IDS = {
-    "8000":  146,  // Gildan DryBlend Tee (G8000)
-    "64000": 145,  // Gildan Softstyle Tee (64000)
-    "18500": 423,  // Gildan Heavy Hoodie (18500) -- using DryBlend hoodie
-    "SF500": 423,  // Softstyle Hoodie fallback
+    "8000":  146,
+    "64000": 32,
+    "18500": 423,
+    "SF500": 3842,
   };
 
   const styleId = GILDAN_STYLE_IDS[id];
@@ -2369,28 +2368,31 @@ async function goPDP(id){
       const res = await fetch(`${SERVER}/catalog/product/${styleId}`);
       const p = await res.json();
       if(!p.error && p.colors && p.colors.length > 0){
-        shopOpenPDP(p);
+        // Map colors from API
+        const colors = p.colors.map(c=>({
+          n:c.name, h:c.hex||"#888",
+          l:(c.hex||"").toLowerCase()==="#ffffff",
+          front:c.front, back:c.back,
+        }));
+        // Use hardcoded product metadata but API colors/photos
+        const hardcoded = PRODUCTS.find(x=>x.id===id)||PRODUCTS[0];
+        pdpState.product = {
+          ...hardcoded,
+          colors,
+          styleId: p.style_id, // mark as having real photos
+          image: p.image,
+          description: p.description,
+        };
+        pdpState.color = colors[0];
+        pdpState.view  = "front";
+        buildPDP();
+        showPage("pdp");
         return;
       }
     } catch(e){ console.log("API load failed:", e.message); }
   }
 
-  // Try searching by title keywords
-  const titleMap = {"8000":"DryBlend T-Shirt","64000":"Softstyle T-Shirt","18500":"DryBlend Hooded","SF500":"Softstyle Hooded"};
-  try {
-    const res = await fetch(`${SERVER}/catalog/products?brand=Gildan&search=${encodeURIComponent(id==="8000"?"DryBlend":id==="64000"?"Softstyle":id)}&limit=3`);
-    const data = await res.json();
-    if(data.products?.length > 0){
-      const fullRes = await fetch(`${SERVER}/catalog/product/${data.products[0].style_id}`);
-      const full = await fullRes.json();
-      if(!full.error){
-        shopOpenPDP(full);
-        return;
-      }
-    }
-  } catch(e){}
-
-  // Final fallback — hardcoded
+  // Fallback to fully hardcoded
   pdpState.product = PRODUCTS.find(p=>p.id===id)||PRODUCTS[0];
   pdpState.color   = pdpState.product.colors[0];
   pdpState.view    = "front";
@@ -2540,14 +2542,15 @@ function buildPDP(){
   const titleEl=document.getElementById("pdp-title"); if(titleEl) titleEl.textContent=title;
   const subEl=document.getElementById("pdp-subtitle"); if(subEl) subEl.textContent=subtitle;
 
-  // Style switcher
+  // Style switcher — show for Gildan hardcoded products even if using API photos
   const stylesEl = document.getElementById("pdp-styles");
+  const isGildan = !!PRODUCTS.find(x=>x.id===p.id);
   if(stylesEl){
-    if(!isSSProduct && p.id && PRODUCTS.find(x=>x.id===p.id)){
+    if(isGildan){
       const isHoodie=p.id==="18500"||p.id==="SF500";
       const related=PRODUCTS.filter(x=>(x.id==="18500"||x.id==="SF500")===isHoodie);
       stylesEl.innerHTML=`<div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Choose Your Style</div><div class="style-grid">${related.map(r=>`
-        <div class="style-opt${r.id===p.id?" on":""}" onclick="pdSwitchStyle('${r.id}')">
+        <div class="style-opt${r.id===p.id?" on":""}" onclick="goPDP('${r.id}')">
           <div class="style-opt-name">${r.tag}</div>
           <div class="style-opt-desc">${r.fabric}</div>
           <div class="style-opt-badge">No Minimum</div>
@@ -2566,7 +2569,7 @@ function buildPDP(){
 
   // Volume pricing
   const qtyTable=document.getElementById("pdp-qty-table");
-  if(qtyTable && !isSSProduct && p.price){
+  if(qtyTable && isGildan && p.price){
     qtyTable.style.display="block";
     const base=p.price;
     [["pdp-price-1",0],["pdp-price-6",.05],["pdp-price-12",.1],["pdp-price-24",.15],["pdp-price-50",.2]].forEach(([id,disc])=>{
