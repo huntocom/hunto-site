@@ -2490,9 +2490,23 @@ function buildPDP(){
   const frontImg = c?.front || p.image || IMG_F;
   const backImg  = c?.back  || p.image || IMG_B;
   const imgEl = document.getElementById("pdp-img");
-  if(imgEl){ imgEl.src = pdpState.view==="back" ? backImg : frontImg; imgEl.style.opacity="1"; }
   const tintEl = document.getElementById("pdp-tint");
-  if(tintEl) tintEl.style.background="transparent";
+  const ch = c?.h||c?.hex||"#ffffff";
+
+  if(c?.front||c?.back||p.image){
+    // Real photo available — just show it, no color tricks
+    if(imgEl){ imgEl.src=pdpState.view==="back"?backImg:frontImg; imgEl.style.opacity="1"; imgEl.style.mixBlendMode="normal"; }
+    if(tintEl) tintEl.style.background="transparent";
+    // Reset container bg
+    const container=imgEl?.parentElement;
+    if(container) container.style.background="#f8f9fb";
+  } else {
+    // Hardcoded product — multiply blend on image, color on container bg
+    if(imgEl){ imgEl.src=pdpState.view==="back"?IMG_B:IMG_F; imgEl.style.opacity="1"; imgEl.style.mixBlendMode=ch==="#ffffff"||ch==="white"?"normal":"multiply"; }
+    if(tintEl) tintEl.style.background="transparent"; // never use tint overlay
+    const container=imgEl?.parentElement;
+    if(container) container.style.background=ch==="#ffffff"?"#f8f9fb":ch;
+  }
 
   // Thumbnail rail
   const rail = document.getElementById("pdp-thumb-rail");
@@ -2670,25 +2684,35 @@ function pdPickColor(name){
   const colors=pdpState.product.colors||[];
   pdpState.color=colors.find(c=>(c.n||c.name)===name)||colors[0];
   buildPDPColors();
-  // Update main image with selected color photo
   const c=pdpState.color;
   const styleImg=pdpState.product?.image||"";
+  const ch=c?.h||c?.hex||"#ffffff";
   const frontImg=c?.front||c?.back||styleImg||IMG_F;
   const backImg=c?.back||c?.front||styleImg||IMG_B;
   const img=document.getElementById("pdp-img");
-  if(img){ img.src=pdpState.view==="back"?backImg:frontImg; img.style.opacity="1"; }
+  const tint=document.getElementById("pdp-tint");
+
+  if(c?.front||c?.back){
+    // Real S&S photo
+    if(img){ img.src=pdpState.view==="back"?backImg:frontImg; img.style.opacity="1"; img.style.mixBlendMode="normal"; }
+    if(tint) tint.style.background="transparent";
+    const container=img?.parentElement;
+    if(container) container.style.background="#f8f9fb";
+  } else {
+    // Hardcoded — multiply blend on image, color behind it
+    const baseImg=pdpState.view==="back"?IMG_B:IMG_F;
+    if(img){ img.src=baseImg; img.style.opacity="1"; img.style.mixBlendMode=ch==="#ffffff"||ch==="white"?"normal":"multiply"; }
+    if(tint) tint.style.background="transparent";
+    const container=img?.parentElement;
+    if(container) container.style.background=ch==="#ffffff"?"#f8f9fb":ch;
+  }
+
   // Update thumbnails
   const rail=document.getElementById("pdp-thumb-rail");
   if(rail){
     const thumbs=rail.querySelectorAll("img");
-    if(thumbs[0]) thumbs[0].src=frontImg;
-    if(thumbs[1]) thumbs[1].src=backImg;
-  }
-  // Update tint for hardcoded products
-  const tint=document.getElementById("pdp-tint");
-  if(tint){
-    const ch=c?.h||c?.hex||"#ffffff";
-    tint.style.background=(!c?.front&&!c?.back)&&ch!=="#ffffff"?ch:"transparent";
+    if(thumbs[0]) thumbs[0].src=frontImg||IMG_F;
+    if(thumbs[1]) thumbs[1].src=backImg||IMG_B;
   }
 }
 
