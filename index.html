@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3.3 -->
+<!-- v3.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -940,9 +940,9 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="nav-logo" onclick="goHome()">HU<em>N</em>TO</div>
   <div class="nav-links">
     <button class="nav-link on" onclick="goHome()">Home</button>
-    <button class="nav-link" onclick="goShop()">Shop</button>
+    <button class="nav-link" onclick="goShop('')">Shop</button>
     <button class="nav-link" onclick="goShop('T-Shirts')">T-Shirts</button>
-    <button class="nav-link" onclick="goShop('Hoodies')">Hoodies</button>
+    <button class="nav-link" onclick="goShop('Fleece')">Hoodies</button>
     <button class="nav-link" onclick="openStudio(null)">Design Studio</button>
   </div>
   <div class="nav-right">
@@ -952,7 +952,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
     <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.3</span>
+  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.4</span>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -3637,12 +3637,25 @@ function shopLoadMore(){
 function shopRenderCats(){
   const wrap=document.getElementById("shop-cats");if(!wrap)return;
   const cats=[
-    {label:"All",value:""},{label:"T-Shirts",value:"T-Shirt"},
-    {label:"Hoodies",value:"Hooded"},{label:"Sweatshirts",value:"Sweatshirt"},
-    {label:"Long Sleeve",value:"Long Sleeve"},{label:"Tank Tops",value:"Tank"},
-    {label:"Polos",value:"Polo"},{label:"Performance",value:"Performance"},
-    {label:"Youth",value:"Youth"},{label:"Ladies",value:"Ladies"},
+    {label:"All",             value:""},
+    {label:"T-Shirts",        value:"T-Shirts"},
+    {label:"Long Sleeve",     value:"Long Sleeve"},
+    {label:"Hoodies",         value:"Fleece - Core - Hood"},
+    {label:"Premium Hoodies", value:"Fleece - Premium - Hood"},
+    {label:"Crewnecks",       value:"Fleece - Core - Crew"},
+    {label:"Premium Crew",    value:"Fleece - Premium - Crew"},
+    {label:"Polos",           value:"Polos"},
+    {label:"Bottoms",         value:"Bottoms"},
+    {label:"Outerwear",       value:"Outerwear"},
+    {label:"Headwear",        value:"Headwear"},
+    {label:"Bags",            value:"Bags"},
+    {label:"Accessories",     value:"Accessories"},
+    {label:"Wovens",          value:"Wovens"},
   ];
+  wrap.innerHTML=cats.map(c=>
+    `<button class="shop-cat-pill${shopState.category===c.value?" on":""}" onclick="shopSetCategory('${c.value}')">${c.label}</button>`
+  ).join("");
+}
   wrap.innerHTML=cats.map(c=>`<button class="shop-cat-pill${shopState.category===c.value?" on":""}" onclick="shopSetCategory('${c.value}')">${c.label}</button>`).join("");
 }
 
