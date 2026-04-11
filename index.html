@@ -2505,16 +2505,15 @@ function buildPDP(){
   const ch = c?.h||c?.hex||"#ffffff";
 
   if(c?.front||c?.back||p.image){
-    // Real photo available — just show it, no color tricks
+    // Real photo — just show it, plain background always
     if(imgEl){ imgEl.src=pdpState.view==="back"?backImg:frontImg; imgEl.style.opacity="1"; imgEl.style.mixBlendMode="normal"; }
     if(tintEl) tintEl.style.background="transparent";
-    // Reset container bg
     const container=imgEl?.parentElement;
     if(container) container.style.background="#f8f9fb";
   } else {
-    // Hardcoded product — multiply blend on image, color on container bg
+    // Hardcoded no photo — multiply blend on image, color on container
     if(imgEl){ imgEl.src=pdpState.view==="back"?IMG_B:IMG_F; imgEl.style.opacity="1"; imgEl.style.mixBlendMode=ch==="#ffffff"||ch==="white"?"normal":"multiply"; }
-    if(tintEl) tintEl.style.background="transparent"; // never use tint overlay
+    if(tintEl) tintEl.style.background="transparent";
     const container=imgEl?.parentElement;
     if(container) container.style.background=ch==="#ffffff"?"#f8f9fb":ch;
   }
@@ -2705,13 +2704,13 @@ function pdPickColor(name){
   const tint=document.getElementById("pdp-tint");
 
   if(c?.front||c?.back){
-    // Real S&S photo
+    // Real S&S photo — show it, always plain background
     if(img){ img.src=pdpState.view==="back"?backImg:frontImg; img.style.opacity="1"; img.style.mixBlendMode="normal"; }
     if(tint) tint.style.background="transparent";
     const container=img?.parentElement;
     if(container) container.style.background="#f8f9fb";
   } else {
-    // Hardcoded — multiply blend on image, color behind it
+    // Hardcoded — multiply blend, color behind
     const baseImg=pdpState.view==="back"?IMG_B:IMG_F;
     if(img){ img.src=baseImg; img.style.opacity="1"; img.style.mixBlendMode=ch==="#ffffff"||ch==="white"?"normal":"multiply"; }
     if(tint) tint.style.background="transparent";
