@@ -1060,6 +1060,18 @@ footer{background:#111;padding:56px 32px 28px}
 <nav class="mega-nav">
 
   <div class="mega-nav-item">
+    <button class="mega-nav-btn" onclick="goShop('Ladies')">Women's <span class="chevron">▾</span></button>
+    <div class="mega-dropdown">
+      <button onclick="goShop('Ladies')">Women's T-Shirts</button>
+      <button onclick="goShop('Ladies')">Women's Hoodies</button>
+      <button onclick="goShop('Ladies')">Women's Polos</button>
+      <button onclick="goShop('Ladies')">Women's Outerwear</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="goShop('Ladies')" style="color:#4a9eff;font-weight:700">View All Women's →</button>
+    </div>
+  </div>
+
+  <div class="mega-nav-item">
     <button class="mega-nav-btn" onclick="goShop('T-Shirts')">T-Shirts <span class="chevron">▾</span></button>
     <div class="mega-dropdown">
       <div class="mega-dropdown-header">By Type</div>
@@ -1264,6 +1276,11 @@ footer{background:#111;padding:56px 32px 28px}
         <div style="font-size:13px;font-weight:700;color:#111">Crewnecks</div>
         <div style="font-size:11px;color:#aaa;margin-top:2px">From $42</div>
       </div>
+      <div onclick="goShop('Ladies')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#4a9eff';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(74,158,255,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
+        <img src="https://www.ssactivewear.com/Images/Style/3480_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.display='none'">
+        <div style="font-size:13px;font-weight:700;color:#111">Women's</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px">From $26</div>
+      </div>
     </div>
   </div>
 
@@ -1283,6 +1300,7 @@ footer{background:#111;padding:56px 32px 28px}
         <button onclick="loadBestSellers('Polos',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Polos</button>
         <button onclick="loadBestSellers('Outerwear',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Outerwear</button>
         <button onclick="loadBestSellers('Long Sleeve',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Long Sleeve</button>
+        <button onclick="loadBestSellers('Ladies',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Women's</button>
       </div>
 
       <!-- Best seller grid -->
@@ -4662,12 +4680,10 @@ function shopRenderCats(){
     {label:"Premium Hoodies", value:"Fleece - Premium - Hood"},
     {label:"Crewnecks",       value:"Fleece - Core - Crew"},
     {label:"Premium Crew",    value:"Fleece - Premium - Crew"},
+    {label:"Women's",         value:"Ladies"},
     {label:"Polos",           value:"Polos"},
     {label:"Bottoms",         value:"Bottoms"},
     {label:"Outerwear",       value:"Outerwear"},
-    {label:"Headwear",        value:"Headwear"},
-    {label:"Bags",            value:"Bags"},
-    {label:"Accessories",     value:"Accessories"},
     {label:"Wovens",          value:"Wovens"},
   ];
   wrap.innerHTML=cats.map(c=>
