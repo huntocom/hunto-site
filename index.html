@@ -2068,6 +2068,8 @@ function showPage(id){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById("page-"+id).classList.add("active");
   window.scrollTo(0,0);
+  // Update URL hash so refresh restores the page
+  history.replaceState(null, "", "#"+id);
 }
 function goHome(){showPage("home")}
 function goPDP(id){
@@ -4409,6 +4411,15 @@ document.addEventListener("click",(e)=>{
 // ════════════════════════════════
 buildHome();
 typeAnim();
+
+// ── Hash router — restore page on refresh ──────────────────
+(function(){
+  const hash = window.location.hash.replace("#","");
+  if(hash === "shop")   { goShop(""); }
+  else if(hash === "studio") { openStudio(null); }
+  else if(hash === "pdp") { /* stay on home, need product data */ }
+  else { showPage("home"); }
+})();
 
 
 // ════════════════════════════════
