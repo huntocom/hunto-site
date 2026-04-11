@@ -1509,6 +1509,36 @@ footer{background:#111;padding:56px 32px 28px}
 
 </div>
 
+<!-- ── Product Picker Modal ── -->
+<div id="product-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;overflow:auto">
+  <div style="background:#fff;margin:40px auto;max-width:1100px;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2)">
+    <!-- Header -->
+    <div style="padding:20px 24px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Add Products</div>
+        <input id="product-modal-search" type="text" placeholder="Search for t-shirts, hoodies, more..."
+          style="width:400px;padding:10px 16px;border:1.5px solid #e8e8e8;border-radius:20px;font-size:13px;font-family:Inter,sans-serif;outline:none"
+          oninput="productModalSearch(this.value)">
+      </div>
+      <button onclick="closeProductModal()" style="width:36px;height:36px;border-radius:50%;border:none;background:#f0f0f0;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:220px 1fr">
+      <!-- Category sidebar -->
+      <div style="border-right:1px solid #f0f0f0;padding:16px 0;max-height:600px;overflow-y:auto">
+        <div style="font-size:12px;font-weight:700;color:#aaa;padding:0 16px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Categories</div>
+        <div id="product-modal-cats"></div>
+      </div>
+
+      <!-- Product grid -->
+      <div style="padding:20px;max-height:600px;overflow-y:auto">
+        <div id="product-modal-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px"></div>
+        <div id="product-modal-loading" style="text-align:center;padding:40px;color:#aaa;font-size:14px">Loading products...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ████ STUDIO PAGE ████ -->
 <div id="page-studio" class="page">
 <div class="studio-page">
@@ -1589,12 +1619,37 @@ footer{background:#111;padding:56px 32px 28px}
       <!-- PRODUCTS -->
       <div id="sp-products">
         <div class="s-panel-hdr">
-          <div><div class="s-panel-title">Products</div><div class="s-panel-sub">Manage your garment</div></div>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Products</div>
+            <div class="s-panel-title">Manage Your Products</div>
+            <div class="s-panel-sub">Select product and color</div>
+          </div>
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
         </div>
         <div class="s-panel-body">
-          <div class="s-label">Select Garment</div>
           <div id="s-garments"></div>
+
+          <!-- Add Products button -->
+          <button onclick="openProductModal()" style="width:100%;margin-top:12px;padding:14px;border:2px dashed #c8deff;border-radius:12px;background:#f8fbff;color:#4a9eff;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s"
+            onmouseover="this.style.background='#e8f3ff'" onmouseout="this.style.background='#f8fbff'">
+            <span style="font-size:18px">+</span> Add Products
+          </button>
+
+          <!-- Customization method -->
+          <div style="margin-top:20px">
+            <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Customization Method</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div style="padding:12px;border:2px solid #4a9eff;border-radius:10px;background:#f0f7ff;text-align:center;cursor:default">
+                <div style="font-size:14px;font-weight:700;color:#4a9eff">Printing</div>
+                <div style="font-size:11px;color:#888;margin-top:2px">No Minimum</div>
+              </div>
+              <div style="padding:12px;border:2px solid #e8e8e8;border-radius:10px;text-align:center;cursor:pointer;color:#aaa"
+                onclick="alert('Embroidery coming soon!')">
+                <div style="font-size:14px;font-weight:600">Embroidery</div>
+                <div style="font-size:11px;margin-top:2px">Coming soon</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2278,8 +2333,10 @@ function openStudio(id){
 }
 function openPDPStudio(){
   sState.product = pdpState.product;
-  sState.color   = pdpState.color;
-  openStudio(null);
+  sState.color   = pdpState.color || pdpState.product.colors[0];
+  sState.view    = "front";
+  showPage("studio");
+  initStudio();
 }
 
 // ════════════════════════════════
@@ -2548,6 +2605,26 @@ function pdPickColor(name){
   const colors=pdpState.product.colors||[];
   pdpState.color=colors.find(c=>(c.n||c.name)===name)||colors[0];
   buildPDPColors();
+  // Update main image with selected color photo
+  const c=pdpState.color;
+  const styleImg=pdpState.product?.image||"";
+  const frontImg=c?.front||c?.back||styleImg||IMG_F;
+  const backImg=c?.back||c?.front||styleImg||IMG_B;
+  const img=document.getElementById("pdp-img");
+  if(img){ img.src=pdpState.view==="back"?backImg:frontImg; img.style.opacity="1"; }
+  // Update thumbnails
+  const rail=document.getElementById("pdp-thumb-rail");
+  if(rail){
+    const thumbs=rail.querySelectorAll("img");
+    if(thumbs[0]) thumbs[0].src=frontImg;
+    if(thumbs[1]) thumbs[1].src=backImg;
+  }
+  // Update tint for hardcoded products
+  const tint=document.getElementById("pdp-tint");
+  if(tint){
+    const ch=c?.h||c?.hex||"#ffffff";
+    tint.style.background=(!c?.front&&!c?.back)&&ch!=="#ffffff"?ch:"transparent";
+  }
 }
 
 function pdView(v){
@@ -2619,31 +2696,114 @@ function sClosePanel(){
 }
 
 function buildSGarments(){
-  const el = document.getElementById("s-garments");
-  if(!el) return;
-
-  // If this is an S&S product (has styleId), show its info — no switcher
-  if(sState.product.styleId){
-    el.innerHTML = `
-      <div class="s-gcard on" style="cursor:default">
-        <div class="s-gcard-name">${sState.product.brand||""} — ${sState.product.name||sState.product.title||""}</div>
-        <div class="s-gcard-sub">${sState.product.base_category||sState.product.baseCategory||""}</div>
-        <div class="s-gcard-price">From $${parseFloat(sState.product.price||sState.product.base_retail||0).toFixed(2)}</div>
+  const el=document.getElementById("s-garments"); if(!el) return;
+  const p=sState.product, c=sState.color;
+  const cn=c?.n||c?.name||""; const ch=c?.h||c?.hex||"#888";
+  const img=c?.front||p?.image||(p?.id?getShirtPhotoUrl(p.id,cn,"front"):IMG_F);
+  el.innerHTML=`
+    <div style="border:1.5px solid #e8e8e8;border-radius:12px;overflow:hidden">
+      <div style="padding:10px 14px;background:#f8f8f8;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:12px;font-weight:700;color:#333">${p?.brand||"Gildan"} — ${p?.name||""}</span>
+        <button onclick="openProductModal()" style="font-size:11px;color:#4a9eff;font-weight:700;background:none;border:1px solid #c8deff;border-radius:6px;padding:3px 8px;cursor:pointer;font-family:Inter,sans-serif">Change</button>
       </div>
-      <button onclick="goShop('')" style="width:100%;margin-top:10px;padding:9px;border:1.5px dashed #c8deff;border-radius:10px;background:#f8fbff;color:#4a9eff;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">
-        ← Browse All Products
-      </button>`;
-    return;
-  }
-
-  // Hardcoded Gildan products — show switcher as before
-  el.innerHTML=PRODUCTS.map(p=>`
-    <div class="s-gcard${p.id===sState.product.id?" on":""}" onclick="sPickProduct('${p.id}')">
-      <div class="s-gcard-name">Gildan ${p.id} — ${p.name}</div>
-      <div class="s-gcard-sub">${p.oz} · ${p.fabric}</div>
-      <div class="s-gcard-price">$${p.price}</div>
-    </div>`).join("");
+      <div style="padding:12px;display:flex;align-items:center;gap:12px">
+        <div style="width:60px;height:60px;border-radius:8px;overflow:hidden;background:#f8f8f8;flex-shrink:0">
+          <img src="${img}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
+        </div>
+        <div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+            <div style="width:16px;height:16px;border-radius:3px;background:${ch};border:1px solid rgba(0,0,0,.1);flex-shrink:0"></div>
+            <span style="font-size:12px;font-weight:600;color:#333">${cn}</span>
+          </div>
+          <button onclick="sPanel('color',document.getElementById('sib-color'))" style="font-size:11px;color:#4a9eff;font-weight:700;background:none;border:1px solid #c8deff;border-radius:6px;padding:3px 10px;cursor:pointer;font-family:Inter,sans-serif">Change Color</button>
+        </div>
+      </div>
+    </div>`;
 }
+
+// ── Product Modal ──────────────────────────────────────────
+let modalState={category:"",search:"",products:[],loaded:false};
+const MODAL_CATS=[
+  {label:"All Products",value:""},{label:"T-Shirts",value:"T-Shirts"},
+  {label:"Long Sleeve",value:"Long Sleeve"},{label:"Hoodies",value:"Fleece - Core - Hood"},
+  {label:"Premium Hoodies",value:"Fleece - Premium - Hood"},{label:"Crewnecks",value:"Fleece - Core - Crew"},
+  {label:"Polos",value:"Polos"},{label:"Outerwear",value:"Outerwear"},
+];
+
+async function openProductModal(){
+  document.getElementById("product-modal").style.display="block";
+  document.body.style.overflow="hidden";
+  renderModalCats();
+  if(!modalState.loaded) await loadModalProducts();
+}
+function closeProductModal(){
+  document.getElementById("product-modal").style.display="none";
+  document.body.style.overflow="";
+}
+function renderModalCats(){
+  const wrap=document.getElementById("product-modal-cats"); if(!wrap) return;
+  wrap.innerHTML=MODAL_CATS.map(c=>`
+    <button onclick="modalSetCat('${c.value}')" style="display:block;width:100%;text-align:left;padding:9px 16px;border:none;background:${modalState.category===c.value?'#f0f7ff':'transparent'};color:${modalState.category===c.value?'#4a9eff':'#444'};font-size:13px;font-weight:${modalState.category===c.value?700:500};cursor:pointer;font-family:Inter,sans-serif;border-left:3px solid ${modalState.category===c.value?'#4a9eff':'transparent'}">${c.label}</button>
+  `).join("");
+}
+async function loadModalProducts(){
+  const loading=document.getElementById("product-modal-loading");
+  const grid=document.getElementById("product-modal-grid");
+  if(loading) loading.style.display="block";
+  if(grid) grid.innerHTML="";
+  try {
+    const params=new URLSearchParams({page:1,limit:48});
+    if(modalState.category) params.set("category",modalState.category);
+    if(modalState.search) params.set("search",modalState.search);
+    const res=await fetch(`${SERVER}/catalog/products?${params}`);
+    const data=await res.json();
+    modalState.products=data.products||[]; modalState.loaded=true;
+    renderModalGrid();
+  } catch(e){ console.error("Modal load:",e); }
+  if(loading) loading.style.display="none";
+}
+function renderModalGrid(){
+  const grid=document.getElementById("product-modal-grid"); if(!grid) return;
+  if(!modalState.products.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">No products found</div>';return;}
+  grid.innerHTML=modalState.products.map(p=>{
+    const img=(p.colors&&p.colors[0]?.front)||p.image||"";
+    const price=p.base_retail?`$${parseFloat(p.base_retail).toFixed(2)}`:"";
+    const dots=(p.colors||[]).slice(0,5).map(c=>`<div style="width:12px;height:12px;border-radius:2px;background:${c.hex||'#888'};border:1px solid rgba(0,0,0,.08)"></div>`).join("");
+    return `<div onclick="modalSelectProduct(${p.style_id})" style="border:1.5px solid #e8e8e8;border-radius:12px;overflow:hidden;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='#4a9eff'" onmouseout="this.style.borderColor='#e8e8e8'">
+      <div style="aspect-ratio:1;background:#f8f9fb;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px">
+        <img src="${img}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
+      </div>
+      <div style="padding:10px">
+        <div style="font-size:10px;color:#aaa;font-weight:600;margin-bottom:2px">${p.brand||""}</div>
+        <div style="font-size:12px;font-weight:700;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title||""}</div>
+        <div style="display:flex;gap:3px;margin:6px 0;flex-wrap:wrap">${dots}</div>
+        <div style="font-size:12px;font-weight:700;color:#4a9eff">${price}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+async function modalSetCat(cat){
+  modalState.category=cat; modalState.loaded=false;
+  renderModalCats(); await loadModalProducts();
+}
+let modalSearchTimer2;
+function productModalSearch(val){
+  clearTimeout(modalSearchTimer2);
+  modalSearchTimer2=setTimeout(async()=>{modalState.search=val;modalState.loaded=false;await loadModalProducts();},400);
+}
+async function modalSelectProduct(styleId){
+  closeProductModal();
+  try {
+    const res=await fetch(`${SERVER}/catalog/product/${styleId}`);
+    const p=await res.json(); if(p.error) return;
+    const colors=(p.colors||[]).map(c=>({n:c.name||c.n||"",h:c.hex||c.h||"#888",l:(c.hex||"").toLowerCase()==="#ffffff",front:c.front,back:c.back})).filter(c=>c.n);
+    sState.product={id:p.style_number,name:p.title||p.name,price:parseFloat(p.base_retail||0),colors,sizes:p.sizes||["S","M","L","XL","2XL"],skus:p.skus||[],styleId:p.style_id,brand:p.brand,base_category:p.base_category,image:p.image};
+    sState.color=colors[0]||{n:"White",h:"#ffffff",l:true};
+    buildSGarments();buildSColors();buildSSizes();sApplyTint();sUpdateAll();
+  } catch(e){console.error("Modal select:",e);}
+}
+
+
 
 function sPickProduct(id){
   sState.product=PRODUCTS.find(p=>p.id===id);
