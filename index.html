@@ -2355,33 +2355,42 @@ function showPage(id){
 }
 function goHome(){showPage("home")}
 async function goPDP(id){
-  // Map hardcoded IDs to S&S style numbers to get real photos
-  const SS_STYLE_MAP = {
-    "8000":  "8000",   // Gildan DryBlend
-    "64000": "64000",  // Gildan Softstyle
-    "18500": "18500",  // Gildan Heavy Hoodie
-    "SF500": "SF500",  // Gildan Softstyle Hoodie
+  // Known Gildan style_ids in our database
+  const GILDAN_STYLE_IDS = {
+    "8000":  146,  // Gildan DryBlend Tee (G8000)
+    "64000": 145,  // Gildan Softstyle Tee (64000)
+    "18500": 423,  // Gildan Heavy Hoodie (18500) -- using DryBlend hoodie
+    "SF500": 423,  // Softstyle Hoodie fallback
   };
 
-  // Try to load from API first for real color photos
-  try {
-    // Search for the style by style number
-    const res = await fetch(`${SERVER}/catalog/products?search=${id}&brand=Gildan&limit=10`);
-    const data = await res.json();
-    const found = data.products?.find(p => p.style_number === id || p.style_number === ("G"+id));
+  const styleId = GILDAN_STYLE_IDS[id];
+  if(styleId){
+    try {
+      const res = await fetch(`${SERVER}/catalog/product/${styleId}`);
+      const p = await res.json();
+      if(!p.error && p.colors && p.colors.length > 0){
+        shopOpenPDP(p);
+        return;
+      }
+    } catch(e){ console.log("API load failed:", e.message); }
+  }
 
-    if(found && found.colors && found.colors.length > 0){
-      // Load full product with SKUs
-      const fullRes = await fetch(`${SERVER}/catalog/product/${found.style_id}`);
+  // Try searching by title keywords
+  const titleMap = {"8000":"DryBlend T-Shirt","64000":"Softstyle T-Shirt","18500":"DryBlend Hooded","SF500":"Softstyle Hooded"};
+  try {
+    const res = await fetch(`${SERVER}/catalog/products?brand=Gildan&search=${encodeURIComponent(id==="8000"?"DryBlend":id==="64000"?"Softstyle":id)}&limit=3`);
+    const data = await res.json();
+    if(data.products?.length > 0){
+      const fullRes = await fetch(`${SERVER}/catalog/product/${data.products[0].style_id}`);
       const full = await fullRes.json();
-      if(!full.error && full.colors?.length > 0){
+      if(!full.error){
         shopOpenPDP(full);
         return;
       }
     }
-  } catch(e){ console.log("API load failed, using hardcoded:", e.message); }
+  } catch(e){}
 
-  // Fallback to hardcoded product
+  // Final fallback — hardcoded
   pdpState.product = PRODUCTS.find(p=>p.id===id)||PRODUCTS[0];
   pdpState.color   = pdpState.product.colors[0];
   pdpState.view    = "front";
