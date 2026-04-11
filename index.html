@@ -937,7 +937,20 @@ footer{background:#111;padding:56px 32px 28px}
 
 <!-- NAV CSS -->
 <style>
-/* ── Top bar ── */
+/* Search autocomplete */
+.search-dropdown{position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.15);border:1px solid #e8e8e8;z-index:500;overflow:hidden;display:none;max-height:480px;overflow-y:auto}
+.search-dropdown.open{display:block}
+.search-result{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;transition:background .1s;border-bottom:1px solid #f8f8f8}
+.search-result:hover{background:#f0f7ff}
+.search-result-img{width:44px;height:44px;border-radius:8px;object-fit:contain;background:#f8f8f8;flex-shrink:0}
+.search-result-info{flex:1;min-width:0}
+.search-result-name{font-size:13px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-result-brand{font-size:11px;color:#aaa;font-weight:500;margin-top:2px}
+.search-result-price{font-size:12px;font-weight:700;color:#4a9eff;flex-shrink:0}
+.search-cat-label{padding:8px 16px 4px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.1em;background:#f8f8f8}
+.search-view-all{display:block;text-align:center;padding:13px;font-size:13px;font-weight:700;color:#4a9eff;cursor:pointer;border-top:1px solid #f0f0f0}
+.search-view-all:hover{background:#f0f7ff}
+
 .topbar{background:#f0f7ff;border-bottom:1px solid #dce8ff;padding:7px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#4a9eff;font-weight:600}
 .topbar-left{display:flex;align-items:center;gap:6px}
 .topbar-left span{cursor:pointer;text-decoration:underline;text-underline-offset:2px}
@@ -1007,10 +1020,12 @@ footer{background:#111;padding:56px 32px 28px}
 
   <div class="hdr-search">
     <span class="hdr-search-icon">🔍</span>
-    <input type="text" placeholder="Search for t-shirts, hoodies, and more..."
-      oninput="shopSearchHeader(this.value)"
-      onfocus="if(this.value.length>0)goShop('')"
-      onkeydown="if(event.key==='Enter'){goShop('');shopSearch(this.value)}">
+    <input type="text" id="hdr-search-input" placeholder="Search for t-shirts, hoodies, and more..."
+      oninput="searchAutocomplete(this.value)"
+      onfocus="if(this.value.length>1) searchAutocomplete(this.value)"
+      onkeydown="if(event.key==='Enter'){closeSearchDropdown();goShop('');shopSearch(this.value)}"
+      autocomplete="off">
+    <div id="search-dropdown" class="search-dropdown"></div>
   </div>
 
   <div class="hdr-actions">
@@ -1117,7 +1132,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.3</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.4</span>
   </div>
 
 </nav>
@@ -1141,29 +1156,54 @@ footer{background:#111;padding:56px 32px 28px}
 <div id="page-home" class="page active">
 
   <!-- HERO -->
-  <section class="hero">
-    <div class="hero-left">
-      <div class="hero-badge">✦ AI-Powered Custom Printing</div>
-      <h1>Wear what<br>you <em>imagine.</em></h1>
-      <p class="hero-sub">Type any idea. Our AI creates the art. We print it in-house and ship it to you in 48 hours. No minimums, ever.</p>
-      <div class="hero-btns">
-        <button class="hero-btn-primary" onclick="goPDP('8000')">✦ Start Creating Free</button>
-        <button class="hero-btn-secondary" onclick="document.getElementById('products-sec').scrollIntoView({behavior:'smooth'})">Browse Garments</button>
+  <section style="position:relative;background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 50%,#0a0a0a 100%);overflow:hidden;min-height:500px;display:flex;align-items:center">
+    <!-- Background pattern -->
+    <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(74,158,255,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(74,158,255,.1) 0%,transparent 40%);pointer-events:none"></div>
+    
+    <div style="max-width:1300px;margin:0 auto;padding:60px 32px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;width:100%">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(74,158,255,.15);border:1px solid rgba(74,158,255,.3);border-radius:20px;padding:6px 16px;margin-bottom:24px">
+          <span style="color:#4a9eff;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">✦ AI-Powered Custom Printing</span>
+        </div>
+        <h1 style="font-size:clamp(36px,5vw,64px);font-weight:900;color:#fff;letter-spacing:-2px;line-height:1.05;margin-bottom:20px">Custom Apparel<br>on <em style="color:#4a9eff;font-style:normal">Any Deadline</em></h1>
+        <p style="font-size:17px;color:rgba(255,255,255,.7);margin-bottom:32px;line-height:1.7;max-width:480px">Design t-shirts, hoodies, and apparel with AI-generated art. In-house DTF printing. No minimums. Ships in 48 hours.</p>
+        
+        <!-- Delivery dates -->
+        <div style="display:flex;gap:12px;margin-bottom:32px">
+          <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 20px;flex:1">
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">📦 Free Delivery</div>
+            <div style="font-size:15px;font-weight:800;color:#fff">Wed, Apr 22</div>
+          </div>
+          <div style="background:rgba(74,158,255,.15);border:1px solid rgba(74,158,255,.3);border-radius:12px;padding:14px 20px;flex:1">
+            <div style="font-size:10px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">🚀 Rush Delivery</div>
+            <div style="font-size:15px;font-weight:800;color:#fff">Mon, Apr 13</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button onclick="goPDP('8000')" style="height:52px;padding:0 32px;background:#4a9eff;color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s;box-shadow:0 4px 20px rgba(74,158,255,.4)">✦ Start Designing Free</button>
+          <button onclick="goShop('')" style="height:52px;padding:0 28px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:26px;font-size:16px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s">Browse Products</button>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:flex;gap:32px;margin-top:36px;padding-top:32px;border-top:1px solid rgba(255,255,255,.1)">
+          <div><div style="font-size:22px;font-weight:900;color:#fff">1.3M+</div><div style="font-size:12px;color:rgba(255,255,255,.5);font-weight:500">Happy Customers</div></div>
+          <div><div style="font-size:22px;font-weight:900;color:#fff">48HR</div><div style="font-size:12px;color:rgba(255,255,255,.5);font-weight:500">Ships Out</div></div>
+          <div><div style="font-size:22px;font-weight:900;color:#fff">$0</div><div style="font-size:12px;color:rgba(255,255,255,.5);font-weight:500">Minimum Order</div></div>
+          <div><div style="font-size:22px;font-weight:900;color:#fff">99.7%</div><div style="font-size:12px;color:rgba(255,255,255,.5);font-weight:500">Satisfaction</div></div>
+        </div>
       </div>
-      <div class="hero-stats">
-        <div><div class="stat-n">1.3M+</div><div class="stat-l">Community</div></div>
-        <div><div class="stat-n">$2M+</div><div class="stat-l">Printed Yearly</div></div>
-        <div><div class="stat-n">48HR</div><div class="stat-l">Ships Out</div></div>
-        <div><div class="stat-n">$0</div><div class="stat-l">Minimum</div></div>
-      </div>
-    </div>
-    <div class="hero-right">
-      <div class="hero-shirt-wrap">
-        <img class="hero-shirt-img" id="hero-shirt" src="" alt="Custom shirt">
-        <div class="hero-type-pill">
-          <span class="hero-type-icon">✦</span>
-          <span class="hero-type-text" id="hero-typing">neon wolf howling at the moon...</span>
-          <span class="cursor"></span>
+
+      <!-- Hero right - AI typing demo -->
+      <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:16px">
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px;width:100%;max-width:400px">
+          <div style="font-size:12px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">✦ AI Art Generator</div>
+          <div style="background:rgba(255,255,255,.08);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <span style="color:#4a9eff;font-size:16px">✦</span>
+            <span id="hero-typing" style="color:rgba(255,255,255,.8);font-size:14px;font-weight:500"></span>
+            <span class="cursor" style="color:#4a9eff">|</span>
+          </div>
+          <img id="hero-shirt" src="" alt="Custom shirt" style="width:100%;border-radius:12px;aspect-ratio:1;object-fit:contain;background:rgba(255,255,255,.05)">
         </div>
       </div>
     </div>
@@ -1187,65 +1227,130 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
   </div>
 
-  <!-- HOW IT WORKS -->
-  <div class="how">
-    <div class="sec-tag">The Process</div>
-    <h2 class="sec-h">Four steps. One shirt.</h2>
-    <p class="sec-sub">From your imagination to your door — no design skills, no minimums, no waiting.</p>
-    <div class="steps">
-      <div class="step-card">
-        <div class="step-num">01</div>
-        <div class="step-title">Pick your garment</div>
-        <p class="step-desc">Choose from four Gildan blanks — Classic or Premium tee, Classic or Premium hoodie. All built for DTF printing.</p>
+  <!-- CATEGORY GRID -->
+  <div style="max-width:1300px;margin:0 auto;padding:64px 32px">
+    <div style="text-align:center;margin-bottom:40px">
+      <div style="font-size:12px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Shop by Category</div>
+      <h2 style="font-size:clamp(28px,3vw,40px);font-weight:900;color:#111;letter-spacing:-1px">Everything you need to print</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px">
+      <div onclick="goShop('T-Shirts')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#4a9eff';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(74,158,255,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
+        <img src="https://www.ssactivewear.com/Images/Color/17927_f_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.display='none'">
+        <div style="font-size:13px;font-weight:700;color:#111">T-Shirts</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px">From $28</div>
       </div>
-      <div class="step-card">
-        <div class="step-num">02</div>
-        <div class="step-title">Generate your design</div>
-        <p class="step-desc">Type anything. Our AI generates print-ready artwork instantly. Or upload your own image — we handle the rest.</p>
+      <div onclick="goShop('Fleece - Core - Hood')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#4a9eff';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(74,158,255,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
+        <img src="https://www.ssactivewear.com/Images/Color/19961_f_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.display='none'">
+        <div style="font-size:13px;font-weight:700;color:#111">Hoodies</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px">From $45</div>
       </div>
-      <div class="step-card">
-        <div class="step-num">03</div>
-        <div class="step-title">We print it</div>
-        <p class="step-desc">Your order hits our in-house production floor immediately. DTF printing delivers vibrant, long-lasting results.</p>
+      <div onclick="goShop('T-Shirts - Long Sleeve')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#4a9eff';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(74,158,255,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
+        <img src="https://www.ssactivewear.com/Images/Style/167_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.display='none'">
+        <div style="font-size:13px;font-weight:700;color:#111">Long Sleeve</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px">From $32</div>
       </div>
-      <div class="step-card">
-        <div class="step-num">04</div>
-        <div class="step-title">You wear it</div>
-        <p class="step-desc">Ships within 48 hours with full tracking. Most domestic orders arrive in 3–5 business days.</p>
+      <div onclick="goShop('Polos')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#4a9eff';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(74,158,255,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
+        <img src="https://www.ssactivewear.com/Images/Color/18514_f_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.display='none'">
+        <div style="font-size:13px;font-weight:700;color:#111">Polo Shirts</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px">From $29</div>
+      </div>
+      <div onclick="goShop('Outerwear')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#4a9eff';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(74,158,255,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
+        <img src="https://www.ssactivewear.com/Images/Style/11017_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.display='none'">
+        <div style="font-size:13px;font-weight:700;color:#111">Outerwear</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px">From $55</div>
+      </div>
+      <div onclick="goShop('Fleece - Premium - Crew')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#4a9eff';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(74,158,255,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
+        <img src="https://www.ssactivewear.com/Images/Style/372_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.display='none'">
+        <div style="font-size:13px;font-weight:700;color:#111">Crewnecks</div>
+        <div style="font-size:11px;color:#aaa;margin-top:2px">From $42</div>
       </div>
     </div>
   </div>
 
-  <!-- PRODUCTS -->
-  <div class="products-section" id="products-sec">
-    <div class="products-inner">
-      <div class="sec-tag">The Lineup</div>
-      <h2 class="sec-h">Four garments. Endless designs.</h2>
-      <p class="sec-sub">Two tees, two hoodies. Classic 50/50 blend or premium ring-spun cotton. Pick your canvas.</p>
-      <div class="products-grid" id="home-grid"></div>
+  <!-- BEST SELLERS -->
+  <div style="background:#f8f9fb;padding:64px 32px">
+    <div style="max-width:1300px;margin:0 auto">
+      <div style="text-align:center;margin-bottom:32px">
+        <div style="font-size:12px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Most Popular</div>
+        <h2 style="font-size:clamp(28px,3vw,40px);font-weight:900;color:#111;letter-spacing:-1px;margin-bottom:8px">Explore Best Sellers</h2>
+        <p style="font-size:15px;color:#888">The most-loved products customers can't get enough of</p>
+      </div>
+
+      <!-- Category tabs -->
+      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:32px;flex-wrap:wrap" id="bs-tabs">
+        <button onclick="loadBestSellers('T-Shirts',this)" class="bs-tab on" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #4a9eff;background:#4a9eff;color:#fff;cursor:pointer;font-family:Inter,sans-serif">T-Shirts</button>
+        <button onclick="loadBestSellers('Fleece',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Hoodies</button>
+        <button onclick="loadBestSellers('Polos',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Polos</button>
+        <button onclick="loadBestSellers('Outerwear',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Outerwear</button>
+        <button onclick="loadBestSellers('Long Sleeve',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Long Sleeve</button>
+      </div>
+
+      <!-- Best seller grid -->
+      <div id="best-sellers-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px"></div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div style="max-width:1300px;margin:0 auto;padding:64px 32px">
+    <div style="text-align:center;margin-bottom:48px">
+      <div style="font-size:12px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">The Process</div>
+      <h2 style="font-size:clamp(28px,3vw,40px);font-weight:900;color:#111;letter-spacing:-1px">Four steps. One shirt.</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
+      <div style="text-align:center;padding:32px 24px;background:#f8f9fb;border-radius:20px;border:1.5px solid #e8e8e8">
+        <div style="width:52px;height:52px;background:#4a9eff;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">👕</div>
+        <div style="font-size:11px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 01</div>
+        <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">Pick your garment</div>
+        <p style="font-size:13px;color:#888;line-height:1.6">Choose from thousands of styles — tees, hoodies, polos, outerwear and more.</p>
+      </div>
+      <div style="text-align:center;padding:32px 24px;background:#f8f9fb;border-radius:20px;border:1.5px solid #e8e8e8">
+        <div style="width:52px;height:52px;background:#4a9eff;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">✦</div>
+        <div style="font-size:11px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 02</div>
+        <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">Generate your design</div>
+        <p style="font-size:13px;color:#888;line-height:1.6">Type any idea. Our AI creates print-ready artwork instantly. Or upload your own.</p>
+      </div>
+      <div style="text-align:center;padding:32px 24px;background:#f8f9fb;border-radius:20px;border:1.5px solid #e8e8e8">
+        <div style="width:52px;height:52px;background:#4a9eff;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">🖨️</div>
+        <div style="font-size:11px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 03</div>
+        <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">We print it</div>
+        <p style="font-size:13px;color:#888;line-height:1.6">In-house DTF printing delivers vibrant, long-lasting results on any garment.</p>
+      </div>
+      <div style="text-align:center;padding:32px 24px;background:#f8f9fb;border-radius:20px;border:1.5px solid #e8e8e8">
+        <div style="width:52px;height:52px;background:#4a9eff;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">📦</div>
+        <div style="font-size:11px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 04</div>
+        <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">You wear it</div>
+        <p style="font-size:13px;color:#888;line-height:1.6">Ships within 48 hours with full tracking. Free shipping on every order.</p>
+      </div>
     </div>
   </div>
 
   <!-- REVIEWS -->
-  <div class="reviews-section">
-    <div class="reviews-inner">
-      <div class="sec-tag">Real Orders</div>
-      <h2 class="sec-h">People are talking.</h2>
-      <div class="reviews-grid">
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"I typed in a description and the shirt arrived looking exactly like I imagined. The quality blew me away. My whole crew wants one."</p>
-          <div class="review-author">Marcus T. — Tampa, FL</div>
+  <div style="background:#f8f9fb;padding:64px 32px">
+    <div style="max-width:1300px;margin:0 auto">
+      <div style="text-align:center;margin-bottom:40px">
+        <div style="font-size:12px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Real Orders</div>
+        <h2 style="font-size:clamp(28px,3vw,40px);font-weight:900;color:#111;letter-spacing:-1px">People are talking.</h2>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px">
+          <span style="color:#f59e0b;font-size:20px">★★★★★</span>
+          <span style="font-size:15px;font-weight:700;color:#333">4.9 out of 5</span>
+          <span style="font-size:14px;color:#aaa">· 28,000+ reviews</span>
         </div>
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"Added Keith's edit and it was 100% worth it. Colors popped perfectly, placement was flawless. This is my third order."</p>
-          <div class="review-author">Brianna K. — Atlanta, GA</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <div style="background:#fff;border-radius:16px;padding:28px;border:1.5px solid #e8e8e8">
+          <div style="color:#f59e0b;font-size:16px;margin-bottom:12px">★★★★★</div>
+          <p style="font-size:14px;color:#444;line-height:1.7;margin-bottom:16px">"I typed in a description and the shirt arrived looking exactly like I imagined. The quality blew me away. My whole crew wants one."</p>
+          <div style="font-size:13px;font-weight:700;color:#111">Marcus T. <span style="color:#aaa;font-weight:400">— Tampa, FL</span></div>
         </div>
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"Ordered hoodies for the squad. Shipped in two days and looked incredible. These people genuinely care about quality."</p>
-          <div class="review-author">Jordan M. — Miami, FL</div>
+        <div style="background:#fff;border-radius:16px;padding:28px;border:1.5px solid #e8e8e8">
+          <div style="color:#f59e0b;font-size:16px;margin-bottom:12px">★★★★★</div>
+          <p style="font-size:14px;color:#444;line-height:1.7;margin-bottom:16px">"Added Keith's edit and it was 100% worth it. Colors popped perfectly, placement was flawless. This is my third order."</p>
+          <div style="font-size:13px;font-weight:700;color:#111">Brianna K. <span style="color:#aaa;font-weight:400">— Atlanta, GA</span></div>
+        </div>
+        <div style="background:#fff;border-radius:16px;padding:28px;border:1.5px solid #e8e8e8">
+          <div style="color:#f59e0b;font-size:16px;margin-bottom:12px">★★★★★</div>
+          <p style="font-size:14px;color:#444;line-height:1.7;margin-bottom:16px">"Ordered hoodies for the squad. Shipped in two days and looked incredible. These people genuinely care about quality."</p>
+          <div style="font-size:13px;font-weight:700;color:#111">Jordan M. <span style="color:#aaa;font-weight:400">— Miami, FL</span></div>
         </div>
       </div>
     </div>
@@ -1255,7 +1360,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="cta-band">
     <h2>Your idea is one<br>prompt away.</h2>
     <p>Join the 1.3 million people who discovered that custom doesn't have to be complicated.</p>
-    <button class="cta-band-btn" onclick="goPDP('8000')">✦ Open the Design Studio →</button>
+    <button class="cta-band-btn" onclick="goPDP('8000')">✦ Start Designing Free →</button>
   </div>
 
   <!-- FOOTER -->
@@ -4300,6 +4405,104 @@ function nnCloseRoster(){
 function shopSearchHeader(val){
   if(val.length > 1) { goShop(''); shopSearch(val); }
 }
+
+// ── Best Sellers ───────────────────────────────────────────
+async function loadBestSellers(category, tabEl){
+  // Update tabs
+  document.querySelectorAll(".bs-tab").forEach(t=>{
+    t.style.background="#fff"; t.style.color="#555"; t.style.borderColor="#e8e8e8";
+  });
+  if(tabEl){ tabEl.style.background="#4a9eff"; tabEl.style.color="#fff"; tabEl.style.borderColor="#4a9eff"; }
+
+  const grid = document.getElementById("best-sellers-grid");
+  if(!grid) return;
+  grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">Loading...</div>`;
+
+  try {
+    const res = await fetch(`${SERVER}/catalog/products?category=${encodeURIComponent(category)}&limit=4`);
+    const data = await res.json();
+    const products = data.products || [];
+    if(!products.length){ grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">No products found</div>`; return; }
+    grid.innerHTML = products.map(p=>{
+      const img=(p.colors&&p.colors[0]?.front)||p.image||"";
+      const price=p.base_retail?`From $${parseFloat(p.base_retail).toFixed(2)}`:"";
+      const colorCount=p.colors?.length||0;
+      return `<div onclick="shopOpenProduct(${p.style_id})" style="background:#fff;border-radius:16px;border:1.5px solid #e8e8e8;overflow:hidden;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='#4a9eff';this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(74,158,255,.12)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
+        <div style="aspect-ratio:1;background:#f8f9fb;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:16px;position:relative">
+          <div style="position:absolute;top:12px;left:12px;background:#4a9eff;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px">Top Seller</div>
+          <img src="${img}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
+        </div>
+        <div style="padding:16px">
+          <div style="font-size:11px;color:#aaa;font-weight:600;margin-bottom:3px">${p.brand||""}</div>
+          <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title||""}</div>
+          <div style="font-size:12px;color:#aaa;margin-bottom:10px">+${colorCount} colors</div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:15px;font-weight:900;color:#111">${price}</div>
+            <button onclick="event.stopPropagation();shopOpenProduct(${p.style_id})" style="padding:7px 16px;background:#4a9eff;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Design →</button>
+          </div>
+        </div>
+      </div>`;
+    }).join("");
+  } catch(e){ console.error("Best sellers error:",e); }
+}
+
+// Load best sellers on home page init
+window.addEventListener("load", ()=>{ if(document.getElementById("best-sellers-grid")) loadBestSellers("T-Shirts", document.querySelector(".bs-tab")); });
+
+// ── Search Autocomplete ────────────────────────────────────
+let searchTimer;
+async function searchAutocomplete(val){
+  const dropdown = document.getElementById("search-dropdown");
+  if(!dropdown) return;
+  if(!val || val.length < 2){ dropdown.classList.remove("open"); return; }
+
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(async()=>{
+    try {
+      const res = await fetch(`${SERVER}/catalog/products?search=${encodeURIComponent(val)}&limit=6`);
+      const data = await res.json();
+      const products = data.products || [];
+
+      if(!products.length){
+        dropdown.innerHTML = `<div style="padding:16px;text-align:center;color:#aaa;font-size:13px">No results for "${val}"</div>`;
+        dropdown.classList.add("open");
+        return;
+      }
+
+      dropdown.innerHTML = `
+        <div class="search-cat-label">Products</div>
+        ${products.map(p => {
+          const img = (p.colors&&p.colors[0]?.front) || p.image || "";
+          const price = p.base_retail ? `From $${parseFloat(p.base_retail).toFixed(2)}` : "";
+          return `<div class="search-result" onclick="closeSearchDropdown();shopOpenProduct(${p.style_id})">
+            <img class="search-result-img" src="${img}" onerror="this.style.display='none'">
+            <div class="search-result-info">
+              <div class="search-result-name">${p.title||""}</div>
+              <div class="search-result-brand">${p.brand||""} · ${p.base_category||""}</div>
+            </div>
+            <div class="search-result-price">${price}</div>
+          </div>`;
+        }).join("")}
+        <div class="search-view-all" onclick="closeSearchDropdown();goShop('');shopSearch('${val.replace(/'/g,"\\'")}')">
+          View all results for "${val}" →
+        </div>`;
+      dropdown.classList.add("open");
+    } catch(e){ console.error("Search error:", e); }
+  }, 250);
+}
+
+function closeSearchDropdown(){
+  const d = document.getElementById("search-dropdown");
+  if(d) d.classList.remove("open");
+  const input = document.getElementById("hdr-search-input");
+  if(input) input.value = "";
+}
+
+// Close dropdown when clicking outside
+document.addEventListener("click", e=>{
+  if(!e.target.closest(".hdr-search")) closeSearchDropdown();
+});
+
 
 // ════════════════════════════════
 // SHOP CATALOG
