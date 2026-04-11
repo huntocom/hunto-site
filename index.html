@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3.2 -->
+<!-- v3.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -779,7 +779,62 @@ footer{background:#111;padding:56px 32px 28px}
 @keyframes sp{to{transform:rotate(360deg)}}
 
 /* ══════════════════════════════════════════
-   MOBILE RESPONSIVE
+   SHOP CATALOG
+══════════════════════════════════════════ */
+.shop-card{
+  background:#fff;border-radius:16px;
+  border:1.5px solid #e8e8e8;
+  overflow:hidden;cursor:pointer;
+  transition:all .2s;
+}
+.shop-card:hover{
+  box-shadow:0 8px 32px rgba(74,158,255,.12);
+  border-color:#c8deff;
+  transform:translateY(-2px);
+}
+.shop-card-img{
+  width:100%;aspect-ratio:1;
+  object-fit:contain;background:#f8f8f8;
+  padding:16px;display:block;
+  transition:transform .25s;
+}
+.shop-card:hover .shop-card-img{transform:scale(1.04)}
+.shop-card-body{padding:14px}
+.shop-card-brand{font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.shop-card-name{font-size:14px;font-weight:700;color:#111;margin-bottom:8px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shop-card-colors{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+.shop-color-dot{width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.08);flex-shrink:0}
+.shop-card-footer{display:flex;align-items:center;justify-content:space-between}
+.shop-card-price{font-size:16px;font-weight:900;color:#111;letter-spacing:-.5px}
+.shop-card-btn{
+  height:32px;padding:0 14px;
+  background:#4a9eff;color:#fff;
+  border:none;border-radius:8px;
+  font-size:12px;font-weight:700;
+  cursor:pointer;font-family:Inter,sans-serif;
+  transition:all .15s;white-space:nowrap;
+}
+.shop-card-btn:hover{background:#2d8df5}
+.shop-cat-pill{
+  padding:7px 16px;border-radius:20px;
+  font-size:13px;font-weight:600;
+  border:1.5px solid #e8e8e8;
+  background:#fff;color:#555;
+  cursor:pointer;transition:all .15s;
+  white-space:nowrap;
+}
+.shop-cat-pill:hover{border-color:#4a9eff;color:#4a9eff}
+.shop-cat-pill.on{background:#4a9eff;border-color:#4a9eff;color:#fff}
+.shop-brand-check{display:flex;align-items:center;gap:7px;font-size:13px;color:#444;cursor:pointer;padding:3px 0}
+.shop-brand-check input{accent-color:#4a9eff}
+
+@media(max-width:768px){
+  #page-shop > div { padding:16px; }
+  #page-shop [style*="grid-template-columns:220px"] { grid-template-columns:1fr !important; }
+  #page-shop [style*="position:sticky"] { position:static !important; display:none; }
+  #shop-grid { grid-template-columns:repeat(2,1fr) !important; gap:10px !important; }
+}
+
 ══════════════════════════════════════════ */
 @media(max-width:768px){
   /* Nav */
@@ -885,10 +940,10 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="nav-logo" onclick="goHome()">HU<em>N</em>TO</div>
   <div class="nav-links">
     <button class="nav-link on" onclick="goHome()">Home</button>
-    <button class="nav-link" onclick="goHome()">T-Shirts</button>
-    <button class="nav-link" onclick="goHome()">Hoodies</button>
-    <button class="nav-link" onclick="goHome()">How It Works</button>
-    <button class="nav-link" onclick="goHome()">About</button>
+    <button class="nav-link" onclick="goShop()">Shop</button>
+    <button class="nav-link" onclick="goShop('T-Shirts')">T-Shirts</button>
+    <button class="nav-link" onclick="goShop('Hoodies')">Hoodies</button>
+    <button class="nav-link" onclick="openStudio(null)">Design Studio</button>
   </div>
   <div class="nav-right">
     <div class="nav-reviews">
@@ -897,7 +952,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <button class="nbtn nbtn-outline" onclick="goHome()">Browse</button>
     <button class="nbtn nbtn-blue" onclick="openStudio(null)">Start Designing →</button>
-  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.2</span>
+  <span style="font-size:10px;font-weight:700;color:#bbb;letter-spacing:.04em;margin-left:4px;">v3.3</span>
   </div>
   <button class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -1070,6 +1125,100 @@ footer{background:#111;padding:56px 32px 28px}
 </div>
 
 <!-- ████ PDP PAGE ████ -->
+<!-- ══════════════════════════════════════════
+   SHOP / CATALOG PAGE
+══════════════════════════════════════════ -->
+<div id="page-shop" class="page">
+  <div style="max-width:1300px;margin:0 auto;padding:32px 24px">
+
+    <!-- Shop Header -->
+    <div style="margin-bottom:28px">
+      <h1 style="font-size:32px;font-weight:900;letter-spacing:-1px;color:#111;margin-bottom:6px">Shop All Products</h1>
+      <p style="font-size:15px;color:#888">Customize anything — AI art, text, or upload your own design</p>
+    </div>
+
+    <!-- Category Pills -->
+    <div id="shop-cats" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;overflow-x:auto;padding-bottom:4px"></div>
+
+    <!-- Filters + Grid -->
+    <div style="display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:start">
+
+      <!-- Sidebar filters -->
+      <div style="position:sticky;top:76px">
+        <!-- Search -->
+        <div style="margin-bottom:20px">
+          <input id="shop-search" type="text" placeholder="Search products..."
+            style="width:100%;padding:10px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:13px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box"
+            oninput="shopSearch(this.value)"
+            onfocus="this.style.borderColor='#4a9eff'" onblur="this.style.borderColor='#e8e8e8'">
+        </div>
+
+        <!-- Brand filter -->
+        <div style="margin-bottom:20px">
+          <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Brand</div>
+          <div id="shop-brands" style="display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+
+        <!-- Price filter -->
+        <div style="margin-bottom:20px">
+          <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Price Range</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;cursor:pointer">
+              <input type="radio" name="shop-price" value="" checked onchange="shopFilterPrice('')" style="accent-color:#4a9eff"> All prices
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;cursor:pointer">
+              <input type="radio" name="shop-price" value="under30" onchange="shopFilterPrice('under30')" style="accent-color:#4a9eff"> Under $30
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;cursor:pointer">
+              <input type="radio" name="shop-price" value="30to50" onchange="shopFilterPrice('30to50')" style="accent-color:#4a9eff"> $30 – $50
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;cursor:pointer">
+              <input type="radio" name="shop-price" value="over50" onchange="shopFilterPrice('over50')" style="accent-color:#4a9eff"> Over $50
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product grid -->
+      <div>
+        <!-- Results bar -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div id="shop-count" style="font-size:13px;color:#888;font-weight:500"></div>
+          <select id="shop-sort" onchange="shopSort(this.value)"
+            style="padding:7px 12px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:12px;font-weight:600;font-family:Inter,sans-serif;color:#333;background:#fff;outline:none">
+            <option value="default">Sort: Default</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+
+        <!-- Grid -->
+        <div id="shop-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"></div>
+
+        <!-- Load more -->
+        <div style="text-align:center;margin-top:32px">
+          <button id="shop-load-more" onclick="shopLoadMore()" style="display:none;padding:12px 32px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;font-size:14px;font-weight:700;color:#555;cursor:pointer;font-family:Inter,sans-serif">
+            Load More Products
+          </button>
+        </div>
+
+        <!-- Empty state -->
+        <div id="shop-empty" style="display:none;text-align:center;padding:80px 20px">
+          <div style="font-size:48px;margin-bottom:16px">🔍</div>
+          <div style="font-size:18px;font-weight:700;color:#333;margin-bottom:8px">No products found</div>
+          <div style="font-size:14px;color:#888">Try a different search or category</div>
+        </div>
+
+        <!-- Loading state -->
+        <div id="shop-loading" style="text-align:center;padding:80px 20px">
+          <div style="font-size:14px;color:#aaa;font-weight:500">Loading catalog...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="page-pdp" class="page">
   <div class="pdp-wrap">
 
@@ -3378,6 +3527,185 @@ function nnCloseRoster(){
   document.getElementById('nn-modal').style.display = 'none';
 }
 
+
+// ════════════════════════════════
+// SHOP CATALOG
+// ════════════════════════════════
+const SERVER = "https://hunto-server-production.up.railway.app";
+let shopState = {
+  category:"", brand:"", search:"", price:"", sort:"default",
+  limit:24, total:0,
+  allProducts:[], filtered:[], displayed:[],
+  brands:[], categories:[], loading:false,
+};
+
+async function goShop(category) {
+  showPage("shop");
+  document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("on"));
+  if(category!==undefined) shopState.category=category||"";
+  if(!shopState.allProducts.length) {
+    await shopLoadCatalog();
+  } else {
+    shopApplyFilters(); shopRenderGrid();
+  }
+  shopRenderCats(); shopRenderBrands();
+}
+
+async function shopLoadCatalog() {
+  if(shopState.loading) return;
+  shopState.loading=true;
+  document.getElementById("shop-loading").style.display="block";
+  document.getElementById("shop-grid").innerHTML="";
+  document.getElementById("shop-empty").style.display="none";
+  try {
+    let page=1, all=[];
+    while(true){
+      const params=new URLSearchParams({page,limit:100});
+      if(shopState.category) params.set("category",shopState.category);
+      const res=await fetch(`${SERVER}/catalog/products?${params}`);
+      const data=await res.json();
+      if(!data.products||!data.products.length) break;
+      all=all.concat(data.products);
+      if(page>=data.pages) break;
+      page++;
+    }
+    shopState.allProducts=all;
+    const brandSet=new Set(all.map(p=>p.brand).filter(Boolean));
+    shopState.brands=[...brandSet].sort();
+  } catch(err) {
+    console.error("Shop load error:",err);
+    document.getElementById("shop-loading").innerHTML='<div style="color:#dc2626;font-size:14px;font-weight:600">⚠ Catalog is still syncing — check back in a few minutes!<br><br><button onclick="shopLoadCatalog()" style="padding:10px 20px;background:#4a9eff;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700">Retry</button></div>';
+    shopState.loading=false; return;
+  }
+  shopState.loading=false;
+  document.getElementById("shop-loading").style.display="none";
+  shopApplyFilters(); shopRenderGrid(); shopRenderCats(); shopRenderBrands();
+}
+
+function shopApplyFilters(){
+  let p=[...shopState.allProducts];
+  if(shopState.category) p=p.filter(x=>x.base_category&&x.base_category.toLowerCase().includes(shopState.category.toLowerCase()));
+  if(shopState.brand)    p=p.filter(x=>x.brand===shopState.brand);
+  if(shopState.search){const q=shopState.search.toLowerCase();p=p.filter(x=>(x.title||"").toLowerCase().includes(q)||(x.brand||"").toLowerCase().includes(q));}
+  if(shopState.price==="under30") p=p.filter(x=>(x.base_retail||0)<30);
+  if(shopState.price==="30to50")  p=p.filter(x=>(x.base_retail||0)>=30&&(x.base_retail||0)<=50);
+  if(shopState.price==="over50")  p=p.filter(x=>(x.base_retail||0)>50);
+  if(shopState.sort==="price-asc")  p.sort((a,b)=>(a.base_retail||0)-(b.base_retail||0));
+  if(shopState.sort==="price-desc") p.sort((a,b)=>(b.base_retail||0)-(a.base_retail||0));
+  if(shopState.sort==="name")       p.sort((a,b)=>(a.title||"").localeCompare(b.title||""));
+  shopState.filtered=p; shopState.total=p.length;
+  shopState.displayed=p.slice(0,shopState.limit);
+}
+
+function shopRenderGrid(){
+  const grid=document.getElementById("shop-grid");
+  const count=document.getElementById("shop-count");
+  const empty=document.getElementById("shop-empty");
+  const lm=document.getElementById("shop-load-more");
+  count.textContent=`${shopState.total} product${shopState.total!==1?"s":""}`;
+  if(!shopState.displayed.length){grid.innerHTML="";empty.style.display="block";lm.style.display="none";return;}
+  empty.style.display="none";
+  grid.innerHTML=shopState.displayed.map(p=>shopCardHTML(p)).join("");
+  lm.style.display=shopState.displayed.length<shopState.total?"inline-block":"none";
+}
+
+function shopCardHTML(p){
+  const colors=(p.colors||[]).slice(0,8);
+  const dots=colors.map(c=>`<div class="shop-color-dot" style="background:${c.hex||"#888"};${(c.hex||"").toLowerCase()==="#ffffff"?"outline:1px solid #ddd":""}" title="${c.name||""}"></div>`).join("")+
+    (p.colors&&p.colors.length>8?`<div style="font-size:10px;color:#aaa;font-weight:600;align-self:center">+${p.colors.length-8}</div>`:"");
+  const img=(p.colors&&p.colors[0]&&p.colors[0].front)||p.image||"";
+  const price=p.base_retail?`From $${parseFloat(p.base_retail).toFixed(2)}`:"See pricing";
+  return `<div class="shop-card" onclick="shopOpenProduct(${p.style_id})">
+    <img class="shop-card-img" src="${img}" alt="${(p.title||"").replace(/"/g,"")}" loading="lazy" onerror="this.style.display='none'">
+    <div class="shop-card-body">
+      <div class="shop-card-brand">${p.brand||""}</div>
+      <div class="shop-card-name" title="${(p.title||"").replace(/"/g,"")}">${p.title||p.style_number||""}</div>
+      <div class="shop-card-colors">${dots}</div>
+      <div class="shop-card-footer">
+        <div class="shop-card-price">${price}</div>
+        <button class="shop-card-btn" onclick="event.stopPropagation();shopDesignNow(${p.style_id})">Design →</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function shopLoadMore(){
+  shopState.displayed=shopState.filtered.slice(0,shopState.displayed.length+shopState.limit);
+  shopRenderGrid();
+}
+
+function shopRenderCats(){
+  const wrap=document.getElementById("shop-cats");if(!wrap)return;
+  const cats=[
+    {label:"All",value:""},{label:"T-Shirts",value:"T-Shirt"},
+    {label:"Hoodies",value:"Hooded"},{label:"Sweatshirts",value:"Sweatshirt"},
+    {label:"Long Sleeve",value:"Long Sleeve"},{label:"Tank Tops",value:"Tank"},
+    {label:"Polos",value:"Polo"},{label:"Performance",value:"Performance"},
+    {label:"Youth",value:"Youth"},{label:"Ladies",value:"Ladies"},
+  ];
+  wrap.innerHTML=cats.map(c=>`<button class="shop-cat-pill${shopState.category===c.value?" on":""}" onclick="shopSetCategory('${c.value}')">${c.label}</button>`).join("");
+}
+
+function shopRenderBrands(){
+  const wrap=document.getElementById("shop-brands");if(!wrap)return;
+  wrap.innerHTML=shopState.brands.map(b=>`
+    <label class="shop-brand-check">
+      <input type="checkbox" ${shopState.brand===b?"checked":""} onchange="shopSetBrand('${b.replace(/'/g,"\\'")}',this.checked)" style="accent-color:#4a9eff">
+      <span>${b}</span>
+    </label>`).join("");
+}
+
+function shopSetCategory(cat){
+  shopState.category=cat; shopState.brand=""; shopState.page=1;
+  shopApplyFilters(); shopRenderGrid(); shopRenderCats(); shopRenderBrands();
+}
+
+function shopSetBrand(brand,checked){
+  shopState.brand=checked?brand:"";
+  document.querySelectorAll("#shop-brands input[type=checkbox]").forEach(cb=>{
+    cb.checked=cb.closest("label").textContent.trim()===brand&&checked;
+  });
+  shopApplyFilters(); shopRenderGrid();
+}
+
+let shopSearchTimer;
+function shopSearch(val){
+  clearTimeout(shopSearchTimer);
+  shopSearchTimer=setTimeout(()=>{shopState.search=val;shopApplyFilters();shopRenderGrid();},300);
+}
+function shopFilterPrice(val){shopState.price=val;shopApplyFilters();shopRenderGrid();}
+function shopSort(val){shopState.sort=val;shopApplyFilters();shopRenderGrid();}
+
+async function shopOpenProduct(styleId){
+  try {
+    const res=await fetch(`${SERVER}/catalog/product/${styleId}`);
+    const p=await res.json();
+    shopOpenPDP(p);
+  } catch(err){console.error("Product load error:",err);}
+}
+
+function shopOpenPDP(p){
+  const colors=(p.colors||[]).map(c=>({
+    n:c.name, h:c.hex||"#888",
+    l:(c.hex||"").toLowerCase()==="#ffffff",
+    front:c.front, back:c.back,
+  }));
+  pdpState.product={
+    id:p.style_number, name:p.title||p.name,
+    price:parseFloat(p.base_retail)||0,
+    colors, sizes:p.sizes||["S","M","L","XL","2XL"],
+    skus:p.skus||[], styleId:p.style_id, description:p.description,
+  };
+  pdpState.color=colors[0]||{n:"White",h:"#ffffff",l:true};
+  pdpState.view="front";
+  const imgEl=document.getElementById("pdp-img");
+  if(imgEl&&colors[0]?.front) imgEl.src=colors[0].front;
+  buildPDP(); showPage("pdp");
+}
+
+function shopDesignNow(styleId){
+  shopOpenProduct(styleId).then(()=>{setTimeout(()=>openPDPStudio(),200);});
+}
 
 // ════════════════════════════════
 const phrases=["neon wolf howling at the moon...","vintage eagle with lightning bolts...","japanese koi watercolor splash...","retro 80s sunset with palm trees...","skull with roses fine line tattoo...","astronaut surfing a wave in space..."];
