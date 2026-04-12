@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v4.9 -->
+<!-- v5.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1226,7 +1226,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.9</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.0</span>
   </div>
 
 </nav>
@@ -4370,6 +4370,10 @@ function nnUpdatePreview(){
 
   sSetView(side);
 
+  // Hide float pills (same stacking context, we'll beat them with z-index anyway)
+  const fp = document.getElementById('s-floats');
+  if(fp) fp.style.visibility = 'hidden';
+
   const SIZES = {
     small:  { name:38, sub:16, num:86  },
     medium: { name:50, sub:20, num:114 },
@@ -4378,30 +4382,63 @@ function nnUpdatePreview(){
   };
   const sz = SIZES[sizeVal] || SIZES.large;
 
-  // Strategy: hijack the float pills div — it's already perfectly centered on the shirt.
-  // Save original content, replace with NAME/00 preview.
-  const fp = document.getElementById('s-floats');
-  if(!fp) return;
+  // KEY FIX: append to s-shirt-stage (not s-shirt-wrap).
+  // s-shirt-stage has isolation:isolate creating its own stacking context.
+  // Float pills are z-index:10 inside it. Our preview at z-index:20 wins.
+  // No overflow:hidden clipping since we're outside s-shirt-wrap.
+  const stage = document.querySelector('.s-shirt-stage');
+  if(!stage) return;
 
-  // Save original HTML so we can restore it
-  fp.dataset.nnOriginal = fp.innerHTML;
-  fp.classList.remove('hidden');
-  fp.style.cssText = 'display:flex !important; flex-direction:column; align-items:center; gap:4px; position:absolute; top:22%; left:50%; transform:translateX(-50%); z-index:10; pointer-events:none;';
+  const preview = document.createElement('div');
+  preview.id = 'nn-preview';
+  preview.style.cssText = [
+    'position:absolute',
+    'top:22%',
+    'left:50%',
+    'transform:translateX(-50%)',
+    'display:flex',
+    'flex-direction:column',
+    'align-items:center',
+    'gap:3px',
+    'z-index:20',
+    'pointer-events:none',
+    'text-align:center',
+  ].join(';');
 
-  let html = '';
-  if(hasNames)    html += `<div style="font-family:${font};font-size:${sz.name}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:4px;text-align:center;white-space:nowrap;">NAME</div>`;
-  if(hasSubtitle) html += `<div style="font-family:${font};font-size:${sz.sub}px;font-weight:700;color:${nnColor};line-height:1.2;letter-spacing:5px;opacity:.8;text-align:center;white-space:nowrap;">SUBTITLE</div>`;
-  if(hasNums)     html += `<div style="font-family:${font};font-size:${sz.num}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:2px;text-align:center;white-space:nowrap;margin-top:${hasNames||hasSubtitle?8:0}px;">00</div>`;
+  if(hasNames){
+    const el = document.createElement('div');
+    el.textContent = 'NAME';
+    el.style.cssText = `font-family:${font};font-size:${sz.name}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:4px;white-space:nowrap;`;
+    preview.appendChild(el);
+  }
+  if(hasSubtitle){
+    const el = document.createElement('div');
+    el.textContent = 'SUBTITLE';
+    el.style.cssText = `font-family:${font};font-size:${sz.sub}px;font-weight:700;color:${nnColor};line-height:1.2;letter-spacing:5px;opacity:.8;white-space:nowrap;margin-top:2px;`;
+    preview.appendChild(el);
+  }
+  if(hasNums){
+    const el = document.createElement('div');
+    el.textContent = '00';
+    el.style.cssText = `font-family:${font};font-size:${sz.num}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:2px;white-space:nowrap;margin-top:${hasNames||hasSubtitle?8:0}px;`;
+    preview.appendChild(el);
+  }
 
-  fp.innerHTML = `<div id="nn-preview" style="display:flex;flex-direction:column;align-items:center;gap:3px;">${html}</div>`;
+  stage.appendChild(preview);
 }
 
 function nnClearPreview(){
+  const el = document.getElementById('nn-preview');
+  if(el) el.remove();
   const fp = document.getElementById('s-floats');
-  if(fp && fp.dataset.nnOriginal !== undefined){
-    fp.innerHTML = fp.dataset.nnOriginal;
-    delete fp.dataset.nnOriginal;
-    fp.style.cssText = '';
+  if(fp){
+    fp.style.visibility = '';
+    // Restore previous v4.9 innerHTML backup if present
+    if(fp.dataset.nnOriginal !== undefined){
+      fp.innerHTML = fp.dataset.nnOriginal;
+      delete fp.dataset.nnOriginal;
+      fp.style.cssText = '';
+    }
     fp.classList.toggle('hidden', (sLayers[sView]||[]).length > 0);
   }
 }
