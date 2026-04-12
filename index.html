@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v6.4 -->
+<!-- v6.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1227,7 +1227,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.5</span>
   </div>
 
 </nav>
@@ -2178,7 +2178,7 @@ footer{background:#111;padding:56px 32px 28px}
             <div style="font-size:10px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Names &amp; Numbers</div>
             <div class="s-panel-title">Names &amp; Numbers Tools</div>
           </div>
-          <button class="s-panel-x" onclick="sClosePanel();nnClearPreview()">×</button>
+          <button class="s-panel-x" onclick="exitJerseyModeAndClose()">×</button>
         </div>
         <div class="s-panel-body">
 
@@ -3014,10 +3014,7 @@ function initStudio(){
 }
 
 function sPanel(id,btn){
-  // If leaving N&N panel, exit jersey mode
-  if(activePanelId === 'names' && id !== 'names'){
-    nnExitJerseyMode();
-  }
+  // Jersey Mode persists across panel switches — only × button exits it
   document.querySelectorAll(".s-ibtn").forEach(b=>b.classList.remove("on"));
   if(btn)btn.classList.add("on");
   ["products","text","ai","upload","color","size","keith","names","qty"].forEach(p=>{
@@ -3029,7 +3026,12 @@ function sPanel(id,btn){
   if(id==="qty") buildQtyGrid();
   // Names panel = Jersey Mode — completely separate design flow
   if(id==="names"){
-    nnEnterJerseyMode();
+    if(!jerseyMode){
+      nnEnterJerseyMode(); // first time entering jersey mode
+    } else {
+      // Already in jersey mode — just re-show panel & re-render if on back
+      if(sView === 'back') setTimeout(()=>jerseyRenderBack(), 250);
+    }
   }
 }
 function sClosePanel(){
@@ -3037,8 +3039,8 @@ function sClosePanel(){
   document.querySelectorAll(".s-ibtn").forEach(b=>b.classList.remove("on"));
   activePanelId=null;
   nnClearPreview();
-  // Exit jersey mode and restore all sidebar buttons
-  if(jerseyMode) nnExitJerseyMode();
+  // Only exit jersey mode when user explicitly closes the N&N panel (× button)
+  // Jersey mode persists if user is just switching to another panel
 }
 
 function buildSGarments(){
@@ -4396,6 +4398,11 @@ function nnEnterJerseyMode(){
   // Grey sidebar (back view = jersey numbers only)
   if(iconbar) iconbar.classList.add('nn-active-mode');
   setTimeout(()=>jerseyRenderBack(), 250);
+}
+
+function exitJerseyModeAndClose(){
+  nnExitJerseyMode();
+  sClosePanel();
 }
 
 function nnExitJerseyMode(){
