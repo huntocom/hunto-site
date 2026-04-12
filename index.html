@@ -1077,8 +1077,8 @@ footer{background:#111;padding:56px 32px 28px}
       <button onclick="shopState.search='tank';goShop('')">Tank Tops &amp; Sleeveless</button>
       <button onclick="shopState.search='performance';goShop('T-Shirts')">Performance Shirts</button>
       <div class="mega-dropdown-sep"></div>
-      <button onclick="shopState.search='';goShop('Ladies')">Women's T-Shirts</button>
-      <button onclick="shopState.search='';goShop('Youth')">Kids' T-Shirts</button>
+      <button onclick="shopState.search='';goShopGender('ladies','T-Shirts')">Women's T-Shirts</button>
+      <button onclick="shopState.search='';goShopGender('youth','T-Shirts')">Kids' T-Shirts</button>
       <div class="mega-dropdown-sep"></div>
       <button onclick="goShop('T-Shirts')" style="color:#4a9eff;font-weight:700">View All T-Shirts →</button>
     </div>
@@ -1095,8 +1095,8 @@ footer{background:#111;padding:56px 32px 28px}
       <button onclick="shopState.search='zip';goShop('Fleece')">Zip Up Hoodies</button>
       <button onclick="shopState.search='quarter zip';goShop('Fleece')">Quarter Zip Ups</button>
       <div class="mega-dropdown-sep"></div>
-      <button onclick="shopState.search='';goShop('Ladies')">Women's Sweatshirts</button>
-      <button onclick="shopState.search='';goShop('Youth')">Kids Sweatshirts</button>
+      <button onclick="goShopGender('ladies','Fleece')">Women's Sweatshirts</button>
+      <button onclick="goShopGender('youth','Fleece')">Kids Sweatshirts</button>
       <div class="mega-dropdown-sep"></div>
       <button onclick="goShop('Fleece')" style="color:#4a9eff;font-weight:700">View All Sweatshirts →</button>
     </div>
@@ -1111,6 +1111,8 @@ footer{background:#111;padding:56px 32px 28px}
       <button onclick="shopState.search='premium';goShop('Polos')">Premium Polos</button>
       <button onclick="shopState.search='long sleeve';goShop('Polos')">Long Sleeve Polos</button>
       <div class="mega-dropdown-sep"></div>
+      <button onclick="goShopGender('ladies','Polos')">Women's Polos</button>
+      <div class="mega-dropdown-sep"></div>
       <button onclick="goShop('Polos')" style="color:#4a9eff;font-weight:700">View All Polos →</button>
     </div>
   </div>
@@ -1123,6 +1125,8 @@ footer{background:#111;padding:56px 32px 28px}
       <button onclick="shopState.search='quarter zip';goShop('Outerwear')">Quarter Zip Pullovers</button>
       <button onclick="shopState.search='carhartt';goShop('Outerwear')">Carhartt Jackets</button>
       <button onclick="shopState.search='fleece';goShop('Outerwear')">Fleece Jackets</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="goShopGender('ladies','Outerwear')">Women's Outerwear</button>
       <div class="mega-dropdown-sep"></div>
       <button onclick="goShop('Outerwear')" style="color:#4a9eff;font-weight:700">View All Outerwear →</button>
     </div>
@@ -1152,25 +1156,25 @@ footer{background:#111;padding:56px 32px 28px}
       <div class="mega-dropdown-wide-grid">
       <div class="mega-col">
         <div class="mega-col-hdr">Women's Apparel</div>
-        <button onclick="shopState.search='';goShop('Ladies')">Women's T-Shirts</button>
-        <button onclick="shopState.search='hood';goShop('Ladies')">Women's Hoodies</button>
-        <button onclick="shopState.search='polo';goShop('Ladies')">Women's Polos</button>
-        <button onclick="shopState.search='';goShop('Ladies')" style="color:#4a9eff;font-weight:600">View All Women's →</button>
+        <button onclick="shopState.search='';goShopGender('ladies','T-Shirts')">Women's T-Shirts</button>
+        <button onclick="goShopGender('ladies','Fleece')">Women's Hoodies</button>
+        <button onclick="goShopGender('ladies','Polos')">Women's Polos</button>
+        <button onclick="goShopGender('ladies','')" style="color:#4a9eff;font-weight:600">View All Women's →</button>
       </div>
       <div class="mega-col">
         <div class="mega-col-hdr">Men's Apparel</div>
-        <button onclick="shopState.search='';goShop('Mens')">Men's T-Shirts</button>
-        <button onclick="shopState.search='hood';goShop('Mens')">Men's Hoodies</button>
-        <button onclick="shopState.search='polo';goShop('Mens')">Men's Polos</button>
-        <button onclick="shopState.search='';goShop('Mens')" style="color:#4a9eff;font-weight:600">View All Men's →</button>
+        <button onclick="goShopGender('mens','T-Shirts')">Men's T-Shirts</button>
+        <button onclick="goShopGender('mens','Fleece')">Men's Hoodies</button>
+        <button onclick="goShopGender('mens','Polos')">Men's Polos</button>
+        <button onclick="goShopGender('mens','')" style="color:#4a9eff;font-weight:600">View All Men's →</button>
       </div>
       <div class="mega-col">
         <div class="mega-col-hdr">Kids Apparel</div>
-        <button onclick="shopState.search='t-shirt';goShop('Youth')">Kids T-Shirts</button>
-        <button onclick="shopState.search='hood';goShop('Youth')">Kids Sweatshirts</button>
-        <button onclick="shopState.search='';goShop('Toddler')">Toddler</button>
-        <button onclick="shopState.search='';goShop('Toddler')">Baby / Infant</button>
-        <button onclick="shopState.search='';goShop('Youth')" style="color:#4a9eff;font-weight:600">View All Kids →</button>
+        <button onclick="goShopGender('youth','T-Shirts')">Kids T-Shirts</button>
+        <button onclick="goShopGender('youth','Fleece')">Kids Sweatshirts</button>
+        <button onclick="goShopGender('toddler','')">Toddler</button>
+        <button onclick="goShopGender('toddler','')">Baby / Infant</button>
+        <button onclick="goShopGender('youth','')" style="color:#4a9eff;font-weight:600">View All Kids →</button>
       </div>
       <div class="mega-col">
         <div class="mega-col-hdr">More Categories</div>
@@ -1323,7 +1327,7 @@ footer{background:#111;padding:56px 32px 28px}
         <div style="font-size:13px;font-weight:700;color:#111">Crewnecks</div>
         <div style="font-size:11px;color:#aaa;margin-top:2px">From $42</div>
       </div>
-      <div onclick="goShop('Ladies')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#4a9eff';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(74,158,255,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
+      <div onclick="goShopGender('ladies','')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#4a9eff';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(74,158,255,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
         <img src="https://www.ssactivewear.com/Images/Style/3480_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.display='none'">
         <div style="font-size:13px;font-weight:700;color:#111">Women's</div>
         <div style="font-size:11px;color:#aaa;margin-top:2px">From $26</div>
@@ -4574,23 +4578,42 @@ document.addEventListener("click", e=>{
 // ════════════════════════════════
 const SERVER = "https://hunto-server-production.up.railway.app";
 let shopState = {
-  category:"", brand:"", search:"", price:"", sort:"default",
+  category:"", gender:"", brand:"", search:"", price:"", sort:"default",
   limit:24, total:0,
   allProducts:[], filtered:[], displayed:[],
   brands:[], categories:[], loading:false,
 };
 
+// Go to shop with optional gender filter (ladies/mens/youth/toddler) + optional subcategory
+function goShopGender(gender, subcat){
+  showPage("shop");
+  document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("on"));
+  shopState.gender   = gender  || "";
+  shopState.category = subcat  || "";
+  shopState.search   = "";
+  shopState.brand    = "";
+  const searchEl = document.getElementById("shop-search");
+  if(searchEl) searchEl.value = "";
+  shopLoadCatalog(); shopRenderCats(); shopRenderBrands();
+}
+
 async function goShop(category) {
   showPage("shop");
   document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("on"));
   const genderCats = ['ladies','mens','youth','toddler'];
-  if(category !== undefined){
-    const isGender = genderCats.includes((category||'').toLowerCase());
-    shopState.category = isGender ? category.toLowerCase() : (category||'');
-    if(!isGender) shopState.search = '';
+  const isGender = genderCats.includes((category||'').toLowerCase());
+  if(isGender){
+    shopState.gender   = category.toLowerCase();
+    shopState.category = "";
+    shopState.search   = "";
+  } else {
+    shopState.gender   = "";
+    shopState.category = category || "";
+    shopState.search   = "";
   }
+  shopState.brand = "";
   const searchEl = document.getElementById("shop-search");
-  if(searchEl) searchEl.value = shopState.search || "";
+  if(searchEl) searchEl.value = "";
   await shopLoadCatalog();
   shopRenderCats(); shopRenderBrands();
 }
@@ -4604,6 +4627,7 @@ async function shopLoadCatalog() {
   try {
     // Load just first page instantly — no more loop
     const params=new URLSearchParams({page:1,limit:shopState.limit});
+    if(shopState.gender)   params.set("gender",shopState.gender);
     if(shopState.category) params.set("category",shopState.category);
     if(shopState.brand)    params.set("brand",shopState.brand);
     if(shopState.search)   params.set("search",shopState.search);
@@ -4707,6 +4731,7 @@ async function shopFetch(){
   document.getElementById("shop-empty").style.display="none";
   try {
     const params=new URLSearchParams({page:1,limit:shopState.limit});
+    if(shopState.gender)   params.set("gender",shopState.gender);
     if(shopState.category) params.set("category",shopState.category);
     if(shopState.brand)    params.set("brand",shopState.brand);
     if(shopState.search)   params.set("search",shopState.search);
