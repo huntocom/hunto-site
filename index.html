@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.0 -->
+<!-- v5.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1226,7 +1226,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.0</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.1</span>
   </div>
 
 </nav>
@@ -4364,67 +4364,42 @@ function nnUpdatePreview(){
   const hasNames    = document.getElementById('nn-names')?.checked;
   const hasSubtitle = document.getElementById('nn-subtitle')?.checked;
   const hasNums     = document.getElementById('nn-numbers')?.checked;
-  const font        = document.getElementById('nn-font')?.value || "'Graduate',sans-serif";
-  const side        = document.getElementById('nn-side')?.value || 'back';
-  const sizeVal     = document.getElementById('nn-size')?.value || 'large';
+  const font        = (document.getElementById('nn-font')?.value) || "'Graduate',sans-serif";
+  const side        = (document.getElementById('nn-side')?.value) || 'back';
+  const sizeVal     = (document.getElementById('nn-size')?.value) || 'large';
+  const col         = nnColor || '#111111';
 
-  sSetView(side);
-
-  // Hide float pills (same stacking context, we'll beat them with z-index anyway)
-  const fp = document.getElementById('s-floats');
-  if(fp) fp.style.visibility = 'hidden';
+  // Switch to back view
+  try { sSetView(side); } catch(e){ console.warn('sSetView err:',e); }
 
   const SIZES = {
-    small:  { name:38, sub:16, num:86  },
-    medium: { name:50, sub:20, num:114 },
-    large:  { name:64, sub:25, num:148 },
-    xl:     { name:78, sub:30, num:180 },
+    small:{name:38,sub:16,num:86}, medium:{name:50,sub:20,num:114},
+    large:{name:64,sub:25,num:148}, xl:{name:78,sub:30,num:180}
   };
-  const sz = SIZES[sizeVal] || SIZES.large;
+  const sz = SIZES[sizeVal]||SIZES.large;
 
-  // KEY FIX: append to s-shirt-stage (not s-shirt-wrap).
-  // s-shirt-stage has isolation:isolate creating its own stacking context.
-  // Float pills are z-index:10 inside it. Our preview at z-index:20 wins.
-  // No overflow:hidden clipping since we're outside s-shirt-wrap.
+  // Build preview HTML string
+  let inner = '';
+  if(hasNames)    inner += `<div style="font-family:${font},Arial Black,sans-serif;font-size:${sz.name}px;font-weight:900;color:${col};line-height:1;letter-spacing:4px;">NAME</div>`;
+  if(hasSubtitle) inner += `<div style="font-family:${font},Arial Black,sans-serif;font-size:${sz.sub}px;font-weight:700;color:${col};letter-spacing:5px;opacity:.8;margin-top:2px;">SUBTITLE</div>`;
+  if(hasNums)     inner += `<div style="font-family:${font},Arial Black,sans-serif;font-size:${sz.num}px;font-weight:900;color:${col};line-height:1;letter-spacing:2px;margin-top:${(hasNames||hasSubtitle)?8:0}px;">00</div>`;
+
+  if(!inner) return;
+
+  // Hide float pills
+  const fp = document.getElementById('s-floats');
+  if(fp){ fp.style.visibility='hidden'; fp.style.opacity='0'; }
+
+  // Append to s-shirt-stage at z-index:20
   const stage = document.querySelector('.s-shirt-stage');
-  if(!stage) return;
+  if(!stage){ console.warn('no stage'); return; }
 
-  const preview = document.createElement('div');
-  preview.id = 'nn-preview';
-  preview.style.cssText = [
-    'position:absolute',
-    'top:22%',
-    'left:50%',
-    'transform:translateX(-50%)',
-    'display:flex',
-    'flex-direction:column',
-    'align-items:center',
-    'gap:3px',
-    'z-index:20',
-    'pointer-events:none',
-    'text-align:center',
-  ].join(';');
-
-  if(hasNames){
-    const el = document.createElement('div');
-    el.textContent = 'NAME';
-    el.style.cssText = `font-family:${font};font-size:${sz.name}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:4px;white-space:nowrap;`;
-    preview.appendChild(el);
-  }
-  if(hasSubtitle){
-    const el = document.createElement('div');
-    el.textContent = 'SUBTITLE';
-    el.style.cssText = `font-family:${font};font-size:${sz.sub}px;font-weight:700;color:${nnColor};line-height:1.2;letter-spacing:5px;opacity:.8;white-space:nowrap;margin-top:2px;`;
-    preview.appendChild(el);
-  }
-  if(hasNums){
-    const el = document.createElement('div');
-    el.textContent = '00';
-    el.style.cssText = `font-family:${font};font-size:${sz.num}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:2px;white-space:nowrap;margin-top:${hasNames||hasSubtitle?8:0}px;`;
-    preview.appendChild(el);
-  }
-
-  stage.appendChild(preview);
+  const el = document.createElement('div');
+  el.id = 'nn-preview';
+  el.style.cssText = 'position:absolute;top:22%;left:50%;transform:translateX(-50%);z-index:20;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px;';
+  el.innerHTML = inner;
+  stage.appendChild(el);
+  console.log('nn-preview appended', el);
 }
 
 function nnClearPreview(){
@@ -4432,14 +4407,9 @@ function nnClearPreview(){
   if(el) el.remove();
   const fp = document.getElementById('s-floats');
   if(fp){
-    fp.style.visibility = '';
-    // Restore previous v4.9 innerHTML backup if present
-    if(fp.dataset.nnOriginal !== undefined){
-      fp.innerHTML = fp.dataset.nnOriginal;
-      delete fp.dataset.nnOriginal;
-      fp.style.cssText = '';
-    }
-    fp.classList.toggle('hidden', (sLayers[sView]||[]).length > 0);
+    fp.style.visibility='';
+    fp.style.opacity='';
+    try { fp.classList.toggle('hidden',(sLayers[sView]||[]).length>0); } catch(e){}
   }
 }
 
