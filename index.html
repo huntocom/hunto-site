@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.8 -->
+<!-- v7.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1244,7 +1244,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.8</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.9</span>
   </div>
 
 </nav>
@@ -2530,6 +2530,7 @@ const PLACEMENTS = {
 // ════════════════════════════════
 const pdpState = {product:PRODUCTS[0],color:PRODUCTS[0].colors[0],view:"front"};
 const sState   = {product:PRODUCTS[0],color:PRODUCTS[0].colors[0],sz:"M",place:"fc",view:"front",keith:false,hasDesign:false};
+let orderState = { sizes:{}, rushOrder:false }; // must be global
 // Multi-product support
 let sProducts = []; // [{product, color}]
 let sActiveIdx = 0;
@@ -6017,7 +6018,6 @@ function deleteDesign(id){
 // PURCHASE FLOW — Step 1 → 2 → 3
 // ═══════════════════════════════════════════════════════
 
-let orderState = { sizes:{}, rushOrder:false };
 
 function setActiveStep(n){
   [1,2,3].forEach(i=>{
