@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v6.2 -->
+<!-- v6.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1227,7 +1227,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.3</span>
   </div>
 
 </nav>
@@ -3014,11 +3014,9 @@ function initStudio(){
 }
 
 function sPanel(id,btn){
-  // If leaving N&N panel, restore sidebar
+  // If leaving N&N panel, exit jersey mode
   if(activePanelId === 'names' && id !== 'names'){
-    const iconbar = document.querySelector('.s-iconbar');
-    if(iconbar) iconbar.classList.remove('nn-active-mode');
-    nnClearPreview();
+    nnExitJerseyMode();
   }
   document.querySelectorAll(".s-ibtn").forEach(b=>b.classList.remove("on"));
   if(btn)btn.classList.add("on");
@@ -3044,9 +3042,8 @@ function sClosePanel(){
   document.querySelectorAll(".s-ibtn").forEach(b=>b.classList.remove("on"));
   activePanelId=null;
   nnClearPreview();
-  // Restore all sidebar buttons
-  const iconbar = document.querySelector('.s-iconbar');
-  if(iconbar) iconbar.classList.remove('nn-active-mode');
+  // Exit jersey mode and restore all sidebar buttons
+  if(jerseyMode) nnExitJerseyMode();
 }
 
 function buildSGarments(){
@@ -3304,21 +3301,20 @@ function sSetView(v){
   const photoUrl = ssPhoto || styleImg || getShirtPhotoUrl(sState.product.id, c?.n||c?.name, v);
   img.src = photoUrl;
   img.onerror=()=>{ img.src = styleImg || (v==="back"?IMG_B:IMG_F); };
-  // N&N preview is its own persistent layer — independent of normal design
-  if(activePanelId === 'names'){
+  // Jersey Mode: sync side dropdown and re-render if needed
+  if(jerseyMode){
     const sideEl = document.getElementById('nn-side');
-    if(sideEl) sideEl.value = v; // keep dropdown in sync
-    const iconbar = document.querySelector('.s-iconbar');
+    if(sideEl) sideEl.value = v;
     if(v === 'back'){
-      // Back: restore NAME/00 preview, grey out sidebar (back is N&N only)
-      if(iconbar) iconbar.classList.add('nn-active-mode');
-      // Call immediately for instant feedback, then again after image loads
-      nnUpdatePreview();
-      setTimeout(()=>nnUpdatePreview(), 300);
+      // Back — always re-render jersey template after image loads
+      setTimeout(()=>jerseyRenderBack(), 280);
     } else {
-      // Front: clear preview, restore full sidebar for design work
-      nnClearPreview();
-      if(iconbar) iconbar.classList.remove('nn-active-mode');
+      // Front — remove preview, restore sidebar for design work
+      jerseyRemovePreview();
+      const iconbar2 = document.querySelector('.s-iconbar');
+      if(iconbar2) iconbar2.classList.remove('nn-active-mode');
+      const fp2 = document.getElementById('s-floats');
+      if(fp2){ fp2.style.visibility=''; fp2.style.opacity=''; }
     }
   }
   sUpdateAll();
@@ -4389,26 +4385,44 @@ function nnPickColor(val){
   nnUpdatePreview();
 }
 
-function nnUpdatePreview(){
-  nnClearPreview();
+// ═══════════════════════════════════════════════════
+// JERSEY MODE — completely separate from normal design
+// ═══════════════════════════════════════════════════
+let jerseyMode = false;
+
+function nnEnterJerseyMode(){
+  jerseyMode = true;
+  const iconbar = document.querySelector('.s-iconbar');
+  // Set side dropdown to back and render
+  const sideEl = document.getElementById('nn-side');
+  if(sideEl) sideEl.value = 'back';
+  // Switch shirt to back
+  try { sSetView('back'); } catch(e){}
+  // Grey sidebar (back view = jersey numbers only)
+  if(iconbar) iconbar.classList.add('nn-active-mode');
+  setTimeout(()=>jerseyRenderBack(), 250);
+}
+
+function nnExitJerseyMode(){
+  jerseyMode = false;
+  jerseyRemovePreview();
+  const iconbar = document.querySelector('.s-iconbar');
+  if(iconbar) iconbar.classList.remove('nn-active-mode');
+  const fp = document.getElementById('s-floats');
+  if(fp){ fp.style.visibility=''; fp.style.opacity=''; }
+}
+
+// Render NAME/00 on back — no sSetView, just draw the overlay
+function jerseyRenderBack(){
+  jerseyRemovePreview();
+  if(!jerseyMode) return;
 
   const hasNames    = document.getElementById('nn-names')?.checked;
   const hasSubtitle = document.getElementById('nn-subtitle')?.checked;
   const hasNums     = document.getElementById('nn-numbers')?.checked;
-  const font        = (document.getElementById('nn-font')?.value) || "'Bebas Neue',sans-serif";
-  const side        = (document.getElementById('nn-side')?.value) || 'back';
-  const sizeVal     = (document.getElementById('nn-size')?.value) || 'large';
+  const font        = document.getElementById('nn-font')?.value || "'Bebas Neue',sans-serif";
+  const sizeVal     = document.getElementById('nn-size')?.value || 'large';
   const col         = nnColor || '#111111';
-
-  // Always ensure correct view is shown
-  try { sSetView(side); } catch(e){ console.warn('sSetView err:',e); }
-
-  // Front = blank canvas for their custom team design — just show shirt, restore pills
-  if(side === 'front'){
-    const fp = document.getElementById('s-floats');
-    if(fp){ fp.style.visibility=''; fp.style.opacity=''; }
-    return;
-  }
 
   const SIZES = {
     small: {name:32, sub:14, num:100},
@@ -4416,42 +4430,63 @@ function nnUpdatePreview(){
     large: {name:58, sub:22, num:168},
     xl:    {name:70, sub:26, num:200},
   };
-  const sz = SIZES[sizeVal]||SIZES.large;
-
-  // Build preview HTML string
-  let inner = '';
-  if(hasNames)    inner += `<div style="font-family:${font};font-size:${sz.name}px;font-weight:900;color:${col};line-height:1;letter-spacing:3px;">NAME</div>`;
-  if(hasSubtitle) inner += `<div style="font-family:${font};font-size:${sz.sub}px;font-weight:700;color:${col};letter-spacing:4px;opacity:.85;margin-top:4px;">SUBTITLE</div>`;
-  if(hasNums)     inner += `<div style="font-family:${font};font-size:${sz.num}px;font-weight:900;color:${col};line-height:1;letter-spacing:1px;margin-top:${(hasNames||hasSubtitle)?10:0}px;">00</div>`;
-
-  if(!inner) return;
+  const sz = SIZES[sizeVal] || SIZES.large;
 
   // Hide float pills
   const fp = document.getElementById('s-floats');
   if(fp){ fp.style.visibility='hidden'; fp.style.opacity='0'; }
 
-  // Append to s-shirt-stage at z-index:20
+  // Grey out sidebar
+  const iconbar = document.querySelector('.s-iconbar');
+  if(iconbar) iconbar.classList.add('nn-active-mode');
+
+  let inner = '';
+  if(hasNames)    inner += `<div style="font-family:${font};font-size:${sz.name}px;font-weight:900;color:${col};line-height:1;letter-spacing:3px;">NAME</div>`;
+  if(hasSubtitle) inner += `<div style="font-family:${font};font-size:${sz.sub}px;font-weight:700;color:${col};letter-spacing:4px;opacity:.85;margin-top:4px;">SUBTITLE</div>`;
+  if(hasNums)     inner += `<div style="font-family:${font};font-size:${sz.num}px;font-weight:900;color:${col};line-height:1;letter-spacing:1px;margin-top:${hasNames||hasSubtitle?10:0}px;">00</div>`;
+
+  if(!inner) return;
+
   const stage = document.querySelector('.s-shirt-stage');
-  if(!stage){ console.warn('no stage'); return; }
+  if(!stage) return;
 
   const el = document.createElement('div');
   el.id = 'nn-preview';
   el.style.cssText = 'position:absolute;top:22%;left:50%;transform:translateX(-50%);z-index:20;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px;';
   el.innerHTML = inner;
   stage.appendChild(el);
-  console.log('nn-preview appended', el);
+}
+
+function jerseyRemovePreview(){
+  const el = document.getElementById('nn-preview');
+  if(el) el.remove();
+}
+
+// Called from panel controls (checkbox, font, size, color changes)
+function nnUpdatePreview(){
+  const side = document.getElementById('nn-side')?.value || 'back';
+  const iconbar = document.querySelector('.s-iconbar');
+
+  if(side === 'front'){
+    // Front = clear preview, full sidebar
+    jerseyRemovePreview();
+    if(iconbar) iconbar.classList.remove('nn-active-mode');
+    const fp = document.getElementById('s-floats');
+    if(fp){ fp.style.visibility=''; fp.style.opacity=''; }
+    try { sSetView('front'); } catch(e){}
+    return;
+  }
+
+  // Back = switch view and render jersey template
+  try { sSetView('back'); } catch(e){}
+  if(iconbar) iconbar.classList.add('nn-active-mode');
+  setTimeout(()=>jerseyRenderBack(), 250);
 }
 
 function nnClearPreview(){
-  const el = document.getElementById('nn-preview');
-  if(el) el.remove();
+  jerseyRemovePreview();
   const fp = document.getElementById('s-floats');
-  if(fp){
-    fp.style.visibility='';
-    fp.style.opacity='';
-    try { fp.classList.toggle('hidden',(sLayers[sView]||[]).length>0); } catch(e){}
-  }
-  // Always restore sidebar when clearing N&N
+  if(fp){ fp.style.visibility=''; fp.style.opacity=''; try{ fp.classList.toggle('hidden',(sLayers[sView]||[]).length>0); }catch(e){} }
   const iconbar = document.querySelector('.s-iconbar');
   if(iconbar) iconbar.classList.remove('nn-active-mode');
 }
