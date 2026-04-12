@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v4.6 -->
+<!-- v4.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1226,7 +1226,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.6</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.7</span>
   </div>
 
 </nav>
@@ -4371,54 +4371,73 @@ function nnUpdatePreview(){
   // Switch shirt to the chosen side
   sSetView(side);
 
-  // Hide float pills with dedicated class (survives sSetView re-renders)
+  // Hide float pills - use both class AND inline important style to guarantee
   const fp = document.getElementById('s-floats');
-  if(fp) fp.classList.add('nn-mode');
+  if(fp){
+    fp.classList.add('nn-mode');
+    fp.style.setProperty('display','none','important');
+  }
 
-  // Font sizes for the 280px-wide print area
+  // Font sizes for 280px print area
   const SIZES = {
-    small:  { name:38,  sub:16, num:86  },
-    medium: { name:50,  sub:20, num:114 },
-    large:  { name:64,  sub:25, num:148 },
-    xl:     { name:78,  sub:30, num:180 },
+    small:  { name:38, sub:16, num:86  },
+    medium: { name:50, sub:20, num:114 },
+    large:  { name:64, sub:25, num:148 },
+    xl:     { name:78, sub:30, num:180 },
   };
   const sz = SIZES[sizeVal] || SIZES.large;
 
-  // Get the print area div — already perfectly positioned inside s-shirt-wrap
+  // Use position:fixed based on where print-area-back is on screen
+  // Fixed positioning bypasses ALL stacking context issues
   const paId = side === 'back' ? 'print-area-back' : 'print-area-front';
   const printArea = document.getElementById(paId);
   if(!printArea) return;
 
-  // Show print area and RAISE its z-index above float pills (which are z-index:10)
-  printArea.style.display  = '';
-  printArea.style.zIndex   = '100';
-  printArea.style.border   = 'none';
-  printArea.style.overflow = 'visible';
+  // Make print area visible so we can measure it
+  const wasHidden = printArea.style.display === 'none';
+  if(wasHidden) printArea.style.display = '';
+
+  // Get screen position of print area
+  const rect = printArea.getBoundingClientRect();
 
   const preview = document.createElement('div');
   preview.id = 'nn-preview';
-  preview.style.cssText = 'width:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px;gap:2px;';
+  preview.style.cssText = [
+    'position:fixed',
+    `top:${rect.top}px`,
+    `left:${rect.left}px`,
+    `width:${rect.width||280}px`,
+    'display:flex',
+    'flex-direction:column',
+    'align-items:center',
+    'justify-content:flex-start',
+    'padding-top:10px',
+    'gap:3px',
+    'pointer-events:none',
+    'z-index:9999',
+  ].join(';');
 
   if(hasNames){
     const el = document.createElement('div');
     el.textContent = 'NAME';
-    el.style.cssText = `font-family:${font};font-size:${sz.name}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:4px;text-align:center;width:100%;display:block;`;
+    el.style.cssText = `font-family:${font};font-size:${sz.name}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:4px;text-align:center;width:100%;`;
     preview.appendChild(el);
   }
   if(hasSubtitle){
     const el = document.createElement('div');
     el.textContent = 'SUBTITLE';
-    el.style.cssText = `font-family:${font};font-size:${sz.sub}px;font-weight:700;color:${nnColor};line-height:1.2;letter-spacing:5px;opacity:.8;text-align:center;width:100%;display:block;margin-top:2px;`;
+    el.style.cssText = `font-family:${font};font-size:${sz.sub}px;font-weight:700;color:${nnColor};line-height:1.2;letter-spacing:5px;opacity:.8;text-align:center;width:100%;margin-top:2px;`;
     preview.appendChild(el);
   }
   if(hasNums){
     const el = document.createElement('div');
     el.textContent = '00';
-    el.style.cssText = `font-family:${font};font-size:${sz.num}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:2px;text-align:center;width:100%;display:block;margin-top:${hasNames||hasSubtitle?8:0}px;`;
+    el.style.cssText = `font-family:${font};font-size:${sz.num}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:2px;text-align:center;width:100%;margin-top:${hasNames||hasSubtitle?8:0}px;`;
     preview.appendChild(el);
   }
 
-  printArea.appendChild(preview);
+  // Append to body — fixed positioning means it appears right over the shirt
+  document.body.appendChild(preview);
 }
 
 function nnClearPreview(){
@@ -4428,13 +4447,9 @@ function nnClearPreview(){
   const fp = document.getElementById('s-floats');
   if(fp){
     fp.classList.remove('nn-mode');
+    fp.style.removeProperty('display');
     fp.classList.toggle('hidden', (sLayers[sView]||[]).length > 0);
   }
-  // Restore print areas
-  ['print-area-front','print-area-back'].forEach(id=>{
-    const pa = document.getElementById(id);
-    if(pa){ pa.style.zIndex='2'; pa.style.overflow=''; pa.style.border=''; }
-  });
 }
 
 function nnOpenRoster(){
