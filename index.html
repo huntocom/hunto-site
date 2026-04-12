@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.3 -->
+<!-- v7.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1244,7 +1244,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.4</span>
   </div>
 
 </nav>
@@ -6031,10 +6031,76 @@ function goStep1(){
   setActiveStep(1);
 }
 
-function goStep2(){
+async function goStep2(){
+  // Capture design preview before switching pages
+  await captureDesignPreview();
   showPage('step2');
   setActiveStep(2);
   buildStep2();
+}
+
+async function captureDesignPreview(){
+  try {
+    const wrap = document.getElementById('s-shirt-wrap');
+    if(!wrap) return;
+
+    // Use html2canvas if available, otherwise fall back to shirt image
+    const shirtImg = document.getElementById('s-shirt');
+    const canvas = document.createElement('canvas');
+    const size = 400;
+    canvas.width = size; canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#f8f9fb';
+    ctx.fillRect(0,0,size,size);
+
+    // Draw shirt background
+    if(shirtImg && shirtImg.src && shirtImg.complete){
+      try {
+        ctx.drawImage(shirtImg, 0, 0, size, size);
+      } catch(e){}
+    }
+
+    // Draw design layers on top
+    const wRect = wrap.getBoundingClientRect();
+    const layers = wrap.querySelectorAll("[data-type='image'][data-side='front'], [data-type='text'][data-side='front'], .txt-layer");
+    for(const layer of layers){
+      if(layer.style.display === 'none') continue;
+      const lRect = layer.getBoundingClientRect();
+      const scaleX = size / wRect.width;
+      const scaleY = size / wRect.height;
+      const lx = (lRect.left - wRect.left) * scaleX;
+      const ly = (lRect.top - wRect.top) * scaleY;
+      const lw = lRect.width * scaleX;
+      const lh = lRect.height * scaleY;
+
+      // Draw image layers
+      const img = layer.querySelector('img');
+      if(img && img.src && img.complete && img.naturalWidth){
+        try { ctx.drawImage(img, lx, ly, lw, lh); } catch(e){}
+      }
+
+      // Draw text layers
+      if(layer.dataset.type === 'text' || layer.classList.contains('txt-layer')){
+        const textEl = layer.querySelector('[data-txt]') || layer;
+        const text = textEl.dataset.txt || textEl.textContent || '';
+        if(text.trim()){
+          ctx.save();
+          ctx.font = `bold ${Math.round(lh * 0.7)}px Inter, sans-serif`;
+          ctx.fillStyle = layer.style.color || '#000';
+          ctx.textAlign = 'center';
+          ctx.fillText(text.trim(), lx + lw/2, ly + lh * 0.75);
+          ctx.restore();
+        }
+      }
+    }
+
+    orderState.designPreview = canvas.toDataURL('image/jpeg', 0.85);
+  } catch(e){
+    console.warn('Preview capture failed:', e);
+    // Fall back to shirt image
+    const shirtImg = document.getElementById('sth-f-img') || document.getElementById('s-shirt');
+    orderState.designPreview = shirtImg?.src || '';
+  }
 }
 
 function goStep3(){
@@ -6049,10 +6115,10 @@ function buildStep2(){
   const c = sState.color;
   if(!p) return;
 
-  // Fix image — try multiple sources
-  const imgSrc = c?.front || c?.back || p.image
-    || document.getElementById('sth-f-img')?.src
-    || document.getElementById('s-shirt')?.src || '';
+  // Use captured design preview first, fall back to shirt photo
+  const imgSrc = orderState.designPreview
+    || c?.front || c?.back || p.image
+    || document.getElementById('sth-f-img')?.src || '';
   const imgEl = document.getElementById('step2-shirt-img');
   if(imgEl){ imgEl.src = imgSrc; imgEl.style.display = imgSrc ? 'block' : 'none'; }
 
@@ -6395,7 +6461,7 @@ window.addEventListener('load', updateDeliveryDates);
 
     <!-- Product summary -->
     <div style="display:flex;align-items:center;gap:20px;margin-bottom:32px;background:#f8f9fb;border-radius:16px;padding:20px 24px">
-      <div style="width:80px;height:80px;border-radius:12px;overflow:hidden;background:#fff;flex-shrink:0;border:1px solid #e8e8e8">
+      <div style="width:120px;height:120px;border-radius:14px;overflow:hidden;background:#fff;flex-shrink:0;border:1.5px solid #e8e8e8;box-shadow:0 4px 12px rgba(0,0,0,.08)">
         <img id="step2-shirt-img" src="" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
       </div>
       <div style="flex:1">
