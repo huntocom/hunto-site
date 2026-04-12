@@ -6111,26 +6111,27 @@ function goStep3(){
 
 // ── Step 2: Quantities ─────────────────────────────────
 function buildStep2(){
-  const p = sState.product;
+  console.log('buildStep2 sState:', JSON.parse(JSON.stringify(sState)));
+  const p = sState.product || {};
   const c = sState.color;
-  if(!p) return;
 
-  // Use captured design preview first, fall back to shirt photo
-  const imgSrc = orderState.designPreview
+  // Use the live shirt element as primary image source
+  const imgSrc = document.getElementById('s-shirt')?.src
+    || orderState.designPreview
     || c?.front || c?.back || p.image
     || document.getElementById('sth-f-img')?.src || '';
   const imgEl = document.getElementById('step2-shirt-img');
   if(imgEl){ imgEl.src = imgSrc; imgEl.style.display = imgSrc ? 'block' : 'none'; }
 
-  document.getElementById('step2-product-name').textContent = p.fullTitle || p.name || p.title || 'Custom Shirt';
+  const productName = p.name || p.title || 'Custom Shirt';
+  document.getElementById('step2-product-name').textContent = productName;
   document.getElementById('step2-product-meta').textContent = (p.brand||'Gildan') + ' · ' + (c?.n||c?.name||'') + ' · Style #' + (p.id||p.style_id||'');
   const basePrice = parseFloat(p.price||p.base_retail||28);
   document.getElementById('step2-base-price').textContent = '$' + basePrice.toFixed(2);
   document.getElementById('step2-total').textContent = '$0.00';
 
-  // Normalize sizes — S&S returns objects OR strings
-  const rawSizes = (p.sizes && p.sizes.length) ? p.sizes : ['S','M','L','XL','2XL','3XL'];
-  const sizes = rawSizes.map(s => typeof s === 'object' ? (s.label||s.name||s.size||String(s)) : String(s));
+  // Always use hardcoded fallback sizes
+  const sizes = ['S','M','L','XL','2XL','3XL'];
 
   const sizeUpcharge = {S:0,M:0,L:0,XL:0,'2XL':3,'3XL':5,'4XL':7,'5XL':9};
 
