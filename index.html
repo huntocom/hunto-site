@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v6.0 -->
+<!-- v6.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1227,7 +1227,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.1</span>
   </div>
 
 </nav>
@@ -3308,12 +3308,15 @@ function sSetView(v){
   if(activePanelId === 'names'){
     const sideEl = document.getElementById('nn-side');
     if(sideEl) sideEl.value = v; // keep dropdown in sync
+    const iconbar = document.querySelector('.s-iconbar');
     if(v === 'back'){
-      // Restore N&N preview when switching back to back
+      // Back: restore NAME/00 preview, grey out sidebar (back is N&N only)
+      if(iconbar) iconbar.classList.add('nn-active-mode');
       setTimeout(()=>nnUpdatePreview(), 200);
     } else {
-      // Front = clear preview, restore pills for design work
+      // Front: clear preview, restore full sidebar for design work
       nnClearPreview();
+      if(iconbar) iconbar.classList.remove('nn-active-mode');
     }
   }
   sUpdateAll();
@@ -4446,6 +4449,9 @@ function nnClearPreview(){
     fp.style.opacity='';
     try { fp.classList.toggle('hidden',(sLayers[sView]||[]).length>0); } catch(e){}
   }
+  // Always restore sidebar when clearing N&N
+  const iconbar = document.querySelector('.s-iconbar');
+  if(iconbar) iconbar.classList.remove('nn-active-mode');
 }
 
 function nnOpenRoster(){
