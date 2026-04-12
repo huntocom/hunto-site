@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.2 -->
+<!-- v7.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1244,7 +1244,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.3</span>
   </div>
 
 </nav>
@@ -6049,38 +6049,50 @@ function buildStep2(){
   const c = sState.color;
   if(!p) return;
 
-  // Product header
-  const img = c?.front || c?.back || p.image || '';
-  document.getElementById('step2-shirt-img').src = img;
-  document.getElementById('step2-product-name').textContent = p.fullTitle || p.name || p.title || '';
-  document.getElementById('step2-product-meta').textContent = (p.brand||'Gildan') + ' · ' + (c?.n||c?.name||'') + ' · ' + (p.base_category||p.fabric||'');
-  document.getElementById('step2-base-price').textContent = '$' + parseFloat(p.price||p.base_retail||0).toFixed(2);
+  // Fix image — try multiple sources
+  const imgSrc = c?.front || c?.back || p.image
+    || document.getElementById('sth-f-img')?.src
+    || document.getElementById('s-shirt')?.src || '';
+  const imgEl = document.getElementById('step2-shirt-img');
+  if(imgEl){ imgEl.src = imgSrc; imgEl.style.display = imgSrc ? 'block' : 'none'; }
+
+  document.getElementById('step2-product-name').textContent = p.fullTitle || p.name || p.title || 'Custom Shirt';
+  document.getElementById('step2-product-meta').textContent = (p.brand||'Gildan') + ' · ' + (c?.n||c?.name||'') + ' · Style #' + (p.id||p.style_id||'');
+  const basePrice = parseFloat(p.price||p.base_retail||28);
+  document.getElementById('step2-base-price').textContent = '$' + basePrice.toFixed(2);
   document.getElementById('step2-total').textContent = '$0.00';
 
-  const sizes = p.sizes && p.sizes.length ? p.sizes : ['S','M','L','XL','2XL','3XL'];
-  const basePrice = parseFloat(p.price||p.base_retail||0);
+  // Normalize sizes — S&S returns objects OR strings
+  const rawSizes = (p.sizes && p.sizes.length) ? p.sizes : ['S','M','L','XL','2XL','3XL'];
+  const sizes = rawSizes.map(s => typeof s === 'object' ? (s.label||s.name||s.size||String(s)) : String(s));
+
   const sizeUpcharge = {S:0,M:0,L:0,XL:0,'2XL':3,'3XL':5,'4XL':7,'5XL':9};
 
+  // Visual tile grid — big tappable cards, easy for mobile
   const grid = document.getElementById('step2-size-grid');
-  grid.innerHTML = sizes.map(sz => {
-    const up = sizeUpcharge[sz]||0;
-    const price = (basePrice + up).toFixed(2);
-    const qty = orderState.sizes[sz]||0;
-    return `<div style="display:grid;grid-template-columns:80px 1fr 180px 80px;align-items:center;gap:12px;padding:12px 16px;background:#fff;border-radius:12px;border:1.5px solid #e8e8e8">
-      <div style="font-size:15px;font-weight:800;color:#111">${sz}</div>
-      <div style="font-size:12px;color:#aaa">${up>0?'(+$'+up+'/shirt)':''} $${price} each</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <button onclick="step2Adj('${sz}',-1)" style="width:36px;height:36px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fff;font-size:20px;cursor:pointer;color:#555;font-family:Inter,sans-serif">−</button>
-        <span id="step2-qty-${sz}" style="font-size:18px;font-weight:800;color:#111;min-width:32px;text-align:center">${qty}</span>
-        <button onclick="step2Adj('${sz}',1)" style="width:36px;height:36px;border:1.5px solid #4a9eff;border-radius:8px;background:#f0f7ff;font-size:20px;cursor:pointer;color:#4a9eff;font-family:Inter,sans-serif">+</button>
-      </div>
-      <div id="step2-sub-${sz}" style="font-size:13px;font-weight:600;color:#4a9eff;text-align:right">${qty?'$'+(qty*(basePrice+up)).toFixed(2):''}</div>
-    </div>`;
-  }).join('');
+  grid.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:8px">
+      ${sizes.map(sz => {
+        const up = sizeUpcharge[sz]||0;
+        const qty = orderState.sizes[sz]||0;
+        return `<div id="step2-tile-${sz}" onclick="step2TileClick('${sz}')" style="border:2px solid ${qty?'#4a9eff':'#e8e8e8'};border-radius:16px;padding:16px 12px;text-align:center;cursor:pointer;background:${qty?'#f0f7ff':'#fff'};transition:all .15s;user-select:none;position:relative">
+          ${qty ? `<div style="position:absolute;top:-8px;right:-8px;width:24px;height:24px;background:#4a9eff;color:#fff;border-radius:50%;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">${qty}</div>` : ''}
+          <div style="font-size:22px;font-weight:900;color:${qty?'#4a9eff':'#111'};margin-bottom:4px">${sz}</div>
+          <div style="font-size:11px;color:#aaa;font-weight:600">$${(basePrice+up).toFixed(2)}${up?'<br><span style="color:#f59e0b">+$'+up+'</span>':''}</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px">
+            <button onclick="event.stopPropagation();step2Adj('${sz}',-1)" style="width:28px;height:28px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;font-size:16px;cursor:pointer;color:#555;line-height:1;padding:0">−</button>
+            <span id="step2-qty-${sz}" style="font-size:16px;font-weight:800;color:#111;min-width:20px;text-align:center">${qty||0}</span>
+            <button onclick="event.stopPropagation();step2Adj('${sz}',1)" style="width:28px;height:28px;border:1.5px solid #4a9eff;border-radius:8px;background:#4a9eff;font-size:16px;cursor:pointer;color:#fff;line-height:1;padding:0">+</button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="font-size:12px;color:#aaa;text-align:center;margin-top:4px">Tap a size to add · Use +/− to adjust quantity</div>
+  `;
 
   // Jersey section
   const jerseySection = document.getElementById('step2-jersey-section');
-  if(jerseyMode && nnRoster.length){
+  if(jerseyMode && nnRoster && nnRoster.length){
     jerseySection.style.display='block';
     const hasN = nnRoster[0]?.name!==undefined, hasNum = nnRoster[0]?.number!==undefined;
     const jerseyPrice = hasN && hasNum ? 6 : hasN ? 4 : 3;
@@ -6088,7 +6100,7 @@ function buildStep2(){
       `${nnRoster.length} shirt${nnRoster.length!==1?'s':''} with personalization<br>` +
       nnRoster.slice(0,5).map(r=>`<span style="display:inline-block;background:#fff;border-radius:6px;padding:2px 10px;margin:2px;font-size:12px;font-weight:600">${r.name||''}${r.number?' #'+r.number:''} (${r.size||'M'})</span>`).join('') +
       (nnRoster.length>5?`<span style="font-size:12px;color:#4a9eff"> +${nnRoster.length-5} more</span>`:'') +
-      `<br><strong>Personalization total: $${(nnRoster.length * jerseyPrice).toFixed(2)}</strong>`;
+      `<br><strong>Personalization: $${(nnRoster.length * jerseyPrice).toFixed(2)}</strong>`;
   } else {
     jerseySection.style.display='none';
   }
@@ -6096,16 +6108,34 @@ function buildStep2(){
   step2UpdateTotals();
 }
 
+function step2TileClick(size){
+  // Tap tile = add 1
+  step2Adj(size, 1);
+}
+
 function step2Adj(size, delta){
   orderState.sizes[size] = Math.max(0,(orderState.sizes[size]||0)+delta);
   const qty = orderState.sizes[size];
-  const el = document.getElementById('step2-qty-'+size);
-  if(el) el.textContent = qty;
-  const p = sState.product;
-  const basePrice = parseFloat(p?.price||p?.base_retail||0);
-  const sizeUpcharge = {S:0,M:0,L:0,XL:0,'2XL':3,'3XL':5,'4XL':7,'5XL':9};
-  const sub = document.getElementById('step2-sub-'+size);
-  if(sub) sub.textContent = qty ? '$'+(qty*(basePrice+(sizeUpcharge[size]||0))).toFixed(2) : '';
+  // Update qty display
+  const qtyEl = document.getElementById('step2-qty-'+size);
+  if(qtyEl) qtyEl.textContent = qty;
+  // Update tile highlight
+  const tile = document.getElementById('step2-tile-'+size);
+  if(tile){
+    tile.style.borderColor = qty ? '#4a9eff' : '#e8e8e8';
+    tile.style.background = qty ? '#f0f7ff' : '#fff';
+    // Update badge
+    let badge = tile.querySelector('.qty-badge');
+    if(qty){
+      if(!badge){
+        badge = document.createElement('div');
+        badge.className='qty-badge';
+        badge.style.cssText='position:absolute;top:-8px;right:-8px;width:24px;height:24px;background:#4a9eff;color:#fff;border-radius:50%;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center';
+        tile.appendChild(badge);
+      }
+      badge.textContent = qty;
+    } else if(badge){ badge.remove(); }
+  }
   step2UpdateTotals();
 }
 
