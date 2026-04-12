@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v6.9 -->
+<!-- v7.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1244,7 +1244,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.9</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.0</span>
   </div>
 
 </nav>
@@ -4224,7 +4224,10 @@ function sUpdateAll(){
 
 function sNext(){
   const hasLayers = (sLayers.front||[]).length > 0 || (sLayers.back||[]).length > 0;
-  if(!sState.hasDesign && !hasLayers && !jerseyMode){
+  // Also check for live text/image elements directly on canvas (before Place is clicked)
+  const wrap = document.getElementById('s-shirt-wrap');
+  const hasCanvasElements = wrap && wrap.querySelectorAll("[data-type='image'],[data-type='text'],.txt-layer").length > 0;
+  if(!sState.hasDesign && !hasLayers && !hasCanvasElements && !jerseyMode){
     sNtf("Add a design first — generate AI art, text, or upload your image!"); return;
   }
   goStep2();
