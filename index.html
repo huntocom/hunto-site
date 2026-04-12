@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v6.6 -->
+<!-- v6.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -933,6 +933,23 @@ footer{background:#111;padding:56px 32px 28px}
   .pdp-cta{height:50px;font-size:16px}
   .s-shirt-img{width:260px}
 }
+
+/* ══════════════════════════════════════════
+   SAVED DESIGNS
+══════════════════════════════════════════ */
+.designs-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+.designs-modal.open{display:flex}
+.designs-box{background:#fff;border-radius:20px;width:100%;max-width:900px;box-shadow:0 24px 64px rgba(0,0,0,.2)}
+.designs-header{padding:24px 28px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between}
+.designs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;padding:24px 28px}
+.design-card{border:1.5px solid #e8e8e8;border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s}
+.design-card:hover{border-color:#4a9eff;box-shadow:0 6px 20px rgba(74,158,255,.12);transform:translateY(-2px)}
+.design-card-img{aspect-ratio:1;background:#f8f9fb;display:flex;align-items:center;justify-content:center;position:relative}
+.design-card-body{padding:12px}
+.design-card-name{font-size:13px;font-weight:700;color:#111;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.design-card-meta{font-size:11px;color:#aaa;font-weight:500}
+.design-card-del{position:absolute;top:8px;right:8px;width:24px;height:24px;background:rgba(0,0,0,.5);border-radius:50%;border:none;color:#fff;font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center}
+.design-card:hover .design-card-del{display:flex}
 </style>
 </head>
 <body>
@@ -1049,7 +1066,7 @@ footer{background:#111;padding:56px 32px 28px}
       <span>(800) HUNTO</span>
       <span class="hdr-action-sub">Talk with an expert</span>
     </div>
-    <div class="hdr-action" onclick="alert('My Account coming soon!')">
+    <div class="hdr-action" onclick="openDesigns()">
       <span class="hdr-action-icon">👤</span>
       <span>My Account</span>
     </div>
@@ -1227,7 +1244,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.6</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.7</span>
   </div>
 
 </nav>
@@ -1772,7 +1789,7 @@ footer{background:#111;padding:56px 32px 28px}
     <div class="studio-price" id="s-price">$28.00</div>
     <div class="studio-actions">
       <button class="stbtn" onclick="goHome()">← Back</button>
-      <button class="stbtn" onclick="sNtf('Design saved!')">💾 Save</button>
+      <button class="stbtn" onclick="saveCurrentDesign()">💾 Save</button>
       <button class="stbtn blue" onclick="sNext()">Next Step →</button>
     </div>
   </div>
@@ -2402,7 +2419,7 @@ footer{background:#111;padding:56px 32px 28px}
       <span id="s-bot-sz">M</span> · No minimum · Ships 48hrs
     </div>
     <button class="s-bot-btn" onclick="sNtf('Price calculated!')">💲 Get Price</button>
-    <button class="s-bot-btn" onclick="sNtf('Design saved!')">💾 Save Design</button>
+    <button class="s-bot-btn" onclick="saveCurrentDesign()">💾 Save Design</button>
     <button class="s-bot-btn next" onclick="sNext()">NEXT STEP →</button>
   </div>
 
@@ -3281,8 +3298,8 @@ function sSetView(v){
   const pab = document.getElementById("print-area-back");
   if(paf) paf.style.display = v==="front" ? "" : "none";
   if(pab) pab.style.display = v==="back"  ? "" : "none";
-  // Show/hide image layers per side
-  document.querySelectorAll("[data-type='image']").forEach(el => {
+  // Show/hide image AND text layers per side
+  document.querySelectorAll("[data-type='image'],[data-type='text']").forEach(el => {
     el.style.display = el.dataset.side === v ? "block" : "none";
   });
   // Show/hide float pills
@@ -5885,6 +5902,132 @@ function generateArtSVG(prompt){
 
   return C.toDataURL("image/png");
 }
+
+
+// ═══════════════════════════════════════════
+// SAVED DESIGNS SYSTEM
+// ═══════════════════════════════════════════
+function getSavedDesigns(){
+  try { return JSON.parse(localStorage.getItem('hunto_designs')||'[]'); } catch(e){ return []; }
+}
+function setSavedDesigns(designs){
+  localStorage.setItem('hunto_designs', JSON.stringify(designs));
+}
+
+function saveCurrentDesign(){
+  const name = prompt('Name this design:', sState.product?.name || 'My Design');
+  if(!name) return;
+
+  const wrap = document.getElementById('s-shirt-wrap');
+  const layers = wrap ? Array.from(wrap.querySelectorAll("[data-type='image'],[data-type='text']")).map(el=>({
+    type: el.dataset.type, side: el.dataset.side, html: el.outerHTML
+  })) : [];
+
+  const design = {
+    id: Date.now(),
+    name,
+    savedAt: new Date().toLocaleDateString(),
+    product: { id: sState.product?.id, name: sState.product?.name, brand: sState.product?.brand||'Gildan' },
+    color: { n: sState.color?.n||sState.color?.name, h: sState.color?.h||sState.color?.hex },
+    layers,
+    jerseyMode,
+    qtyState,
+    nnRoster,
+  };
+
+  const designs = getSavedDesigns();
+  designs.unshift(design);
+  if(designs.length > 20) designs.pop(); // keep last 20
+  setSavedDesigns(designs);
+  sNtf('✓ Design saved — "' + name + '"');
+}
+
+function openDesigns(){
+  const modal = document.getElementById('designs-modal');
+  if(modal) modal.classList.add('open');
+  renderDesignsGrid();
+}
+function closeDesigns(){
+  const modal = document.getElementById('designs-modal');
+  if(modal) modal.classList.remove('open');
+}
+
+function renderDesignsGrid(){
+  const grid = document.getElementById('designs-grid');
+  const empty = document.getElementById('designs-empty');
+  const designs = getSavedDesigns();
+  if(!designs.length){ grid.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  grid.innerHTML = designs.map(d=>`
+    <div class="design-card" onclick="loadDesign(${d.id})">
+      <div class="design-card-img">
+        <div style="font-size:48px">${d.product?.id?.includes('500')||d.product?.id==='18500'?'🧥':'👕'}</div>
+        <div style="position:absolute;inset:0;background:${d.color?.h||'#f0f0f0'}22;border-radius:0;mix-blend-mode:multiply"></div>
+        <button class="design-card-del" onclick="event.stopPropagation();deleteDesign(${d.id})" title="Delete">×</button>
+      </div>
+      <div class="design-card-body">
+        <div class="design-card-name">${d.name}</div>
+        <div class="design-card-meta">${d.product?.brand||'Gildan'} · ${d.color?.n||'White'}</div>
+        <div class="design-card-meta">${d.savedAt}</div>
+      </div>
+    </div>`).join('');
+}
+
+function loadDesign(id){
+  const designs = getSavedDesigns();
+  const d = designs.find(x=>x.id===id);
+  if(!d) return;
+  closeDesigns();
+
+  // Load the product
+  const product = PRODUCTS.find(p=>p.id===d.product?.id)||PRODUCTS[0];
+  const color = product.colors.find(c=>c.n===d.color?.n)||product.colors[0];
+  sState.product = product;
+  sState.color = color;
+
+  showPage('studio');
+  initStudio();
+
+  setTimeout(()=>{
+    // Restore layers
+    const wrap = document.getElementById('s-shirt-wrap');
+    if(wrap && d.layers?.length){
+      d.layers.forEach(layer=>{
+        const div = document.createElement('div');
+        div.innerHTML = layer.html;
+        const el = div.firstElementChild;
+        if(el) wrap.appendChild(el);
+      });
+    }
+    sNtf('✓ Design loaded — "' + d.name + '"');
+  }, 400);
+}
+
+function deleteDesign(id){
+  if(!confirm('Delete this design?')) return;
+  const designs = getSavedDesigns().filter(d=>d.id!==id);
+  setSavedDesigns(designs);
+  renderDesignsGrid();
+}
 </script>
+
+<!-- ████ SAVED DESIGNS MODAL ████ -->
+<div class="designs-modal" id="designs-modal" onclick="if(event.target===this)closeDesigns()">
+  <div class="designs-box">
+    <div class="designs-header">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">My Designs</div>
+        <div style="font-size:22px;font-weight:900;color:#111;letter-spacing:-.5px">Saved Shirt Designs</div>
+      </div>
+      <button onclick="closeDesigns()" style="background:none;border:none;font-size:26px;color:#aaa;cursor:pointer;line-height:1">×</button>
+    </div>
+    <div id="designs-grid" class="designs-grid"></div>
+    <div id="designs-empty" style="display:none;text-align:center;padding:60px 20px;color:#aaa">
+      <div style="font-size:48px;margin-bottom:12px">💾</div>
+      <div style="font-size:16px;font-weight:600;color:#555;margin-bottom:6px">No saved designs yet</div>
+      <div style="font-size:13px">Hit Save in the studio to save your work</div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
