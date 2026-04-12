@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.0 -->
+<!-- v7.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1244,7 +1244,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.1</span>
   </div>
 
 </nav>
@@ -1287,11 +1287,11 @@ footer{background:#111;padding:56px 32px 28px}
         <div style="display:flex;gap:12px;margin-bottom:32px">
           <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 20px;flex:1">
             <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">📦 Free Delivery</div>
-            <div style="font-size:15px;font-weight:800;color:#fff">Wed, Apr 22</div>
+            <div style="font-size:15px;font-weight:800;color:#fff" id="hero-free-date">...</div>
           </div>
           <div style="background:rgba(74,158,255,.15);border:1px solid rgba(74,158,255,.3);border-radius:12px;padding:14px 20px;flex:1">
             <div style="font-size:10px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">🚀 Rush Delivery</div>
-            <div style="font-size:15px;font-weight:800;color:#fff">Mon, Apr 13</div>
+            <div style="font-size:15px;font-weight:800;color:#fff" id="hero-rush-date">...</div>
           </div>
         </div>
 
@@ -1675,11 +1675,11 @@ footer{background:#111;padding:56px 32px 28px}
       <div class="ship-cards" style="margin-bottom:16px">
         <div class="ship-card">
           <span class="ship-icon">📦</span>
-          <div><div class="ship-label">Free Shipping</div><div class="ship-date" id="pdp-free-ship">Wed Apr 22</div></div>
+          <div><div class="ship-label">Free Shipping</div><div class="ship-date" id="pdp-free-ship">...</div></div>
         </div>
         <div class="ship-card">
           <span class="ship-icon">🚀</span>
-          <div><div class="ship-label">Rush Shipping</div><div class="ship-date" id="pdp-rush-ship">Mon Apr 13</div></div>
+          <div><div class="ship-label">Rush Shipping</div><div class="ship-date" id="pdp-rush-ship">...</div></div>
         </div>
       </div>
 
@@ -6315,6 +6315,36 @@ async function placeOrder(){
     console.error('Order error:',err);
   }
 }
+
+// ── Dynamic Delivery Dates ────────────────────────────────
+function calcDeliveryDate(businessDaysFromNow){
+  const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const d = new Date();
+  let added = 0;
+  while(added < businessDaysFromNow){
+    d.setDate(d.getDate()+1);
+    if(d.getDay()!==0 && d.getDay()!==6) added++; // skip weekends
+  }
+  return DAYS[d.getDay()]+', '+MONTHS[d.getMonth()]+' '+d.getDate();
+}
+
+function updateDeliveryDates(){
+  const free = calcDeliveryDate(10); // ~2 weeks standard
+  const rush = calcDeliveryDate(2);  // 48hr rush
+
+  ['hero-free-date','pdp-free-ship'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = free;
+  });
+  ['hero-rush-date','pdp-rush-ship'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = rush;
+  });
+}
+
+// Run on load
+window.addEventListener('load', updateDeliveryDates);
 </script>
 
 
