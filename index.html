@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hunto — Wear What You Imagine</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Oswald:wght@400;700&family=Raleway:wght@400;700;900&family=Permanent+Marker&family=Russo+One&family=Pacifico&family=Righteous&family=Satisfy&family=Lobster&family=Anton&family=Black+Han+Sans&family=Bungee&family=Alfa+Slab+One&family=Squada+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Oswald:wght@400;700&family=Raleway:wght@400;700;900&family=Permanent+Marker&family=Russo+One&family=Pacifico&family=Righteous&family=Satisfy&family=Lobster&family=Anton&family=Black+Han+Sans&family=Bungee&family=Alfa+Slab+One&family=Squada+One&family=Graduate&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════
    RESET & BASE
@@ -2202,67 +2202,86 @@ footer{background:#111;padding:56px 32px 28px}
       <!-- NAMES & NUMBERS PANEL -->
       <div id="sp-names" style="display:none">
         <div class="s-panel-hdr">
-          <div><div class="s-panel-title">Names &amp; Numbers</div><div class="s-panel-sub">Team &amp; bulk personalization</div></div>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Names &amp; Numbers</div>
+            <div class="s-panel-title">Names &amp; Numbers Tools</div>
+          </div>
           <button class="s-panel-x" onclick="sClosePanel();nnClearPreview()">×</button>
         </div>
         <div class="s-panel-body">
 
           <!-- Step 1: What to include -->
-          <div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Step 1 — What to include</div>
-          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px">
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#333;cursor:pointer">
-              <input type="checkbox" id="nn-names" checked onchange="nnUpdatePreview()" style="accent-color:#4a9eff;width:15px;height:15px"> Names
-            </label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#333;cursor:pointer">
-              <input type="checkbox" id="nn-subtitle" onchange="nnUpdatePreview()" style="accent-color:#4a9eff;width:15px;height:15px"> Subtitle
-            </label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#333;cursor:pointer">
-              <input type="checkbox" id="nn-numbers" checked onchange="nnUpdatePreview()" style="accent-color:#4a9eff;width:15px;height:15px"> Numbers
-            </label>
+          <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:18px">
+            <div style="font-size:12px;font-weight:700;color:#aaa;white-space:nowrap;padding-top:2px">Step 1</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px 16px">
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#333;cursor:pointer">
+                <input type="checkbox" id="nn-names" checked onchange="nnUpdatePreview()" style="accent-color:#4a9eff;width:15px;height:15px"> Add Names
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#333;cursor:pointer">
+                <input type="checkbox" id="nn-numbers" checked onchange="nnUpdatePreview()" style="accent-color:#4a9eff;width:15px;height:15px"> Add Numbers
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#333;cursor:pointer">
+                <input type="checkbox" id="nn-subtitle" onchange="nnUpdatePreview()" style="accent-color:#4a9eff;width:15px;height:15px"> Add Subtitles
+              </label>
+            </div>
           </div>
 
           <!-- Side -->
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid #f0f0f0">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid #f0f0f0">
             <div style="font-size:13px;font-weight:600;color:#333">Side</div>
-            <select id="nn-side" onchange="nnUpdatePreview()" style="padding:6px 10px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;color:#333;background:#fff">
-              <option value="back">Back</option>
-              <option value="front">Front</option>
+            <select id="nn-side" onchange="nnUpdatePreview()" style="padding:7px 12px;border:1.5px solid #e0e0e0;border-radius:20px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;color:#333;background:#fff;cursor:pointer;appearance:none;padding-right:28px;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 6%22><path d=%22M0 0l5 6 5-6z%22 fill=%22%23999%22/></svg>');background-repeat:no-repeat;background-position:right 10px center;background-size:8px">
+              <option value="back">BACK</option>
+              <option value="front">FRONT</option>
+            </select>
+          </div>
+
+          <!-- Size -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid #f0f0f0">
+            <div style="font-size:13px;font-weight:600;color:#333">Size</div>
+            <select id="nn-size" onchange="nnUpdatePreview()" style="padding:7px 12px;border:1.5px solid #e0e0e0;border-radius:20px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;color:#333;background:#fff;cursor:pointer;appearance:none;padding-right:28px;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 6%22><path d=%22M0 0l5 6 5-6z%22 fill=%22%23999%22/></svg>');background-repeat:no-repeat;background-position:right 10px center;background-size:8px">
+              <option value="small">SMALL</option>
+              <option value="medium">MEDIUM</option>
+              <option value="large" selected>LARGE</option>
+              <option value="xl">X-LARGE</option>
             </select>
           </div>
 
           <!-- Font -->
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid #f0f0f0">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid #f0f0f0">
             <div style="font-size:13px;font-weight:600;color:#333">Font</div>
-            <select id="nn-font" onchange="nnUpdatePreview()" style="padding:6px 10px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;color:#333;background:#fff">
-              <option value="'Bebas Neue',sans-serif">Bebas Neue</option>
-              <option value="'Anton',sans-serif">Anton</option>
-              <option value="'Oswald',sans-serif">Oswald</option>
-              <option value="'Russo One',sans-serif">Russo One</option>
-              <option value="'Inter',sans-serif">Inter</option>
-              <option value="'Squada One',sans-serif">Squada One</option>
+            <select id="nn-font" onchange="nnUpdatePreview()" style="padding:7px 12px;border:1.5px solid #e0e0e0;border-radius:20px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;color:#333;background:#fff;cursor:pointer;appearance:none;padding-right:28px;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 6%22><path d=%22M0 0l5 6 5-6z%22 fill=%22%23999%22/></svg>');background-repeat:no-repeat;background-position:right 10px center;background-size:8px">
+              <option value="'Graduate',sans-serif">COLLEGIATE</option>
+              <option value="'Bebas Neue',sans-serif">BEBAS NEUE</option>
+              <option value="'Anton',sans-serif">ANTON</option>
+              <option value="'Russo One',sans-serif">RUSSO ONE</option>
+              <option value="'Oswald',sans-serif">OSWALD</option>
+              <option value="'Squada One',sans-serif">SQUADA ONE</option>
+              <option value="'Inter',sans-serif">INTER</option>
             </select>
           </div>
 
           <!-- Color -->
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid #f0f0f0;margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid #f0f0f0;margin-bottom:18px">
             <div style="font-size:13px;font-weight:600;color:#333">Color</div>
-            <div style="display:flex;align-items:center;gap:8px">
-              <span id="nn-color-label" style="font-size:13px;font-weight:600;color:#555">Black</span>
-              <div id="nn-color-swatch" style="width:26px;height:26px;background:#111111;border-radius:6px;border:1.5px solid rgba(0,0,0,.1);cursor:pointer" onclick="document.getElementById('nn-color-input').click()"></div>
+            <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onclick="document.getElementById('nn-color-input').click()">
+              <span id="nn-color-label" style="font-size:13px;font-weight:700;color:#333">Black</span>
+              <div id="nn-color-swatch" style="width:28px;height:28px;background:#111111;border-radius:6px;border:1.5px solid rgba(0,0,0,.12)"></div>
+              <span style="color:#bbb;font-size:16px">›</span>
               <input type="color" id="nn-color-input" value="#111111" style="opacity:0;width:0;height:0;position:absolute" onchange="nnPickColor(this.value)">
-              <span style="color:#bbb;font-size:14px;cursor:pointer" onclick="document.getElementById('nn-color-input').click()">›</span>
             </div>
           </div>
 
-          <!-- Pricing -->
-          <div id="nn-pricing" style="background:#f0f7ff;border-radius:10px;padding:10px 14px;font-size:12px;color:#555;margin-bottom:14px;line-height:1.8;text-align:center">
-            Names = <strong>$4.00</strong> &nbsp;|&nbsp; Numbers = <strong>$3.00</strong><br>Names &amp; Numbers = <strong>$6.00</strong>
-          </div>
-
-          <!-- Enter button -->
-          <button onclick="nnOpenRoster()" style="width:100%;padding:14px;background:#4a9eff;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 3px 12px rgba(74,158,255,.3)">
+          <!-- CTA Button -->
+          <button onclick="nnOpenRoster()" style="width:100%;padding:15px;background:#4a9eff;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 4px 14px rgba(74,158,255,.35);letter-spacing:.01em">
             Enter Names/Numbers →
           </button>
+
+          <!-- Pricing -->
+          <div style="margin-top:14px;font-size:12px;color:#aaa;text-align:center;line-height:1.9">
+            Complete list required for accurate pricing<br>
+            Names = <strong style="color:#555">$4.00</strong> &nbsp;|&nbsp; Numbers = <strong style="color:#555">$3.00</strong><br>
+            Names &amp; Numbers = <strong style="color:#555">$6.00</strong>
+          </div>
 
         </div>
       </div>
@@ -3087,6 +3106,12 @@ function sPanel(id,btn){
   document.getElementById("s-panel").style.display="flex";
   activePanelId=id;
   if(id==="qty") buildQtyGrid();
+  // Names panel: auto-switch to back and show preview immediately
+  if(id==="names"){
+    const sideEl = document.getElementById('nn-side');
+    if(sideEl) sideEl.value = 'back';
+    setTimeout(()=>nnUpdatePreview(), 50); // slight delay so panel is visible first
+  }
 }
 function sClosePanel(){
   document.getElementById("s-panel").style.display="none";
@@ -4422,35 +4447,46 @@ function nnUpdatePreview(){
   const wrap = document.getElementById('s-shirt-wrap');
   if(!wrap) return;
 
-  const hasNames   = document.getElementById('nn-names')?.checked;
-  const hasSubtitle= document.getElementById('nn-subtitle')?.checked;
-  const hasNums    = document.getElementById('nn-numbers')?.checked;
-  const font       = document.getElementById('nn-font')?.value || "'Bebas Neue',sans-serif";
-  const side       = document.getElementById('nn-side')?.value || 'back';
+  const hasNames    = document.getElementById('nn-names')?.checked;
+  const hasSubtitle = document.getElementById('nn-subtitle')?.checked;
+  const hasNums     = document.getElementById('nn-numbers')?.checked;
+  const font        = document.getElementById('nn-font')?.value || "'Graduate',sans-serif";
+  const side        = document.getElementById('nn-side')?.value || 'back';
+  const sizeVal     = document.getElementById('nn-size')?.value || 'large';
 
-  // Switch shirt view to match selected side
+  // Auto-switch shirt to the selected side
   sSetView(side);
+
+  // Font sizes per size setting
+  const SIZES = {
+    small:  { name:32,  sub:14, num:70  },
+    medium: { name:42,  sub:18, num:90  },
+    large:  { name:54,  sub:22, num:118 },
+    xl:     { name:66,  sub:26, num:146 },
+  };
+  const sz = SIZES[sizeVal] || SIZES.large;
 
   const preview = document.createElement('div');
   preview.id = 'nn-preview';
-  preview.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;z-index:20;gap:4px;padding-top:60px;';
+  // Position in the upper-center of the shirt print area (back)
+  preview.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;z-index:20;gap:2px;padding-top:40px;';
 
   if(hasNames){
     const nameEl = document.createElement('div');
     nameEl.textContent = 'NAME';
-    nameEl.style.cssText = `font-family:${font};font-size:52px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:2px;text-shadow:0 1px 3px rgba(0,0,0,.08)`;
+    nameEl.style.cssText = `font-family:${font};font-size:${sz.name}px;font-weight:900;color:${nnColor};line-height:1.05;letter-spacing:3px;`;
     preview.appendChild(nameEl);
   }
   if(hasSubtitle){
     const subEl = document.createElement('div');
     subEl.textContent = 'SUBTITLE';
-    subEl.style.cssText = `font-family:${font};font-size:22px;font-weight:700;color:${nnColor};line-height:1;letter-spacing:3px;opacity:.8`;
+    subEl.style.cssText = `font-family:${font};font-size:${sz.sub}px;font-weight:700;color:${nnColor};line-height:1.2;letter-spacing:4px;opacity:.85;margin-top:2px;`;
     preview.appendChild(subEl);
   }
   if(hasNums){
     const numEl = document.createElement('div');
     numEl.textContent = '00';
-    numEl.style.cssText = `font-family:${font};font-size:110px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:4px;text-shadow:0 2px 6px rgba(0,0,0,.1)`;
+    numEl.style.cssText = `font-family:${font};font-size:${sz.num}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:2px;margin-top:${hasNames||hasSubtitle?4:0}px;`;
     preview.appendChild(numEl);
   }
 
@@ -4613,7 +4649,13 @@ async function loadBestSellers(category, tabEl){
   grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">Loading...</div>`;
 
   try {
-    const res = await fetch(`${SERVER}/catalog/products?category=${encodeURIComponent(category)}&limit=4`);
+    // Use bestsellers endpoint — seeds Gildan/Bella+Canvas/Next Level first,
+    // auto-evolves as real orders come in and order_count increments
+    const isGender = category === "Ladies";
+    const params = new URLSearchParams({ limit: 4 });
+    if(isGender) params.set("gender", "ladies");
+    else if(category) params.set("category", category);
+    const res = await fetch(`${SERVER}/catalog/bestsellers?${params}`);
     const data = await res.json();
     const products = data.products || [];
     if(!products.length){ grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa">No products found</div>`; return; }
