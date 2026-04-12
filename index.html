@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v8.0 -->
+<!-- v8.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1244,7 +1244,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v8.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v8.1</span>
   </div>
 
 </nav>
@@ -6043,9 +6043,14 @@ function captureDesignPreview(){
   // Just store the current shirt image src — canvas CORS blocks S&S images
   // The design overlay is shown separately in Step 2
   try {
-    const shirtImg = document.getElementById('s-shirt');
     const thumbImg = document.getElementById('sth-f-img');
-    orderState.designPreview = (shirtImg && shirtImg.src && shirtImg.complete) ? shirtImg.src : (thumbImg?.src || '');
+    const shirtImg = document.getElementById('s-shirt');
+    // sth-f-img has the real S&S photo; s-shirt may be base64 placeholder
+    const thumbSrc = thumbImg?.src || '';
+    const shirtSrc = shirtImg?.src || '';
+    // Use thumb if it's a real URL (not base64), otherwise use shirt
+    orderState.designPreview = (thumbSrc && !thumbSrc.startsWith('data:')) ? thumbSrc
+      : (shirtSrc && !shirtSrc.startsWith('data:')) ? shirtSrc : thumbSrc;
     
     // Also capture design layer info for display in step 2
     const wrap = document.getElementById('s-shirt-wrap');
