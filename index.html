@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.4 -->
+<!-- v7.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1244,7 +1244,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.5</span>
   </div>
 
 </nav>
@@ -6031,15 +6031,15 @@ function goStep1(){
   setActiveStep(1);
 }
 
-async function goStep2(){
-  // Capture design preview before switching pages
-  await captureDesignPreview();
+function goStep2(){
+  // Capture design preview before switching pages (non-blocking)
+  try { captureDesignPreview(); } catch(e) { console.warn('captureDesignPreview failed:', e); }
   showPage('step2');
   setActiveStep(2);
   buildStep2();
 }
 
-async function captureDesignPreview(){
+function captureDesignPreview(){
   try {
     const wrap = document.getElementById('s-shirt-wrap');
     if(!wrap) return;
