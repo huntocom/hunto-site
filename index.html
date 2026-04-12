@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v6.1 -->
+<!-- v6.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1227,7 +1227,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.2</span>
   </div>
 
 </nav>
@@ -3312,7 +3312,9 @@ function sSetView(v){
     if(v === 'back'){
       // Back: restore NAME/00 preview, grey out sidebar (back is N&N only)
       if(iconbar) iconbar.classList.add('nn-active-mode');
-      setTimeout(()=>nnUpdatePreview(), 200);
+      // Call immediately for instant feedback, then again after image loads
+      nnUpdatePreview();
+      setTimeout(()=>nnUpdatePreview(), 300);
     } else {
       // Front: clear preview, restore full sidebar for design work
       nnClearPreview();
@@ -4398,8 +4400,8 @@ function nnUpdatePreview(){
   const sizeVal     = (document.getElementById('nn-size')?.value) || 'large';
   const col         = nnColor || '#111111';
 
-  // Only switch view if needed (avoids race condition causing double-render)
-  if(sView !== side){ try { sSetView(side); } catch(e){ console.warn('sSetView err:',e); } }
+  // Always ensure correct view is shown
+  try { sSetView(side); } catch(e){ console.warn('sSetView err:',e); }
 
   // Front = blank canvas for their custom team design — just show shirt, restore pills
   if(side === 'front'){
