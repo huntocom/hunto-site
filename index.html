@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.6 -->
+<!-- v5.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1226,7 +1226,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.6</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.7</span>
   </div>
 
 </nav>
@@ -3291,6 +3291,15 @@ function sSetView(v){
   const photoUrl = ssPhoto || styleImg || getShirtPhotoUrl(sState.product.id, c?.n||c?.name, v);
   img.src = photoUrl;
   img.onerror=()=>{ img.src = styleImg || (v==="back"?IMG_B:IMG_F); };
+  // If N&N preview is showing and user switched to front, clear it
+  if(v === 'front' && document.getElementById('nn-preview')){
+    nnClearPreview();
+  }
+  // Sync the N&N side dropdown if panel is open
+  if(activePanelId === 'names'){
+    const sideEl = document.getElementById('nn-side');
+    if(sideEl && sideEl.value !== v) sideEl.value = v;
+  }
   sUpdateAll();
 }
 
