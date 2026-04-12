@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.9 -->
+<!-- v6.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -481,6 +481,7 @@ footer{background:#111;padding:56px 32px 28px}
 }
 .s-ibtn:hover{background:#f5f5f5}
 .s-ibtn.on{background:#f0f7ff}
+.s-iconbar.nn-active-mode .s-ibtn:not(#sib-names){opacity:.25 !important;pointer-events:none !important;cursor:not-allowed !important;}
 .s-ibtn-icon{font-size:20px;line-height:1}
 .s-ibtn-label{font-size:9px;font-weight:700;color:#999;text-align:center;line-height:1.2;letter-spacing:.02em}
 .s-ibtn.on .s-ibtn-label{color:#4a9eff}
@@ -1226,7 +1227,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.9</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v6.0</span>
   </div>
 
 </nav>
@@ -3309,7 +3310,7 @@ function sSetView(v){
     if(sideEl) sideEl.value = v; // keep dropdown in sync
     if(v === 'back'){
       // Restore N&N preview when switching back to back
-      setTimeout(()=>nnUpdatePreview(), 30);
+      setTimeout(()=>nnUpdatePreview(), 200);
     } else {
       // Front = clear preview, restore pills for design work
       nnClearPreview();
@@ -4394,8 +4395,8 @@ function nnUpdatePreview(){
   const sizeVal     = (document.getElementById('nn-size')?.value) || 'large';
   const col         = nnColor || '#111111';
 
-  // Switch shirt to chosen side
-  try { sSetView(side); } catch(e){ console.warn('sSetView err:',e); }
+  // Only switch view if needed (avoids race condition causing double-render)
+  if(sView !== side){ try { sSetView(side); } catch(e){ console.warn('sSetView err:',e); } }
 
   // Front = blank canvas for their custom team design — just show shirt, restore pills
   if(side === 'front'){
