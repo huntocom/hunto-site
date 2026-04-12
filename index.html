@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.8 -->
+<!-- v5.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1226,7 +1226,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.8</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.9</span>
   </div>
 
 </nav>
@@ -3013,6 +3013,12 @@ function initStudio(){
 }
 
 function sPanel(id,btn){
+  // If leaving N&N panel, restore sidebar
+  if(activePanelId === 'names' && id !== 'names'){
+    const iconbar = document.querySelector('.s-iconbar');
+    if(iconbar) iconbar.classList.remove('nn-active-mode');
+    nnClearPreview();
+  }
   document.querySelectorAll(".s-ibtn").forEach(b=>b.classList.remove("on"));
   if(btn)btn.classList.add("on");
   ["products","text","ai","upload","color","size","keith","names","qty"].forEach(p=>{
@@ -3026,7 +3032,10 @@ function sPanel(id,btn){
   if(id==="names"){
     const sideEl = document.getElementById('nn-side');
     if(sideEl) sideEl.value = 'back';
-    nnUpdatePreview(); // runs instantly — uses print-area-back div, no timing issues
+    // Grey out other sidebar buttons while N&N is active
+    const iconbar = document.querySelector('.s-iconbar');
+    if(iconbar) iconbar.classList.add('nn-active-mode');
+    nnUpdatePreview();
   }
 }
 function sClosePanel(){
@@ -3034,6 +3043,9 @@ function sClosePanel(){
   document.querySelectorAll(".s-ibtn").forEach(b=>b.classList.remove("on"));
   activePanelId=null;
   nnClearPreview();
+  // Restore all sidebar buttons
+  const iconbar = document.querySelector('.s-iconbar');
+  if(iconbar) iconbar.classList.remove('nn-active-mode');
 }
 
 function buildSGarments(){
