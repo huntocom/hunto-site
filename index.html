@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v4.0 -->
+<!-- v4.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1197,7 +1197,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.4</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.5</span>
   </div>
 
 </nav>
@@ -4640,9 +4640,11 @@ async function shopLoadCatalog() {
     shopState.currentPage=1;
     shopState.displayed=data.products||[];
 
-    // Get brands for sidebar
-    const brandSet=new Set((data.products||[]).map(p=>p.brand).filter(Boolean));
-    const brandRes=await fetch(`${SERVER}/catalog/brands`);
+    // Get brands for sidebar — pass same category/gender so only relevant brands appear
+    const brandParams=new URLSearchParams();
+    if(shopState.category) brandParams.set('category',shopState.category);
+    if(shopState.gender)   brandParams.set('gender',shopState.gender);
+    const brandRes=await fetch(`${SERVER}/catalog/brands?${brandParams}`);
     const brandData=await brandRes.json();
     shopState.brands=(brandData.brands||[]).map(b=>b.name).filter(Boolean);
   } catch(err) {
