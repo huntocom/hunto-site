@@ -1132,6 +1132,34 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
   </div>
 
+  <!-- Kids -->
+  <div class="mega-nav-item">
+    <button class="mega-nav-btn" onclick="goShopGender('youth','')">Kids <span class="chevron">▾</span></button>
+    <div class="mega-dropdown">
+      <button onclick="goShopGender('youth','T-Shirts')">Kids T-Shirts <span class="nav-popular">Popular</span></button>
+      <button onclick="goShopGender('youth','Fleece')">Kids Hoodies &amp; Sweatshirts</button>
+      <button onclick="goShopGender('youth','Polos')">Youth Polos</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="goShopGender('toddler','')">Toddler</button>
+      <button onclick="goShopGender('toddler','')">Baby / Infant</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="goShopGender('youth','')" style="color:#4a9eff;font-weight:700">View All Kids &rarr;</button>
+    </div>
+  </div>
+
+  <!-- Safety & Hi-Vis -->
+  <div class="mega-nav-item">
+    <button class="mega-nav-btn" onclick="goShop('Safety')">Safety <span class="chevron">▾</span></button>
+    <div class="mega-dropdown">
+      <button onclick="goShop('Safety')">All Safety Apparel <span class="nav-popular">Popular</span></button>
+      <button onclick="shopState.search='hi-vis';goShop('Safety')">Hi-Vis Shirts</button>
+      <button onclick="shopState.search='reflective';goShop('Safety')">Reflective Gear</button>
+      <button onclick="shopState.search='hi-vis';goShop('Outerwear')">Hi-Vis Jackets &amp; Vests</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="goShop('Safety')" style="color:#4a9eff;font-weight:700">View All Safety &rarr;</button>
+    </div>
+  </div>
+
   <!-- Brands -->
   <div class="mega-nav-item">
     <button class="mega-nav-btn">Brands <span class="chevron">▾</span></button>
@@ -1182,7 +1210,7 @@ footer{background:#111;padding:56px 32px 28px}
         <div class="mega-col-hdr">More Categories</div>
         <button onclick="shopState.search='performance';goShop('')">Activewear</button>
         <button onclick="goShop('Bottoms')">Bottoms &amp; Shorts</button>
-        <button onclick="goShop('Safety')">Safety Apparel</button>
+        <button onclick="goShop('Safety')">Safety &amp; Hi-Vis Apparel</button>
         <button onclick="goShop('BigTall')">Big &amp; Tall</button>
         <button onclick="shopState.search='tie dye';goShop('')">Tie Dye</button>
       </div>
@@ -1210,6 +1238,9 @@ footer{background:#111;padding:56px 32px 28px}
   <button class="mobile-nav-link" onclick="goShop('Fleece');closeMobileMenu()">🧥 Hoodies</button>
   <button class="mobile-nav-link" onclick="goShop('Polos');closeMobileMenu()">👔 Polo Shirts</button>
   <button class="mobile-nav-link" onclick="goShop('Outerwear');closeMobileMenu()">🧣 Outerwear</button>
+  <button class="mobile-nav-link" onclick="goShopGender('youth','');closeMobileMenu()">👦 Kids &amp; Youth</button>
+  <button class="mobile-nav-link" onclick="goShopGender('toddler','');closeMobileMenu()">🍼 Toddler &amp; Infant</button>
+  <button class="mobile-nav-link" onclick="goShop('Safety');closeMobileMenu()">🦺 Safety &amp; Hi-Vis</button>
   <button class="mobile-nav-link" onclick="goShop('');closeMobileMenu()">🛍 All Products</button>
   <div style="margin-top:16px">
     <button style="width:100%;height:52px;background:#4a9eff;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;font-family:Inter,sans-serif" onclick="openStudio(null);closeMobileMenu()">Start Designing →</button>
@@ -1712,6 +1743,36 @@ footer{background:#111;padding:56px 32px 28px}
         <div id="product-modal-loading" style="text-align:center;padding:40px;color:#aaa;font-size:14px">Loading products...</div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ████ GARMENT PICKER MODAL ████ -->
+<div id="garment-picker" onclick="if(event.target===this)closeGarmentPicker()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:900;display:none;align-items:center;justify-content:center;padding:24px">
+  <div style="background:#fff;border-radius:24px;max-width:760px;width:100%;padding:40px;position:relative;box-shadow:0 24px 64px rgba(0,0,0,.25)">
+    <button onclick="closeGarmentPicker()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;color:#aaa;cursor:pointer;line-height:1">×</button>
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="font-size:11px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">✦ Start Designing</div>
+      <h2 style="font-size:28px;font-weight:900;color:#111;letter-spacing:-1px;margin-bottom:8px">Pick Your Garment</h2>
+      <p style="font-size:14px;color:#888;font-weight:400">Choose a product to start customizing, or browse our full catalog.</p>
+    </div>
+
+    <!-- Default product cards -->
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px" id="gp-cards">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- Divider -->
+    <div style="display:flex;align-items:center;gap:12px;margin:20px 0">
+      <div style="flex:1;height:1px;background:#f0f0f0"></div>
+      <span style="font-size:12px;color:#ccc;font-weight:600">OR</span>
+      <div style="flex:1;height:1px;background:#f0f0f0"></div>
+    </div>
+
+    <!-- Browse all -->
+    <button onclick="closeGarmentPicker();openProductModal()" style="width:100%;height:48px;border:1.5px solid #e0e0e0;border-radius:14px;background:#fff;font-size:14px;font-weight:700;color:#444;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px"
+      onmouseover="this.style.borderColor='#4a9eff';this.style.color='#4a9eff'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#444'">
+      🛍 Browse All Products
+    </button>
   </div>
 </div>
 
@@ -2577,11 +2638,73 @@ async function goPDP(id){
 }
 function openStudio(id){
   if(id){
+    // Specific product requested — go straight to studio
     sState.product = PRODUCTS.find(p=>p.id===id)||PRODUCTS[0];
     sState.color   = sState.product.colors[0];
+    showPage("studio");
+    initStudio();
+  } else {
+    // No product — show garment picker first
+    showGarmentPicker();
   }
-  showPage("studio");
-  initStudio();
+}
+
+function showGarmentPicker(){
+  const picker = document.getElementById("garment-picker");
+  if(!picker) return;
+  // Build default product cards
+  const gpCards = document.getElementById("gp-cards");
+  if(gpCards){
+    const featured = [
+      {id:"8000",  emoji:"👕", label:"Classic T-Shirt",   sub:"Gildan DryBlend · 50/50 · From $28",  badge:"Most Popular"},
+      {id:"64000", emoji:"👕", label:"Premium T-Shirt",   sub:"Gildan Softstyle · 100% Cotton · From $32", badge:"Super Soft"},
+      {id:"18500", emoji:"🧥", label:"Classic Hoodie",    sub:"Gildan Heavy Blend · 50/50 · From $52", badge:""},
+      {id:"SF500", emoji:"🧥", label:"Premium Hoodie",    sub:"Gildan Softstyle · 80/20 · From $56",  badge:"Premium"},
+    ];
+    gpCards.innerHTML = featured.map(f => `
+      <div onclick="pickGarmentAndDesign('${f.id}')" style="border:1.5px solid #e8e8e8;border-radius:16px;padding:20px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:14px;position:relative"
+        onmouseover="this.style.borderColor='#4a9eff';this.style.background='#f0f7ff'" onmouseout="this.style.borderColor='#e8e8e8';this.style.background=''">
+        ${f.badge ? `<div style="position:absolute;top:10px;right:10px;background:#4a9eff;color:#fff;font-size:9px;font-weight:800;padding:2px 8px;border-radius:10px;letter-spacing:.05em;text-transform:uppercase">${f.badge}</div>` : ""}
+        <div style="font-size:36px;flex-shrink:0">${f.emoji}</div>
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#111;margin-bottom:3px">${f.label}</div>
+          <div style="font-size:12px;color:#999;font-weight:400">${f.sub}</div>
+        </div>
+        <div style="margin-left:auto;color:#ccc;font-size:18px;flex-shrink:0">›</div>
+      </div>`).join("");
+  }
+  picker.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeGarmentPicker(){
+  const picker = document.getElementById("garment-picker");
+  if(picker) picker.style.display = "none";
+  document.body.style.overflow = "";
+}
+
+async function pickGarmentAndDesign(id){
+  closeGarmentPicker();
+  // Try to load real S&S product data
+  const GILDAN_STYLE_IDS = {"8000":146,"64000":32,"18500":423,"SF500":423};
+  const styleId = GILDAN_STYLE_IDS[id];
+  if(styleId){
+    try {
+      const res = await fetch(`${SERVER}/catalog/product/${styleId}`);
+      const p = await res.json();
+      if(!p.error && p.colors && p.colors.length > 0){
+        const colors = p.colors.map(c=>({n:c.name,h:c.hex||"#888",l:(c.hex||"").toLowerCase()==="#ffffff",front:c.front,back:c.back}));
+        const base = PRODUCTS.find(x=>x.id===id)||PRODUCTS[0];
+        sState.product = {...base, colors, styleId:p.style_id, image:p.image};
+        sState.color = colors[0];
+        showPage("studio"); initStudio(); return;
+      }
+    } catch(e){}
+  }
+  // Fallback to hardcoded
+  sState.product = PRODUCTS.find(p=>p.id===id)||PRODUCTS[0];
+  sState.color   = sState.product.colors[0];
+  showPage("studio"); initStudio();
 }
 function openPDPStudio(){
   sState.product = pdpState.product;
