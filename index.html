@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v4.8 -->
+<!-- v4.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1226,7 +1226,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.8</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v4.9</span>
   </div>
 
 </nav>
@@ -4368,12 +4368,7 @@ function nnUpdatePreview(){
   const side        = document.getElementById('nn-side')?.value || 'back';
   const sizeVal     = document.getElementById('nn-size')?.value || 'large';
 
-  // Switch shirt to chosen side
   sSetView(side);
-
-  // Kill float pills — both methods to be safe
-  const fp = document.getElementById('s-floats');
-  if(fp){ fp.style.visibility='hidden'; fp.style.opacity='0'; }
 
   const SIZES = {
     small:  { name:38, sub:16, num:86  },
@@ -4383,72 +4378,30 @@ function nnUpdatePreview(){
   };
   const sz = SIZES[sizeVal] || SIZES.large;
 
-  // Calculate preview position from s-shirt-wrap (always visible, always has dimensions)
-  // Print area on back: 280px wide, starts 185px from top of shirt, horizontally centered
-  function doRender(){
-    const wrap = document.getElementById('s-shirt-wrap');
-    if(!wrap) return;
-    const r = wrap.getBoundingClientRect();
-    if(!r.width) { setTimeout(doRender, 100); return; } // wait if not laid out yet
+  // Strategy: hijack the float pills div — it's already perfectly centered on the shirt.
+  // Save original content, replace with NAME/00 preview.
+  const fp = document.getElementById('s-floats');
+  if(!fp) return;
 
-    const previewW = Math.min(280, r.width * 0.6);
-    const top  = r.top  + (r.height * 0.24); // ~24% down = collar area start
-    const left = r.left + (r.width  - previewW) / 2;
+  // Save original HTML so we can restore it
+  fp.dataset.nnOriginal = fp.innerHTML;
+  fp.classList.remove('hidden');
+  fp.style.cssText = 'display:flex !important; flex-direction:column; align-items:center; gap:4px; position:absolute; top:22%; left:50%; transform:translateX(-50%); z-index:10; pointer-events:none;';
 
-    const existing = document.getElementById('nn-preview');
-    if(existing) existing.remove();
+  let html = '';
+  if(hasNames)    html += `<div style="font-family:${font};font-size:${sz.name}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:4px;text-align:center;white-space:nowrap;">NAME</div>`;
+  if(hasSubtitle) html += `<div style="font-family:${font};font-size:${sz.sub}px;font-weight:700;color:${nnColor};line-height:1.2;letter-spacing:5px;opacity:.8;text-align:center;white-space:nowrap;">SUBTITLE</div>`;
+  if(hasNums)     html += `<div style="font-family:${font};font-size:${sz.num}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:2px;text-align:center;white-space:nowrap;margin-top:${hasNames||hasSubtitle?8:0}px;">00</div>`;
 
-    const preview = document.createElement('div');
-    preview.id = 'nn-preview';
-    preview.style.cssText = [
-      'position:fixed',
-      `top:${Math.round(top)}px`,
-      `left:${Math.round(left)}px`,
-      `width:${Math.round(previewW)}px`,
-      'display:flex',
-      'flex-direction:column',
-      'align-items:center',
-      'justify-content:flex-start',
-      'padding-top:6px',
-      'gap:2px',
-      'pointer-events:none',
-      'z-index:9999',
-    ].join(';');
-
-    if(hasNames){
-      const el = document.createElement('div');
-      el.textContent = 'NAME';
-      el.style.cssText = `font-family:${font};font-size:${sz.name}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:4px;text-align:center;width:100%;`;
-      preview.appendChild(el);
-    }
-    if(hasSubtitle){
-      const el = document.createElement('div');
-      el.textContent = 'SUBTITLE';
-      el.style.cssText = `font-family:${font};font-size:${sz.sub}px;font-weight:700;color:${nnColor};line-height:1.2;letter-spacing:5px;opacity:.8;text-align:center;width:100%;margin-top:2px;`;
-      preview.appendChild(el);
-    }
-    if(hasNums){
-      const el = document.createElement('div');
-      el.textContent = '00';
-      el.style.cssText = `font-family:${font};font-size:${sz.num}px;font-weight:900;color:${nnColor};line-height:1;letter-spacing:2px;text-align:center;width:100%;margin-top:${hasNames||hasSubtitle?8:0}px;`;
-      preview.appendChild(el);
-    }
-
-    document.body.appendChild(preview);
-  }
-
-  // Small delay to let sSetView finish loading the back image
-  setTimeout(doRender, 80);
+  fp.innerHTML = `<div id="nn-preview" style="display:flex;flex-direction:column;align-items:center;gap:3px;">${html}</div>`;
 }
 
 function nnClearPreview(){
-  const el = document.getElementById('nn-preview');
-  if(el) el.remove();
   const fp = document.getElementById('s-floats');
-  if(fp){
-    fp.style.visibility = '';
-    fp.style.opacity = '';
-    fp.classList.remove('nn-mode');
+  if(fp && fp.dataset.nnOriginal !== undefined){
+    fp.innerHTML = fp.dataset.nnOriginal;
+    delete fp.dataset.nnOriginal;
+    fp.style.cssText = '';
     fp.classList.toggle('hidden', (sLayers[sView]||[]).length > 0);
   }
 }
