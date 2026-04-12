@@ -1072,6 +1072,28 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 
   <div class="mega-nav-item">
+    <button class="mega-nav-btn" onclick="goShop('Mens')">Men's <span class="chevron">▾</span></button>
+    <div class="mega-dropdown">
+      <button onclick="shopState.search='T-Shirt';goShop('Mens')">Men's T-Shirts</button>
+      <button onclick="shopState.search='Hood';goShop('Mens')">Men's Hoodies</button>
+      <button onclick="shopState.search='Polo';goShop('Mens')">Men's Polos</button>
+      <button onclick="shopState.search='Jacket';goShop('Mens')">Men's Outerwear</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="shopState.search='';goShop('Mens')" style="color:#4a9eff;font-weight:700">View All Men's →</button>
+    </div>
+  </div>
+
+  <div class="mega-nav-item">
+    <button class="mega-nav-btn" onclick="goShop('Youth')">Kids <span class="chevron">▾</span></button>
+    <div class="mega-dropdown">
+      <button onclick="shopState.search='';goShop('Youth')">Youth / Kids</button>
+      <button onclick="shopState.search='';goShop('Toddler')">Toddler / Infant</button>
+      <div class="mega-dropdown-sep"></div>
+      <button onclick="shopState.search='';goShop('Youth')" style="color:#4a9eff;font-weight:700">View All Kids →</button>
+    </div>
+  </div>
+
+  <div class="mega-nav-item">
     <button class="mega-nav-btn" onclick="goShop('T-Shirts - Core')">T-Shirts <span class="chevron">▾</span></button>
     <div class="mega-dropdown">
       <div class="mega-dropdown-header">By Type</div>
@@ -4534,15 +4556,12 @@ let shopState = {
 async function goShop(category) {
   showPage("shop");
   document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("on"));
+  const genderCats = ['ladies','mens','youth','toddler'];
   if(category !== undefined){
-    shopState.category = category || "";
-    // For Ladies, keep whatever search was pre-set, or default to Women
-    if(category.toLowerCase() === 'ladies'){
-      shopState.category = "ladies";
-      if(!shopState.search) shopState.search = "";
-    }
+    const isGender = genderCats.includes((category||'').toLowerCase());
+    shopState.category = isGender ? category.toLowerCase() : (category||'');
+    if(!isGender) shopState.search = '';
   }
-  // Update search input to reflect current search
   const searchEl = document.getElementById("shop-search");
   if(searchEl) searchEl.value = shopState.search || "";
   await shopLoadCatalog();
@@ -4690,6 +4709,9 @@ function shopRenderCats(){
     {label:"Crewnecks",        value:"Fleece - Core - Crew"},
     {label:"Premium Crew",     value:"Fleece - Premium - Crew"},
     {label:"Women's",          value:"Ladies"},
+    {label:"Men's",            value:"Mens"},
+    {label:"Youth/Kids",       value:"Youth"},
+    {label:"Toddler/Infant",   value:"Toddler"},
     {label:"Polos",            value:"Polos"},
     {label:"Outerwear",        value:"Outerwear"},
     {label:"Bottoms",          value:"Bottoms"},
