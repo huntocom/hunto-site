@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.4 -->
+<!-- v5.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1226,7 +1226,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.4</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.5</span>
   </div>
 
 </nav>
@@ -3285,6 +3285,7 @@ function sSetView(v){
   const img=document.getElementById("s-shirt");
   img.style.mixBlendMode="normal";
   img.style.opacity="1";
+  const c = sProducts[sActiveIdx]?.color || sState.color; // was missing — caused front/back to not switch
   const ssPhoto = v==="back" ? (c?.back||c?.front) : (c?.front||c?.back);
   const styleImg = sState.product?.image;
   const photoUrl = ssPhoto || styleImg || getShirtPhotoUrl(sState.product.id, c?.n||c?.name, v);
