@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7.7 -->
+<!-- v7.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1244,7 +1244,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.7</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v7.8</span>
   </div>
 
 </nav>
@@ -6111,22 +6111,34 @@ function goStep3(){
 
 // ── Step 2: Quantities ─────────────────────────────────
 function buildStep2(){
-  const p = sState.product;
-  const c = sState.color;
-  if(!p) return;
+  // Always get best available data — never fail silently
+  const p = sState.product || PRODUCTS[0] || {};
+  const c = sState.color || (p.colors && p.colors[0]) || {};
 
-  // Use captured design preview first, fall back to shirt photo
+  // Image: use current shirt img src as primary (most reliable)
+  const shirtEl = document.getElementById('s-shirt');
+  const thumbEl = document.getElementById('sth-f-img');
   const imgSrc = orderState.designPreview
-    || c?.front || c?.back || p.image
-    || document.getElementById('sth-f-img')?.src || '';
+    || (shirtEl && shirtEl.src && !shirtEl.src.startsWith('data:image/jpeg;base64,/9') ? shirtEl.src : '')
+    || thumbEl?.src || c?.front || c?.back || '';
   const imgEl = document.getElementById('step2-shirt-img');
-  if(imgEl){ imgEl.src = imgSrc; imgEl.style.display = imgSrc ? 'block' : 'none'; }
+  if(imgEl){ imgEl.src = imgSrc; imgEl.style.display = ''; }
 
-  document.getElementById('step2-product-name').textContent = p.fullTitle || p.name || p.title || 'Custom Shirt';
-  document.getElementById('step2-product-meta').textContent = (p.brand||'Gildan') + ' · ' + (c?.n||c?.name||'') + ' · Style #' + (p.id||p.style_id||'');
-  const basePrice = parseFloat(p.price||p.base_retail||28);
-  document.getElementById('step2-base-price').textContent = '$' + basePrice.toFixed(2);
-  document.getElementById('step2-total').textContent = '$0.00';
+  const productName = p.fullTitle || p.name || p.title || p.style_name || 'Custom Shirt';
+  const brand = p.brand || p.brand_name || 'Gildan';
+  const colorName = c?.n || c?.name || c?.color_name || '';
+  const styleId = p.id || p.style_id || '';
+  const basePrice = parseFloat(p.price || p.base_retail || p.retail_price || 28);
+
+  const nameEl = document.getElementById('step2-product-name');
+  const metaEl = document.getElementById('step2-product-meta');
+  const priceEl = document.getElementById('step2-base-price');
+  const totalEl = document.getElementById('step2-total');
+
+  if(nameEl) nameEl.textContent = productName;
+  if(metaEl) metaEl.textContent = brand + (colorName ? ' · ' + colorName : '') + (styleId ? ' · Style #' + styleId : '');
+  if(priceEl) priceEl.textContent = '$' + basePrice.toFixed(2);
+  if(totalEl) totalEl.textContent = '$0.00';
 
   // Always use standard sizes as fallback
   const sizes = ['S','M','L','XL','2XL','3XL'];
