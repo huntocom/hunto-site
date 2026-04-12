@@ -4884,27 +4884,34 @@ async function shopFetch(){
 
 function shopRenderCats(){
   const wrap=document.getElementById("shop-cats");if(!wrap)return;
-  const cats=[
-    {label:"All",              value:""},
-    {label:"T-Shirts",         value:"T-Shirts - Core"},
-    {label:"Premium T-Shirts", value:"T-Shirts - Premium"},
-    {label:"Long Sleeve",      value:"T-Shirts - Long Sleeve"},
-    {label:"Hoodies",          value:"Fleece - Core - Hood"},
-    {label:"Premium Hoodies",  value:"Fleece - Premium - Hood"},
-    {label:"Crewnecks",        value:"Fleece - Core - Crew"},
-    {label:"Premium Crew",     value:"Fleece - Premium - Crew"},
-    {label:"Women's",          value:"Ladies"},
-    {label:"Men's",            value:"Mens"},
-    {label:"Youth/Kids",       value:"Youth"},
-    {label:"Toddler/Infant",   value:"Toddler"},
-    {label:"Big & Tall",       value:"BigTall"},
-    {label:"Polos",            value:"Polos"},
-    {label:"Outerwear",        value:"Outerwear"},
-    {label:"Bottoms",          value:"Bottoms"},
+  // Category pills — some are gender filters, others are category filters
+  const catPills=[
+    {label:"All",              type:"cat",    value:""},
+    {label:"T-Shirts",         type:"cat",    value:"T-Shirts - Core"},
+    {label:"Premium T-Shirts", type:"cat",    value:"T-Shirts - Premium"},
+    {label:"Long Sleeve",      type:"cat",    value:"T-Shirts - Long Sleeve"},
+    {label:"Hoodies",          type:"cat",    value:"Fleece - Core - Hood"},
+    {label:"Premium Hoodies",  type:"cat",    value:"Fleece - Premium - Hood"},
+    {label:"Crewnecks",        type:"cat",    value:"Fleece - Core - Crew"},
+    {label:"Premium Crew",     type:"cat",    value:"Fleece - Premium - Crew"},
+    {label:"Women's",          type:"gender", value:"ladies"},
+    {label:"Men's",            type:"gender", value:"mens"},
+    {label:"Youth/Kids",       type:"gender", value:"youth"},
+    {label:"Toddler/Infant",   type:"gender", value:"toddler"},
+    {label:"Big & Tall",       type:"cat",    value:"BigTall"},
+    {label:"Polos",            type:"cat",    value:"Polos"},
+    {label:"Outerwear",        type:"cat",    value:"Outerwear"},
+    {label:"Bottoms",          type:"cat",    value:"Bottoms"},
   ];
-  wrap.innerHTML=cats.map(c=>
-    `<button class="shop-cat-pill${shopState.category===c.value?" on":""}" onclick="shopSetCategory('${c.value}')">${c.label}</button>`
-  ).join("");
+  wrap.innerHTML=catPills.map(c=>{
+    const isOn = c.type==="gender"
+      ? shopState.gender===c.value && !shopState.category
+      : shopState.category===c.value && !shopState.gender;
+    const handler = c.type==="gender"
+      ? `shopSetGender('${c.value}')`
+      : `shopSetCategory('${c.value}')`;
+    return `<button class="shop-cat-pill${isOn?" on":""}" onclick="${handler}">${c.label}</button>`;
+  }).join("");
 }
 
 function shopRenderBrands(){
@@ -4928,7 +4935,12 @@ function brandCheckbox(b){
 }
 
 function shopSetCategory(cat){
-  shopState.category=cat; shopState.brand=""; shopState.currentPage=1;
+  shopState.category=cat; shopState.gender=""; shopState.brand=""; shopState.currentPage=1;
+  shopFetch(); shopRenderCats(); shopRenderBrands();
+}
+
+function shopSetGender(gender){
+  shopState.gender=gender; shopState.category=""; shopState.brand=""; shopState.currentPage=1;
   shopFetch(); shopRenderCats(); shopRenderBrands();
 }
 
