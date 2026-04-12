@@ -1062,10 +1062,10 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-item">
     <button class="mega-nav-btn" onclick="goShop('Ladies')">Women's <span class="chevron">▾</span></button>
     <div class="mega-dropdown">
-      <button onclick="shopState.category='';shopState.search='Women T-Shirt';goShop('Ladies')">Women's T-Shirts</button>
-      <button onclick="shopState.category='';shopState.search='Women Hoodie';goShop('Ladies')">Women's Hoodies</button>
-      <button onclick="shopState.category='';shopState.search='Women Polo';goShop('Ladies')">Women's Polos</button>
-      <button onclick="shopState.category='';shopState.search='Women Jacket';goShop('Ladies')">Women's Outerwear</button>
+      <button onclick="shopState.search='T-Shirt';goShop('Ladies')">Women's T-Shirts</button>
+      <button onclick="shopState.search='Hood';goShop('Ladies')">Women's Hoodies</button>
+      <button onclick="shopState.search='Polo';goShop('Ladies')">Women's Polos</button>
+      <button onclick="shopState.search='Jacket';goShop('Ladies')">Women's Outerwear</button>
       <div class="mega-dropdown-sep"></div>
       <button onclick="shopState.search='';goShop('Ladies')" style="color:#4a9eff;font-weight:700">View All Women's →</button>
     </div>
@@ -4536,9 +4536,10 @@ async function goShop(category) {
   document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("on"));
   if(category !== undefined){
     shopState.category = category || "";
+    // For Ladies, keep whatever search was pre-set, or default to Women
     if(category.toLowerCase() === 'ladies'){
-      shopState.category = "";
-      if(!shopState.search) shopState.search = "Women";
+      shopState.category = "ladies";
+      if(!shopState.search) shopState.search = "";
     }
   }
   // Update search input to reflect current search
