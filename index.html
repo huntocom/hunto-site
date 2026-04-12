@@ -1141,9 +1141,11 @@ footer{background:#111;padding:56px 32px 28px}
       <button onclick="shopState.brand='Next Level';goShop('')">Next Level</button>
       <button onclick="shopState.brand='Comfort Colors';goShop('')">Comfort Colors</button>
       <button onclick="shopState.brand='Hanes';goShop('')">Hanes</button>
+      <button onclick="shopState.brand='Independent Trading';goShop('')">Independent Trading</button>
       <button onclick="shopState.brand='Carhartt';goShop('')">Carhartt</button>
       <button onclick="shopState.brand='Champion';goShop('')">Champion</button>
       <button onclick="shopState.brand='Sport-Tek';goShop('')">Sport-Tek</button>
+      <button onclick="shopState.brand='Port & Company';goShop('')">Port & Company</button>
       <div class="mega-dropdown-sep"></div>
       <button onclick="goShop('')" style="color:#4a9eff;font-weight:700">View All Brands →</button>
     </div>
@@ -4640,12 +4642,9 @@ async function shopLoadCatalog() {
 
     // Get brands for sidebar
     const brandSet=new Set((data.products||[]).map(p=>p.brand).filter(Boolean));
-    if(shopState.brands.length===0){
-      // Load brands separately
-      const brandRes=await fetch(`${SERVER}/catalog/brands`);
-      const brandData=await brandRes.json();
-      shopState.brands=(brandData.brands||[]).map(b=>b.name).filter(Boolean).sort();
-    }
+    const brandRes=await fetch(`${SERVER}/catalog/brands`);
+    const brandData=await brandRes.json();
+    shopState.brands=(brandData.brands||[]).map(b=>b.name).filter(Boolean);
   } catch(err) {
     console.error("Shop load error:",err);
     document.getElementById("shop-loading").innerHTML='<div style="color:#dc2626;font-size:14px;font-weight:600">⚠ Could not load catalog. <button onclick="shopLoadCatalog()" style="padding:8px 16px;background:#4a9eff;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;margin-left:8px">Retry</button></div>';
@@ -4785,11 +4784,22 @@ function shopRenderCats(){
 
 function shopRenderBrands(){
   const wrap=document.getElementById("shop-brands");if(!wrap)return;
-  wrap.innerHTML=shopState.brands.map(b=>`
-    <label class="shop-brand-check">
-      <input type="checkbox" ${shopState.brand===b?"checked":""} onchange="shopSetBrand('${b.replace(/'/g,"\\'")}',this.checked)" style="accent-color:#4a9eff">
-      <span>${b}</span>
-    </label>`).join("");
+  const POPULAR=['Gildan','Bella+Canvas','Next Level','Comfort Colors','Hanes','Independent Trading','Champion','Carhartt','Sport-Tek','District','Port & Company'];
+  const sorted=[
+    ...POPULAR.filter(b=>shopState.brands.includes(b)),
+    ...shopState.brands.filter(b=>!POPULAR.includes(b)).sort()
+  ];
+  wrap.innerHTML=`<div style="font-size:10px;font-weight:700;color:#4a9eff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;margin-top:-4px">Popular</div>`+
+  sorted.slice(0,POPULAR.length).map(b=>brandCheckbox(b)).join("")+
+  `<div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin:10px 0 6px">All Brands</div>`+
+  sorted.slice(POPULAR.length).map(b=>brandCheckbox(b)).join("");
+}
+
+function brandCheckbox(b){
+  return `<label class="shop-brand-check">
+    <input type="checkbox" ${shopState.brand===b?"checked":""} onchange="shopSetBrand('${b.replace(/'/g,"\\'")}',this.checked)" style="accent-color:#4a9eff">
+    <span>${b}</span>
+  </label>`;
 }
 
 function shopSetCategory(cat){
