@@ -1180,8 +1180,8 @@ footer{background:#111;padding:56px 32px 28px}
         <div class="mega-col-hdr">More Categories</div>
         <button onclick="shopState.search='performance';goShop('')">Activewear</button>
         <button onclick="goShop('Bottoms')">Bottoms &amp; Shorts</button>
-        <button onclick="shopState.search='safety';goShop('')">Safety Apparel</button>
-        <button onclick="shopState.search='big tall';goShop('')">Big &amp; Tall</button>
+        <button onclick="goShop('Safety')">Safety Apparel</button>
+        <button onclick="goShop('BigTall')">Big &amp; Tall</button>
         <button onclick="shopState.search='tie dye';goShop('')">Tie Dye</button>
       </div>
       </div>
@@ -4687,7 +4687,15 @@ function shopCardHTML(p){
   const colors=(p.colors||[]).slice(0,8);
   const dots=colors.map(c=>`<div class="shop-color-dot" style="background:${c.hex||"#888"};${(c.hex||"").toLowerCase()==="#ffffff"?"outline:1px solid #ddd":""}" title="${c.name||""}"></div>`).join("")+
     (p.colors&&p.colors.length>8?`<div style="font-size:10px;color:#aaa;font-weight:600;align-self:center">+${p.colors.length-8}</div>`:"");
-  const img=(p.colors&&p.colors[0]&&p.colors[0].front)||p.image||"";
+  
+  // For safety products, prefer safety-colored images (green/orange/yellow)
+  let img = (p.colors&&p.colors[0]&&p.colors[0].front)||p.image||"";
+  if(p.colors && p.colors.length > 1){
+    const safetyColor = p.colors.find(c=>(c.name||"").toLowerCase().includes("safety")||
+      (c.name||"").toLowerCase().includes("hi-vis")||(c.name||"").toLowerCase().includes("high vis"));
+    if(safetyColor && safetyColor.front) img = safetyColor.front;
+  }
+  
   const price=p.base_retail?`From $${parseFloat(p.base_retail).toFixed(2)}`:"See pricing";
   return `<div class="shop-card" onclick="shopOpenProduct(${p.style_id})">
     <img class="shop-card-img" src="${img}" alt="${(p.title||"").replace(/"/g,"")}" loading="lazy" onerror="this.style.display='none'">
@@ -4711,6 +4719,7 @@ async function shopLoadMore(){
   try {
     const nextPage=(shopState.currentPage||1)+1;
     const params=new URLSearchParams({page:nextPage,limit:shopState.limit});
+    if(shopState.gender)   params.set("gender",shopState.gender);
     if(shopState.category) params.set("category",shopState.category);
     if(shopState.brand)    params.set("brand",shopState.brand);
     if(shopState.search)   params.set("search",shopState.search);
