@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.5 -->
+<!-- v5.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1226,7 +1226,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.5</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.6</span>
   </div>
 
 </nav>
@@ -4370,8 +4370,15 @@ function nnUpdatePreview(){
   const sizeVal     = (document.getElementById('nn-size')?.value) || 'large';
   const col         = nnColor || '#111111';
 
-  // Switch to back view
+  // Switch shirt to chosen side
   try { sSetView(side); } catch(e){ console.warn('sSetView err:',e); }
+
+  // Front = blank canvas for their custom team design — just show shirt, restore pills
+  if(side === 'front'){
+    const fp = document.getElementById('s-floats');
+    if(fp){ fp.style.visibility=''; fp.style.opacity=''; }
+    return;
+  }
 
   const SIZES = {
     small: {name:32, sub:14, num:100},
