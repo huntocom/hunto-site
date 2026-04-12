@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.2 -->
+<!-- v5.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1226,7 +1226,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.2</span>
+    <span style="font-size:10px;font-weight:700;color:#ddd;margin-left:8px">v5.3</span>
   </div>
 
 </nav>
@@ -2221,13 +2221,13 @@ footer{background:#111;padding:56px 32px 28px}
           <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid #f0f0f0">
             <div style="font-size:13px;font-weight:600;color:#333">Font</div>
             <select id="nn-font" onchange="nnUpdatePreview()" style="padding:7px 12px;border:1.5px solid #e0e0e0;border-radius:20px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;color:#333;background:#fff;cursor:pointer;appearance:none;padding-right:28px;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 6%22><path d=%22M0 0l5 6 5-6z%22 fill=%22%23999%22/></svg>');background-repeat:no-repeat;background-position:right 10px center;background-size:8px">
-              <option value="'Graduate',sans-serif">COLLEGIATE</option>
-              <option value="'Bebas Neue',sans-serif">BEBAS NEUE</option>
-              <option value="'Anton',sans-serif">ANTON</option>
-              <option value="'Russo One',sans-serif">RUSSO ONE</option>
-              <option value="'Oswald',sans-serif">OSWALD</option>
-              <option value="'Squada One',sans-serif">SQUADA ONE</option>
-              <option value="'Inter',sans-serif">INTER</option>
+              <option value="'Bebas Neue',sans-serif">COLLEGIATE (Bebas)</option>
+              <option value="'Anton',sans-serif">BLOCK (Anton)</option>
+              <option value="'Russo One',sans-serif">VARSITY (Russo One)</option>
+              <option value="'Oswald',sans-serif">ATHLETIC (Oswald)</option>
+              <option value="'Graduate',sans-serif">GRADUATE</option>
+              <option value="'Squada One',sans-serif">STENCIL (Squada)</option>
+              <option value="'Inter',sans-serif">MODERN (Inter)</option>
             </select>
           </div>
 
@@ -4364,7 +4364,7 @@ function nnUpdatePreview(){
   const hasNames    = document.getElementById('nn-names')?.checked;
   const hasSubtitle = document.getElementById('nn-subtitle')?.checked;
   const hasNums     = document.getElementById('nn-numbers')?.checked;
-  const font        = (document.getElementById('nn-font')?.value) || "'Graduate',sans-serif";
+  const font        = (document.getElementById('nn-font')?.value) || "'Bebas Neue',sans-serif";
   const side        = (document.getElementById('nn-side')?.value) || 'back';
   const sizeVal     = (document.getElementById('nn-size')?.value) || 'large';
   const col         = nnColor || '#111111';
