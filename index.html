@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v8.7 -->
+<!-- v8.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1352,7 +1352,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v8.7</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v8.8</span>
   </div>
 
 </nav>
@@ -4606,7 +4606,7 @@ function nnEnterJerseyMode(){
   try { sSetView('back'); } catch(e){}
   // Grey sidebar (back view = jersey numbers only)
   if(iconbar) iconbar.classList.add('nn-active-mode');
-  setTimeout(()=>jerseyRenderBack(), 250);
+  setTimeout(()=>jerseyRenderBack(), 450);
 }
 
 function exitJerseyModeAndClose(){
@@ -4659,20 +4659,20 @@ function jerseyRenderBack(){
 
   if(!inner) return;
 
-  const stage = document.querySelector('.s-shirt-stage');
-  if(!stage) return;
+  const wrap = document.getElementById('s-shirt-wrap');
+  if(!wrap) return;
 
   const el = document.createElement('div');
   el.id = 'nn-preview';
   // Detect garment type to set vertical position
   const prodId = sState?.product?.id || '';
   const isHoodie = prodId === '18500' || prodId === 'SF500';
-  const isCrew   = prodId === '18000'; // crewneck sweatshirt
+  const isCrew   = prodId === '18000';
   const topPct   = isHoodie ? '38%' : isCrew ? '30%' : '22%';
 
   el.style.cssText = `position:absolute;top:${topPct};left:50%;transform:translateX(-50%);z-index:20;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px;`;
   el.innerHTML = inner;
-  stage.appendChild(el);
+  wrap.appendChild(el);
 }
 
 function jerseyRemovePreview(){
