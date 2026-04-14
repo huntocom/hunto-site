@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v9.0 -->
+<!-- v9.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1352,7 +1352,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.1</span>
   </div>
 
 </nav>
@@ -2152,46 +2152,123 @@ footer{background:#111;padding:56px 32px 28px}
       <!-- AI ART -->
       <div id="sp-ai" style="display:none">
         <div class="s-panel-hdr">
-          <div><div class="s-panel-title">AI Art Generator</div><div class="s-panel-sub">Describe your design</div></div>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Art Powered by AI</div>
+            <div class="s-panel-title" id="ai-panel-title">Add Art</div>
+          </div>
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
         </div>
-        <div class="s-panel-body">
+        <div class="s-panel-body" style="padding:0">
 
-          <textarea class="ai-ta" id="ai-prompt" placeholder="e.g. neon wolf howling at the moon, cyberpunk style..."></textarea>
-          <div class="ai-chips">
-            <span class="ai-chip" onclick="setP('neon wolf howling at the moon')">Neon wolf</span>
-            <span class="ai-chip" onclick="setP('retro 80s sunset palm trees')">80s vibes</span>
-            <span class="ai-chip" onclick="setP('skull with roses tattoo art')">Skull &amp; roses</span>
-            <span class="ai-chip" onclick="setP('astronaut surfing in space')">Space surfer</span>
-            <span class="ai-chip" onclick="setP('japanese koi watercolor splash')">Koi fish</span>
-            <span class="ai-chip" onclick="setP('vintage american eagle bold')">Eagle</span>
-          </div>
-          <button class="ai-gen-btn" id="ai-gen-btn" onclick="aiGen()">✦ Generate Design</button>
+          <!-- ── SCREEN 1: Generate ── -->
+          <div id="ai-screen-1" style="padding:14px 16px">
+            <p style="font-size:13px;color:#888;line-height:1.5;margin-bottom:12px">Use our AI image generator to create stunning logos and designs. Short or long prompts, just try it.</p>
+            <textarea class="ai-ta" id="ai-prompt" placeholder="e.g. neon wolf howling at the moon, cyberpunk style..." style="margin-bottom:8px"></textarea>
+            <!-- Prompt history -->
+            <div id="ai-prev-prompts" style="margin-bottom:10px;display:flex;flex-wrap:wrap;gap:5px"></div>
+            <!-- Chips -->
+            <div class="ai-chips" style="margin-bottom:12px">
+              <span class="ai-chip" onclick="setP('neon wolf howling at the moon')">Neon wolf</span>
+              <span class="ai-chip" onclick="setP('retro 80s sunset palm trees')">80s vibes</span>
+              <span class="ai-chip" onclick="setP('skull with roses tattoo art')">Skull &amp; roses</span>
+              <span class="ai-chip" onclick="setP('astronaut surfing in space')">Space surfer</span>
+              <span class="ai-chip" onclick="setP('japanese koi watercolor splash')">Koi fish</span>
+              <span class="ai-chip" onclick="setP('vintage american eagle bold')">Eagle</span>
+            </div>
+            <button class="ai-gen-btn" id="ai-gen-btn" onclick="aiGen()">✦ Generate</button>
 
-          <!-- DESIGN EDIT TOOLS -->
-          <div id="design-edit-tools" style="display:none;margin-top:16px;border-top:1px solid #f0f0f0;padding-top:16px">
-            <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#111;margin-bottom:12px">Edit Design</div>
-            <div style="margin-bottom:12px">
-              <div style="font-size:11px;font-weight:700;color:#888;margin-bottom:6px;display:flex;justify-content:space-between"><span>SIZE</span><span id="size-val">100%</span></div>
-              <input type="range" id="design-size" min="30" max="200" value="100" step="1" style="width:100%;accent-color:#7c3aed" oninput="applyDesignTransform()">
-            </div>
-            <div style="margin-bottom:12px">
-              <div style="font-size:11px;font-weight:700;color:#888;margin-bottom:6px;display:flex;justify-content:space-between"><span>ROTATE</span><span id="rotate-val">0°</span></div>
-              <input type="range" id="design-rotate" min="-180" max="180" value="0" step="1" style="width:100%;accent-color:#7c3aed" oninput="applyDesignTransform()">
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px">
-              <button onclick="flipDesign()" style="padding:8px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fff;font-size:12px;font-weight:600;color:#555;cursor:pointer;font-family:Inter,sans-serif">↔ Flip</button>
-              <button onclick="centerDesign()" style="padding:8px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fff;font-size:12px;font-weight:600;color:#555;cursor:pointer;font-family:Inter,sans-serif">⊕ Center</button>
-              <button onclick="resetDesignTransform()" style="padding:8px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fff;font-size:12px;font-weight:600;color:#555;cursor:pointer;font-family:Inter,sans-serif">↺ Reset</button>
-              <button onclick="clearCurrentDesign()" style="padding:8px;border:1.5px solid #fecaca;border-radius:8px;background:#fff5f5;font-size:12px;font-weight:600;color:#dc2626;cursor:pointer;font-family:Inter,sans-serif">🗑 Remove</button>
+            <!-- Results grid -->
+            <div id="ai-results" style="display:none;margin-top:16px">
+              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#333;margin-bottom:10px">AI Images &nbsp;<span style="background:#7c3aed;color:#fff;font-size:9px;padding:2px 6px;border-radius:20px;font-weight:700">AI</span></div>
+              <div id="ai-results-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
             </div>
           </div>
 
-          <div style="margin-top:16px;padding:12px;background:#fdf4ff;border-radius:10px;border:1px solid #e9d5ff">
-            <div style="font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:4px">✏ Keith's Designer Edit — +$20</div>
-            <div style="font-size:12px;color:#888;line-height:1.5;margin-bottom:8px">Our in-house designer optimizes your art for perfect DTF printing.</div>
-            <button id="keith-ai-btn" onclick="toggleKeith()" style="width:100%;padding:8px;border:1.5px solid #7c3aed;border-radius:8px;background:#fff;color:#7c3aed;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">+ Add Keith's Edit</button>
+          <!-- ── SCREEN 2: Processing ── -->
+          <div id="ai-screen-2" style="display:none;padding:24px 16px;text-align:center">
+            <div style="font-size:36px;margin-bottom:12px">🎨</div>
+            <div style="font-size:15px;font-weight:800;color:#111;margin-bottom:6px">Processing your design</div>
+            <div id="ai-process-status" style="font-size:13px;color:#7c3aed;font-weight:600;margin-bottom:16px">Removing Background &amp; Trimming</div>
+            <div style="background:#f0f0f0;border-radius:20px;height:8px;overflow:hidden;margin-bottom:8px">
+              <div id="ai-progress-bar" style="height:100%;background:linear-gradient(90deg,#7c3aed,#ec4899);border-radius:20px;width:0%;transition:width .4s ease"></div>
+            </div>
+            <div id="ai-progress-pct" style="font-size:12px;color:#aaa;font-weight:600">0%</div>
           </div>
+
+          <!-- ── SCREEN 3: Edit ── -->
+          <div id="ai-screen-3" style="display:none">
+            <div style="padding:14px 16px 10px;border-bottom:1px solid #f0f0f0">
+              <div style="font-size:13px;font-weight:800;color:#111;margin-bottom:12px">Filters</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px">
+                <div id="ai-filter-normal" onclick="aiSetFilter('normal')" style="cursor:pointer;text-align:center">
+                  <div id="ai-thumb-normal" style="border-radius:8px;overflow:hidden;border:2px solid #7c3aed;background:#f5f5f5;aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin-bottom:4px">
+                    <img id="ai-thumb-normal-img" src="" style="width:100%;height:100%;object-fit:contain">
+                  </div>
+                  <div style="font-size:11px;font-weight:700;color:#7c3aed">Normal</div>
+                </div>
+                <div id="ai-filter-single" onclick="aiSetFilter('single')" style="cursor:pointer;text-align:center">
+                  <div style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;background:#f5f5f5;aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin-bottom:4px">
+                    <img id="ai-thumb-single-img" src="" style="width:100%;height:100%;object-fit:contain;filter:grayscale(1) sepia(0.3) contrast(1.4)">
+                  </div>
+                  <div style="font-size:11px;font-weight:600;color:#888">Single Color</div>
+                </div>
+                <div id="ai-filter-bw" onclick="aiSetFilter('bw')" style="cursor:pointer;text-align:center">
+                  <div style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;background:#f5f5f5;aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin-bottom:4px">
+                    <img id="ai-thumb-bw-img" src="" style="width:100%;height:100%;object-fit:contain;filter:grayscale(1) contrast(1.8)">
+                  </div>
+                  <div style="font-size:11px;font-weight:600;color:#888">Black/White</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Controls -->
+            <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0">
+              <!-- Remove Background toggle -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0">
+                <div style="font-size:13px;font-weight:600;color:#333">Remove Background</div>
+                <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer">
+                  <input type="checkbox" id="ai-rmbg-toggle" checked onchange="aiToggleRemoveBg()" style="opacity:0;width:0;height:0">
+                  <span style="position:absolute;inset:0;background:#7c3aed;border-radius:12px;transition:.2s" id="ai-rmbg-track"></span>
+                  <span style="position:absolute;left:2px;top:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s;transform:translateX(20px)" id="ai-rmbg-knob"></span>
+                </label>
+              </div>
+              <!-- Size -->
+              <div style="padding:8px 0">
+                <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#888;margin-bottom:6px"><span>SIZE</span><span id="ai-size-val">100%</span></div>
+                <input type="range" id="ai-design-size" min="30" max="200" value="100" step="1" style="width:100%;accent-color:#7c3aed" oninput="aiApplyTransform()">
+              </div>
+              <!-- Rotate -->
+              <div style="padding:8px 0">
+                <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#888;margin-bottom:6px"><span>ROTATE</span><span id="ai-rotate-val">0°</span></div>
+                <input type="range" id="ai-design-rotate" min="-180" max="180" value="0" step="1" style="width:100%;accent-color:#7c3aed" oninput="aiApplyTransform()">
+              </div>
+              <button onclick="aiResetTransform()" style="font-size:12px;font-weight:700;color:#7c3aed;background:none;border:none;cursor:pointer;padding:4px 0;font-family:Inter,sans-serif">Reset to Defaults</button>
+            </div>
+
+            <!-- Bottom toolbar -->
+            <div style="padding:10px 16px;display:flex;gap:6px;justify-content:space-around">
+              <button onclick="centerDesign()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 8px;border-radius:8px">
+                <span style="font-size:18px">⊕</span>Center
+              </button>
+              <button onclick="flipDesign()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 8px;border-radius:8px">
+                <span style="font-size:18px">↔</span>Flip
+              </button>
+              <button onclick="clearCurrentDesign()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#dc2626;font-family:Inter,sans-serif;padding:6px 8px;border-radius:8px">
+                <span style="font-size:18px">🗑</span>Remove
+              </button>
+              <button onclick="aiGoToScreen(1)" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#7c3aed;font-family:Inter,sans-serif;padding:6px 8px;border-radius:8px">
+                <span style="font-size:18px">✦</span>New Art
+              </button>
+            </div>
+
+            <!-- Keith upsell -->
+            <div style="margin:0 16px 16px;padding:12px;background:#fdf4ff;border-radius:10px;border:1px solid #e9d5ff">
+              <div style="font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:4px">✏ Keith's Designer Edit — +$20</div>
+              <div style="font-size:12px;color:#888;line-height:1.5;margin-bottom:8px">Our in-house designer optimizes your art for perfect DTF printing.</div>
+              <button id="keith-ai-btn" onclick="toggleKeith()" style="width:100%;padding:8px;border:1.5px solid #7c3aed;border-radius:8px;background:#fff;color:#7c3aed;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">+ Add Keith's Edit</button>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -3178,6 +3255,7 @@ function sPanel(id,btn){
   document.getElementById("s-panel").style.display="flex";
   activePanelId=id;
   if(id==="qty") buildQtyGrid();
+  if(id==="ai"){ aiGoToScreen(1); aiRenderHistory(); }
   // Names panel — 2-step: confirm first, then settings
   if(id==="names"){
     const confirmEl  = document.getElementById('nn-step-confirm');
@@ -3515,6 +3593,165 @@ function sResizeDesign(v){
 
 function setP(t){const el=document.getElementById("ai-prompt");if(el)el.value=t;}
 
+let aiCurrentUrl = null;
+let aiCurrentFilter = 'normal';
+let aiPromptHistory = JSON.parse(localStorage.getItem('hunto_ai_prompts')||'[]');
+
+function aiGoToScreen(n){
+  [1,2,3].forEach(i=>{
+    const el=document.getElementById('ai-screen-'+i);
+    if(el) el.style.display = i===n ? 'block' : 'none';
+  });
+  const title = document.getElementById('ai-panel-title');
+  if(title) title.textContent = n===1 ? 'Add Art' : n===2 ? 'Processing...' : 'Edit Your Artwork';
+}
+
+function aiSetProgress(pct, label){
+  const bar = document.getElementById('ai-progress-bar');
+  const pctEl = document.getElementById('ai-progress-pct');
+  const status = document.getElementById('ai-process-status');
+  if(bar) bar.style.width = pct+'%';
+  if(pctEl) pctEl.textContent = pct+'%';
+  if(label && status) status.textContent = label;
+}
+
+function aiShowResults(url){
+  // Save prompt to history
+  const prompt = (document.getElementById('ai-prompt')||{}).value||'';
+  if(prompt && !aiPromptHistory.includes(prompt)){
+    aiPromptHistory.unshift(prompt);
+    if(aiPromptHistory.length>5) aiPromptHistory.pop();
+    localStorage.setItem('hunto_ai_prompts', JSON.stringify(aiPromptHistory));
+    aiRenderHistory();
+  }
+
+  const grid = document.getElementById('ai-results-grid');
+  const results = document.getElementById('ai-results');
+  if(!grid||!results) return;
+  results.style.display = 'block';
+
+  // Show single result as a card (tap to select)
+  grid.innerHTML = `
+    <div onclick="aiSelectImage('${url}')" style="cursor:pointer;border-radius:10px;overflow:hidden;border:2px solid #e8e8e8;aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='#e8e8e8'">
+      <img src="${url}" style="width:100%;height:100%;object-fit:contain">
+    </div>
+  `;
+}
+
+function aiRenderHistory(){
+  const el = document.getElementById('ai-prev-prompts');
+  if(!el) return;
+  el.innerHTML = aiPromptHistory.length ?
+    aiPromptHistory.map(p=>`<span onclick="setP('${p.replace(/'/g,"\\'")}');this.parentNode.querySelectorAll('span').forEach(s=>s.style.background='#f5f5f5');this.style.background='#ede9fe'" style="font-size:11px;font-weight:600;color:#7c3aed;background:#f5f5f5;padding:3px 8px;border-radius:20px;cursor:pointer;white-space:nowrap;border:1px solid #e8e8e8">${p.length>18?p.slice(0,18)+'…':p}</span>`).join('') : '';
+}
+
+function aiSelectImage(url){
+  aiCurrentUrl = url;
+  aiCurrentFilter = 'normal';
+  aiGoToScreen(2);
+  aiSetProgress(0, 'Removing Background & Trimming');
+
+  // Animate progress
+  let p = 0;
+  const iv = setInterval(()=>{
+    p += Math.random()*18+8;
+    if(p>=90){ p=90; clearInterval(iv); }
+    aiSetProgress(Math.round(p), p<40?'Removing Background & Trimming':p<75?'Optimizing artwork...':'Almost done...');
+  }, 300);
+
+  // Actually remove bg
+  removeBackground(url, (cleanUrl)=>{
+    clearInterval(iv);
+    aiSetProgress(100, 'Done!');
+    setTimeout(()=>{
+      aiCurrentUrl = cleanUrl;
+      // Place on shirt
+      applyDesign(cleanUrl);
+      sState.hasDesign = true;
+      // Set up edit screen thumbnails
+      ['normal','single','bw'].forEach(f=>{
+        const img = document.getElementById('ai-thumb-'+f+'-img');
+        if(img) img.src = cleanUrl;
+      });
+      document.getElementById('ai-design-size').value=100;
+      document.getElementById('ai-design-rotate').value=0;
+      document.getElementById('ai-size-val').textContent='100%';
+      document.getElementById('ai-rotate-val').textContent='0°';
+      document.getElementById('ai-rmbg-toggle').checked=true;
+      aiGoToScreen(3);
+      sNtf('✓ Design placed on shirt!');
+    }, 400);
+  });
+}
+
+function aiSetFilter(f){
+  aiCurrentFilter = f;
+  ['normal','single','bw'].forEach(id=>{
+    const wrap = document.getElementById('ai-filter-'+id);
+    if(!wrap) return;
+    const thumb = wrap.querySelector('div');
+    if(thumb) thumb.style.borderColor = id===f ? '#7c3aed' : '#e8e8e8';
+    const label = wrap.querySelector('div+div') || wrap.lastElementChild;
+    if(label) label.style.color = id===f ? '#7c3aed' : '#888';
+  });
+
+  const filters = {normal:'none', single:'grayscale(1) sepia(0.3) contrast(1.4)', bw:'grayscale(1) contrast(1.8)'};
+  // Apply CSS filter to the placed design element
+  const dzone = document.getElementById('s-dzone-'+sView);
+  if(dzone){
+    const img = dzone.querySelector('img[data-type="image"], img');
+    if(img) img.style.filter = filters[f]||'none';
+  }
+}
+
+function aiToggleRemoveBg(){
+  const tog = document.getElementById('ai-rmbg-toggle');
+  const track = document.getElementById('ai-rmbg-track');
+  const knob = document.getElementById('ai-rmbg-knob');
+  if(!tog) return;
+  const on = tog.checked;
+  if(track) track.style.background = on ? '#7c3aed' : '#ccc';
+  if(knob) knob.style.transform = on ? 'translateX(20px)' : 'translateX(0)';
+
+  if(on && aiCurrentUrl){
+    // Remove bg
+    removeBackground(aiCurrentUrl, (cleanUrl)=>{
+      aiCurrentUrl = cleanUrl;
+      applyDesign(cleanUrl);
+      ['normal','single','bw'].forEach(f=>{ const img=document.getElementById('ai-thumb-'+f+'-img'); if(img) img.src=cleanUrl; });
+    });
+  } else if(aiCurrentUrl){
+    // Restore original (would need to store it - for now just notify)
+    sNtf('Regenerate to restore original background');
+  }
+}
+
+function aiApplyTransform(){
+  const size = document.getElementById('ai-design-size')?.value || 100;
+  const rot  = document.getElementById('ai-design-rotate')?.value || 0;
+  document.getElementById('ai-size-val').textContent   = size+'%';
+  document.getElementById('ai-rotate-val').textContent = rot+'°';
+
+  const dzone = document.getElementById('s-dzone-'+sView);
+  if(!dzone) return;
+  const el = dzone.querySelector('[data-type="image"]') || dzone.firstElementChild;
+  if(el){
+    const base = 283;
+    const px = Math.round(base * size / 100);
+    el.style.width = px+'px';
+    el.style.height = px+'px';
+    el.style.transform = `rotate(${rot}deg)`;
+  }
+}
+
+function aiResetTransform(){
+  document.getElementById('ai-design-size').value = 100;
+  document.getElementById('ai-design-rotate').value = 0;
+  document.getElementById('ai-size-val').textContent = '100%';
+  document.getElementById('ai-rotate-val').textContent = '0°';
+  aiApplyTransform();
+}
+
 async function aiGen(){
   const p=(document.getElementById("ai-prompt")||{}).value||"";
   if(!p.trim()){sNtf("Enter a description first");return;}
@@ -3525,19 +3762,16 @@ async function aiGen(){
   btn.disabled=true;
   btn.innerHTML='<span class="spin"></span> Generating...';
 
-  try {
-    // Call Railway server — handles DALL-E + Remove.bg server-side
-    const SERVER = "https://hunto-server-production.up.railway.app";
-    btn.innerHTML = '<span class="spin"></span> Creating art...';
+  // Hide old results
+  const results = document.getElementById('ai-results');
+  if(results) results.style.display='none';
 
+  try {
+    const SERVER = "https://hunto-server-production.up.railway.app";
     const serverRes = await fetch(SERVER + "/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        prompt: p,
-        openaiKey: key
-        // No rmbgKey — user chooses bg removal after seeing result
-      })
+      body: JSON.stringify({ prompt: p, openaiKey: key })
     });
 
     if(!serverRes.ok){
@@ -3556,30 +3790,21 @@ async function aiGen(){
       generatedUrl = data.url;
     }
 
-    // Show preview with bg removal choice
     btn.disabled = false;
-    btn.innerHTML = "✦ Regenerate Design";
-    aiShowBgChoice(generatedUrl);
+    btn.innerHTML = "✦ Generate";
+    aiShowResults(generatedUrl);
+
   } catch(err){
     btn.disabled=false;
-    btn.innerHTML="✦ Generate Design";
+    btn.innerHTML="✦ Generate";
     console.error("DALL-E error:", err);
-
     const msg = err.message || "Unknown error";
-    if(msg.includes("401") || msg.includes("Incorrect API key")){
-      updateKeyStatus("❌ Invalid key — re-enter below", "#dc2626");
-      showAiError("❌ Invalid API key. Re-enter your key in the box above.");
-    } else if(msg.includes("429")){
-      showAiError("⏳ Too many requests. Wait 30 seconds and try again.");
-    } else if(msg.includes("billing") || msg.includes("quota")){
-      showAiError("💳 No credits left. Add billing at platform.openai.com");
-    } else if(msg.includes("safety") || msg.includes("content_policy")){
-      showAiError("🚫 OpenAI blocked that prompt. Try rewording it.");
-    } else if(msg.includes("Failed to fetch") || msg.includes("NetworkError")){
-      showAiError("🌐 Network error. Check your internet connection.");
-    } else {
-      showAiError("⚠ Error: " + msg);
-    }
+    if(msg.includes("401")||msg.includes("Incorrect API key")) showAiError("❌ Invalid API key. Re-enter your key in the box above.");
+    else if(msg.includes("429")) showAiError("⏳ Too many requests. Wait 30 seconds and try again.");
+    else if(msg.includes("billing")||msg.includes("quota")) showAiError("💳 No credits left. Add billing at platform.openai.com");
+    else if(msg.includes("safety")||msg.includes("content_policy")) showAiError("🚫 OpenAI blocked that prompt. Try rewording it.");
+    else if(msg.includes("Failed to fetch")||msg.includes("NetworkError")) showAiError("🌐 Network error. Check your internet connection.");
+    else showAiError("⚠ Error: " + msg);
   }
 }
 
@@ -3593,54 +3818,6 @@ function showAiError(msg){
   const btn = document.getElementById("ai-gen-btn");
   if(btn) btn.after(box);
   setTimeout(()=>box.remove(), 8000);
-}
-
-// ── AI Background Choice ──────────────────────────────────
-function aiShowBgChoice(url){
-  // Remove any existing choice box
-  const old = document.getElementById('ai-bg-choice');
-  if(old) old.remove();
-
-  const box = document.createElement('div');
-  box.id = 'ai-bg-choice';
-  box.style.cssText = 'margin-top:14px;border:1.5px solid #e8e8e8;border-radius:14px;overflow:hidden;';
-  box.innerHTML = `
-    <img src="${url}" style="width:100%;display:block;max-height:200px;object-fit:contain;background:#f5f5f5;">
-    <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
-      <div style="font-size:11px;font-weight:700;color:#888;text-align:center;text-transform:uppercase;letter-spacing:.08em">Choose how to use this design</div>
-      <button onclick="aiUseAsIs('${url}')"
-        style="width:100%;padding:11px;background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;font-weight:700;color:#333;cursor:pointer;font-family:Inter,sans-serif">
-        🖼 Use As-Is (keep background)
-      </button>
-      <button onclick="aiRemoveBgAndApply('${url}')" id="ai-rmbg-btn"
-        style="width:100%;padding:11px;background:#7c3aed;border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(124,58,237,.3)">
-        ✨ Remove Background
-      </button>
-    </div>
-  `;
-  const genBtn = document.getElementById('ai-gen-btn');
-  if(genBtn) genBtn.after(box);
-}
-
-function aiUseAsIs(url){
-  document.getElementById('ai-bg-choice')?.remove();
-  applyDesign(url);
-  sState.hasDesign = true;
-  sNtf('✓ Design placed on shirt!');
-  showDesignEditTools();
-}
-
-function aiRemoveBgAndApply(url){
-  const btn = document.getElementById('ai-rmbg-btn');
-  if(btn){ btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Removing background...'; }
-
-  removeBackground(url, (cleanUrl) => {
-    document.getElementById('ai-bg-choice')?.remove();
-    applyDesign(cleanUrl);
-    sState.hasDesign = true;
-    sNtf('✓ Background removed & design placed!');
-    showDesignEditTools();
-  });
 }
 
 // ── Key management (stored in localStorage, never in chat) ──
