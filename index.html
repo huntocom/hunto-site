@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v8.8 -->
+<!-- v9.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1352,7 +1352,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v8.8</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.0</span>
   </div>
 
 </nav>
@@ -3535,8 +3535,8 @@ async function aiGen(){
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         prompt: p,
-        openaiKey: key,
-        rmbgKey: getRmbgKey()
+        openaiKey: key
+        // No rmbgKey — user chooses bg removal after seeing result
       })
     });
 
@@ -3547,20 +3547,19 @@ async function aiGen(){
     }
 
     const contentType = serverRes.headers.get("content-type") || "";
+    let generatedUrl;
     if(contentType.includes("image")){
       const blob = await serverRes.blob();
-      const cleanUrl = URL.createObjectURL(blob);
-      applyDesign(cleanUrl);
+      generatedUrl = URL.createObjectURL(blob);
     } else {
       const data = await serverRes.json();
-      applyDesign(data.url);
+      generatedUrl = data.url;
     }
 
-    sState.hasDesign = true;
-    sNtf("✓ Clean design placed on shirt!");
+    // Show preview with bg removal choice
     btn.disabled = false;
     btn.innerHTML = "✦ Regenerate Design";
-    showDesignEditTools();
+    aiShowBgChoice(generatedUrl);
   } catch(err){
     btn.disabled=false;
     btn.innerHTML="✦ Generate Design";
@@ -3594,6 +3593,54 @@ function showAiError(msg){
   const btn = document.getElementById("ai-gen-btn");
   if(btn) btn.after(box);
   setTimeout(()=>box.remove(), 8000);
+}
+
+// ── AI Background Choice ──────────────────────────────────
+function aiShowBgChoice(url){
+  // Remove any existing choice box
+  const old = document.getElementById('ai-bg-choice');
+  if(old) old.remove();
+
+  const box = document.createElement('div');
+  box.id = 'ai-bg-choice';
+  box.style.cssText = 'margin-top:14px;border:1.5px solid #e8e8e8;border-radius:14px;overflow:hidden;';
+  box.innerHTML = `
+    <img src="${url}" style="width:100%;display:block;max-height:200px;object-fit:contain;background:#f5f5f5;">
+    <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+      <div style="font-size:11px;font-weight:700;color:#888;text-align:center;text-transform:uppercase;letter-spacing:.08em">Choose how to use this design</div>
+      <button onclick="aiUseAsIs('${url}')"
+        style="width:100%;padding:11px;background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;font-weight:700;color:#333;cursor:pointer;font-family:Inter,sans-serif">
+        🖼 Use As-Is (keep background)
+      </button>
+      <button onclick="aiRemoveBgAndApply('${url}')" id="ai-rmbg-btn"
+        style="width:100%;padding:11px;background:#7c3aed;border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(124,58,237,.3)">
+        ✨ Remove Background
+      </button>
+    </div>
+  `;
+  const genBtn = document.getElementById('ai-gen-btn');
+  if(genBtn) genBtn.after(box);
+}
+
+function aiUseAsIs(url){
+  document.getElementById('ai-bg-choice')?.remove();
+  applyDesign(url);
+  sState.hasDesign = true;
+  sNtf('✓ Design placed on shirt!');
+  showDesignEditTools();
+}
+
+function aiRemoveBgAndApply(url){
+  const btn = document.getElementById('ai-rmbg-btn');
+  if(btn){ btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Removing background...'; }
+
+  removeBackground(url, (cleanUrl) => {
+    document.getElementById('ai-bg-choice')?.remove();
+    applyDesign(cleanUrl);
+    sState.hasDesign = true;
+    sNtf('✓ Background removed & design placed!');
+    showDesignEditTools();
+  });
 }
 
 // ── Key management (stored in localStorage, never in chat) ──
@@ -4668,7 +4715,7 @@ function jerseyRenderBack(){
   const prodId = sState?.product?.id || '';
   const isHoodie = prodId === '18500' || prodId === 'SF500';
   const isCrew   = prodId === '18000';
-  const topPct   = isHoodie ? '38%' : isCrew ? '30%' : '22%';
+  const topPct   = isHoodie ? '38%' : '22%';
 
   el.style.cssText = `position:absolute;top:${topPct};left:50%;transform:translateX(-50%);z-index:20;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px;`;
   el.innerHTML = inner;
