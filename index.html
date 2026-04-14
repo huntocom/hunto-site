@@ -913,77 +913,101 @@ footer{background:#111;padding:56px 32px 28px}
   /* ── Studio ── */
   .studio-page{height:100vh;height:100dvh;overflow:hidden;flex-direction:column}
   .studio-topbar{
-    padding:0 12px;gap:6px;height:52px;
+    padding:0 10px;gap:4px;height:46px;
     position:sticky;top:0;z-index:100;
   }
-  .studio-price{font-size:18px}
-  .stbtn{height:32px;padding:0 10px;font-size:12px}
-  .stbtn.blue{height:36px;padding:0 14px;font-size:13px}
+  .studio-price{font-size:16px}
+  .stbtn{height:30px;padding:0 8px;font-size:11px}
+  .stbtn.blue{height:34px;padding:0 12px;font-size:12px}
   .studio-steps .sstep-label{display:none}
-  .studio-steps .sstep-div{width:12px}
+  .studio-steps .sstep-div{width:8px}
 
-  .studio-body{flex-direction:column;overflow:hidden;flex:1;min-height:0}
+  .studio-body{flex-direction:column;overflow:hidden;flex:1;min-height:0;position:relative}
 
-  /* Sidebar becomes horizontal scrollable tab bar */
+  /* ── Canvas takes all available space ── */
+  .s-canvas{
+    min-height:0;flex:1;order:1;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .s-shirt-stage{min-height:0;height:100%;display:flex;align-items:center;justify-content:center}
+  .s-shirt-img{width:min(300px,75vw);max-height:100%;object-fit:contain}
+
+  /* ── View thumbs: compact horizontal strip ── */
+  .s-thumbs{
+    width:100%;flex-direction:row;flex-shrink:0;
+    border-left:none;border-top:1px solid #e8e8e8;
+    padding:3px 8px;overflow-x:auto;justify-content:center;
+    gap:6px;order:2;height:auto;max-height:44px;
+    -webkit-overflow-scrolling:touch;background:#fff;
+  }
+  .s-thumb{width:36px;flex-shrink:0;border-radius:6px}
+  .s-thumb-img{height:36px}
+  .s-thumb-label{display:none}
+  .s-thumb-div{display:none}
+  .s-thumb-action{display:none}
+
+  /* ── Iconbar: bottom tab bar ── */
   .s-iconbar{
-    width:100%;flex-direction:row;flex-shrink:0;border-right:none;border-bottom:1px solid #e8e8e8;overflow-x:auto;padding:4px 6px;gap:2px;justify-content:flex-start;height:auto;max-height:48px;-webkit-overflow-scrolling:touch;scrollbar-width:none
+    width:100%;flex-direction:row;flex-shrink:0;
+    border-right:none;border-top:1px solid #e8e8e8;
+    overflow-x:auto;padding:2px 4px;gap:0;
+    justify-content:flex-start;height:auto;
+    order:3;background:#fff;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
   }
   .s-iconbar::-webkit-scrollbar{display:none}
   .s-ibtn{
-    width:auto;flex-direction:row;gap:6px;
-    padding:8px 14px;white-space:nowrap;
-    border-radius:20px;flex-shrink:0;
+    width:auto;flex-direction:column;gap:1px;
+    padding:4px 10px;white-space:nowrap;
+    border-radius:8px;flex-shrink:0;
     min-width:auto;height:auto;
   }
-  .s-ibtn-icon{font-size:15px}
-  .s-ibtn-label{font-size:12px}
+  .s-ibtn-icon{font-size:16px}
+  .s-ibtn-label{font-size:9px}
   .s-ibtn-sep{display:none}
   .s-ibtn.on{background:#7c3aed;color:#fff}
   .s-ibtn.on .s-ibtn-label{color:#fff}
 
-  /* Panel slides up from bottom */
+  /* ── Panel: OVERLAY that slides up over canvas ── */
   .s-panel{
-    width:100%;border-right:none;border-top:1px solid #e8e8e8;max-height:40vh;overflow-y:auto;order:3;flex-shrink:0;-webkit-overflow-scrolling:touch
+    position:absolute;bottom:0;left:0;right:0;
+    width:100%;border-right:none;border-top:1px solid #e8e8e8;
+    max-height:55vh;overflow-y:auto;z-index:80;
+    background:#fff;border-radius:16px 16px 0 0;
+    box-shadow:0 -4px 24px rgba(0,0,0,.12);
+    -webkit-overflow-scrolling:touch;
+    transform:translateY(0);transition:transform .25s ease;
   }
-  .s-panel-inner{padding:16px}
-
-  /* Canvas area */
-  .s-canvas{
-    min-height:0;flex:1;order:2;overflow:hidden;display:flex;align-items:center;justify-content:center
+  .s-panel::before{
+    content:'';display:block;width:36px;height:4px;
+    background:#ddd;border-radius:2px;
+    margin:8px auto 4px;flex-shrink:0;
   }
-  .s-shirt-stage{min-height:0;height:100%;display:flex;align-items:center;justify-content:center}
-  .s-shirt-img{width:min(320px,80vw);max-height:100%;object-fit:contain}
+  .s-panel-inner{padding:12px 16px}
+  .s-panel[style*="display: none"],.s-panel[style*="display:none"]{transform:translateY(100%)}
 
-  /* Right thumbs become top row */
-  .s-thumbs{
-    width:100%;flex-direction:row;flex-shrink:0;border-left:none;border-bottom:1px solid #e8e8e8;padding:4px 8px;overflow-x:auto;justify-content:flex-start;gap:6px;order:1;height:auto;max-height:60px;-webkit-overflow-scrolling:touch
-  }
-  .s-thumb{width:52px;flex-shrink:0}
-  .s-thumb-img{height:52px}
-  .s-thumb-label{font-size:9px}
-  .s-thumb-div{display:none}
-  .s-thumb-action{display:none}
-
-  /* Bottom bar */
+  /* ── Bottom bar: compact ── */
   .s-bottombar{
-    padding:6px 10px;gap:6px;position:relative;bottom:auto;background:#fff;border-top:1px solid #e8e8e8;z-index:50;flex-shrink:0
+    padding:4px 10px;gap:6px;position:relative;bottom:auto;
+    background:#fff;border-top:1px solid #e8e8e8;
+    z-index:90;flex-shrink:0;order:4;
   }
   .s-bottom-info{display:none}
-  .s-bot-btn{height:38px;padding:0 14px;font-size:13px}
+  .s-bot-btn{height:36px;padding:0 12px;font-size:12px}
   .s-bot-btn.next{
-    height:44px;padding:0 20px;font-size:14px;
+    height:42px;padding:0 18px;font-size:13px;
     flex:1;border-radius:12px;
   }
 
   /* Float pills */
-  .float-pill{font-size:13px;padding:10px 16px;gap:6px}
-  .s-floats{gap:8px}
+  .float-pill{font-size:12px;padding:8px 14px;gap:6px}
+  .s-floats{gap:6px;bottom:8px}
 
   /* Step 2 mobile */
-  #page-step2 .studio-topbar{height:52px}
+  #page-step2 .studio-topbar{height:46px}
   #page-step2 .studio-actions .stbtn:first-child{display:none}
 
-  /* Step 3 mobile */  
+  /* Step 3 mobile */
   #page-step3 > .studio-page > div:last-child{
     grid-template-columns:1fr !important;
     padding:16px !important;
@@ -998,8 +1022,14 @@ footer{background:#111;padding:56px 32px 28px}
   .steps{grid-template-columns:1fr}
   .pdp-title{font-size:20px}
   .pdp-cta{height:50px;font-size:15px}
-  .s-shirt-img{width:min(260px,75vw)}
-  .s-panel{max-height:35vh}
+  .s-shirt-img{width:min(240px,70vw)}
+  .s-panel{max-height:50vh}
+  .s-ibtn{padding:4px 8px}
+  .s-ibtn-icon{font-size:14px}
+  .s-ibtn-label{font-size:8px}
+  .studio-topbar{height:42px;padding:0 8px}
+  .stbtn{height:28px;padding:0 6px;font-size:10px}
+  .stbtn.blue{height:30px;padding:0 10px;font-size:11px}
   .pcard-img-area{min-height:160px;padding:16px}
   .footer-grid{grid-template-columns:1fr;gap:20px}
   .ship-cards{grid-template-columns:1fr}
@@ -3126,6 +3156,18 @@ function sClosePanel(){
   // Only exit jersey mode when user explicitly closes the N&N panel (× button)
   // Jersey mode persists if user is just switching to another panel
 }
+
+/* Mobile: tap canvas to dismiss panel overlay */
+document.addEventListener('DOMContentLoaded',function(){
+  const canvas=document.querySelector('.s-canvas');
+  if(canvas) canvas.addEventListener('click',function(e){
+    if(window.innerWidth>768) return;
+    const panel=document.getElementById('s-panel');
+    if(panel && panel.style.display!=='none' && !e.target.closest('.s-dzone') && !e.target.closest('.txt-layer')){
+      sClosePanel();
+    }
+  });
+});
 
 function buildSGarments(){
   const el=document.getElementById("s-garments"); if(!el) return;
