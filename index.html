@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v8.6 -->
+<!-- v8.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1352,7 +1352,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v8.6</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v8.7</span>
   </div>
 
 </nav>
@@ -4642,13 +4642,7 @@ function jerseyRenderBack(){
     large: {name:58, sub:22, num:168},
     xl:    {name:70, sub:26, num:200},
   };
-  // Hoodies have less body space — scale down
-  const sizeScale = isHoodie ? 0.72 : 1;
-  const sz = {
-    name: Math.round((SIZES[sizeVal]||SIZES.large).name * sizeScale),
-    sub:  Math.round((SIZES[sizeVal]||SIZES.large).sub  * sizeScale),
-    num:  Math.round((SIZES[sizeVal]||SIZES.large).num  * sizeScale),
-  };
+  const sz = SIZES[sizeVal] || SIZES.large;
 
   // Hide float pills
   const fp = document.getElementById('s-floats');
