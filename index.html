@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v8.2 -->
+<!-- v8.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1040,6 +1040,8 @@ footer{background:#111;padding:56px 32px 28px}
   #step2-size-grid > div{grid-template-columns:repeat(2,1fr) !important}
 }
 
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
 /* ══════════════════════════════════════════
    SAVED DESIGNS
 ══════════════════════════════════════════ */
@@ -1350,7 +1352,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v8.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v8.3</span>
   </div>
 
 </nav>
@@ -1924,7 +1926,7 @@ footer{background:#111;padding:56px 32px 28px}
         <span class="s-ibtn-label">Quantities</span>
       </button>
       <div class="s-ibtn-sep"></div>
-      <button class="s-ibtn" id="sib-names" onclick="sPanel('names',this)">
+      <button class="s-ibtn" id="sib-names" onclick="nnConfirmEnter(this)">
         <span class="s-ibtn-icon">🏷</span>
         <span class="s-ibtn-label">Names &amp; #s</span>
       </button>
@@ -2368,6 +2370,65 @@ footer{background:#111;padding:56px 32px 28px}
             Names &amp; Numbers = <strong style="color:#555">$6.00</strong>
           </div>
 
+          <!-- Cancel / exit jersey mode -->
+          <button onclick="nnCancelMode()" style="width:100%;margin-top:14px;padding:11px;background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;font-weight:700;color:#888;cursor:pointer;font-family:Inter,sans-serif">
+            ✕ Cancel Names &amp; Numbers
+          </button>
+
+        </div>
+      </div>
+
+      <!-- CANCEL NAMES MODE BUTTON — visible once inside jersey mode -->
+          <button id="nn-cancel-mode-btn" onclick="nnCancelMode()" style="display:none;width:100%;margin-top:10px;padding:11px;background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;font-weight:700;color:#888;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s">
+            ✕ Cancel Names &amp; Numbers
+          </button>
+
+      <!-- CONFIRMATION MODAL — shown before activating jersey mode -->
+      <div id="nn-confirm-modal" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);align-items:flex-end;justify-content:center">
+        <div style="background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:460px;margin:0 auto;overflow:hidden;box-shadow:0 -8px 40px rgba(0,0,0,.2);animation:slideUp .25s ease">
+          <!-- Header -->
+          <div style="padding:20px 20px 0;display:flex;align-items:flex-start;justify-content:space-between">
+            <div>
+              <div style="font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px">Names &amp; Numbers</div>
+              <div style="font-size:22px;font-weight:900;color:#111;letter-spacing:-.5px">Add Names &amp; Numbers</div>
+            </div>
+            <button onclick="nnDismissConfirm()" style="background:none;border:none;font-size:22px;color:#bbb;cursor:pointer;padding:0;line-height:1;margin-top:2px">×</button>
+          </div>
+          <!-- Description -->
+          <p style="margin:10px 20px 0;font-size:13px;color:#888;line-height:1.6">Use personalized Names &amp; Numbers for projects like team jerseys where you need a unique name and/or number for each item.</p>
+          <!-- Jersey preview image -->
+          <div style="margin:14px 20px;border-radius:12px;overflow:hidden;background:#f5f5f5;height:180px;display:flex;align-items:center;justify-content:center">
+            <div style="text-align:center;padding:20px">
+              <div style="font-size:48px;margin-bottom:8px">🏆</div>
+              <div style="display:flex;gap:16px;justify-content:center">
+                <div style="text-align:center;font-family:'Bebas Neue',sans-serif">
+                  <div style="font-size:13px;font-weight:700;color:#c0392b;letter-spacing:2px">JAMESON</div>
+                  <div style="font-size:32px;font-weight:900;color:#c0392b;line-height:1">21</div>
+                </div>
+                <div style="text-align:center;font-family:'Bebas Neue',sans-serif">
+                  <div style="font-size:13px;font-weight:700;color:#c0392b;letter-spacing:2px">THOMAS</div>
+                  <div style="font-size:32px;font-weight:900;color:#c0392b;line-height:1">13</div>
+                </div>
+                <div style="text-align:center;font-family:'Bebas Neue',sans-serif">
+                  <div style="font-size:13px;font-weight:700;color:#c0392b;letter-spacing:2px">THOMAS</div>
+                  <div style="font-size:32px;font-weight:900;color:#c0392b;line-height:1">26</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Pricing note -->
+          <div style="margin:0 20px;background:#faf5ff;border-radius:10px;padding:10px 14px;font-size:12px;color:#7c3aed;font-weight:600">
+            Names = <strong>$4.00</strong> &nbsp;·&nbsp; Numbers = <strong>$3.00</strong> &nbsp;·&nbsp; Both = <strong>$6.00</strong> per shirt
+          </div>
+          <!-- Buttons -->
+          <div style="padding:16px 20px 28px;display:flex;flex-direction:column;gap:8px">
+            <button onclick="nnDoEnter()" style="width:100%;padding:15px;background:#7c3aed;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 4px 14px rgba(124,58,237,.35);letter-spacing:.01em">
+              Add Names &amp; Numbers →
+            </button>
+            <button onclick="nnDismissConfirm()" style="width:100%;padding:12px;background:none;border:1.5px solid #e0e0e0;border-radius:14px;font-size:14px;font-weight:600;color:#888;cursor:pointer;font-family:Inter,sans-serif">
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
 
@@ -4498,6 +4559,40 @@ function qtyUpdateTotals(){
 // NAMES & NUMBERS
 // ════════════════════════════════
 let nnRoster = [];
+// ═══════════════════════════════════════════════════
+// NAMES & NUMBERS — CONFIRM MODAL
+// ═══════════════════════════════════════════════════
+let _nnPendingBtn = null;
+
+function nnConfirmEnter(btn){
+  // If already in jersey mode, just open the panel normally
+  if(jerseyMode){
+    sPanel('names', btn);
+    return;
+  }
+  // Otherwise show the confirmation modal first
+  _nnPendingBtn = btn;
+  const modal = document.getElementById('nn-confirm-modal');
+  if(modal) modal.style.display = 'flex';
+}
+
+function nnDismissConfirm(){
+  const modal = document.getElementById('nn-confirm-modal');
+  if(modal) modal.style.display = 'none';
+  _nnPendingBtn = null;
+}
+
+function nnDoEnter(){
+  nnDismissConfirm();
+  sPanel('names', _nnPendingBtn);
+  _nnPendingBtn = null;
+}
+
+function nnCancelMode(){
+  exitJerseyModeAndClose();
+  sNtf('Names & Numbers cancelled');
+}
+
 let nnRowCount = 0;
 let nnColor = '#111111';
 
