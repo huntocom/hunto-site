@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v8.5 -->
+<!-- v8.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1352,7 +1352,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v8.5</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v8.6</span>
   </div>
 
 </nav>
@@ -4642,7 +4642,13 @@ function jerseyRenderBack(){
     large: {name:58, sub:22, num:168},
     xl:    {name:70, sub:26, num:200},
   };
-  const sz = SIZES[sizeVal] || SIZES.large;
+  // Hoodies have less body space — scale down
+  const sizeScale = isHoodie ? 0.72 : 1;
+  const sz = {
+    name: Math.round((SIZES[sizeVal]||SIZES.large).name * sizeScale),
+    sub:  Math.round((SIZES[sizeVal]||SIZES.large).sub  * sizeScale),
+    num:  Math.round((SIZES[sizeVal]||SIZES.large).num  * sizeScale),
+  };
 
   // Hide float pills
   const fp = document.getElementById('s-floats');
@@ -4664,7 +4670,13 @@ function jerseyRenderBack(){
 
   const el = document.createElement('div');
   el.id = 'nn-preview';
-  el.style.cssText = 'position:absolute;top:22%;left:50%;transform:translateX(-50%);z-index:20;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px;';
+  // Detect garment type to set vertical position
+  const prodId = sState?.product?.id || '';
+  const isHoodie = prodId === '18500' || prodId === 'SF500';
+  const isCrew   = prodId === '18000'; // crewneck sweatshirt
+  const topPct   = isHoodie ? '38%' : isCrew ? '30%' : '22%';
+
+  el.style.cssText = `position:absolute;top:${topPct};left:50%;transform:translateX(-50%);z-index:20;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px;`;
   el.innerHTML = inner;
   stage.appendChild(el);
 }
