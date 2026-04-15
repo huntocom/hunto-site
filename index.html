@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v10.8 -->
+<!-- v10.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.8</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.9</span>
   </div>
 
 </nav>
@@ -6798,39 +6798,45 @@ function buildStep2(){
     // Collapsible size section
     html += '<div id="step2-sizes-'+idx+'" style="display:none;background:#fafafa;padding:16px 20px;border-top:1px solid #f5f5f5">';
 
-    // Adult sizes
-    html += '<div style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Adult Sizes</div>';
-    html += '<div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap">';
-    ADULT.forEach(function(sz){
-      const up = UP[sz]||0;
-      const qty = psizes[sz]||0;
+    // Helper: compact size input
+    function sizeBox(sz, pidx, qty, up){
       const active = qty > 0;
-      html += '<div style="text-align:center;flex:1;min-width:44px">';
-      html += '<div style="font-size:11px;font-weight:700;color:#555;margin-bottom:4px">'+sz+'</div>';
-      html += '<input type="number" min="0" max="999" value="'+(qty||'')+'" placeholder="0" ';
-      html += 'data-pidx="'+idx+'" data-sz="'+sz+'" ';
-      html += 'oninput="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
-      html += 'style="width:100%;padding:9px 4px;border:'+(active?'2px solid #7c3aed':'1.5px solid #e0e0e0')+';border-radius:8px;font-size:15px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(active?'#faf5ff':'#fff')+';outline:none;box-sizing:border-box">';
-      if(up) html += '<div style="font-size:9px;color:#aaa;margin-top:2px">+$'+up+'</div>';
-      html += '</div>';
-    });
+      let h = '<div style="text-align:center">';
+      h += '<div style="font-size:10px;font-weight:700;color:#666;margin-bottom:3px">'+sz+'</div>';
+      h += '<input type="number" min="0" max="999" value="'+(qty||0)+'" ';
+      h += 'data-pidx="'+pidx+'" data-sz="'+sz+'" ';
+      h += 'oninput="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
+      h += 'style="width:44px;height:40px;padding:0;border:'+(active?'2px solid #7c3aed':'1px solid #ddd')+';border-radius:6px;font-size:13px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(active?'#faf5ff':'#fff')+';outline:none;-moz-appearance:textfield">';
+      if(up) h += '<div style="font-size:9px;color:#aaa;margin-top:2px">+$'+up+'</div>';
+      h += '</div>';
+      return h;
+    }
+
+    // Adult sizes — single row
+    const ADULT_MAIN = ['S','M','L','XL','2XL','3XL','4XL'];
+    html += '<div style="padding:12px 20px;border-bottom:1px solid #f5f5f5">';
+    html += '<div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Adult Sizes</div>';
+    html += '<div style="display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap">';
+    ADULT_MAIN.forEach(function(sz){ html += sizeBox(sz, idx, psizes[sz]||0, UP[sz]||0); });
+    html += '</div>';
+    // 5XL full width
+    const qty5xl = psizes['5XL']||0;
+    html += '<div style="margin-top:8px">';
+    html += '<div style="font-size:10px;font-weight:700;color:#666;margin-bottom:3px">5XL</div>';
+    html += '<input type="number" min="0" max="999" value="'+qty5xl+'" ';
+    html += 'data-pidx="'+idx+'" data-sz="5XL" ';
+    html += 'oninput="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
+    html += 'style="width:100%;height:38px;padding:0 12px;border:'+(qty5xl?'2px solid #7c3aed':'1px solid #ddd')+';border-radius:6px;font-size:13px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(qty5xl?'#faf5ff':'#fff')+';outline:none;box-sizing:border-box">';
+    html += '<div style="font-size:9px;color:#aaa;margin-top:2px">+$4.95</div>';
+    html += '</div>';
     html += '</div>';
 
-    // Youth sizes
-    html += '<div style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Youth Sizes</div>';
-    html += '<div style="display:flex;gap:6px;flex-wrap:wrap">';
-    YOUTH.forEach(function(sz){
-      const qty = psizes[sz]||0;
-      const active = qty > 0;
-      html += '<div style="text-align:center;flex:1;min-width:44px">';
-      html += '<div style="font-size:11px;font-weight:700;color:#555;margin-bottom:4px">'+sz+'</div>';
-      html += '<input type="number" min="0" max="999" value="'+(qty||'')+'" placeholder="0" ';
-      html += 'data-pidx="'+idx+'" data-sz="'+sz+'" ';
-      html += 'oninput="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
-      html += 'style="width:100%;padding:9px 4px;border:'+(active?'2px solid #7c3aed':'1.5px solid #e0e0e0')+';border-radius:8px;font-size:15px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(active?'#faf5ff':'#fff')+';outline:none;box-sizing:border-box">';
-      html += '</div>';
-    });
-    html += '</div>';
+    // Youth sizes — single row
+    html += '<div style="padding:12px 20px 16px">';
+    html += '<div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Youth Sizes</div>';
+    html += '<div style="display:flex;gap:6px;align-items:flex-start">';
+    YOUTH.forEach(function(sz){ html += sizeBox(sz, idx, psizes[sz]||0, 0); });
+    html += '</div></div>';
 
     html += '</div></div>'; // close sizes + row
   });
@@ -6840,16 +6846,56 @@ function buildStep2(){
   // Auto-open first product
   step2ToggleProduct(0);
 
-  // Update left-side shirt image — show active product
+  // Update left-side shirt image — show active product, full bleed
   const first = sProducts[sActiveIdx] || sProducts[0];
   const fp = first?.product || {};
   const fc = first?.color || {};
   const imgEl = document.getElementById('step2-shirt-img');
   if(imgEl){
-    const src = fc.front || getShirtPhotoUrl(fp.id, fc.n||fc.name||'', 'front') || orderState.designPreview || '';
-    imgEl.src = src;
-    imgEl.style.opacity = '1';
+    const src = fc.back || fc.front || getShirtPhotoUrl(fp.id, fc.n||fc.name||'', 'back') || '';
+    if(src && !src.startsWith('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEs')){
+      imgEl.src = src;
+      imgEl.style.display = '';
+    } else {
+      // fallback to front
+      const fsrc = fc.front || getShirtPhotoUrl(fp.id, fc.n||fc.name||'', 'front') || '';
+      imgEl.src = fsrc;
+      imgEl.style.display = '';
+    }
   }
+
+  // Show design overlay on the shirt
+  const overlay = document.getElementById('step2-design-overlay');
+  if(overlay){
+    const wrap = document.getElementById('s-shirt-wrap');
+    const imgElShirt = document.getElementById('s-shirt');
+    if(wrap && imgElShirt){
+      // Get shirt bounds and design layers, scale to full screen
+      const layers = Array.from(wrap.querySelectorAll("[data-type='image'],[data-type='text'],.txt-layer"))
+        .filter(function(el){ return el.style.display !== 'none'; });
+      if(layers.length > 0){
+        const wRect = wrap.getBoundingClientRect();
+        overlay.innerHTML = layers.map(function(el){
+          const lRect = el.getBoundingClientRect();
+          const left = ((lRect.left - wRect.left) / wRect.width * 100).toFixed(1);
+          const top  = ((lRect.top  - wRect.top)  / wRect.height * 100).toFixed(1);
+          const w    = (lRect.width  / wRect.width  * 100).toFixed(1);
+          const h    = (lRect.height / wRect.height * 100).toFixed(1);
+          const img  = el.querySelector('img');
+          if(img && img.src && !img.src.startsWith('data:image/jpeg;base64,/9j/4AAQ')){
+            return '<img src="'+img.src+'" style="position:absolute;left:'+left+'%;top:'+top+'%;width:'+w+'%;height:'+h+'%;object-fit:contain;pointer-events:none">';
+          }
+          return '';
+        }).join('');
+      } else {
+        overlay.innerHTML = '';
+      }
+    }
+  }
+
+  // Re-trigger slide animation
+  const panel = document.getElementById('step2-panel');
+  if(panel){ panel.classList.remove('step2-panel-animate'); void panel.offsetWidth; panel.classList.add('step2-panel-animate'); }
 
   // Jersey section
   const jerseySection = document.getElementById('step2-jersey-section');
@@ -7171,59 +7217,62 @@ window.addEventListener('load', updateDeliveryDates);
 
 
 <!-- ████ STEP 2: QUANTITY & SIZES ████ -->
+<style>
+@keyframes slideInRight{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.step2-panel-animate{animation:slideInRight .32s cubic-bezier(.22,.68,0,1.2) forwards}
+</style>
 <div id="page-step2" class="page">
-<div style="display:flex;height:100vh;overflow:hidden;background:#f5f5f5">
+<div style="display:flex;height:100vh;overflow:hidden">
 
-  <!-- LEFT: Garment preview -->
-  <div style="flex:1;position:relative;display:flex;align-items:center;justify-content:center;background:#e8e8e8;overflow:hidden">
-    <img id="step2-shirt-img" src="" style="max-height:90vh;max-width:100%;object-fit:contain" onerror="this.style.opacity='.3'">
-    <div id="step2-design-overlay" style="position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center"></div>
-    <!-- Back to design button -->
-    <button onclick="goStep1()" style="position:absolute;top:20px;left:20px;display:flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,.9);border:1px solid #e0e0e0;border-radius:20px;font-size:13px;font-weight:700;color:#333;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.1)">
-      ← Back to Design
-    </button>
-    <!-- Step indicator -->
-    <div style="position:absolute;top:20px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.9);border-radius:20px;padding:6px 16px;box-shadow:0 2px 8px rgba(0,0,0,.1)">
-      <span style="font-size:11px;font-weight:600;color:#aaa">1 Design</span>
-      <span style="color:#ddd">›</span>
-      <span style="font-size:11px;font-weight:800;color:#7c3aed">2 Quantity & Sizes</span>
-      <span style="color:#ddd">›</span>
-      <span style="font-size:11px;font-weight:600;color:#aaa">3 Review</span>
+  <!-- LEFT: Garment + artwork preview -->
+  <div style="flex:1;position:relative;background:#d1d1d1;overflow:hidden;display:flex;align-items:center;justify-content:center">
+    <!-- Shirt fills left side -->
+    <img id="step2-shirt-img" src="" style="height:100%;width:100%;object-fit:cover;object-position:center top" onerror="this.style.display='none'">
+    <!-- Artwork overlay centered on shirt body -->
+    <div id="step2-design-overlay" style="position:absolute;inset:0;pointer-events:none"></div>
+    <!-- Step breadcrumb -->
+    <div style="position:absolute;top:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);border-radius:20px;padding:7px 18px;font-size:12px;font-weight:600;white-space:nowrap">
+      <span onclick="goStep1()" style="color:#888;cursor:pointer">1 Design</span>
+      <span style="color:#ccc">›</span>
+      <span style="color:#7c3aed;font-weight:800">2 Quantity &amp; Sizes</span>
+      <span style="color:#ccc">›</span>
+      <span style="color:#aaa">3 Review</span>
     </div>
+    <!-- Back button -->
+    <button onclick="goStep1()" style="position:absolute;top:18px;left:18px;padding:7px 14px;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);border:none;border-radius:20px;font-size:12px;font-weight:700;color:#333;cursor:pointer;font-family:Inter,sans-serif">← Back</button>
   </div>
 
-  <!-- RIGHT: Quantity panel (slides in from right) -->
-  <div style="width:420px;flex-shrink:0;background:#fff;display:flex;flex-direction:column;border-left:1px solid #e8e8e8;box-shadow:-4px 0 20px rgba(0,0,0,.08)">
+  <!-- RIGHT: Quantity panel -->
+  <div id="step2-panel" class="step2-panel-animate" style="width:400px;flex-shrink:0;background:#fff;display:flex;flex-direction:column;box-shadow:-8px 0 32px rgba(0,0,0,.12)">
 
-    <!-- Panel header -->
-    <div style="padding:20px 24px 16px;border-bottom:1px solid #f0f0f0">
+    <!-- Header -->
+    <div style="padding:22px 24px 16px;border-bottom:1px solid #f0f0f0">
       <div style="font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px">Quantity &amp; Sizes</div>
       <div style="font-size:22px;font-weight:900;color:#111;letter-spacing:-.5px;margin-bottom:6px">How Many Do You Need?</div>
-      <div style="font-size:12px;color:#aaa;line-height:1.5">Enter quantities to calculate the price. Save money by increasing quantity.</div>
+      <div style="font-size:12px;color:#aaa;line-height:1.5">Enter quantities to calculate the price.</div>
     </div>
 
-    <!-- Scrollable product list -->
-    <div id="step2-size-grid" style="flex:1;overflow-y:auto;padding:0"></div>
+    <!-- Product list -->
+    <div id="step2-size-grid" style="flex:1;overflow-y:auto"></div>
 
-    <!-- Jersey section -->
-    <div id="step2-jersey-section" style="display:none;margin:0 16px 8px;background:#faf5ff;border-radius:12px;padding:14px 16px">
-      <div style="font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:6px">🏆 Names &amp; Numbers</div>
-      <div id="step2-jersey-summary" style="font-size:12px;color:#555;line-height:1.7"></div>
+    <!-- Jersey -->
+    <div id="step2-jersey-section" style="display:none;margin:0 16px 8px;background:#faf5ff;border-radius:10px;padding:12px 14px">
+      <div style="font-size:11px;font-weight:700;color:#7c3aed;margin-bottom:4px">🏆 Names &amp; Numbers</div>
+      <div id="step2-jersey-summary" style="font-size:11px;color:#555;line-height:1.6"></div>
     </div>
 
-    <!-- Bottom: totals + CTA -->
-    <div style="border-top:1px solid #f0f0f0;padding:16px 24px">
-      <div id="step2-summary" style="margin-bottom:12px"></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <!-- Footer -->
+    <div style="border-top:1px solid #f0f0f0;padding:14px 20px">
+      <div id="step2-summary" style="margin-bottom:10px;font-size:12px;color:#888"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
         <div style="font-size:13px;font-weight:600;color:#555">Estimated Total</div>
-        <div id="step2-grand-total" style="font-size:24px;font-weight:900;color:#7c3aed">$0.00</div>
+        <div id="step2-grand-total" style="font-size:22px;font-weight:900;color:#7c3aed">$0.00</div>
       </div>
-      <button onclick="goStep3()" style="width:100%;padding:16px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;letter-spacing:.04em;box-shadow:0 4px 16px rgba(37,99,235,.4)">
+      <button onclick="goStep3()" style="width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;letter-spacing:.06em">
         CALCULATE PRICING →
       </button>
-      <div style="font-size:11px;color:#aaa;text-align:center;margin-top:8px">Free shipping · No minimums</div>
+      <div style="font-size:11px;color:#aaa;text-align:center;margin-top:8px">Free shipping on all orders · No minimums</div>
     </div>
-
   </div>
 </div>
 </div>
