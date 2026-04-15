@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v12.6 -->
+<!-- v12.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1370,7 +1370,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.6</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.7</span>
   </div>
 
 </nav>
@@ -2392,7 +2392,7 @@ footer{background:#111;padding:56px 32px 28px}
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               Duplicate
             </button>
-            <button onclick="eaMoveLayerUp()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:1px solid #e8e8e8;cursor:pointer;font-size:9px;font-weight:700;color:#555;font-family:Inter,sans-serif;padding:8px 4px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+            <button onclick="showLayerStack()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:1px solid #e8e8e8;cursor:pointer;font-size:9px;font-weight:700;color:#555;font-family:Inter,sans-serif;padding:8px 4px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
               Layers
             </button>
@@ -4930,6 +4930,95 @@ function showLayerToolbar(id){
 
   // Open the Edit Artwork panel in the sidebar
   eaOpenForLayer(id);
+
+  // Build floating mini-toolbar on canvas (competitor-style)
+  buildCanvasOverlay(id);
+}
+
+function buildCanvasOverlay(id){
+  // Remove existing
+  const old = document.getElementById('canvas-overlay');
+  if(old) old.remove();
+
+  const dz = document.getElementById(id);
+  if(!dz) return;
+
+  const overlay = document.createElement('div');
+  overlay.id = 'canvas-overlay';
+
+  // Position below the layer - will be updated on scroll/resize
+  function positionOverlay(){
+    const rect = dz.getBoundingClientRect();
+    overlay.style.top  = (rect.bottom + 8) + 'px';
+    overlay.style.left = (rect.left + rect.width/2) + 'px';
+  }
+
+  overlay.style.cssText = 'position:fixed;z-index:9000;transform:translateX(-50%);display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:auto';
+
+  // Row 1 — Remove Background toggle
+  const rmbgApplied = dz.dataset.rmbgApplied === 'true';
+  overlay.innerHTML = `
+    <div style="background:rgba(255,255,255,.97);border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.18);border:1px solid #e8e8e8;padding:6px 14px;display:flex;align-items:center;gap:8px;white-space:nowrap">
+      <span style="font-size:12px;font-weight:700;color:#333">Remove</span>
+      <span style="font-size:9px;font-weight:800;background:#7c3aed;color:#fff;padding:1px 5px;border-radius:4px">AI</span>
+      <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;flex-shrink:0">
+        <input type="checkbox" id="co-rmbg" ${rmbgApplied?'checked':''} style="opacity:0;width:0;height:0" onchange="coToggleRmbg('${id}')">
+        <span id="co-rmbg-track" style="position:absolute;inset:0;border-radius:10px;background:${rmbgApplied?'#7c3aed':'#ccc'};transition:background .2s"></span>
+        <span id="co-rmbg-knob" style="position:absolute;top:2px;left:${rmbgApplied?'16':'2'}px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:left .2s"></span>
+      </label>
+    </div>
+    <div style="background:rgba(255,255,255,.97);border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.18);border:1px solid #e8e8e8;padding:0;display:flex;overflow:hidden">
+      <button onclick="eaOpenForLayer('${id}');sPanel('edit-artwork',null)" style="padding:7px 14px;border:none;background:none;font-size:12px;font-weight:700;color:#333;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px;border-right:1px solid #f0f0f0" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit
+      </button>
+      <button onclick="coToggleFront('${id}')" style="padding:7px 14px;border:none;background:none;font-size:12px;font-weight:700;color:#333;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px;border-right:1px solid #f0f0f0" title="Bring to Front" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+        Forward
+      </button>
+      <button onclick="coToggleBack('${id}')" style="padding:7px 14px;border:none;background:none;font-size:12px;font-weight:700;color:#333;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px;border-right:1px solid #f0f0f0" title="Send to Back" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        Backward
+      </button>
+      <button onclick="removeLayer('${id}');document.getElementById('canvas-overlay')?.remove()" style="padding:7px 14px;border:none;background:none;font-size:12px;font-weight:700;color:#dc2626;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='none'">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        Delete
+      </button>
+    </div>`;
+
+  positionOverlay();
+  document.body.appendChild(overlay);
+
+  // Keep overlay positioned even if layer moves
+  overlay._posTimer = setInterval(positionOverlay, 100);
+}
+
+function coToggleRmbg(id){
+  const tog = document.getElementById('co-rmbg');
+  const track = document.getElementById('co-rmbg-track');
+  const knob  = document.getElementById('co-rmbg-knob');
+  if(!tog) return;
+  const on = tog.checked;
+  if(track) track.style.background = on ? '#7c3aed' : '#ccc';
+  if(knob)  knob.style.left = on ? '16px' : '2px';
+
+  // Also sync the panel toggle
+  const panelTog = document.getElementById('ea-rmbg');
+  if(panelTog){ panelTog.checked = on; }
+  window.eaCurrentLayerId = id;
+  eaToggleRmbg();
+}
+
+function coToggleFront(id){
+  moveLayerUp(id);
+  buildCanvasOverlay(id);
+  sNtf('Layer moved forward');
+}
+
+function coToggleBack(id){
+  moveLayerDown(id);
+  buildCanvasOverlay(id);
+  sNtf('Layer moved backward');
 }
 
 function eaOpenForLayer(id){
@@ -4974,6 +5063,8 @@ function eaOpenForLayer(id){
 function hideLayerToolbar(){
   const tb = document.getElementById("layer-toolbar");
   if(tb) tb.remove();
+  const co = document.getElementById("canvas-overlay");
+  if(co){ clearInterval(co._posTimer); co.remove(); }
   document.querySelectorAll("[id^='rot-handle-']").forEach(h => h.remove());
 }
 
@@ -5012,6 +5103,53 @@ function eaSetFilter(f, skipHighlight){
 function eaMoveLayerUp(){
   const id = window.eaCurrentLayerId; if(!id) return;
   moveLayerUp(id);
+  buildCanvasOverlay(id);
+  sNtf('Layer moved forward');
+}
+
+function showLayerStack(){
+  // Build a visual layer stack panel
+  const wrap = document.getElementById('s-shirt-wrap');
+  if(!wrap) return;
+  const layers = getAllLayersSorted ? getAllLayersSorted() : 
+    Array.from(wrap.querySelectorAll("[data-type='image'],[data-type='text']"));
+
+  // Build modal
+  let existing = document.getElementById('layer-stack-modal');
+  if(existing){ existing.remove(); return; } // toggle
+
+  const modal = document.createElement('div');
+  modal.id = 'layer-stack-modal';
+  modal.style.cssText = 'position:fixed;bottom:80px;right:20px;z-index:9500;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.2);border:1px solid #e8e8e8;width:220px;overflow:hidden';
+
+  let html = '<div style="padding:12px 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">' +
+    '<span style="font-size:12px;font-weight:800;color:#111">Layers</span>' +
+    '<button onclick="document.getElementById(\'layer-stack-modal\').remove()" style="background:none;border:none;font-size:16px;color:#aaa;cursor:pointer">×</button>' +
+    '</div><div style="padding:8px">';
+
+  const reversed = [...layers].reverse(); // show top layer first
+  reversed.forEach(function(el, i){
+    const img = el.querySelector('img');
+    const thumb = img?.src || '';
+    const isText = el.dataset.type === 'text';
+    const isActive = el.id === window.eaCurrentLayerId;
+    html += '<div onclick="selectLayer(\''+el.id+'\')" style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;background:'+(isActive?'#faf5ff':'none')+';margin-bottom:4px" onmouseover="this.style.background=\'#f5f5f5\'" onmouseout="this.style.background=\''+(isActive?'#faf5ff':'none')+'\'">' +
+      '<div style="width:36px;height:36px;border-radius:6px;overflow:hidden;background:#f0f0f0;flex-shrink:0;border:1.5px solid '+(isActive?'#7c3aed':'#e8e8e8')+'">' +
+        (isText ? '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:16px">T</div>' :
+          '<img src="'+thumb+'" style="width:100%;height:100%;object-fit:cover">') +
+      '</div>' +
+      '<span style="font-size:11px;font-weight:600;color:#333;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(isText?'Text layer':'Image '+(reversed.length-i))+'</span>' +
+      '<div style="display:flex;gap:2px">' +
+        '<button onclick="event.stopPropagation();moveLayerUp(\''+el.id+'\');showLayerStack();buildCanvasOverlay(\''+el.id+'\')" style="width:22px;height:22px;border:1px solid #e8e8e8;border-radius:4px;background:#fff;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center" title="Move up">↑</button>' +
+        '<button onclick="event.stopPropagation();moveLayerDown(\''+el.id+'\');showLayerStack();buildCanvasOverlay(\''+el.id+'\')" style="width:22px;height:22px;border:1px solid #e8e8e8;border-radius:4px;background:#fff;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center" title="Move down">↓</button>' +
+      '</div>' +
+    '</div>';
+  });
+
+  if(!reversed.length) html += '<div style="padding:12px;text-align:center;font-size:12px;color:#aaa">No layers yet</div>';
+  html += '</div>';
+  modal.innerHTML = html;
+  document.body.appendChild(modal);
 }
 
 function eaReset(){
