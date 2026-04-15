@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v11.3 -->
+<!-- v11.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1043,6 +1043,14 @@ footer{background:#111;padding:56px 32px 28px}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 
 
+@keyframes slideInRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes slideOutRight{from{transform:translateX(0)}to{transform:translateX(100%)}}
+.qty-panel-visible{animation:slideInRight .32s cubic-bezier(.22,.68,0,1.2) forwards}
+.qty-panel-hidden{animation:slideOutRight .28s ease-in forwards}
+#qty-slide-panel{position:fixed;top:0;right:0;bottom:0;z-index:500;display:none;align-items:stretch}
+#qty-slide-panel .qsp-inner{width:420px;background:#fff;display:flex;flex-direction:column;height:100vh;box-shadow:-8px 0 40px rgba(0,0,0,.18)}
+#qty-slide-panel .qsp-backdrop{flex:1;background:rgba(0,0,0,.25);backdrop-filter:blur(1px);cursor:pointer}
+
 /* ══════════════════════════════════════════
    SAVED DESIGNS
 ══════════════════════════════════════════ */
@@ -1353,7 +1361,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.4</span>
   </div>
 
 </nav>
@@ -2574,6 +2582,41 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
 
+    </div>
+
+    <!-- SLIDING QUANTITY PANEL (overlays studio) -->
+    <div id="qty-slide-panel">
+      <div class="qsp-backdrop" onclick="closeQtyPanel()"></div>
+      <div class="qsp-inner">
+        <!-- Header -->
+        <div style="padding:20px 22px 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px">Quantity &amp; Sizes</div>
+            <div style="font-size:21px;font-weight:900;color:#111;letter-spacing:-.5px;margin-bottom:4px">How Many Do You Need?</div>
+            <div style="font-size:12px;color:#aaa">Enter quantities to calculate the price.</div>
+          </div>
+          <button onclick="closeQtyPanel()" style="background:none;border:none;font-size:22px;color:#bbb;cursor:pointer;padding:0;margin-top:2px;line-height:1">×</button>
+        </div>
+        <!-- Product size grids -->
+        <div id="step2-size-grid" style="flex:1;overflow-y:auto"></div>
+        <!-- Jersey -->
+        <div id="step2-jersey-section" style="display:none;margin:0 16px 8px;background:#faf5ff;border-radius:10px;padding:12px 14px">
+          <div style="font-size:11px;font-weight:700;color:#7c3aed;margin-bottom:4px">🏆 Names &amp; Numbers</div>
+          <div id="step2-jersey-summary" style="font-size:11px;color:#555;line-height:1.6"></div>
+        </div>
+        <!-- Footer -->
+        <div style="border-top:1px solid #f0f0f0;padding:14px 20px">
+          <div id="step2-summary" style="margin-bottom:8px;font-size:12px;color:#888"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div style="font-size:13px;font-weight:600;color:#555">Estimated Total</div>
+            <div id="step2-grand-total" style="font-size:22px;font-weight:900;color:#7c3aed">$0.00</div>
+          </div>
+          <button onclick="goStep3()" style="width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;letter-spacing:.04em">
+            CALCULATE PRICING →
+          </button>
+          <div style="font-size:11px;color:#aaa;text-align:center;margin-top:8px">Free shipping · No minimums</div>
+        </div>
+      </div>
     </div>
 
     <!-- CANVAS -->
@@ -6695,16 +6738,35 @@ function setActiveStep(n){
 }
 
 function goStep1(){
+  closeQtyPanel();
   showPage('studio');
   setActiveStep(1);
 }
 
 function goStep2(){
-  // Capture design preview then switch page
-  try { captureDesignPreview(); } catch(e){ console.warn('preview capture:', e); }
-  showPage('step2');
-  setActiveStep(2);
+  // Don't navigate away — slide quantity panel over the studio
+  const panel = document.getElementById('qty-slide-panel');
+  if(!panel) return;
   buildStep2();
+  panel.style.display = 'flex';
+  panel.classList.remove('qty-panel-hidden');
+  panel.classList.add('qty-panel-visible');
+  // Update step indicator
+  document.querySelectorAll('.sstep').forEach((el,i)=>{
+    el.classList.toggle('active', i===1);
+  });
+}
+
+function closeQtyPanel(){
+  const panel = document.getElementById('qty-slide-panel');
+  if(!panel) return;
+  panel.classList.remove('qty-panel-visible');
+  panel.classList.add('qty-panel-hidden');
+  setTimeout(()=>{ panel.style.display='none'; }, 320);
+  // Restore step indicator
+  document.querySelectorAll('.sstep').forEach((el,i)=>{
+    el.classList.toggle('active', i===0);
+  });
 }
 
 function captureDesignPreview(){
@@ -6744,6 +6806,8 @@ function captureDesignPreview(){
 }
 
 function goStep3(){
+  const panel = document.getElementById('qty-slide-panel');
+  if(panel) panel.style.display='none';
   showPage('step3');
   buildStep3();
   renderMockups();
