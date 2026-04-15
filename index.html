@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v9.1 -->
+<!-- v9.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1352,7 +1352,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.3</span>
   </div>
 
 </nav>
@@ -2181,6 +2181,12 @@ footer{background:#111;padding:56px 32px 28px}
             <div id="ai-results" style="display:none;margin-top:16px">
               <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#333;margin-bottom:10px">AI Images &nbsp;<span style="background:#7c3aed;color:#fff;font-size:9px;padding:2px 6px;border-radius:20px;font-weight:700">AI</span></div>
               <div id="ai-results-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
+            </div>
+
+            <!-- Clipart section -->
+            <div id="ai-clipart-section" style="display:none;margin-top:20px">
+              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#333;margin-bottom:10px">Clipart Results</div>
+              <div id="ai-clipart-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
             </div>
           </div>
 
@@ -3615,7 +3621,7 @@ function aiSetProgress(pct, label){
   if(label && status) status.textContent = label;
 }
 
-function aiShowResults(url){
+function aiShowResults(urls){
   // Save prompt to history
   const prompt = (document.getElementById('ai-prompt')||{}).value||'';
   if(prompt && !aiPromptHistory.includes(prompt)){
@@ -3630,12 +3636,55 @@ function aiShowResults(url){
   if(!grid||!results) return;
   results.style.display = 'block';
 
-  // Show single result as a card (tap to select)
-  grid.innerHTML = `
+  const urlArr = Array.isArray(urls) ? urls : [urls];
+  grid.innerHTML = urlArr.map(url=>`
     <div onclick="aiSelectImage('${url}')" style="cursor:pointer;border-radius:10px;overflow:hidden;border:2px solid #e8e8e8;aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='#e8e8e8'">
       <img src="${url}" style="width:100%;height:100%;object-fit:contain">
     </div>
-  `;
+  `).join('');
+}
+
+async function aiSearchClipart(query){
+  const section = document.getElementById('ai-clipart-section');
+  const grid    = document.getElementById('ai-clipart-grid');
+  if(!section||!grid) return;
+
+  section.style.display = 'block';
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:12px;color:#bbb;font-size:12px">Searching clipart...</div>';
+
+  try {
+    // OpenClipart — CC0 public domain, free, no API key needed, safe for print-on-demand
+    const res = await fetch(`https://openclipart.org/search/json/?query=${encodeURIComponent(query)}&amount=9&offset=0`);
+    const data = await res.json();
+
+    if(!data.resources || data.resources.length === 0){
+      grid.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#bbb;text-align:center;padding:8px">No clipart found — try a different search</div>';
+      return;
+    }
+
+    grid.innerHTML = data.resources.slice(0,9).map(item=>`
+      <div onclick="aiSelectImage('${item.svg.url}')" style="cursor:pointer;border-radius:8px;overflow:hidden;border:1.5px solid #e8e8e8;aspect-ratio:1;background:#f9f9f9;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='#e8e8e8'">
+        <img src="${item.svg.url}" style="width:90%;height:90%;object-fit:contain" onerror="this.src='${item.previews.preview.url}'">
+      </div>
+    `).join('');
+  } catch(e){
+    // OpenClipart sometimes has CORS issues — fall back to preview images via proxy
+    try {
+      const res2 = await fetch(`https://openclipart.org/search/json/?query=${encodeURIComponent(query)}&amount=9`);
+      const data2 = await res2.json();
+      if(data2.resources && data2.resources.length > 0){
+        grid.innerHTML = data2.resources.slice(0,9).map(item=>`
+          <div onclick="aiSelectImage('${item.previews.preview.url}')" style="cursor:pointer;border-radius:8px;overflow:hidden;border:1.5px solid #e8e8e8;aspect-ratio:1;background:#f9f9f9;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='#e8e8e8'">
+            <img src="${item.previews.preview.url}" style="width:90%;height:90%;object-fit:contain">
+          </div>
+        `).join('');
+      } else {
+        grid.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#bbb;text-align:center;padding:8px">Could not load clipart</div>';
+      }
+    } catch(e2){
+      grid.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#bbb;text-align:center;padding:8px">Could not load clipart</div>';
+    }
+  }
 }
 
 function aiRenderHistory(){
@@ -3766,33 +3815,44 @@ async function aiGen(){
   const results = document.getElementById('ai-results');
   if(results) results.style.display='none';
 
+  // Also fetch clipart in parallel
+  aiSearchClipart(p);
+
   try {
     const SERVER = "https://hunto-server-production.up.railway.app";
-    const serverRes = await fetch(SERVER + "/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: p, openaiKey: key })
-    });
 
-    if(!serverRes.ok){
-      let errData;
-      try { errData = await serverRes.json(); } catch(e){ errData = {}; }
-      throw new Error(errData.error || "Server error " + serverRes.status);
-    }
+    // Make 3 parallel DALL-E calls
+    const calls = [1,2,3].map(()=>
+      fetch(SERVER + "/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: p, openaiKey: key })
+      })
+    );
 
-    const contentType = serverRes.headers.get("content-type") || "";
-    let generatedUrl;
-    if(contentType.includes("image")){
-      const blob = await serverRes.blob();
-      generatedUrl = URL.createObjectURL(blob);
-    } else {
-      const data = await serverRes.json();
-      generatedUrl = data.url;
+    btn.innerHTML='<span class="spin"></span> Generating 3 options...';
+    const responses = await Promise.allSettled(calls);
+
+    const urls = [];
+    for(const res of responses){
+      if(res.status === 'rejected') continue;
+      const r = res.value;
+      if(!r.ok) continue;
+      const ct = r.headers.get("content-type")||"";
+      if(ct.includes("image")){
+        const blob = await r.blob();
+        urls.push(URL.createObjectURL(blob));
+      } else {
+        const data = await r.json();
+        if(data.url) urls.push(data.url);
+      }
     }
 
     btn.disabled = false;
-    btn.innerHTML = "✦ Generate";
-    aiShowResults(generatedUrl);
+    btn.innerHTML = "✦ Regenerate";
+
+    if(urls.length === 0) throw new Error("No images generated");
+    aiShowResults(urls);
 
   } catch(err){
     btn.disabled=false;
