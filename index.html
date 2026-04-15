@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v12.2 -->
+<!-- v12.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1370,7 +1370,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.3</span>
   </div>
 
 </nav>
@@ -2292,6 +2292,99 @@ footer{background:#111;padding:56px 32px 28px}
               <div style="font-size:12px;color:#888;line-height:1.5;margin-bottom:8px">Our in-house designer optimizes your art for perfect DTF printing.</div>
               <button id="keith-ai-btn" onclick="toggleKeith()" style="width:100%;padding:8px;border:1.5px solid #7c3aed;border-radius:8px;background:#fff;color:#7c3aed;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">+ Add Keith's Edit</button>
             </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- EDIT ARTWORK (shown when image layer selected) -->
+      <div id="sp-edit-artwork" style="display:none">
+        <div class="s-panel-hdr">
+          <div>
+            <div class="s-panel-title">Edit Your Artwork</div>
+            <div class="s-panel-sub">Adjust filters, size and effects</div>
+          </div>
+          <button class="s-panel-x" onclick="sClosePanel()">×</button>
+        </div>
+        <div class="s-panel-body" style="padding-top:0">
+
+          <!-- Filter thumbnails -->
+          <div style="margin-bottom:16px">
+            <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.08em;padding:14px 0 10px">Filters</div>
+            <div style="display:flex;gap:10px">
+              <div id="ea-filter-normal" onclick="eaSetFilter('normal')" style="cursor:pointer;text-align:center;flex:1">
+                <div style="border-radius:8px;overflow:hidden;border:2.5px solid #7c3aed;aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center">
+                  <img id="ea-thumb-normal" style="width:100%;height:100%;object-fit:cover">
+                </div>
+                <div style="font-size:10px;font-weight:700;color:#7c3aed;margin-top:4px">Normal</div>
+              </div>
+              <div id="ea-filter-single" onclick="eaSetFilter('single')" style="cursor:pointer;text-align:center;flex:1">
+                <div style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center">
+                  <img id="ea-thumb-single" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1) sepia(.4) contrast(1.3)">
+                </div>
+                <div style="font-size:10px;font-weight:600;color:#888;margin-top:4px">Single Color</div>
+              </div>
+              <div id="ea-filter-bw" onclick="eaSetFilter('bw')" style="cursor:pointer;text-align:center;flex:1">
+                <div style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center">
+                  <img id="ea-thumb-bw" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.8)">
+                </div>
+                <div style="font-size:10px;font-weight:600;color:#888;margin-top:4px">Black/White</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid #f0f0f0;margin-bottom:14px"></div>
+
+          <!-- Remove Background -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:5px">
+                Remove Background
+                <span style="font-size:9px;background:#7c3aed;color:#fff;padding:1px 5px;border-radius:4px;font-weight:700">AI</span>
+              </div>
+              <div style="font-size:11px;color:#888;margin-top:1px">Erase background, keep design</div>
+            </div>
+            <label style="position:relative;display:inline-block;width:40px;height:22px;cursor:pointer;flex-shrink:0">
+              <input type="checkbox" id="ea-rmbg" style="opacity:0;width:0;height:0" onchange="eaToggleRmbg()">
+              <span id="ea-rmbg-track" style="position:absolute;inset:0;border-radius:11px;background:#ccc;transition:background .2s"></span>
+              <span id="ea-rmbg-knob" style="position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s"></span>
+            </label>
+          </div>
+
+          <!-- Size -->
+          <div style="margin-bottom:14px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+              <div style="font-size:12px;font-weight:700;color:#333">Size</div>
+              <div id="ea-size-val" style="font-size:12px;font-weight:700;color:#7c3aed">100%</div>
+            </div>
+            <input type="range" id="ea-size" min="20" max="200" value="100" step="1"
+              style="width:100%;accent-color:#7c3aed" oninput="eaApplyTransform()">
+          </div>
+
+          <!-- Rotate -->
+          <div style="margin-bottom:18px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+              <div style="font-size:12px;font-weight:700;color:#333">Rotate</div>
+              <div id="ea-rotate-val" style="font-size:12px;font-weight:700;color:#7c3aed">0°</div>
+            </div>
+            <input type="range" id="ea-rotate" min="-180" max="180" value="0" step="1"
+              style="width:100%;accent-color:#7c3aed" oninput="eaApplyTransform()">
+          </div>
+
+          <!-- Bottom toolbar -->
+          <div style="border-top:1px solid #f0f0f0;padding-top:14px;display:flex;justify-content:space-around">
+            <button onclick="eaCenter()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 10px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+              <span style="font-size:18px">⊕</span>Center
+            </button>
+            <button onclick="eaFlip()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 10px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+              <span style="font-size:18px">↔</span>Flip
+            </button>
+            <button onclick="eaDuplicate()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 10px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+              <span style="font-size:18px">⧉</span>Duplicate
+            </button>
+            <button onclick="eaDelete()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#dc2626;font-family:Inter,sans-serif;padding:6px 10px;border-radius:8px" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='none'">
+              <span style="font-size:18px">🗑</span>Delete
+            </button>
           </div>
 
         </div>
@@ -3470,7 +3563,7 @@ function sPanel(id,btn){
   // Jersey Mode persists across panel switches — only × button exits it
   document.querySelectorAll(".s-ibtn").forEach(b=>b.classList.remove("on"));
   if(btn)btn.classList.add("on");
-  ["products","text","ai","upload","color","size","keith","names","qty"].forEach(p=>{
+  ["products","text","ai","upload","color","size","keith","names","qty","edit-artwork"].forEach(p=>{
     const el=document.getElementById("sp-"+p);
     if(el)el.style.display=p===id?"block":"none";
   });
@@ -4754,6 +4847,8 @@ function applyDesign(src){
   sState.hasDesign = true;
   const fp = document.getElementById("s-floats");
   if(fp) fp.classList.add("hidden");
+  // Auto-open edit panel
+  setTimeout(function(){ eaOpenForLayer(id); }, 100);
 }
 
 function addImageLayer(side, id, src){
@@ -4811,45 +4906,178 @@ function showLayerToolbar(id){
   hideLayerToolbar();
   const dz = document.getElementById(id);
   if(!dz) return;
-  // Show resize handle
   const rzh = document.getElementById("rzh-"+id);
   if(rzh) rzh.style.display = "block";
 
-  const dzRect = dz.getBoundingClientRect();
+  // Open the Edit Artwork panel in the sidebar
+  eaOpenForLayer(id);
+}
 
-  const tb = document.createElement("div");
-  tb.id = "layer-toolbar";
-  tb.style.cssText = "position:fixed;z-index:9999;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.18);border:1px solid #e8e8e8;display:flex;align-items:center;gap:0;overflow:hidden;";
-  tb.style.top = (dzRect.bottom + 8) + "px";
-  tb.style.left = (dzRect.left + dzRect.width/2) + "px";
-  tb.style.transform = "translateX(-50%)";
+function eaOpenForLayer(id){
+  const dz = document.getElementById(id);
+  if(!dz) return;
 
-  const btns = [
-    {icon:"🗑", label:"Delete", action:`removeLayer('${id}')`},
-    {icon:"🔼", label:"Forward", action:`moveLayerUp('${id}')`},
-    {icon:"🔽", label:"Backward", action:`moveLayerDown('${id}')`},
-    {icon:"⤡", label:"Size", action:`quickSize('${id}')`},
-    {icon:"↺", label:"Rotate", action:`quickRotate('${id}')`},
-  ];
+  // Store which layer we're editing
+  window.eaCurrentLayerId = id;
 
-  btns.forEach((b,i) => {
-    const btn = document.createElement("button");
-    btn.style.cssText = "border:none;background:transparent;padding:8px 12px;cursor:pointer;font-size:12px;font-weight:600;color:#333;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:Inter,sans-serif;"+(i>0?"border-left:1px solid #f0f0f0":"");
-    btn.innerHTML = '<span style="font-size:15px">'+b.icon+'</span><span style="font-size:9px;color:#888">'+b.label+'</span>';
-    btn.onclick = (e) => { e.stopPropagation(); eval(b.action); };
-    btn.onmouseover = () => btn.style.background = "#fdf4ff";
-    btn.onmouseout = () => btn.style.background = "transparent";
-    tb.appendChild(btn);
+  // Set filter thumbnails from the layer's img src
+  const img = dz.querySelector('img');
+  const src = img?.src || '';
+  ['normal','single','bw'].forEach(function(f){
+    const thumb = document.getElementById('ea-thumb-'+f);
+    if(thumb) thumb.src = src;
   });
 
-  document.body.appendChild(tb);
+  // Reset sliders
+  const sizeEl = document.getElementById('ea-size');
+  const rotEl  = document.getElementById('ea-rotate');
+  if(sizeEl){ const w=dz.offsetWidth; sizeEl.value=Math.round(w/220*100); }
+  if(rotEl)  rotEl.value = 0;
+  eaUpdateLabels();
+
+  // Reset bg toggle
+  const tog = document.getElementById('ea-rmbg');
+  const track = document.getElementById('ea-rmbg-track');
+  const knob  = document.getElementById('ea-rmbg-knob');
+  if(tog) tog.checked = !!dz.dataset.rmbgApplied;
+  if(track) track.style.background = dz.dataset.rmbgApplied ? '#7c3aed' : '#ccc';
+  if(knob)  knob.style.transform   = dz.dataset.rmbgApplied ? 'translateX(18px)' : 'translateX(0)';
+
+  // Update filter selection highlight
+  eaSetFilter(dz.dataset.filter || 'normal', true);
+
+  // Open the panel
+  sPanel('edit-artwork', null);
+  // Highlight the upload icon button as active
+  document.querySelectorAll('.s-ibtn').forEach(function(b){ b.classList.remove('on'); });
 }
 
 function hideLayerToolbar(){
   const tb = document.getElementById("layer-toolbar");
   if(tb) tb.remove();
-  // Also remove any rotate handles
   document.querySelectorAll("[id^='rot-handle-']").forEach(h => h.remove());
+}
+
+// ── Edit Artwork Panel Functions ──────────────────────
+window.eaCurrentLayerId = null;
+window.eaOriginalSrc = {}; // store original src per layer id
+
+function eaUpdateLabels(){
+  const sv = document.getElementById('ea-size');
+  const rv = document.getElementById('ea-rotate');
+  const sl = document.getElementById('ea-size-val');
+  const rl = document.getElementById('ea-rotate-val');
+  if(sv&&sl) sl.textContent = sv.value+'%';
+  if(rv&&rl) rl.textContent = rv.value+'°';
+}
+
+function eaSetFilter(f, skipHighlight){
+  const id = window.eaCurrentLayerId;
+  const filters = {normal:'none', single:'grayscale(1) sepia(.4) contrast(1.3)', bw:'grayscale(1) contrast(1.8)'};
+  if(id){
+    const dz = document.getElementById(id);
+    if(dz){ const img=dz.querySelector('img'); if(img) img.style.filter=filters[f]||'none'; dz.dataset.filter=f; }
+  }
+  if(!skipHighlight){
+    ['normal','single','bw'].forEach(function(key){
+      const wrap = document.getElementById('ea-filter-'+key);
+      if(!wrap) return;
+      const box = wrap.querySelector('div');
+      if(box) box.style.borderColor = key===f ? '#7c3aed' : '#e8e8e8';
+      const lbl = wrap.querySelector('div+div');
+      if(lbl){ lbl.style.color = key===f ? '#7c3aed' : '#888'; lbl.style.fontWeight = key===f ? '700':'600'; }
+    });
+  }
+}
+
+function eaApplyTransform(){
+  eaUpdateLabels();
+  const id = window.eaCurrentLayerId;
+  if(!id) return;
+  const el = document.getElementById(id);
+  if(!el) return;
+  const size = parseFloat(document.getElementById('ea-size')?.value||100);
+  const rot  = parseFloat(document.getElementById('ea-rotate')?.value||0);
+  const base = 220;
+  const newPx = Math.round(base * size / 100);
+  const oldW = el.offsetWidth||newPx, oldH = el.offsetHeight||newPx;
+  const oldL = parseFloat(el.style.left)||0, oldT = parseFloat(el.style.top)||0;
+  const cx = oldL+oldW/2, cy = oldT+oldH/2;
+  el.style.width  = newPx+'px'; el.style.height = newPx+'px';
+  el.style.left   = (cx-newPx/2)+'px'; el.style.top = (cy-newPx/2)+'px';
+  const flip = el.dataset.flipped==='true'?' scaleX(-1)':'';
+  el.style.transform = 'rotate('+rot+'deg)'+flip;
+}
+
+function eaCenter(){
+  const id = window.eaCurrentLayerId; if(!id) return;
+  const el = document.getElementById(id);
+  const wrap = document.getElementById('s-shirt-wrap');
+  if(!el||!wrap) return;
+  el.style.left = ((wrap.offsetWidth  - el.offsetWidth )/2)+'px';
+  el.style.top  = ((wrap.offsetHeight - el.offsetHeight)/2)+'px';
+}
+
+function eaFlip(){
+  const id = window.eaCurrentLayerId; if(!id) return;
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.dataset.flipped = el.dataset.flipped==='true' ? 'false' : 'true';
+  const rot = document.getElementById('ea-rotate')?.value||0;
+  const flip = el.dataset.flipped==='true'?' scaleX(-1)':'';
+  el.style.transform = 'rotate('+rot+'deg)'+flip;
+}
+
+function eaDuplicate(){
+  const id = window.eaCurrentLayerId; if(!id) return;
+  const el = document.getElementById(id);
+  if(!el) return;
+  const img = el.querySelector('img');
+  if(!img) return;
+  const side = el.dataset.side||'front';
+  const newId = 'layer-'+(++layerCounter);
+  sLayers[side] = sLayers[side]||[];
+  sLayers[side].push({id:newId, src:img.src, type:'image'});
+  addImageLayer(side, newId, img.src);
+  sNtf('✓ Layer duplicated!');
+}
+
+function eaDelete(){
+  const id = window.eaCurrentLayerId; if(!id) return;
+  removeLayer(id);
+  window.eaCurrentLayerId = null;
+  sClosePanel();
+}
+
+function eaToggleRmbg(){
+  const tog   = document.getElementById('ea-rmbg');
+  const track = document.getElementById('ea-rmbg-track');
+  const knob  = document.getElementById('ea-rmbg-knob');
+  if(!tog) return;
+  const on = tog.checked;
+  if(track) track.style.background = on ? '#7c3aed' : '#ccc';
+  if(knob)  knob.style.transform   = on ? 'translateX(18px)' : 'translateX(0)';
+
+  const id = window.eaCurrentLayerId; if(!id) return;
+  const el = document.getElementById(id);
+  const img = el?.querySelector('img'); if(!img) return;
+
+  if(on){
+    // Store original src
+    if(!eaOriginalSrc[id]) eaOriginalSrc[id] = img.src;
+    img.style.opacity = '0.5';
+    removeBackground(eaOriginalSrc[id], function(cleanUrl){
+      img.src = cleanUrl; img.style.opacity='1';
+      el.dataset.rmbgApplied = 'true';
+      // Update filter thumbs
+      ['normal','single','bw'].forEach(function(f){ const t=document.getElementById('ea-thumb-'+f); if(t) t.src=cleanUrl; });
+    });
+  } else {
+    // Restore original
+    if(eaOriginalSrc[id]){ img.src=eaOriginalSrc[id]; img.style.opacity='1'; }
+    el.dataset.rmbgApplied = '';
+    ['normal','single','bw'].forEach(function(f){ const t=document.getElementById('ea-thumb-'+f); if(t&&eaOriginalSrc[id]) t.src=eaOriginalSrc[id]; });
+  }
 }
 
 function quickRotate(id){
