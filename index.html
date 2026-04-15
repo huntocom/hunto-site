@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v10.1 -->
+<!-- v10.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.2</span>
   </div>
 
 </nav>
@@ -1871,17 +1871,17 @@ footer{background:#111;padding:56px 32px 28px}
 
   <div class="studio-topbar">
     <div class="studio-steps" id="studio-steps">
-      <div class="sstep active" id="sstep-1">
+      <div class="sstep active" id="sstep-1" onclick="goToStudioStep(1)" style="cursor:pointer">
         <div class="sstep-num">1</div>
         <div class="sstep-label">Design</div>
       </div>
       <div class="sstep-div"></div>
-      <div class="sstep" id="sstep-2">
+      <div class="sstep" id="sstep-2" onclick="goToStudioStep(2)" style="cursor:pointer">
         <div class="sstep-num">2</div>
         <div class="sstep-label">Quantity &amp; Sizes</div>
       </div>
       <div class="sstep-div"></div>
-      <div class="sstep" id="sstep-3">
+      <div class="sstep" id="sstep-3" onclick="goToStudioStep(3)" style="cursor:pointer">
         <div class="sstep-num">3</div>
         <div class="sstep-label">Review</div>
       </div>
@@ -3776,33 +3776,35 @@ function aiSetFilter(f){
   });
 
   const filters = {normal:'none', single:'grayscale(1) sepia(0.3) contrast(1.4)', bw:'grayscale(1) contrast(1.8)'};
-  // Apply CSS filter to the placed design element
-  const dzone = document.getElementById('s-dzone-'+sView);
-  if(dzone){
-    const img = dzone.querySelector('img[data-type="image"], img');
-    if(img) img.style.filter = filters[f]||'none';
-  }
+  // Apply CSS filter to the placed AI layer
+  const el = document.getElementById(aiCurrentLayerId);
+  if(el){ const img = el.querySelector('img'); if(img) img.style.filter = filters[f]||'none'; }
 }
 
 function aiToggleRemoveBg(){
-  const tog = document.getElementById('ai-rmbg-toggle');
+  const tog   = document.getElementById('ai-rmbg-toggle');
   const track = document.getElementById('ai-rmbg-track');
-  const knob = document.getElementById('ai-rmbg-knob');
+  const knob  = document.getElementById('ai-rmbg-knob');
   if(!tog) return;
   const on = tog.checked;
   if(track) track.style.background = on ? '#7c3aed' : '#ccc';
-  if(knob) knob.style.transform = on ? 'translateX(20px)' : 'translateX(0)';
+  if(knob)  knob.style.transform   = on ? 'translateX(20px)' : 'translateX(0)';
 
   if(on && aiCurrentUrl){
-    // Remove bg
+    sNtf('Removing background...');
     removeBackground(aiCurrentUrl, (cleanUrl)=>{
-      aiCurrentUrl = cleanUrl;
-      applyDesign(cleanUrl);
-      ['normal','single','bw'].forEach(f=>{ const img=document.getElementById('ai-thumb-'+f+'-img'); if(img) img.src=cleanUrl; });
+      // Update the placed layer's image src
+      const el = document.getElementById(aiCurrentLayerId);
+      if(el){ const img = el.querySelector('img'); if(img) img.src = cleanUrl; }
+      // Update thumbnails
+      ['normal','single','bw'].forEach(f=>{ const t=document.getElementById('ai-thumb-'+f+'-img'); if(t) t.src=cleanUrl; });
+      sNtf('✓ Background removed!');
     });
-  } else if(aiCurrentUrl){
-    // Restore original (would need to store it - for now just notify)
-    sNtf('Regenerate to restore original background');
+  } else {
+    // Restore original
+    const el = document.getElementById(aiCurrentLayerId);
+    if(el && aiCurrentUrl){ const img = el.querySelector('img'); if(img) img.src = aiCurrentUrl; }
+    ['normal','single','bw'].forEach(f=>{ const t=document.getElementById('ai-thumb-'+f+'-img'); if(t) t.src=aiCurrentUrl; });
   }
 }
 
@@ -3812,16 +3814,14 @@ function aiApplyTransform(){
   document.getElementById('ai-size-val').textContent   = size+'%';
   document.getElementById('ai-rotate-val').textContent = rot+'°';
 
-  const dzone = document.getElementById('s-dzone-'+sView);
-  if(!dzone) return;
-  const el = dzone.querySelector('[data-type="image"]') || dzone.firstElementChild;
-  if(el){
-    const base = 283;
-    const px = Math.round(base * size / 100);
-    el.style.width = px+'px';
-    el.style.height = px+'px';
-    el.style.transform = `rotate(${rot}deg)`;
-  }
+  // Find the tracked AI layer
+  const el = document.getElementById(aiCurrentLayerId);
+  if(!el) return;
+  const base = 220; // initial size from addImageLayer
+  const px = Math.round(base * size / 100);
+  el.style.width  = px + 'px';
+  el.style.height = px + 'px';
+  el.style.transform = 'rotate(' + rot + 'deg)';
 }
 
 function aiResetTransform(){
@@ -4271,10 +4271,13 @@ function handleUpload(e){
   r.readAsDataURL(f);
 }
 
+let aiCurrentLayerId = null;
+
 function applyDesign(src){
   const side = sView === "back" ? "back" : "front";
   const id = "layer-" + (++layerCounter);
   sLayers[side].push({id, src, type:"image"});
+  aiCurrentLayerId = id; // track for AI edit controls
   addImageLayer(side, id, src);
   sState.hasDesign = true;
   const fp = document.getElementById("s-floats");
@@ -4691,6 +4694,12 @@ function sUpdateAll(){
   const frontStatus = (sLayers.front||[]).length > 0 ? "✓ Front" : "Front: empty";
   const backStatus  = (sLayers.back||[]).length  > 0 ? "✓ Back"  : "Back: empty";
   if(cl)cl.textContent=(sView==="back"?"Back":"Front")+" — "+sState.product.id+" · "+sState.color.n+" · "+sState.sz+" · "+frontStatus+" · "+backStatus;
+}
+
+function goToStudioStep(n){
+  if(n===1) showPage('page-studio');
+  else if(n===2) sNext();
+  else if(n===3){ sNext(); } // only if already on step 2
 }
 
 function sNext(){
