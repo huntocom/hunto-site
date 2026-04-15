@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v12.3 -->
+<!-- v12.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1370,7 +1370,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.4</span>
   </div>
 
 </nav>
@@ -1903,10 +1903,13 @@ footer{background:#111;padding:56px 32px 28px}
         <div class="sstep-label">Review</div>
       </div>
     </div>
-    <div class="studio-price" id="s-price">$28.00</div>
+    <div class="studio-price" id="s-price" style="display:flex;flex-direction:column;align-items:flex-end;cursor:pointer" onclick="goStep2()" title="Click to add quantities">
+      <div style="font-size:16px;font-weight:900;color:#111" id="s-price-each">$28.00 ea</div>
+      <div id="s-price-sub" style="font-size:10px;color:#aaa;font-weight:600">0 items · add qty →</div>
+    </div>
     <div class="studio-actions">
       <button class="stbtn" onclick="goHome()">← Back</button>
-      <button class="stbtn" onclick="saveCurrentDesign()">💾 Save</button>
+      <button class="stbtn" onclick="showSaveDesignPrompt(function(){})">💾 Save</button>
       <button class="stbtn blue" onclick="sNext()">Next Step →</button>
     </div>
   </div>
@@ -2795,7 +2798,7 @@ footer{background:#111;padding:56px 32px 28px}
 
         <!-- Footer CTA -->
         <div style="border-top:1px solid #f0f0f0;padding:16px 20px">
-          <button onclick="requireLogin()" style="width:100%;padding:16px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;letter-spacing:.04em;margin-bottom:10px">
+          <button onclick="proceedToCheckout()" style="width:100%;padding:16px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;letter-spacing:.04em;margin-bottom:10px">
             ADD TO CART →
           </button>
           <!-- Payment logos -->
@@ -2805,7 +2808,7 @@ footer{background:#111;padding:56px 32px 28px}
             <span style="font-size:11px;font-weight:800;color:#000;background:#f5f5f5;padding:3px 8px;border-radius:4px">Klarna</span>
             <span style="font-size:11px;font-weight:800;color:#000;background:#f5f5f5;padding:3px 8px;border-radius:4px">Affirm</span>
           </div>
-          <button onclick="requireLogin()" style="width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">
+          <button onclick="proceedToCheckout()" style="width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">
             🍎 Buy with Apple Pay
           </button>
         </div>
@@ -5385,11 +5388,13 @@ function toggleKeith(){
 
 function sUpdateAll(){
   const total=sState.product.price+(sState.keith?20:0);
-  const pe=document.getElementById("s-price");if(pe)pe.textContent="$"+total.toFixed(2);
+  // Update live topbar price
+  const totalUnits = orderState.totalUnits || 0;
+  const garmentTotal = orderState.garmentTotal || 0;
+  updateStudioLivePrice(totalUnits, garmentTotal || (total * (totalUnits||0)));
   const bp=document.getElementById("s-bot-prod");if(bp)bp.textContent="Gildan "+sState.product.id+" "+sState.product.name;
   const bc=document.getElementById("s-bot-color");if(bc)bc.textContent=sState.color.n;
   const bs=document.getElementById("s-bot-sz");if(bs)bs.textContent=sState.sz;
-  const pl={fc:"Front Center",lc:"Left Chest",fb:"Full Back"}[sState.place];
   const cl=document.getElementById("s-canvas-label");
   const frontStatus = (sLayers.front||[]).length > 0 ? "✓ Front" : "Front: empty";
   const backStatus  = (sLayers.back||[]).length  > 0 ? "✓ Back"  : "Back: empty";
@@ -7354,23 +7359,31 @@ function closeReviewPanel(){
   setTimeout(()=>{ panel.style.display='none'; }, 320);
 }
 
+function proceedToCheckout(){
+  // No login wall — go straight to checkout, offer account creation post-purchase
+  closeReviewPanel();
+  showSaveDesignPrompt(function(){
+    sNtf('Redirecting to checkout...');
+    setTimeout(function(){ window.location.href='https://hunto-5642.myshopify.com/checkout'; }, 600);
+  });
+}
+
+// Keep requireLogin for any other uses but make it non-blocking
 function requireLogin(){
-  const m = document.getElementById('login-modal');
-  if(m){ m.style.display='flex'; }
+  proceedToCheckout();
 }
 
 function doLogin(){
   const email = document.getElementById('login-email')?.value||'';
-  if(!email){ alert('Please enter your email'); return; }
+  if(!email){ sNtf('Please enter your email'); return; }
   document.getElementById('login-modal').style.display='none';
-  sNtf('✓ Signed in! Redirecting to checkout...');
-  setTimeout(()=>{ window.location.href='https://hunto-5642.myshopify.com/account/login'; }, 1000);
+  sNtf('✓ Signed in! Redirecting...');
+  setTimeout(function(){ window.location.href='https://hunto-5642.myshopify.com/account/login'; }, 800);
 }
 
 function doGuestCheckout(){
   document.getElementById('login-modal').style.display='none';
-  sNtf('✓ Continuing as guest...');
-  setTimeout(()=>{ window.location.href='https://hunto-5642.myshopify.com/checkout'; }, 800);
+  proceedToCheckout();
 }
 
 // ── Step 2: Quantities ─────────────────────────────────
@@ -7664,7 +7677,119 @@ function step2UpdateTotals(){
   orderState.jerseyTotal = jerseyTotal;
   orderState.grand = grand;
   orderState.totalUnits = totalUnits;
+
+  // ── Live price in studio topbar ──
+  updateStudioLivePrice(totalUnits, garmentTotal);
 }
+
+// ── Live pricing in studio topbar ──────────────────────
+function updateStudioLivePrice(totalUnits, garmentTotal){
+  const priceEach = document.getElementById('s-price-each');
+  const priceSub  = document.getElementById('s-price-sub');
+  if(!priceEach || !priceSub) return;
+
+  const basePrice = parseFloat(sState.product?.price || sState.product?.base_retail || 28);
+
+  if(!totalUnits){
+    priceEach.textContent = '$'+basePrice.toFixed(2)+' ea';
+    priceSub.innerHTML = '0 items · <span style="color:#7c3aed">add qty →</span>';
+    return;
+  }
+
+  // Bulk discount tiers
+  const disc = totalUnits>=24?10 : totalUnits>=12?7 : totalUnits>=6?3 : 0;
+  const rawPer = garmentTotal / totalUnits;
+  const discPer = rawPer * (1 - disc/100);
+
+  if(disc > 0){
+    priceEach.innerHTML = '<span style="text-decoration:line-through;color:#bbb;font-size:13px">$'+rawPer.toFixed(2)+'</span> <span style="color:#16a34a">$'+discPer.toFixed(2)+' ea</span>';
+  } else {
+    priceEach.textContent = '$'+rawPer.toFixed(2)+' ea';
+  }
+
+  // Next discount tier hint
+  const nextTier = totalUnits<6?{n:6,p:3} : totalUnits<12?{n:12,p:7} : totalUnits<24?{n:24,p:10} : null;
+  if(nextTier){
+    const need = nextTier.n - totalUnits;
+    priceSub.innerHTML = totalUnits+' items · <span style="color:#7c3aed">add '+need+' more → '+nextTier.p+'% off</span>';
+  } else {
+    priceSub.innerHTML = '<span style="color:#16a34a;font-weight:700">'+totalUnits+' items · max discount ✓</span>';
+  }
+}
+
+// ── Fix 3: Save Design Prompt (abandoned design recovery) ──
+let saveDesignEmailCaptured = false;
+
+function showSaveDesignPrompt(onContinue){
+  // If already captured email, skip prompt
+  if(saveDesignEmailCaptured || localStorage.getItem('hunto_email')){
+    onContinue();
+    return;
+  }
+
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px';
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:20px;max-width:380px;width:100%;padding:32px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.25)">
+      <div style="font-size:32px;margin-bottom:12px">💾</div>
+      <div style="font-size:22px;font-weight:900;color:#111;letter-spacing:-.5px;margin-bottom:8px">Save your design</div>
+      <div style="font-size:13px;color:#888;margin-bottom:20px;line-height:1.5">Enter your email to save your design and get your order confirmation. We'll never spam you.</div>
+      <input id="save-design-email" type="email" placeholder="your@email.com"
+        style="width:100%;padding:13px 16px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box;margin-bottom:10px"
+        onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#e8e8e8'">
+      <button onclick="saveDesignAndContinue(this)" style="width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;margin-bottom:10px">
+        Save &amp; Checkout →
+      </button>
+      <button onclick="this.closest('div[style*=fixed]').remove();(${onContinue.toString()})()" style="width:100%;padding:12px;background:none;border:none;font-size:13px;color:#aaa;cursor:pointer;font-family:Inter,sans-serif">
+        Skip — continue without saving
+      </button>
+    </div>`;
+  document.body.appendChild(modal);
+
+  // Store callback for the save button
+  modal._onContinue = onContinue;
+  window._saveDesignContinue = onContinue;
+}
+
+function saveDesignAndContinue(btn){
+  const email = document.getElementById('save-design-email')?.value?.trim();
+  if(!email || !email.includes('@')){ sNtf('Please enter a valid email'); return; }
+
+  // Store email locally
+  localStorage.setItem('hunto_email', email);
+  saveDesignEmailCaptured = true;
+
+  // Save design to server for abandoned recovery
+  try {
+    const designData = {
+      email,
+      product: sState.product?.name || '',
+      color: sState.color?.n || '',
+      units: orderState.totalUnits || 0,
+      total: orderState.grand || 0,
+      timestamp: Date.now(),
+    };
+    fetch('https://hunto-server-production.up.railway.app/save-design', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(designData)
+    }).catch(function(){});
+  } catch(e){}
+
+  // Close modal and continue
+  btn.closest('div[style*="position:fixed"]').remove();
+  sNtf('✓ Design saved! Redirecting to checkout...');
+  setTimeout(function(){ window.location.href='https://hunto-5642.myshopify.com/checkout'; }, 600);
+}
+
+// Auto-trigger save prompt when user starts to leave (mouse leaves window)
+let savePromptShown = false;
+document.addEventListener('mouseleave', function(e){
+  if(e.clientY < 5 && !savePromptShown && sState.hasDesign && !saveDesignEmailCaptured && !localStorage.getItem('hunto_email')){
+    savePromptShown = true;
+    showSaveDesignPrompt(function(){ savePromptShown = false; });
+  }
+});
 
 // ── Step 3: Review & Order ─────────────────────────────
 function buildStep3(){
