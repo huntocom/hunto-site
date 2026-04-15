@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v10.3 -->
+<!-- v10.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.4</span>
   </div>
 
 </nav>
@@ -2496,6 +2496,22 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
 
+      <!-- COLOR PICKER MODAL -->
+      <div id="color-picker-modal" style="display:none;position:fixed;inset:0;z-index:2500;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);align-items:center;justify-content:center">
+        <div style="background:#fff;border-radius:20px;width:100%;max-width:340px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25);margin:16px">
+          <div style="padding:18px 20px 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Change Color</div>
+              <div style="font-size:13px;font-weight:600;color:#333">Color: <span id="color-picker-name">—</span></div>
+            </div>
+            <button onclick="closeColorPicker()" style="width:32px;height:32px;border-radius:50%;background:#f5f5f5;border:none;font-size:18px;color:#aaa;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>
+          </div>
+          <div style="padding:16px 20px 20px">
+            <div id="color-picker-grid" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- ROSTER MODAL -->
       <div id="nn-modal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.45);backdrop-filter:blur(2px)">
         <div style="position:absolute;inset:0;overflow-y:auto;padding:20px 16px;display:flex;align-items:flex-start;justify-content:center">
@@ -2997,10 +3013,10 @@ function buildPDP(){
   if(rail){
     rail.innerHTML = `
       <div onclick="pdView('front')" style="width:72px;height:72px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid ${pdpState.view!=='back'?'#7c3aed':'#e8e8e8'};background:#f8f9fb;display:flex;align-items:center;justify-content:center">
-        <img src="${frontImg}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
+        <img src="${frontImg}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display=\'none\'">
       </div>
       <div onclick="pdView('back')" style="width:72px;height:72px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid ${pdpState.view==='back'?'#7c3aed':'#e8e8e8'};background:#f8f9fb;display:flex;align-items:center;justify-content:center">
-        <img src="${backImg}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
+        <img src="${backImg}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display=\'none\'">
       </div>`;
   }
 
@@ -3304,37 +3320,120 @@ document.addEventListener('DOMContentLoaded',function(){
 
 function buildSGarments(){
   const el=document.getElementById("s-garments"); if(!el) return;
-  // Initialize if empty
   if(!sProducts.length) sInitProducts();
 
-  const cards = sProducts.map((sp,idx)=>{
-    const p=sp.product, c=sp.color;
-    const cn=c?.n||c?.name||""; const ch=c?.h||c?.hex||"#888";
-    const img=c?.front||p?.image||(p?.id?getShirtPhotoUrl(p.id,cn,"front"):IMG_F);
-    const isActive=idx===sActiveIdx;
-    return `<div onclick="sSetActive(${idx})" style="border:2px solid ${isActive?'#7c3aed':'#e8e8e8'};border-radius:12px;overflow:hidden;margin-bottom:10px;cursor:pointer;transition:all .15s;background:${isActive?'#fdf4ff':'#fff'}">
-      <div style="padding:8px 12px;background:${isActive?'#e8f3ff':'#f8f8f8'};border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:11px;font-weight:700;color:${isActive?'#7c3aed':'#555'}">${isActive?'● ACTIVE':'○'} Product ${idx+1}</span>
-        <div style="display:flex;gap:6px">
-          <button onclick="event.stopPropagation();openProductModalFor(${idx})" style="font-size:10px;color:#7c3aed;font-weight:700;background:none;border:1px solid #d8b4fe;border-radius:5px;padding:2px 7px;cursor:pointer;font-family:Inter,sans-serif">Change</button>
-          ${sProducts.length>1?`<button onclick="event.stopPropagation();sRemoveProduct(${idx})" style="font-size:10px;color:#dc2626;font-weight:700;background:none;border:1px solid #fca5a5;border-radius:5px;padding:2px 6px;cursor:pointer;font-family:Inter,sans-serif">✕</button>`:""}
-        </div>
-      </div>
-      <div style="padding:10px;display:flex;align-items:center;gap:10px">
-        <div style="width:52px;height:52px;border-radius:8px;overflow:hidden;background:#f8f8f8;flex-shrink:0">
-          <img src="${img}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
-        </div>
-        <div style="min-width:0">
-          <div style="font-size:11px;color:#333;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p?.brand||"Gildan"} — ${p?.name||""}</div>
-          <div style="display:flex;align-items:center;gap:5px;margin-top:4px">
-            <div style="width:14px;height:14px;border-radius:3px;background:${ch};border:1px solid rgba(0,0,0,.1);flex-shrink:0"></div>
-            <span style="font-size:11px;color:#666">${cn}</span>
-          </div>
-        </div>
-      </div>
-    </div>`;
-  }).join("");
-  el.innerHTML = cards;
+  // Group by product id
+  const groups={}, groupOrder=[];
+  sProducts.forEach((sp,idx)=>{
+    const pid=sp.product?.id||'unknown';
+    if(!groups[pid]){groups[pid]=[];groupOrder.push(pid);}
+    groups[pid].push({sp,idx});
+  });
+
+  let html='';
+  groupOrder.forEach(pid=>{
+    const entries=groups[pid];
+    const p=entries[0].sp.product;
+    const colorThumbs=entries.map(({sp,idx})=>{
+      const c=sp.color, cn=c?.n||c?.name||'', ch=c?.h||c?.hex||'#888';
+      const img=c?.front||p?.image||(p?.id?getShirtPhotoUrl(p.id,cn,'front'):IMG_F);
+      const isActive=idx===sActiveIdx;
+      const shortName=cn.length>9?cn.slice(0,9)+'…':cn;
+      return '<div style="text-align:center;position:relative">' +
+        '<div onclick="sSetActive('+idx+')" title="'+cn+'" style="width:64px;height:64px;border-radius:10px;overflow:hidden;border:2.5px solid '+(isActive?'#7c3aed':'#e8e8e8')+';background:#f5f5f5;cursor:pointer;transition:border-color .15s">' +
+          '<img src="'+img+'" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display=\'none\'">' +
+        '</div>' +
+        '<div style="font-size:10px;color:#888;margin-top:3px;width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+shortName+'</div>' +
+        '<button onclick="openColorPicker('+idx+')" style="margin-top:2px;font-size:10px;font-weight:700;color:#7c3aed;background:none;border:1px solid #d8b4fe;border-radius:10px;padding:2px 8px;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:3px;margin-left:auto;margin-right:auto">' +
+          '<span style="width:8px;height:8px;border-radius:50%;background:'+ch+';display:inline-block;border:1px solid rgba(0,0,0,.1)"></span> Change' +
+        '</button>' +
+        (sProducts.length>1?'<button onclick="event.stopPropagation();sRemoveProduct('+idx+')" style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:#fff;border:1.5px solid #fca5a5;color:#dc2626;font-size:10px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>':'') +
+      '</div>';
+    }).join('');
+
+    html += '<div style="border:1.5px solid #e8e8e8;border-radius:14px;overflow:hidden;margin-bottom:12px;background:#fff">' +
+      '<div style="padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f0f0;background:#f9f9f9">' +
+        '<div style="font-size:12px;font-weight:800;color:#111;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:165px">'+(p?.brand||'Gildan')+' '+(p?.name||'')+'</div>' +
+        '<button onclick="openProductModalFor('+entries[0].idx+')" style="font-size:11px;font-weight:700;color:#7c3aed;background:none;border:1.5px solid #d8b4fe;border-radius:20px;padding:3px 10px;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;flex-shrink:0">Change Product</button>' +
+      '</div>' +
+      '<div style="padding:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start">' +
+        colorThumbs +
+        '<div style="text-align:center">' +
+          '<div onclick="sAddColor('+entries[0].idx+')" style="width:64px;height:64px;border-radius:10px;border:2px dashed #d8b4fe;background:#fdf4ff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:background .15s" onmouseover="this.style.background=\'#ede9fe\'" onmouseout="this.style.background=\'#fdf4ff\'">' +
+            '<span style="font-size:24px;color:#7c3aed;line-height:1">+</span>' +
+          '</div>' +
+          '<div style="font-size:10px;color:#aaa;margin-top:3px">Add Color</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+
+  el.innerHTML = html;
+}
+
+// ── Color Picker Modal ────────────────────────────────────
+let colorPickerIdx = -1;
+
+function openColorPicker(idx){
+  colorPickerIdx = idx;
+  const sp = sProducts[idx];
+  if(!sp) return;
+  const colors = sp.product?.colors || [];
+  const curName = sp.color?.n||sp.color?.name||'';
+
+  const modal = document.getElementById('color-picker-modal');
+  const nameEl = document.getElementById('color-picker-name');
+  const grid   = document.getElementById('color-picker-grid');
+  if(!modal) return;
+
+  if(nameEl) nameEl.textContent = curName;
+  if(grid){
+    grid.innerHTML = '';
+    colors.forEach(function(c){
+      const cn = c.n||c.name||'';
+      const ch = c.h||c.hex||'#888';
+      const sel = cn === curName;
+      const dot = document.createElement('div');
+      dot.title = cn;
+      dot.style.cssText = 'width:28px;height:28px;border-radius:6px;background:'+ch+';border:2.5px solid '+(sel?'#7c3aed':'rgba(0,0,0,.06)')+';cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15);transition:border-color .12s';
+      dot.onmouseover = function(){ if(nameEl) nameEl.textContent = cn; };
+      dot.onmouseout  = function(){ if(nameEl) nameEl.textContent = document.getElementById('color-picker-name').textContent; };
+      dot.onclick     = function(){ pickColor(cn); };
+      grid.appendChild(dot);
+    });
+  }
+
+  modal.style.display = 'flex';
+}
+
+function pickColor(colorName){
+  if(colorPickerIdx<0) return;
+  const sp=sProducts[colorPickerIdx]; if(!sp) return;
+  const c=sp.product?.colors?.find(c=>(c.n||c.name)===colorName);
+  if(!c) return;
+  sProducts[colorPickerIdx].color=c;
+  if(colorPickerIdx===sActiveIdx){ sState.color=c; sUpdateShirt(); }
+  closeColorPicker();
+  buildSGarments();
+}
+
+function closeColorPicker(){
+  const m=document.getElementById('color-picker-modal');
+  if(m) m.style.display='none';
+  colorPickerIdx=-1;
+}
+
+function sAddColor(fromIdx){
+  const sp=sProducts[fromIdx]; if(!sp) return;
+  const p=sp.product;
+  const used=sProducts.filter(s=>s.product?.id===p.id).map(s=>s.color?.n||s.color?.name);
+  const next=(p?.colors||[]).find(c=>!used.includes(c.n||c.name))||p?.colors?.[0];
+  if(!next){ sNtf('All colors already added!'); return; }
+  sProducts.push({product:p, color:next});
+  sActiveIdx=sProducts.length-1;
+  sState.product=p; sState.color=next;
+  sUpdateShirt(); buildSGarments();
+  sNtf('✓ Color added!');
 }
 
 // ── Product Modal ──────────────────────────────────────────
@@ -3398,7 +3497,7 @@ function renderModalGrid(){
     const dots=(p.colors||[]).slice(0,5).map(c=>`<div style="width:12px;height:12px;border-radius:2px;background:${c.hex||'#888'};border:1px solid rgba(0,0,0,.08)"></div>`).join("");
     return `<div onclick="modalSelectProduct(${p.style_id})" style="border:1.5px solid #e8e8e8;border-radius:12px;overflow:hidden;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='#e8e8e8'">
       <div style="aspect-ratio:1;background:#f8f9fb;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px">
-        <img src="${img}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
+        <img src="${img}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display=\'none\'">
       </div>
       <div style="padding:10px">
         <div style="font-size:10px;color:#aaa;font-weight:600;margin-bottom:2px">${p.brand||""}</div>
@@ -5243,7 +5342,7 @@ async function loadBestSellers(category, tabEl){
       return `<div onclick="shopOpenProduct(${p.style_id})" style="background:#fff;border-radius:16px;border:1.5px solid #e8e8e8;overflow:hidden;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='#7c3aed';this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(124,58,237,.12)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
         <div style="aspect-ratio:1;background:#f8f9fb;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:16px;position:relative">
           <div style="position:absolute;top:12px;left:12px;background:#7c3aed;color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px">Top Seller</div>
-          <img src="${img}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
+          <img src="${img}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display=\'none\'">
         </div>
         <div style="padding:16px">
           <div style="font-size:11px;color:#aaa;font-weight:600;margin-bottom:3px">${p.brand||""}</div>
@@ -5288,7 +5387,7 @@ async function searchAutocomplete(val){
           const img = (p.colors&&p.colors[0]?.front) || p.image || "";
           const price = p.base_retail ? `From $${parseFloat(p.base_retail).toFixed(2)}` : "";
           return `<div class="search-result" onclick="closeSearchDropdown();shopOpenProduct(${p.style_id})">
-            <img class="search-result-img" src="${img}" onerror="this.style.display='none'">
+            <img class="search-result-img" src="${img}" onerror="this.style.display=\'none\'">
             <div class="search-result-info">
               <div class="search-result-name">${p.title||""}</div>
               <div class="search-result-brand">${p.brand||""} · ${p.base_category||""}</div>
@@ -5441,7 +5540,7 @@ function shopCardHTML(p){
   
   const price=p.base_retail?`From $${parseFloat(p.base_retail).toFixed(2)}`:"See pricing";
   return `<div class="shop-card" onclick="shopOpenProduct(${p.style_id})">
-    <img class="shop-card-img" src="${img}" alt="${(p.title||"").replace(/"/g,"")}" loading="lazy" onerror="this.style.display='none'">
+    <img class="shop-card-img" src="${img}" alt="${(p.title||"").replace(/"/g,"")}" loading="lazy" onerror="this.style.display=\'none\'">
     <div class="shop-card-body">
       <div class="shop-card-brand">${p.brand||""}</div>
       <div class="shop-card-name" title="${(p.title||"").replace(/"/g,"")}">${p.title||p.style_number||""}</div>
@@ -6532,7 +6631,7 @@ function renderDesignsGrid(){
     <div class="design-card" onclick="loadDesign(${d.id})">
       <div class="design-card-img" style="background:#f8f9fb">
         ${d.frontImg
-          ? `<img src="${d.frontImg}" style="width:100%;height:100%;object-fit:contain;padding:8px" onerror="this.style.display='none'">`
+          ? `<img src="${d.frontImg}" style="width:100%;height:100%;object-fit:contain;padding:8px" onerror="this.style.display=\'none\'">`
           : `<div style="font-size:48px">${d.product?.id?.includes('500')||d.product?.id==='18500'?'🧥':'👕'}</div>`}
         <button class="design-card-del" onclick="event.stopPropagation();deleteDesign(${d.id})" title="Delete">×</button>
       </div>
