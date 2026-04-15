@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v10.7 -->
+<!-- v10.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.7</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.8</span>
   </div>
 
 </nav>
@@ -6774,79 +6774,82 @@ function buildStep2(){
     const cn = c.n||c.name||'';
     const ch = c.h||c.hex||'#888';
     const imgSrc = c.front || c.back || getShirtPhotoUrl(p.id, cn, 'front') || '';
-    const brand = p.brand||'Gildan';
     const styleId = p.id||'';
+    const brand = p.brand||'Gildan';
     const pname = p.name||p.fullTitle||'Custom Shirt';
     const basePrice = parseFloat(p.price||p.base_retail||28);
+    const psizes = orderState.productSizes[idx]||{};
+    const itemCount = Object.values(psizes).reduce(function(a,b){return a+(b||0);},0);
 
-    html += '<div style="background:#fff;border:1.5px solid #e8e8e8;border-radius:16px;overflow:hidden;margin-bottom:16px">';
-
-    // Header
-    html += '<div style="padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;background:#f9f9f9">';
-    html += '<div style="width:48px;height:48px;border-radius:10px;overflow:hidden;background:#f5f5f5;flex-shrink:0;border:1px solid #e8e8e8">';
+    // Product row header
+    html += '<div style="border-bottom:1px solid #f0f0f0">';
+    html += '<div onclick="step2ToggleProduct('+idx+')" style="padding:14px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;background:#fff">';
+    html += '<span style="font-size:16px;color:#aaa;transition:transform .2s" id="step2-arrow-'+idx+'">›</span>';
+    html += '<div style="width:44px;height:44px;border-radius:8px;overflow:hidden;background:#f5f5f5;flex-shrink:0;border:1px solid #e8e8e8">';
     html += '<img src="'+imgSrc+'" style="width:100%;height:100%;object-fit:contain">';
     html += '</div>';
     html += '<div style="flex:1;min-width:0">';
-    html += '<div style="font-size:13px;font-weight:800;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+styleId+' '+brand+' '+pname+'</div>';
-    html += '<div style="display:flex;align-items:center;gap:6px;margin-top:3px">';
-    html += '<div style="width:12px;height:12px;border-radius:3px;background:'+ch+';border:1px solid rgba(0,0,0,.1)"></div>';
-    html += '<span style="font-size:12px;color:#888;font-weight:600">'+cn+'</span>';
-    html += '</div></div>';
-    html += '<div style="text-align:right;flex-shrink:0">';
-    html += '<div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em">From</div>';
-    html += '<div style="font-size:18px;font-weight:900;color:#111">$'+basePrice.toFixed(2)+'</div>';
-    html += '</div></div>';
+    html += '<div style="font-size:13px;font-weight:800;color:#111">'+styleId+' '+brand+' '+pname+'</div>';
+    html += '<div style="font-size:12px;color:#888;margin-top:2px">'+cn+'</div>';
+    html += '</div>';
+    html += '<div id="step2-count-'+idx+'" style="font-size:12px;font-weight:700;color:'+(itemCount?'#7c3aed':'#aaa')+';white-space:nowrap">'+itemCount+' Item'+(itemCount!==1?'s':'')+'</div>';
+    html += '</div>';
+
+    // Collapsible size section
+    html += '<div id="step2-sizes-'+idx+'" style="display:none;background:#fafafa;padding:16px 20px;border-top:1px solid #f5f5f5">';
 
     // Adult sizes
-    html += '<div style="padding:14px 16px">';
-    html += '<div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Adult Sizes</div>';
-    html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">';
+    html += '<div style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Adult Sizes</div>';
+    html += '<div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap">';
     ADULT.forEach(function(sz){
       const up = UP[sz]||0;
-      const qty = (orderState.productSizes[idx]||{})[sz]||0;
+      const qty = psizes[sz]||0;
       const active = qty > 0;
-      html += '<div style="text-align:center">';
-      html += '<div style="font-size:11px;font-weight:700;color:#333;margin-bottom:4px">'+sz+'</div>';
+      html += '<div style="text-align:center;flex:1;min-width:44px">';
+      html += '<div style="font-size:11px;font-weight:700;color:#555;margin-bottom:4px">'+sz+'</div>';
       html += '<input type="number" min="0" max="999" value="'+(qty||'')+'" placeholder="0" ';
-      html += 'data-pidx="'+idx+'" data-sz="'+sz+'" onchange="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
-      html += 'style="width:100%;padding:8px 4px;border:'+(active?'2px solid #7c3aed':'1.5px solid #e8e8e8')+';border-radius:8px;font-size:14px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(active?'#faf5ff':'#fff')+';outline:none">';
-      if(up) html += '<div style="font-size:10px;color:#aaa;margin-top:2px">+$'+up+'</div>';
+      html += 'data-pidx="'+idx+'" data-sz="'+sz+'" ';
+      html += 'oninput="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
+      html += 'style="width:100%;padding:9px 4px;border:'+(active?'2px solid #7c3aed':'1.5px solid #e0e0e0')+';border-radius:8px;font-size:15px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(active?'#faf5ff':'#fff')+';outline:none;box-sizing:border-box">';
+      if(up) html += '<div style="font-size:9px;color:#aaa;margin-top:2px">+$'+up+'</div>';
       html += '</div>';
     });
     html += '</div>';
 
     // Youth sizes
-    html += '<div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Youth Sizes</div>';
-    html += '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">';
+    html += '<div style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Youth Sizes</div>';
+    html += '<div style="display:flex;gap:6px;flex-wrap:wrap">';
     YOUTH.forEach(function(sz){
-      const qty = (orderState.productSizes[idx]||{})[sz]||0;
+      const qty = psizes[sz]||0;
       const active = qty > 0;
-      html += '<div style="text-align:center">';
-      html += '<div style="font-size:11px;font-weight:700;color:#333;margin-bottom:4px">'+sz+'</div>';
+      html += '<div style="text-align:center;flex:1;min-width:44px">';
+      html += '<div style="font-size:11px;font-weight:700;color:#555;margin-bottom:4px">'+sz+'</div>';
       html += '<input type="number" min="0" max="999" value="'+(qty||'')+'" placeholder="0" ';
-      html += 'data-pidx="'+idx+'" data-sz="'+sz+'" onchange="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
-      html += 'style="width:100%;padding:8px 2px;border:'+(active?'2px solid #7c3aed':'1.5px solid #e8e8e8')+';border-radius:8px;font-size:14px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(active?'#faf5ff':'#fff')+';outline:none">';
+      html += 'data-pidx="'+idx+'" data-sz="'+sz+'" ';
+      html += 'oninput="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
+      html += 'style="width:100%;padding:9px 4px;border:'+(active?'2px solid #7c3aed':'1.5px solid #e0e0e0')+';border-radius:8px;font-size:15px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(active?'#faf5ff':'#fff')+';outline:none;box-sizing:border-box">';
       html += '</div>';
     });
-    html += '</div></div>'; // close sizes + card
-    html += '</div>'; // close product card
+    html += '</div>';
+
+    html += '</div></div>'; // close sizes + row
   });
 
   grid.innerHTML = html;
 
-  // Update header product info to show first product
-  const first = sProducts[0];
+  // Auto-open first product
+  step2ToggleProduct(0);
+
+  // Update left-side shirt image — show active product
+  const first = sProducts[sActiveIdx] || sProducts[0];
   const fp = first?.product || {};
   const fc = first?.color || {};
   const imgEl = document.getElementById('step2-shirt-img');
-  if(imgEl){ 
+  if(imgEl){
     const src = fc.front || getShirtPhotoUrl(fp.id, fc.n||fc.name||'', 'front') || orderState.designPreview || '';
     imgEl.src = src;
+    imgEl.style.opacity = '1';
   }
-  const nameEl = document.getElementById('step2-product-name');
-  if(nameEl) nameEl.textContent = (fp.brand||'Gildan') + ' ' + (fp.name||'Custom Shirt') + (sProducts.length > 1 ? ' + '+(sProducts.length-1)+' more' : '');
-  const metaEl = document.getElementById('step2-product-meta');
-  if(metaEl) metaEl.textContent = sProducts.length + ' garment color'+(sProducts.length>1?'s':'') + ' selected';
 
   // Jersey section
   const jerseySection = document.getElementById('step2-jersey-section');
@@ -6866,10 +6869,31 @@ function buildStep2(){
   step2UpdateTotals();
 }
 
+function step2ToggleProduct(idx){
+  const section = document.getElementById('step2-sizes-'+idx);
+  const arrow   = document.getElementById('step2-arrow-'+idx);
+  if(!section) return;
+  const open = section.style.display === 'none' || section.style.display === '';
+  section.style.display = open ? 'block' : 'none';
+  if(arrow) arrow.style.transform = open ? 'rotate(90deg)' : '';
+}
+
 function step2SetQty(pidx, sz, qty){
   if(!orderState.productSizes) orderState.productSizes = {};
   if(!orderState.productSizes[pidx]) orderState.productSizes[pidx] = {};
   orderState.productSizes[pidx][sz] = Math.max(0, qty||0);
+  // Update item count in the header
+  const ps = orderState.productSizes[pidx]||{};
+  const total = Object.values(ps).reduce(function(a,b){return a+(b||0);},0);
+  const countEl = document.getElementById('step2-count-'+pidx);
+  if(countEl){ countEl.textContent = total+' Item'+(total!==1?'s':''); countEl.style.color=total?'#7c3aed':'#aaa'; }
+  // Highlight the input
+  const inputs = document.querySelectorAll('[data-pidx="'+pidx+'"][data-sz="'+sz+'"]');
+  inputs.forEach(function(inp){
+    inp.style.borderColor = qty>0?'#7c3aed':'#e0e0e0';
+    inp.style.borderWidth = qty>0?'2px':'1.5px';
+    inp.style.background  = qty>0?'#faf5ff':'#fff';
+  });
   step2UpdateTotals();
 }
 function step2TileClick(size){
@@ -7148,67 +7172,56 @@ window.addEventListener('load', updateDeliveryDates);
 
 <!-- ████ STEP 2: QUANTITY & SIZES ████ -->
 <div id="page-step2" class="page">
-<div class="studio-page" style="display:flex;flex-direction:column">
+<div style="display:flex;height:100vh;overflow:hidden;background:#f5f5f5">
 
-  <!-- Top bar (shared with studio) -->
-  <div class="studio-topbar">
-    <div class="studio-steps" id="studio-steps-2">
-      <div class="sstep" id="sstep2-1" onclick="goStep1()" style="cursor:pointer">
-        <div class="sstep-num">1</div><div class="sstep-label">Design</div>
-      </div>
-      <div class="sstep-div"></div>
-      <div class="sstep active"><div class="sstep-num">2</div><div class="sstep-label">Quantity &amp; Sizes</div></div>
-      <div class="sstep-div"></div>
-      <div class="sstep"><div class="sstep-num">3</div><div class="sstep-label">Review</div></div>
-    </div>
-    <div class="studio-price" id="step2-total">$0.00</div>
-    <div class="studio-actions">
-      <button class="stbtn" onclick="goStep1()">← Back to Design</button>
-      <button class="stbtn blue" onclick="goStep3()">Review Order →</button>
+  <!-- LEFT: Garment preview -->
+  <div style="flex:1;position:relative;display:flex;align-items:center;justify-content:center;background:#e8e8e8;overflow:hidden">
+    <img id="step2-shirt-img" src="" style="max-height:90vh;max-width:100%;object-fit:contain" onerror="this.style.opacity='.3'">
+    <div id="step2-design-overlay" style="position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center"></div>
+    <!-- Back to design button -->
+    <button onclick="goStep1()" style="position:absolute;top:20px;left:20px;display:flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,.9);border:1px solid #e0e0e0;border-radius:20px;font-size:13px;font-weight:700;color:#333;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.1)">
+      ← Back to Design
+    </button>
+    <!-- Step indicator -->
+    <div style="position:absolute;top:20px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.9);border-radius:20px;padding:6px 16px;box-shadow:0 2px 8px rgba(0,0,0,.1)">
+      <span style="font-size:11px;font-weight:600;color:#aaa">1 Design</span>
+      <span style="color:#ddd">›</span>
+      <span style="font-size:11px;font-weight:800;color:#7c3aed">2 Quantity & Sizes</span>
+      <span style="color:#ddd">›</span>
+      <span style="font-size:11px;font-weight:600;color:#aaa">3 Review</span>
     </div>
   </div>
 
-  <!-- Step 2 body -->
-  <div style="flex:1;overflow-y:auto;padding:40px 32px;max-width:900px;margin:0 auto;width:100%">
+  <!-- RIGHT: Quantity panel (slides in from right) -->
+  <div style="width:420px;flex-shrink:0;background:#fff;display:flex;flex-direction:column;border-left:1px solid #e8e8e8;box-shadow:-4px 0 20px rgba(0,0,0,.08)">
 
-    <!-- Product summary -->
-    <div style="display:flex;align-items:center;gap:20px;margin-bottom:32px;background:#f8f9fb;border-radius:16px;padding:20px 24px">
-      <div style="width:140px;height:140px;border-radius:14px;overflow:hidden;background:#f8f9fb;flex-shrink:0;border:1.5px solid #e8e8e8;box-shadow:0 4px 12px rgba(0,0,0,.08);position:relative">
-        <img id="step2-shirt-img" src="" style="width:100%;height:100%;object-fit:contain;position:absolute;inset:0" onerror="this.style.opacity='0'">
-        <div id="step2-design-overlay" style="position:absolute;inset:0;pointer-events:none"></div>
-      </div>
-      <div style="flex:1">
-        <div id="step2-product-name" style="font-size:20px;font-weight:800;color:#111;margin-bottom:4px"></div>
-        <div id="step2-product-meta" style="font-size:13px;color:#888"></div>
-      </div>
-      <div>
-        <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Base price</div>
-        <div id="step2-base-price" style="font-size:22px;font-weight:900;color:#111"></div>
-      </div>
+    <!-- Panel header -->
+    <div style="padding:20px 24px 16px;border-bottom:1px solid #f0f0f0">
+      <div style="font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px">Quantity &amp; Sizes</div>
+      <div style="font-size:22px;font-weight:900;color:#111;letter-spacing:-.5px;margin-bottom:6px">How Many Do You Need?</div>
+      <div style="font-size:12px;color:#aaa;line-height:1.5">Enter quantities to calculate the price. Save money by increasing quantity.</div>
     </div>
 
-    <!-- Size grid -->
-    <div style="margin-bottom:28px">
-      <div style="font-size:15px;font-weight:700;color:#111;margin-bottom:16px">Select Quantities by Size</div>
-      <div id="step2-size-grid" style="display:flex;flex-direction:column;gap:10px"></div>
+    <!-- Scrollable product list -->
+    <div id="step2-size-grid" style="flex:1;overflow-y:auto;padding:0"></div>
+
+    <!-- Jersey section -->
+    <div id="step2-jersey-section" style="display:none;margin:0 16px 8px;background:#faf5ff;border-radius:12px;padding:14px 16px">
+      <div style="font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:6px">🏆 Names &amp; Numbers</div>
+      <div id="step2-jersey-summary" style="font-size:12px;color:#555;line-height:1.7"></div>
     </div>
 
-    <!-- Jersey roster summary -->
-    <div id="step2-jersey-section" style="display:none;margin-bottom:28px;background:#faf5ff;border-radius:14px;padding:18px 20px">
-      <div style="font-size:14px;font-weight:700;color:#7c3aed;margin-bottom:8px">🏆 Jersey Mode — Names & Numbers</div>
-      <div id="step2-jersey-summary" style="font-size:13px;color:#555;line-height:1.8"></div>
-      <div style="font-size:12px;color:#888;margin-top:8px">Names = $4 · Numbers = $3 · Both = $6 per shirt</div>
-    </div>
-
-    <!-- Order summary -->
-    <div style="background:#f8f9fb;border-radius:16px;padding:20px 24px">
-      <div style="font-size:15px;font-weight:700;color:#111;margin-bottom:16px">Order Summary</div>
-      <div id="step2-summary" style="display:flex;flex-direction:column;gap:8px"></div>
-      <div style="border-top:1.5px solid #e8e8e8;margin-top:16px;padding-top:16px;display:flex;justify-content:space-between;align-items:center">
-        <div style="font-size:14px;font-weight:600;color:#333">Estimated Total</div>
-        <div id="step2-grand-total" style="font-size:26px;font-weight:900;color:#7c3aed"></div>
+    <!-- Bottom: totals + CTA -->
+    <div style="border-top:1px solid #f0f0f0;padding:16px 24px">
+      <div id="step2-summary" style="margin-bottom:12px"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div style="font-size:13px;font-weight:600;color:#555">Estimated Total</div>
+        <div id="step2-grand-total" style="font-size:24px;font-weight:900;color:#7c3aed">$0.00</div>
       </div>
-      <div style="font-size:11px;color:#aaa;margin-top:8px">+ Free shipping on all orders · No minimums</div>
+      <button onclick="goStep3()" style="width:100%;padding:16px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;letter-spacing:.04em;box-shadow:0 4px 16px rgba(37,99,235,.4)">
+        CALCULATE PRICING →
+      </button>
+      <div style="font-size:11px;color:#aaa;text-align:center;margin-top:8px">Free shipping · No minimums</div>
     </div>
 
   </div>
