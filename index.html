@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v13.5 -->
+<!-- v13.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -722,28 +722,38 @@ footer{background:#111;padding:56px 32px 28px}
 
 /* Right thumbnails */
 .s-thumbs{
-  width:88px;flex-shrink:0;background:#fff;
+  width:80px;flex-shrink:0;background:#f8f8fb;
   border-left:1px solid #e8e8e8;
   display:flex;flex-direction:column;align-items:center;
-  padding:10px 6px;gap:6px;overflow-y:auto;
+  padding:12px 0 16px;gap:4px;overflow-y:auto;
 }
 .s-thumb{
-  width:74px;cursor:pointer;border-radius:10px;
-  overflow:hidden;border:2px solid transparent;
-  background:#f8f8f8;transition:all .15s;
+  width:64px;cursor:pointer;border-radius:12px;
+  overflow:hidden;border:2.5px solid transparent;
+  background:#fff;transition:all .18s;
+  box-shadow:0 1px 4px rgba(0,0,0,.08);
 }
-.s-thumb.on{border-color:#7c3aed}
-.s-thumb:hover:not(.on){border-color:#ccc}
-.s-thumb-img{width:100%;height:74px;object-fit:contain;display:block}
-.s-thumb-label{text-align:center;font-size:9px;font-weight:700;color:#aaa;padding:3px 0;text-transform:uppercase;letter-spacing:.04em}
+.s-thumb.on{border-color:#7c3aed;box-shadow:0 2px 10px rgba(124,58,237,.2)}
+.s-thumb:hover:not(.on){border-color:#d8b4fe;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.s-thumb-img{width:100%;height:64px;object-fit:contain;display:block;padding:4px;box-sizing:border-box}
+.s-thumb-label{text-align:center;font-size:9px;font-weight:800;color:#aaa;padding:2px 0 5px;text-transform:uppercase;letter-spacing:.06em}
 .s-thumb.on .s-thumb-label{color:#7c3aed}
-.s-thumb-div{width:50px;height:1px;background:#f0f0f0}
+.s-thumb-div{width:44px;height:1px;background:#e8e8e8;margin:6px 0}
 .s-thumb-action{
-  width:74px;text-align:center;font-size:9px;font-weight:700;color:#ccc;
-  cursor:pointer;padding:7px 4px;border-radius:8px;
-  transition:all .15s;line-height:1.4;text-transform:uppercase;letter-spacing:.04em;
+  width:60px;display:flex;flex-direction:column;align-items:center;gap:4px;
+  cursor:pointer;padding:8px 4px;border-radius:10px;
+  transition:all .15s;
 }
-.s-thumb-action:hover{background:#f5f5f5;color:#666}
+.s-thumb-action:hover{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.s-thumb-action-icon{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.1);
+  transition:all .15s;
+}
+.s-thumb-action:hover .s-thumb-action-icon{box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.s-thumb-action-label{font-size:9px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.05em}
+.s-thumb-action:hover .s-thumb-action-label{color:#555}
 
 /* Studio bottom bar */
 .s-bottombar{
@@ -1399,7 +1409,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v13.5</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v13.6</span>
   </div>
 
 </nav>
@@ -2976,17 +2986,65 @@ footer{background:#111;padding:56px 32px 28px}
 
     <!-- Right thumbnails -->
     <div class="s-thumbs">
+
+      <!-- Front view -->
       <div class="s-thumb on" id="sth-f" onclick="sSetView('front')">
         <img class="s-thumb-img" id="sth-f-img" src="" alt="Front">
         <div class="s-thumb-label">Front</div>
       </div>
+
+      <!-- Back view -->
       <div class="s-thumb" id="sth-b" onclick="sSetView('back')">
         <img class="s-thumb-img" id="sth-b-img" src="" alt="Back">
         <div class="s-thumb-label">Back</div>
       </div>
+
       <div class="s-thumb-div"></div>
-      <div class="s-thumb-action" onclick="sNtf('Share link copied!')">🔗<br>Share</div>
-      <div class="s-thumb-action" onclick="sNtf('Design saved!')">💾<br>Save</div>
+
+      <!-- Undo -->
+      <div class="s-thumb-action" onclick="historyUndo()" title="Undo">
+        <div class="s-thumb-action-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7v6h6"/><path d="M3 13C5.5 8 10 6 14 6c3.5 0 6.5 1.5 8 5"/>
+          </svg>
+        </div>
+        <span class="s-thumb-action-label">Undo</span>
+      </div>
+
+      <!-- Redo -->
+      <div class="s-thumb-action" onclick="historyRedo()" title="Redo">
+        <div class="s-thumb-action-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 7v6h-6"/><path d="M21 13C18.5 8 14 6 10 6c-3.5 0-6.5 1.5-8 5"/>
+          </svg>
+        </div>
+        <span class="s-thumb-action-label">Redo</span>
+      </div>
+
+      <!-- Layers -->
+      <div class="s-thumb-action" onclick="showLayerStack()" title="Layers">
+        <div class="s-thumb-action-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+            <polyline points="2 17 12 22 22 17"/>
+            <polyline points="2 12 12 17 22 12"/>
+          </svg>
+        </div>
+        <span class="s-thumb-action-label">Layers</span>
+      </div>
+
+      <!-- Save -->
+      <div class="s-thumb-action" onclick="showSaveDesignPrompt(function(){})" title="Save">
+        <div class="s-thumb-action-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+        </div>
+        <span class="s-thumb-action-label">Save</span>
+      </div>
+
     </div>
 
   </div>
