@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v9.3 -->
+<!-- v9.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1352,7 +1352,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.4</span>
   </div>
 
 </nav>
@@ -3653,37 +3653,27 @@ async function aiSearchClipart(query){
   grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:12px;color:#bbb;font-size:12px">Searching clipart...</div>';
 
   try {
-    // OpenClipart — CC0 public domain, free, no API key needed, safe for print-on-demand
-    const res = await fetch(`https://openclipart.org/search/json/?query=${encodeURIComponent(query)}&amount=9&offset=0`);
+    // Route through CORS proxy — OpenClipart blocks direct browser requests
+    const apiUrl = `https://openclipart.org/search/json/?query=${encodeURIComponent(query)}&amount=9&offset=0`;
+    const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(apiUrl)}`);
     const data = await res.json();
 
     if(!data.resources || data.resources.length === 0){
-      grid.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#bbb;text-align:center;padding:8px">No clipart found — try a different search</div>';
+      grid.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#bbb;text-align:center;padding:8px">No clipart found — try different keywords</div>';
       return;
     }
 
     grid.innerHTML = data.resources.slice(0,9).map(item=>`
-      <div onclick="aiSelectImage('${item.svg.url}')" style="cursor:pointer;border-radius:8px;overflow:hidden;border:1.5px solid #e8e8e8;aspect-ratio:1;background:#f9f9f9;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='#e8e8e8'">
-        <img src="${item.svg.url}" style="width:90%;height:90%;object-fit:contain" onerror="this.src='${item.previews.preview.url}'">
+      <div onclick="aiSelectImage('${item.previews.preview.url}')"
+        style="cursor:pointer;border-radius:8px;overflow:hidden;border:1.5px solid #e8e8e8;aspect-ratio:1;background:#f9f9f9;display:flex;align-items:center;justify-content:center;transition:border-color .15s"
+        onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='#e8e8e8'">
+        <img src="${item.previews.preview.url}" style="width:90%;height:90%;object-fit:contain" loading="lazy">
       </div>
     `).join('');
+
   } catch(e){
-    // OpenClipart sometimes has CORS issues — fall back to preview images via proxy
-    try {
-      const res2 = await fetch(`https://openclipart.org/search/json/?query=${encodeURIComponent(query)}&amount=9`);
-      const data2 = await res2.json();
-      if(data2.resources && data2.resources.length > 0){
-        grid.innerHTML = data2.resources.slice(0,9).map(item=>`
-          <div onclick="aiSelectImage('${item.previews.preview.url}')" style="cursor:pointer;border-radius:8px;overflow:hidden;border:1.5px solid #e8e8e8;aspect-ratio:1;background:#f9f9f9;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='#e8e8e8'">
-            <img src="${item.previews.preview.url}" style="width:90%;height:90%;object-fit:contain">
-          </div>
-        `).join('');
-      } else {
-        grid.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#bbb;text-align:center;padding:8px">Could not load clipart</div>';
-      }
-    } catch(e2){
-      grid.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#bbb;text-align:center;padding:8px">Could not load clipart</div>';
-    }
+    grid.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#bbb;text-align:center;padding:8px">Could not load clipart</div>';
+    console.error('Clipart error:', e);
   }
 }
 
