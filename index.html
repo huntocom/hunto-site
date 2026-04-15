@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v13.4 -->
+<!-- v13.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1399,7 +1399,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v13.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v13.5</span>
   </div>
 
 </nav>
@@ -1669,13 +1669,13 @@ footer{background:#111;padding:56px 32px 28px}
   <div style="max-width:1300px;margin:0 auto;padding:32px 24px">
 
     <!-- Shop Header -->
-    <div style="margin-bottom:28px">
-      <h1 style="font-size:32px;font-weight:900;letter-spacing:-1px;color:#111;margin-bottom:6px">Shop All Products</h1>
-      <p style="font-size:15px;color:#888">Customize anything — AI art, text, or upload your own design</p>
+    <div style="margin-bottom:24px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div>
+        <h1 id="shop-title" style="font-size:28px;font-weight:900;letter-spacing:-.5px;color:#111;margin-bottom:4px">Shop All Products</h1>
+        <p style="font-size:13px;color:#aaa">Customize anything — AI art, text, or upload your own design</p>
+      </div>
+      <div id="shop-count-label" style="font-size:13px;color:#888;font-weight:600"></div>
     </div>
-
-    <!-- Category Pills -->
-    <div id="shop-cats" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;overflow-x:auto;padding-bottom:4px"></div>
 
     <!-- Filters + Grid -->
     <div style="display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:start">
@@ -6233,7 +6233,10 @@ function goShopGender(gender, subcat){
   shopState.brand    = "";
   const searchEl = document.getElementById("shop-search");
   if(searchEl) searchEl.value = "";
-  shopLoadCatalog(); shopRenderCats(); shopRenderBrands();
+  const titleEl = document.getElementById("shop-title");
+  const genderLabels = {ladies:"Women's Apparel", mens:"Men's Apparel", youth:"Kids' & Youth Apparel", toddler:"Toddler & Infant"};
+  if(titleEl) titleEl.textContent = genderLabels[gender] || "Shop All Products";
+  shopLoadCatalog(); shopRenderBrands();
 }
 
 async function goShop(category) {
@@ -6241,23 +6244,34 @@ async function goShop(category) {
   document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("on"));
   const genderCats = ['ladies','mens','youth','toddler'];
   const isGender = genderCats.includes((category||'').toLowerCase());
+
   if(isGender){
     shopState.gender   = category.toLowerCase();
     shopState.category = "";
     shopState.search   = "";
+  } else if(category === 'Safety'){
+    // S&S doesn't have a "Safety" category — search for hi-vis instead
+    shopState.gender   = "";
+    shopState.category = "";
+    shopState.search   = "hi-vis";
   } else {
     shopState.gender   = "";
     shopState.category = category || "";
-    // Safety needs a search hint since SS catalog may call it different things
-    if(category === 'Safety' && !shopState.search){
-      shopState.search = "safety";
-    }
+    shopState.search   = "";
   }
   shopState.brand = "";
   const searchEl = document.getElementById("shop-search");
   if(searchEl) searchEl.value = shopState.search || "";
+
+  // Update page title
+  const titleEl = document.getElementById('shop-title');
+  if(titleEl){
+    const labels = {'Safety':'Safety & Hi-Vis Apparel', 'Polos':'Polo Shirts', 'Outerwear':'Outerwear & Jackets', 'Bottoms':'Bottoms & Pants', 'BigTall':'Big & Tall'};
+    titleEl.textContent = labels[category] || (category ? category : 'Shop All Products');
+  }
+
   await shopLoadCatalog();
-  shopRenderCats(); shopRenderBrands();
+  shopRenderBrands();
 }
 
 async function shopLoadCatalog() {
@@ -6294,7 +6308,7 @@ async function shopLoadCatalog() {
   }
   shopState.loading=false;
   document.getElementById("shop-loading").style.display="none";
-  shopRenderGrid(); shopRenderCats(); shopRenderBrands();
+  shopRenderGrid(); shopRenderBrands();
 }
 
 function shopApplyFilters(){
@@ -6317,7 +6331,10 @@ function shopRenderGrid(){
   const count=document.getElementById("shop-count");
   const empty=document.getElementById("shop-empty");
   const lm=document.getElementById("shop-load-more");
-  count.textContent=`${(shopState.total||0).toLocaleString()} product${shopState.total!==1?"s":""}`;
+  const countText = `${(shopState.total||0).toLocaleString()} product${shopState.total!==1?"s":""}`;
+  if(count) count.textContent=countText;
+  const countLabel = document.getElementById("shop-count-label");
+  if(countLabel) countLabel.textContent = countText;
   if(!shopState.displayed||!shopState.displayed.length){grid.innerHTML="";empty.style.display="block";lm.style.display="none";return;}
   empty.style.display="none";
   grid.innerHTML=shopState.displayed.map(p=>shopCardHTML(p)).join("");
@@ -6468,12 +6485,12 @@ function brandCheckbox(b){
 
 function shopSetCategory(cat){
   shopState.category=cat; shopState.gender=""; shopState.brand=""; shopState.currentPage=1;
-  shopFetch(); shopRenderCats(); shopRenderBrands();
+  shopFetch(); shopRenderBrands();
 }
 
 function shopSetGender(gender){
   shopState.gender=gender; shopState.category=""; shopState.brand=""; shopState.currentPage=1;
-  shopFetch(); shopRenderCats(); shopRenderBrands();
+  shopFetch(); shopRenderBrands();
 }
 
 function shopSetBrand(brand,checked){
