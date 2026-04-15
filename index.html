@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v13.2 -->
+<!-- v13.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1399,7 +1399,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v13.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v13.3</span>
   </div>
 
 </nav>
@@ -5625,9 +5625,18 @@ function sUpdateAll(){
 }
 
 function goToStudioStep(n){
-  if(n===1) showPage('page-studio');
-  else if(n===2) sNext();
-  else if(n===3){ sNext(); } // only if already on step 2
+  if(n===1){
+    closeQtyPanel();
+    closeReviewPanel();
+    // Ensure studio page is visible
+    const studio = document.getElementById('page-studio');
+    if(studio) showPage('page-studio');
+    // Reset step indicator
+    document.querySelectorAll('.sstep').forEach(function(el,i){
+      el.classList.toggle('active', i===0);
+    });
+  } else if(n===2) sNext();
+  else if(n===3) goStep3();
 }
 
 function sNext(){
