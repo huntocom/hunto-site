@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v11.1 -->
+<!-- v11.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.2</span>
   </div>
 
 </nav>
@@ -6848,9 +6848,70 @@ function buildStep2(){
     imgEl.style.display = '';
   }
 
-  // Clear overlay — design visible in step 1
-  const overlay = document.getElementById('step2-design-overlay');
-  if(overlay) overlay.innerHTML = '';
+  // Composite shirt + design on step 2 canvas
+  setTimeout(function(){
+    const wrap = document.getElementById('s-shirt-wrap');
+    const overlay = document.getElementById('step2-design-overlay');
+    const step2Img = document.getElementById('step2-shirt-img');
+    if(!wrap || !overlay || !step2Img) return;
+
+    // Get front design layers
+    const layers = Array.from(wrap.querySelectorAll("[data-type='image'],[data-type='text'],.txt-layer"))
+      .filter(function(el){ return el.dataset.side !== 'back' && el.style.display !== 'none'; });
+    if(!layers.length){ overlay.innerHTML=''; return; }
+
+    // Calculate shirt-wrap rect and layer positions as percentages
+    const wRect = wrap.getBoundingClientRect();
+    const layerData = layers.map(function(el){
+      const r = el.getBoundingClientRect();
+      const img = el.querySelector('img');
+      return {
+        leftPct:  (r.left - wRect.left) / wRect.width,
+        topPct:   (r.top  - wRect.top)  / wRect.height,
+        wPct:     r.width  / wRect.width,
+        hPct:     r.height / wRect.height,
+        src:      (img && img.src && !img.src.startsWith('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEs')) ? img.src : '',
+        rot:      el.style.transform || '',
+      };
+    }).filter(function(d){ return d.src; });
+
+    if(!layerData.length){ overlay.innerHTML=''; return; }
+
+    // Position overlay relative to the rendered shirt image
+    function applyLayers(){
+      const imgEl = step2Img;
+      const cRect = imgEl.parentElement.getBoundingClientRect();
+      const iRect = imgEl.getBoundingClientRect();
+
+      // Calculate rendered image bounds within the contain box
+      const nat = imgEl.naturalWidth && imgEl.naturalHeight
+        ? imgEl.naturalWidth / imgEl.naturalHeight : 1;
+      const containerAspect = iRect.width / iRect.height;
+      let rW, rH, offX, offY;
+      if(nat > containerAspect){
+        rW = iRect.width; rH = iRect.width / nat;
+        offX = 0; offY = (iRect.height - rH) / 2;
+      } else {
+        rH = iRect.height; rW = iRect.height * nat;
+        offX = (iRect.width - rW) / 2; offY = 0;
+      }
+
+      // Offset from parent container
+      const pOffX = iRect.left - cRect.left + offX;
+      const pOffY = iRect.top  - cRect.top  + offY;
+
+      overlay.innerHTML = layerData.map(function(d){
+        const l = pOffX + d.leftPct * rW;
+        const t = pOffY + d.topPct  * rH;
+        const w = d.wPct * rW;
+        const h = d.hPct * rH;
+        return '<img src="'+d.src+'" style="position:absolute;left:'+l.toFixed(1)+'px;top:'+t.toFixed(1)+'px;width:'+w.toFixed(1)+'px;height:'+h.toFixed(1)+'px;object-fit:contain;pointer-events:none;'+(d.rot?'transform:'+d.rot:'')+'">';
+      }).join('');
+    }
+
+    if(step2Img.complete && step2Img.naturalWidth) applyLayers();
+    else step2Img.onload = applyLayers;
+  }, 200);
 
   // Re-trigger slide animation
   const panel = document.getElementById('step2-panel');
