@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v10.4 -->
+<!-- v10.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.5</span>
   </div>
 
 </nav>
@@ -1915,7 +1915,7 @@ footer{background:#111;padding:56px 32px 28px}
         <span class="s-ibtn-label">Upload Art</span>
       </button>
       <div class="s-ibtn-sep"></div>
-      <button class="s-ibtn" id="sib-color" onclick="sPanel('color',this)">
+      <button class="s-ibtn" id="sib-color" onclick="sPanel('color',this)" style="display:none">
         <span class="s-ibtn-icon">🎨</span>
         <span class="s-ibtn-label">Color</span>
       </button>
@@ -1948,7 +1948,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div>
             <div style="font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Products</div>
             <div class="s-panel-title">Manage Your Products</div>
-            <div class="s-panel-sub">Select product and color</div>
+            <div class="s-panel-sub">Select product and manage colors</div>
           </div>
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
         </div>
@@ -3278,6 +3278,7 @@ function sPanel(id,btn){
   });
   document.getElementById("s-panel").style.display="flex";
   activePanelId=id;
+  if(id==="products") buildSGarments();
   if(id==="qty") buildQtyGrid();
   if(id==="ai"){ aiGoToScreen(1); aiRenderHistory(); }
   // Names panel — 2-step: confirm first, then settings
