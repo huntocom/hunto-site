@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v10.2 -->
+<!-- v10.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.3</span>
   </div>
 
 </nav>
@@ -2255,10 +2255,10 @@ footer{background:#111;padding:56px 32px 28px}
 
             <!-- Bottom toolbar -->
             <div style="padding:10px 16px;display:flex;gap:6px;justify-content:space-around">
-              <button onclick="centerDesign()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 8px;border-radius:8px">
+              <button onclick="aiCenterDesign()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 8px;border-radius:8px">
                 <span style="font-size:18px">⊕</span>Center
               </button>
-              <button onclick="flipDesign()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 8px;border-radius:8px">
+              <button onclick="aiFlipDesign()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 8px;border-radius:8px">
                 <span style="font-size:18px">↔</span>Flip
               </button>
               <button onclick="clearCurrentDesign()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#dc2626;font-family:Inter,sans-serif;padding:6px 8px;border-radius:8px">
@@ -3814,14 +3814,50 @@ function aiApplyTransform(){
   document.getElementById('ai-size-val').textContent   = size+'%';
   document.getElementById('ai-rotate-val').textContent = rot+'°';
 
-  // Find the tracked AI layer
   const el = document.getElementById(aiCurrentLayerId);
   if(!el) return;
-  const base = 220; // initial size from addImageLayer
-  const px = Math.round(base * size / 100);
-  el.style.width  = px + 'px';
-  el.style.height = px + 'px';
-  el.style.transform = 'rotate(' + rot + 'deg)';
+
+  const base = 220;
+  const newPx = Math.round(base * size / 100);
+
+  // Keep center fixed while resizing
+  const oldW = el.offsetWidth  || newPx;
+  const oldH = el.offsetHeight || newPx;
+  const oldL = parseFloat(el.style.left) || 0;
+  const oldT = parseFloat(el.style.top)  || 0;
+  const centerX = oldL + oldW / 2;
+  const centerY = oldT + oldH / 2;
+
+  el.style.width  = newPx + 'px';
+  el.style.height = newPx + 'px';
+  el.style.left   = (centerX - newPx / 2) + 'px';
+  el.style.top    = (centerY - newPx / 2) + 'px';
+
+  // Preserve flip state in transform
+  const flip = el.dataset.flipped === 'true' ? ' scaleX(-1)' : '';
+  el.style.transform = 'rotate(' + rot + 'deg)' + flip;
+}
+
+function aiCenterDesign(){
+  const el = document.getElementById(aiCurrentLayerId);
+  const wrap = document.getElementById('s-shirt-wrap');
+  if(!el || !wrap) return;
+  const wrapW = wrap.offsetWidth;
+  const wrapH = wrap.offsetHeight;
+  const elW   = el.offsetWidth;
+  const elH   = el.offsetHeight;
+  el.style.left = ((wrapW - elW) / 2) + 'px';
+  el.style.top  = ((wrapH - elH) / 2) + 'px';
+}
+
+function aiFlipDesign(){
+  const el = document.getElementById(aiCurrentLayerId);
+  if(!el) return;
+  const flipped = el.dataset.flipped === 'true';
+  el.dataset.flipped = (!flipped).toString();
+  const rot  = document.getElementById('ai-design-rotate')?.value || 0;
+  const flip = !flipped ? ' scaleX(-1)' : '';
+  el.style.transform = 'rotate(' + rot + 'deg)' + flip;
 }
 
 function aiResetTransform(){
@@ -3829,7 +3865,13 @@ function aiResetTransform(){
   document.getElementById('ai-design-rotate').value = 0;
   document.getElementById('ai-size-val').textContent = '100%';
   document.getElementById('ai-rotate-val').textContent = '0°';
+  const el = document.getElementById(aiCurrentLayerId);
+  if(el){
+    el.dataset.flipped = 'false';
+    el.style.transform = '';
+  }
   aiApplyTransform();
+  aiCenterDesign();
 }
 
 async function aiGen(){
