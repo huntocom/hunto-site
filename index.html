@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v10.0 -->
+<!-- v10.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.1</span>
   </div>
 
 </nav>
@@ -2196,7 +2196,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div id="ai-screen-2" style="display:none;padding:24px 16px;text-align:center">
             <div style="font-size:36px;margin-bottom:12px">🎨</div>
             <div style="font-size:15px;font-weight:800;color:#111;margin-bottom:6px">Processing your design</div>
-            <div id="ai-process-status" style="font-size:13px;color:#7c3aed;font-weight:600;margin-bottom:16px">Removing Background &amp; Trimming</div>
+            <div id="ai-process-status" style="font-size:13px;color:#7c3aed;font-weight:600;margin-bottom:16px">Loading artwork...</div>
             <div style="background:#f0f0f0;border-radius:20px;height:8px;overflow:hidden;margin-bottom:8px">
               <div id="ai-progress-bar" style="height:100%;background:linear-gradient(90deg,#7c3aed,#ec4899);border-radius:20px;width:0%;transition:width .4s ease"></div>
             </div>
@@ -3700,39 +3700,68 @@ function aiSelectImage(url){
   aiCurrentUrl = url;
   aiCurrentFilter = 'normal';
   aiGoToScreen(2);
-  aiSetProgress(0, 'Removing Background & Trimming');
+  aiSetProgress(0, 'Placing design...');
 
-  // Animate progress
+  // Animate a quick progress — no bg removal, just placing
   let p = 0;
   const iv = setInterval(()=>{
-    p += Math.random()*18+8;
-    if(p>=90){ p=90; clearInterval(iv); }
-    aiSetProgress(Math.round(p), p<40?'Removing Background & Trimming':p<75?'Optimizing artwork...':'Almost done...');
-  }, 300);
+    p += Math.random()*25+15;
+    if(p>=95){ p=95; clearInterval(iv); }
+    aiSetProgress(Math.round(p), p<60?'Loading artwork...':'Almost done...');
+  }, 150);
 
-  // Actually remove bg
-  removeBackground(url, (cleanUrl)=>{
+  // Place image as-is (no background removal)
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function(){
     clearInterval(iv);
     aiSetProgress(100, 'Done!');
     setTimeout(()=>{
-      aiCurrentUrl = cleanUrl;
       // Place on shirt
-      applyDesign(cleanUrl);
+      applyDesign(url);
       sState.hasDesign = true;
       // Set up edit screen thumbnails
       ['normal','single','bw'].forEach(f=>{
-        const img = document.getElementById('ai-thumb-'+f+'-img');
-        if(img) img.src = cleanUrl;
+        const thumb = document.getElementById('ai-thumb-'+f+'-img');
+        if(thumb) thumb.src = url;
       });
       document.getElementById('ai-design-size').value=100;
       document.getElementById('ai-design-rotate').value=0;
       document.getElementById('ai-size-val').textContent='100%';
       document.getElementById('ai-rotate-val').textContent='0°';
-      document.getElementById('ai-rmbg-toggle').checked=true;
+      // Default toggle to OFF — user must opt in to remove bg
+      const tog = document.getElementById('ai-rmbg-toggle');
+      if(tog){ tog.checked = false; }
+      const track = document.getElementById('ai-rmbg-track');
+      if(track) track.style.background = '#ccc';
+      const knob = document.getElementById('ai-rmbg-knob');
+      if(knob) knob.style.transform = 'translateX(0)';
       aiGoToScreen(3);
       sNtf('✓ Design placed on shirt!');
-    }, 400);
-  });
+    }, 300);
+  };
+  img.onerror = function(){
+    // If can't load via Image element, place directly
+    clearInterval(iv);
+    aiSetProgress(100, 'Done!');
+    setTimeout(()=>{
+      applyDesign(url);
+      sState.hasDesign = true;
+      ['normal','single','bw'].forEach(f=>{
+        const thumb = document.getElementById('ai-thumb-'+f+'-img');
+        if(thumb) thumb.src = url;
+      });
+      const tog = document.getElementById('ai-rmbg-toggle');
+      if(tog) tog.checked = false;
+      const track = document.getElementById('ai-rmbg-track');
+      if(track) track.style.background = '#ccc';
+      const knob = document.getElementById('ai-rmbg-knob');
+      if(knob) knob.style.transform = 'translateX(0)';
+      aiGoToScreen(3);
+      sNtf('✓ Design placed on shirt!');
+    }, 300);
+  };
+  img.src = url;
 }
 
 function aiSetFilter(f){
