@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v10.6 -->
+<!-- v10.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.6</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.7</span>
   </div>
 
 </nav>
@@ -6751,91 +6751,114 @@ function goStep3(){
 
 // ── Step 2: Quantities ─────────────────────────────────
 function buildStep2(){
-  // Always get best available data — never fail silently
-  const p = sState.product || PRODUCTS[0] || {};
-  const c = sState.color || (p.colors && p.colors[0]) || {};
+  try { captureDesignPreview(); } catch(e){}
 
-  // Image: use current shirt img src as primary (most reliable)
-  const shirtEl = document.getElementById('s-shirt');
-  const thumbEl = document.getElementById('sth-f-img');
-  const imgSrc = orderState.designPreview
-    || (shirtEl && shirtEl.src && !shirtEl.src.startsWith('data:image/jpeg;base64,/9') ? shirtEl.src : '')
-    || thumbEl?.src || c?.front || c?.back || '';
-  const imgEl = document.getElementById('step2-shirt-img');
-  if(imgEl){ imgEl.src = imgSrc; imgEl.style.display = ''; }
+  // Init per-product qty storage if needed
+  if(!orderState.productSizes) orderState.productSizes = {};
+  sProducts.forEach(function(sp,idx){
+    if(!orderState.productSizes[idx]) orderState.productSizes[idx] = {};
+  });
 
-  // Show design layers as overlay
-  const overlay = document.getElementById('step2-design-overlay');
-  if(overlay && orderState.designLayers && orderState.designLayers.length){
-    overlay.innerHTML = orderState.designLayers.map(layer => {
-      if(layer.type === 'image' && layer.src){
-        return '<img src="'+layer.src+'" style="position:absolute;left:'+layer.left+';top:'+layer.top+';width:'+layer.width+';object-fit:contain">';
-      }
-      if(layer.text){
-        return '<div style="position:absolute;left:'+layer.left+';top:'+layer.top+';font-size:8px;font-weight:800;color:'+layer.color+';white-space:nowrap;transform:translateX(-50%)">'+layer.text+'</div>';
-      }
-      return '';
-    }).join('');
-  }
-
-  const productName = p.fullTitle || p.name || p.title || p.style_name || 'Custom Shirt';
-  const brand = p.brand || p.brand_name || 'Gildan';
-  const colorName = c?.n || c?.name || c?.color_name || '';
-  const styleId = p.id || p.style_id || '';
-  const basePrice = parseFloat(p.price || p.base_retail || p.retail_price || 28);
-
-  const nameEl = document.getElementById('step2-product-name');
-  const metaEl = document.getElementById('step2-product-meta');
-  const priceEl = document.getElementById('step2-base-price');
-  const totalEl = document.getElementById('step2-total');
-
-  if(nameEl) nameEl.textContent = productName;
-  if(metaEl) metaEl.textContent = brand + (colorName ? ' · ' + colorName : '') + (styleId ? ' · Style #' + styleId : '');
-  if(priceEl) priceEl.textContent = '$' + basePrice.toFixed(2);
-  if(totalEl) totalEl.textContent = '$0.00';
-
-  // Always use standard sizes as fallback
-  const sizes = ['S','M','L','XL','2XL','3XL'];
-  const sizeUpcharge = {S:0,M:0,L:0,XL:0,'2XL':3,'3XL':5,'4XL':7,'5XL':9};
-
-  // Build size tiles with string concat (avoids nested template literal issues)
+  // Build multi-product layout in the step2-size-grid container
   const grid = document.getElementById('step2-size-grid');
-  if(grid){
-    let html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">';
-    sizes.forEach(function(sz){
-      const up = sizeUpcharge[sz]||0;
-      const qty = orderState.sizes[sz]||0;
-      const price = '$'+(basePrice+up).toFixed(2);
-      const upLabel = up ? ' (+$'+up+')' : '';
-      const border = qty ? '2px solid #7c3aed' : '1.5px solid #e8e8e8';
-      const bg = qty ? '#faf5ff' : '#fff';
-      const col = qty ? '#7c3aed' : '#111';
-      html += '<div id="step2-tile-'+sz+'" data-sz="'+sz+'" onclick="step2TileClick(this.dataset.sz)" style="border:'+border+';border-radius:16px;padding:18px 12px;text-align:center;cursor:pointer;background:'+bg+';transition:all .15s;user-select:none;position:relative">';
-      if(qty) html += '<div class="qty-badge" style="position:absolute;top:-8px;right:-8px;width:24px;height:24px;background:#7c3aed;color:#fff;border-radius:50%;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">'+qty+'</div>';
-      html += '<div style="font-size:24px;font-weight:900;color:'+col+';margin-bottom:6px">'+sz+'</div>';
-      html += '<div style="font-size:12px;color:#aaa;font-weight:600">'+price+upLabel+'</div>';
-      html += '<div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px">';
-      html += '<button data-sz="'+sz+'" onclick="event.stopPropagation();step2Adj(this.dataset.sz,-1)" style="width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;font-size:18px;cursor:pointer;color:#555;line-height:1;padding:0;font-family:Inter,sans-serif">−</button>';
-      html += '<span id="step2-qty-'+sz+'" style="font-size:18px;font-weight:800;color:#111;min-width:24px;text-align:center">'+(qty||0)+'</span>';
-      html += '<button data-sz="'+sz+'" onclick="event.stopPropagation();step2Adj(this.dataset.sz,1)" style="width:32px;height:32px;border:none;border-radius:8px;background:#7c3aed;font-size:18px;cursor:pointer;color:#fff;line-height:1;padding:0;font-family:Inter,sans-serif">+</button>';
-      html += '</div></div>';
+  if(!grid) return;
+
+  const ADULT  = ['S','M','L','XL','2XL','3XL','4XL','5XL'];
+  const YOUTH  = ['YXS','YS','YM','YL','YXL'];
+  const UP = {S:0,M:0,L:0,XL:0,'2XL':2.95,'3XL':3.95,'4XL':4.95,'5XL':4.95};
+
+  let html = '';
+  sProducts.forEach(function(sp, idx){
+    const p = sp.product || {};
+    const c = sp.color || {};
+    const cn = c.n||c.name||'';
+    const ch = c.h||c.hex||'#888';
+    const imgSrc = c.front || c.back || getShirtPhotoUrl(p.id, cn, 'front') || '';
+    const brand = p.brand||'Gildan';
+    const styleId = p.id||'';
+    const pname = p.name||p.fullTitle||'Custom Shirt';
+    const basePrice = parseFloat(p.price||p.base_retail||28);
+
+    html += '<div style="background:#fff;border:1.5px solid #e8e8e8;border-radius:16px;overflow:hidden;margin-bottom:16px">';
+
+    // Header
+    html += '<div style="padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;background:#f9f9f9">';
+    html += '<div style="width:48px;height:48px;border-radius:10px;overflow:hidden;background:#f5f5f5;flex-shrink:0;border:1px solid #e8e8e8">';
+    html += '<img src="'+imgSrc+'" style="width:100%;height:100%;object-fit:contain">';
+    html += '</div>';
+    html += '<div style="flex:1;min-width:0">';
+    html += '<div style="font-size:13px;font-weight:800;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+styleId+' '+brand+' '+pname+'</div>';
+    html += '<div style="display:flex;align-items:center;gap:6px;margin-top:3px">';
+    html += '<div style="width:12px;height:12px;border-radius:3px;background:'+ch+';border:1px solid rgba(0,0,0,.1)"></div>';
+    html += '<span style="font-size:12px;color:#888;font-weight:600">'+cn+'</span>';
+    html += '</div></div>';
+    html += '<div style="text-align:right;flex-shrink:0">';
+    html += '<div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em">From</div>';
+    html += '<div style="font-size:18px;font-weight:900;color:#111">$'+basePrice.toFixed(2)+'</div>';
+    html += '</div></div>';
+
+    // Adult sizes
+    html += '<div style="padding:14px 16px">';
+    html += '<div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Adult Sizes</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">';
+    ADULT.forEach(function(sz){
+      const up = UP[sz]||0;
+      const qty = (orderState.productSizes[idx]||{})[sz]||0;
+      const active = qty > 0;
+      html += '<div style="text-align:center">';
+      html += '<div style="font-size:11px;font-weight:700;color:#333;margin-bottom:4px">'+sz+'</div>';
+      html += '<input type="number" min="0" max="999" value="'+(qty||'')+'" placeholder="0" ';
+      html += 'data-pidx="'+idx+'" data-sz="'+sz+'" onchange="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
+      html += 'style="width:100%;padding:8px 4px;border:'+(active?'2px solid #7c3aed':'1.5px solid #e8e8e8')+';border-radius:8px;font-size:14px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(active?'#faf5ff':'#fff')+';outline:none">';
+      if(up) html += '<div style="font-size:10px;color:#aaa;margin-top:2px">+$'+up+'</div>';
+      html += '</div>';
     });
     html += '</div>';
-    html += '<div style="font-size:12px;color:#aaa;text-align:center;padding-bottom:4px">Tap + to add quantity per size</div>';
-    grid.innerHTML = html;
+
+    // Youth sizes
+    html += '<div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Youth Sizes</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">';
+    YOUTH.forEach(function(sz){
+      const qty = (orderState.productSizes[idx]||{})[sz]||0;
+      const active = qty > 0;
+      html += '<div style="text-align:center">';
+      html += '<div style="font-size:11px;font-weight:700;color:#333;margin-bottom:4px">'+sz+'</div>';
+      html += '<input type="number" min="0" max="999" value="'+(qty||'')+'" placeholder="0" ';
+      html += 'data-pidx="'+idx+'" data-sz="'+sz+'" onchange="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
+      html += 'style="width:100%;padding:8px 2px;border:'+(active?'2px solid #7c3aed':'1.5px solid #e8e8e8')+';border-radius:8px;font-size:14px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(active?'#faf5ff':'#fff')+';outline:none">';
+      html += '</div>';
+    });
+    html += '</div></div>'; // close sizes + card
+    html += '</div>'; // close product card
+  });
+
+  grid.innerHTML = html;
+
+  // Update header product info to show first product
+  const first = sProducts[0];
+  const fp = first?.product || {};
+  const fc = first?.color || {};
+  const imgEl = document.getElementById('step2-shirt-img');
+  if(imgEl){ 
+    const src = fc.front || getShirtPhotoUrl(fp.id, fc.n||fc.name||'', 'front') || orderState.designPreview || '';
+    imgEl.src = src;
   }
+  const nameEl = document.getElementById('step2-product-name');
+  if(nameEl) nameEl.textContent = (fp.brand||'Gildan') + ' ' + (fp.name||'Custom Shirt') + (sProducts.length > 1 ? ' + '+(sProducts.length-1)+' more' : '');
+  const metaEl = document.getElementById('step2-product-meta');
+  if(metaEl) metaEl.textContent = sProducts.length + ' garment color'+(sProducts.length>1?'s':'') + ' selected';
 
   // Jersey section
   const jerseySection = document.getElementById('step2-jersey-section');
   if(jerseyMode && nnRoster && nnRoster.length){
     jerseySection.style.display='block';
-    const hasN = nnRoster[0]?.name!==undefined, hasNum = nnRoster[0]?.number!==undefined;
+    const hasN=nnRoster[0]?.name!==undefined, hasNum=nnRoster[0]?.number!==undefined;
     const jerseyPrice = hasN && hasNum ? 6 : hasN ? 4 : 3;
     document.getElementById('step2-jersey-summary').innerHTML =
-      `${nnRoster.length} shirt${nnRoster.length!==1?'s':''} with personalization<br>` +
-      nnRoster.slice(0,5).map(r=>`<span style="display:inline-block;background:#fff;border-radius:6px;padding:2px 10px;margin:2px;font-size:12px;font-weight:600">${r.name||''}${r.number?' #'+r.number:''} (${r.size||'M'})</span>`).join('') +
-      (nnRoster.length>5?`<span style="font-size:12px;color:#7c3aed"> +${nnRoster.length-5} more</span>`:'') +
-      `<br><strong>Personalization: $${(nnRoster.length * jerseyPrice).toFixed(2)}</strong>`;
+      nnRoster.length + ' shirt'+(nnRoster.length!==1?'s':'')+' with personalization<br>'+
+      nnRoster.slice(0,5).map(function(r){ return '<span style="display:inline-block;background:#fff;border-radius:6px;padding:2px 10px;margin:2px;font-size:12px;font-weight:600">'+(r.name||'')+( r.number?' #'+r.number:'')+' ('+(r.size||'M')+')</span>'; }).join('')+
+      (nnRoster.length>5?'<span style="font-size:12px;color:#7c3aed"> +'+( nnRoster.length-5)+' more</span>':'')+
+      '<br><strong>Personalization: $'+(nnRoster.length*jerseyPrice).toFixed(2)+'</strong>';
   } else {
     jerseySection.style.display='none';
   }
@@ -6843,6 +6866,12 @@ function buildStep2(){
   step2UpdateTotals();
 }
 
+function step2SetQty(pidx, sz, qty){
+  if(!orderState.productSizes) orderState.productSizes = {};
+  if(!orderState.productSizes[pidx]) orderState.productSizes[pidx] = {};
+  orderState.productSizes[pidx][sz] = Math.max(0, qty||0);
+  step2UpdateTotals();
+}
 function step2TileClick(size){
   // Tap tile = add 1
   step2Adj(size, 1);
@@ -6875,17 +6904,29 @@ function step2Adj(size, delta){
 }
 
 function step2UpdateTotals(){
-  const p = sState.product;
-  const basePrice = parseFloat(p?.price||p?.base_retail||0);
-  const sizeUpcharge = {S:0,M:0,L:0,XL:0,'2XL':3,'3XL':5,'4XL':7,'5XL':9};
+  const sizeUpcharge = {S:0,M:0,L:0,XL:0,'2XL':2.95,'3XL':3.95,'4XL':4.95,'5XL':4.95};
   let garmentTotal=0, totalUnits=0;
   const lines=[];
-  Object.entries(orderState.sizes).forEach(([sz,qty])=>{
-    if(!qty) return;
-    const price = basePrice+(sizeUpcharge[sz]||0);
-    garmentTotal += qty*price;
-    totalUnits += qty;
-    lines.push(`<div style="display:flex;justify-content:space-between"><span>${qty}× ${sz}</span><span>$${(qty*price).toFixed(2)}</span></div>`);
+
+  // Sum across all products
+  const ps = orderState.productSizes || {};
+  sProducts.forEach(function(sp, idx){
+    const p = sp.product || {};
+    const c = sp.color || {};
+    const basePrice = parseFloat(p.price||p.base_retail||28);
+    const sizes = ps[idx] || {};
+    let prodQty = 0;
+    Object.entries(sizes).forEach(function([sz,qty]){
+      if(!qty) return;
+      const price = basePrice+(sizeUpcharge[sz]||0);
+      garmentTotal += qty*price;
+      totalUnits += qty;
+      prodQty += qty;
+    });
+    if(prodQty){
+      const cn = c.n||c.name||'';
+      lines.push('<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#888">'+(p.brand||'Gildan')+' '+(p.name||'')+' — '+cn+'</span><span>'+prodQty+' pcs</span></div>');
+    }
   });
 
   let jerseyTotal = 0;
