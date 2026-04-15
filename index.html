@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v10.5 -->
+<!-- v10.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.5</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.6</span>
   </div>
 
 </nav>
@@ -3355,7 +3355,7 @@ function buildSGarments(){
     html += '<div style="border:1.5px solid #e8e8e8;border-radius:14px;overflow:hidden;margin-bottom:12px;background:#fff">' +
       '<div style="padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f0f0;background:#f9f9f9">' +
         '<div style="font-size:12px;font-weight:800;color:#111;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:165px">'+(p?.brand||'Gildan')+' '+(p?.name||'')+'</div>' +
-        '<button onclick="openProductModalFor('+entries[0].idx+')" style="font-size:11px;font-weight:700;color:#7c3aed;background:none;border:1.5px solid #d8b4fe;border-radius:20px;padding:3px 10px;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;flex-shrink:0">Change Product</button>' +
+        '<button onclick="openProductModal()" style="font-size:11px;font-weight:700;color:#7c3aed;background:none;border:1.5px solid #d8b4fe;border-radius:20px;padding:3px 10px;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;flex-shrink:0">+ Add Product</button>' +
       '</div>' +
       '<div style="padding:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start">' +
         colorThumbs +
@@ -3413,7 +3413,7 @@ function pickColor(colorName){
   const c=sp.product?.colors?.find(c=>(c.n||c.name)===colorName);
   if(!c) return;
   sProducts[colorPickerIdx].color=c;
-  if(colorPickerIdx===sActiveIdx){ sState.color=c; sUpdateShirt(); }
+  if(colorPickerIdx===sActiveIdx){ sState.color=c; sApplyTint(); sUpdateAll(); }
   closeColorPicker();
   buildSGarments();
 }
@@ -3433,7 +3433,7 @@ function sAddColor(fromIdx){
   sProducts.push({product:p, color:next});
   sActiveIdx=sProducts.length-1;
   sState.product=p; sState.color=next;
-  sUpdateShirt(); buildSGarments();
+  sApplyTint(); sUpdateAll(); buildSGarments();
   sNtf('✓ Color added!');
 }
 
