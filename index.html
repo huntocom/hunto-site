@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v12.1 -->
+<!-- v12.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1071,15 +1071,11 @@ footer{background:#111;padding:56px 32px 28px}
 .design-card-del{position:absolute;top:8px;right:8px;width:24px;height:24px;background:rgba(0,0,0,.5);border-radius:50%;border:none;color:#fff;font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center}
 .design-card:hover .design-card-del{display:flex}
 </style>
-  <!-- ML Background Removal (runs 100% in browser, no API key needed) -->
-  <script>
-    // Load @imgly/background-removal as UMD — exposes window.BackgroundRemoval
-    (function(){
-      var s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser/index.js';
-      s.onload = function(){ console.log('BG removal ready:', typeof window.BackgroundRemoval?.removeBackground); };
-      document.head.appendChild(s);
-    })();
+  <!-- ML Background Removal — ESM module -->
+  <script type="module">
+    import { removeBackground } from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser/index.js';
+    window.imglyRemoveBackground = removeBackground;
+    console.log('✓ BG removal ML ready');
   </script>
 </head>
 <body>
@@ -1374,7 +1370,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.2</span>
   </div>
 
 </nav>
@@ -6501,8 +6497,13 @@ async function removeBackground(imageUrl, callback){
     }
   } catch(e){ console.warn('Server remove-bg failed:', e.message); }
 
-  // ── 2. Try @imgly browser ML library (loads via script tag, no API key) ──
-  const rmFn = window.BackgroundRemoval?.removeBackground;
+  // ── 2. Try @imgly browser ML library ──
+  // Wait up to 3s for the module to finish loading if needed
+  let rmFn = window.imglyRemoveBackground;
+  if(!rmFn){
+    await new Promise(function(res){ setTimeout(res, 2000); });
+    rmFn = window.imglyRemoveBackground;
+  }
   if(typeof rmFn === 'function'){
     try {
       const blob = imageUrl.startsWith('data:') ? dataUrlToBlob(imageUrl)
