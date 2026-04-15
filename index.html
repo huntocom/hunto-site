@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v9.8 -->
+<!-- v9.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.8</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.9</span>
   </div>
 
 </nav>
@@ -3655,26 +3655,25 @@ async function aiSearchClipart(query){
   grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:12px;color:#bbb;font-size:12px">Searching clipart...</div>';
 
   try {
-    // SVG Repo — 500k+ free vectors, CORS-enabled public API
-    const res  = await fetch('https://api.svgrepo.com/vectors?query=' + encodeURIComponent(query) + '&limit=9');
+    // Proxied through Railway server — avoids all CORS issues
+    const res  = await fetch('https://hunto-server-production.up.railway.app/clipart?query=' + encodeURIComponent(query));
     const data = await res.json();
 
-    if(!data.vectors || data.vectors.length === 0){
+    if(!data.resources || data.resources.length === 0){
       grid.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#bbb;text-align:center;padding:8px">No clipart found — try different keywords</div>';
       return;
     }
 
-    const rows = data.vectors.slice(0,9).map(function(item){
-      const url = item.url || item.svg_url || '';
-      const thumb = item.thumbnail_url || url;
+    const rows = data.resources.slice(0,9).map(function(item){
+      const url = item.previews.preview.url;
       const div = document.createElement('div');
       div.onclick = function(){ aiSelectImage(url); };
       div.style.cssText = 'cursor:pointer;border-radius:8px;overflow:hidden;border:1.5px solid #e8e8e8;aspect-ratio:1;background:#f9f9f9;display:flex;align-items:center;justify-content:center;transition:border-color .15s';
       div.onmouseover = function(){ this.style.borderColor='#7c3aed'; };
       div.onmouseout  = function(){ this.style.borderColor='#e8e8e8'; };
       const img = document.createElement('img');
-      img.src = thumb; img.loading = 'lazy';
-      img.style.cssText = 'width:80%;height:80%;object-fit:contain';
+      img.src = url; img.loading = 'lazy';
+      img.style.cssText = 'width:85%;height:85%;object-fit:contain';
       img.onerror = function(){ this.parentNode.style.display='none'; };
       div.appendChild(img);
       return div.outerHTML;
