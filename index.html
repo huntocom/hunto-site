@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v11.4 -->
+<!-- v11.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1044,6 +1044,9 @@ footer{background:#111;padding:56px 32px 28px}
 
 
 @keyframes slideInRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+#review-slide-panel{position:fixed;top:0;right:0;bottom:0;z-index:600;display:none;align-items:stretch}
+#review-slide-panel .rsp-inner{width:460px;background:#fff;display:flex;flex-direction:column;height:100vh;box-shadow:-8px 0 40px rgba(0,0,0,.2)}
+#review-slide-panel .rsp-backdrop{flex:1;background:rgba(0,0,0,.3);backdrop-filter:blur(2px);cursor:pointer}
 @keyframes slideOutRight{from{transform:translateX(0)}to{transform:translateX(100%)}}
 .qty-panel-visible{animation:slideInRight .32s cubic-bezier(.22,.68,0,1.2) forwards}
 .qty-panel-hidden{animation:slideOutRight .28s ease-in forwards}
@@ -1361,7 +1364,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.5</span>
   </div>
 
 </nav>
@@ -2582,6 +2585,90 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
 
+    </div>
+
+    <!-- SLIDING REVIEW PANEL (overlays studio) -->
+    <div id="review-slide-panel">
+      <div class="rsp-backdrop" onclick="closeReviewPanel()"></div>
+      <div class="rsp-inner">
+        <!-- Header -->
+        <div style="padding:18px 20px 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px">Review Your Order</div>
+            <div style="font-size:18px;font-weight:900;color:#111">← Your Products &amp; Pricing</div>
+          </div>
+          <button onclick="closeReviewPanel()" style="background:none;border:none;font-size:22px;color:#bbb;cursor:pointer;padding:0">×</button>
+        </div>
+
+        <!-- Scrollable body -->
+        <div style="flex:1;overflow-y:auto">
+
+          <!-- Price summary -->
+          <div style="padding:16px 20px;border-bottom:1px solid #f0f0f0">
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+              <div id="rsp-price-each" style="font-size:24px;font-weight:900;color:#111">$0.00 each</div>
+            </div>
+            <div id="rsp-total-line" style="font-size:13px;color:#7c3aed;font-weight:700;margin-bottom:12px"></div>
+            <!-- Stats row -->
+            <div id="rsp-stats" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
+            <!-- Bulk discount hint -->
+            <div id="rsp-bulk" style="font-size:11px;color:#555;background:#f8f9fb;border-radius:8px;padding:8px 12px;font-weight:600"></div>
+          </div>
+
+          <!-- Product summary list -->
+          <div id="rsp-summary-list" style="padding:0"></div>
+
+          <!-- Rush option -->
+          <div style="margin:12px 20px;background:#f9f9f9;border:1px solid #e8e8e8;border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#111">🚀 Rush Production</div>
+              <div style="font-size:11px;color:#888;margin-top:2px">Ships within 24hrs · +$15</div>
+            </div>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+              <input type="checkbox" id="order-rush" style="accent-color:#7c3aed;width:16px;height:16px">
+              <span style="font-size:13px;font-weight:600;color:#333">Add Rush</span>
+            </label>
+          </div>
+
+        </div>
+
+        <!-- Footer CTA -->
+        <div style="border-top:1px solid #f0f0f0;padding:16px 20px">
+          <button onclick="requireLogin()" style="width:100%;padding:16px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;letter-spacing:.04em;margin-bottom:10px">
+            ADD TO CART →
+          </button>
+          <!-- Payment logos -->
+          <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+            <span style="font-size:11px;color:#aaa;font-weight:600">or pay with</span>
+            <span style="font-size:11px;font-weight:800;color:#000;background:#f5f5f5;padding:3px 8px;border-radius:4px">Afterpay</span>
+            <span style="font-size:11px;font-weight:800;color:#000;background:#f5f5f5;padding:3px 8px;border-radius:4px">Klarna</span>
+            <span style="font-size:11px;font-weight:800;color:#000;background:#f5f5f5;padding:3px 8px;border-radius:4px">Affirm</span>
+          </div>
+          <button onclick="requireLogin()" style="width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">
+            🍎 Buy with Apple Pay
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="login-modal" style="display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);align-items:center;justify-content:center">
+      <div style="background:#fff;border-radius:20px;width:100%;max-width:380px;padding:32px;margin:16px;box-shadow:0 24px 60px rgba(0,0,0,.25)">
+        <div style="text-align:center;margin-bottom:24px">
+          <div style="font-size:28px;font-weight:900;color:#111;letter-spacing:-.5px;margin-bottom:6px">Sign in to Checkout</div>
+          <div style="font-size:13px;color:#888">Save your order, track shipping, and reorder easily</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+          <input id="login-email" type="email" placeholder="Email address" style="width:100%;padding:13px 16px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#e8e8e8'">
+          <input id="login-pass" type="password" placeholder="Password" style="width:100%;padding:13px 16px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor='#e8e8e8'">
+        </div>
+        <button onclick="doLogin()" style="width:100%;padding:14px;background:#7c3aed;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;margin-bottom:10px">Sign In</button>
+        <button onclick="doGuestCheckout()" style="width:100%;padding:14px;background:#fff;color:#333;border:1.5px solid #e8e8e8;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;margin-bottom:16px">Continue as Guest</button>
+        <div style="text-align:center;font-size:13px;color:#888">
+          Don't have an account? <span onclick="doGuestCheckout()" style="color:#7c3aed;font-weight:700;cursor:pointer">Create one at checkout</span>
+        </div>
+        <button onclick="document.getElementById('login-modal').style.display='none'" style="position:absolute;display:none">×</button>
+      </div>
     </div>
 
     <!-- SLIDING QUANTITY PANEL (overlays studio) -->
@@ -6806,11 +6893,41 @@ function captureDesignPreview(){
 }
 
 function goStep3(){
-  const panel = document.getElementById('qty-slide-panel');
-  if(panel) panel.style.display='none';
-  showPage('step3');
+  // Close qty panel, slide review panel over studio — no page navigation
+  closeQtyPanel();
+  const panel = document.getElementById('review-slide-panel');
+  if(!panel) return;
   buildStep3();
-  renderMockups();
+  panel.style.display = 'flex';
+  panel.classList.remove('qty-panel-hidden');
+  panel.classList.add('qty-panel-visible');
+}
+
+function closeReviewPanel(){
+  const panel = document.getElementById('review-slide-panel');
+  if(!panel) return;
+  panel.classList.remove('qty-panel-visible');
+  panel.classList.add('qty-panel-hidden');
+  setTimeout(()=>{ panel.style.display='none'; }, 320);
+}
+
+function requireLogin(){
+  const m = document.getElementById('login-modal');
+  if(m){ m.style.display='flex'; }
+}
+
+function doLogin(){
+  const email = document.getElementById('login-email')?.value||'';
+  if(!email){ alert('Please enter your email'); return; }
+  document.getElementById('login-modal').style.display='none';
+  sNtf('✓ Signed in! Redirecting to checkout...');
+  setTimeout(()=>{ window.location.href='https://hunto-5642.myshopify.com/account/login'; }, 1000);
+}
+
+function doGuestCheckout(){
+  document.getElementById('login-modal').style.display='none';
+  sNtf('✓ Continuing as guest...');
+  setTimeout(()=>{ window.location.href='https://hunto-5642.myshopify.com/checkout'; }, 800);
 }
 
 // ── Step 2: Quantities ─────────────────────────────────
@@ -7108,24 +7225,98 @@ function step2UpdateTotals(){
 
 // ── Step 3: Review & Order ─────────────────────────────
 function buildStep3(){
-  const p = sState.product;
-  const c = sState.color;
-  const sizeUpcharge = {S:0,M:0,L:0,XL:0,'2XL':3,'3XL':5,'4XL':7,'5XL':9};
-  const basePrice = parseFloat(p?.price||p?.base_retail||0);
+  const UP = {S:0,M:0,L:0,XL:0,'2XL':2.95,'3XL':3.95,'4XL':4.95,'5XL':4.95};
+  const ps = orderState.productSizes || {};
 
-  let lines = Object.entries(orderState.sizes).filter(([,q])=>q>0)
-    .map(([sz,q])=>`${q}× ${sz} @ $${(basePrice+(sizeUpcharge[sz]||0)).toFixed(2)} = $${(q*(basePrice+(sizeUpcharge[sz]||0))).toFixed(2)}`);
+  // Calculate totals across all products
+  let totalUnits=0, grandTotal=0;
+  sProducts.forEach(function(sp,idx){
+    const basePrice = parseFloat(sp.product?.price||sp.product?.base_retail||28);
+    Object.entries(ps[idx]||{}).forEach(function([sz,qty]){
+      if(!qty) return;
+      totalUnits += qty;
+      grandTotal += qty * (basePrice + (UP[sz]||0));
+    });
+  });
 
-  if(jerseyMode && nnRoster.length) lines.push(`Names & Numbers: $${orderState.jerseyTotal?.toFixed(2)||'0.00'}`);
+  // Bulk discount tiers
+  const discountPct = totalUnits>=24?10:totalUnits>=12?7:totalUnits>=6?3:0;
+  const discountedTotal = grandTotal * (1 - discountPct/100);
+  const priceEach = totalUnits>0 ? discountedTotal/totalUnits : 0;
 
-  const summaryEl = document.getElementById('step3-summary');
-  if(summaryEl) summaryEl.innerHTML = `
-    <div><strong>${p?.brand||'Gildan'}</strong> — ${p?.name||''}</div>
-    <div>Color: ${c?.n||c?.name||''} · ${orderState.totalUnits||0} shirts</div>
-    <div style="margin-top:8px;font-size:12px;color:#aaa">${lines.join('<br>')}</div>
-  `;
-  document.getElementById('step3-total').textContent = '$'+(orderState.grand||0).toFixed(2);
-  document.getElementById('step3-grand').textContent = '$'+(orderState.grand||0).toFixed(2);
+  // Price summary
+  const priceEl = document.getElementById('rsp-price-each');
+  if(priceEl){
+    if(discountPct>0){
+      priceEl.innerHTML = '<span style="color:#aaa;text-decoration:line-through;font-size:16px;font-weight:600">$'+(grandTotal/totalUnits||0).toFixed(2)+'</span> <span style="color:#111;font-size:26px;font-weight:900">$'+priceEach.toFixed(2)+' each</span>';
+    } else {
+      priceEl.innerHTML = '<span style="color:#111;font-size:26px;font-weight:900">$'+priceEach.toFixed(2)+' each</span>';
+    }
+  }
+
+  const totalEl = document.getElementById('rsp-total-line');
+  if(totalEl){
+    totalEl.innerHTML = '<span style="color:#aaa;text-decoration:line-through">$'+grandTotal.toFixed(2)+'</span> <strong style="color:#111">$'+discountedTotal.toFixed(2)+' total</strong>'+(discountPct?' <span style="color:#16a34a;background:#dcfce7;padding:2px 7px;border-radius:20px;font-size:11px">'+discountPct+'% off</span>':'');
+  }
+
+  // Stats badges
+  const statsEl = document.getElementById('rsp-stats');
+  if(statsEl){
+    const colorCount = sProducts.length;
+    statsEl.innerHTML = [
+      '👕 '+totalUnits+' item'+(totalUnits!==1?'s':''),
+      '🖨 1 print area',
+      '🎨 '+colorCount+' color'+(colorCount!==1?'s':''),
+      '✅ 100% Guarantee',
+    ].map(function(s){ return '<span style="font-size:11px;font-weight:600;color:#555;background:#f5f5f5;border-radius:20px;padding:4px 10px">'+s+'</span>'; }).join('');
+  }
+
+  // Bulk discount hints
+  const bulkEl = document.getElementById('rsp-bulk');
+  if(bulkEl){
+    const nextTiers = [{min:6,pct:3},{min:12,pct:7},{min:24,pct:10}].filter(function(t){ return totalUnits<t.min; }).slice(0,2);
+    if(nextTiers.length){
+      bulkEl.innerHTML = '<strong>Buy More &amp; Save:</strong> '+nextTiers.map(function(t){
+        const p2 = (grandTotal/totalUnits||0)*(1-t.pct/100);
+        return t.min+' items for <strong style="color:#7c3aed">$'+p2.toFixed(2)+' ea.</strong>';
+      }).join(' &nbsp;|&nbsp; ');
+      bulkEl.style.display='block';
+    } else { bulkEl.style.display='none'; }
+  }
+
+  // Product summary cards
+  const listEl = document.getElementById('rsp-summary-list');
+  if(listEl){
+    let html = '<div style="font-size:12px;font-weight:700;color:#888;padding:12px 20px 6px">Summary ('+totalUnits+' items)</div>';
+    sProducts.forEach(function(sp,idx){
+      const p=sp.product||{}, c=sp.color||{};
+      const cn=c.n||c.name||'', ch=c.h||c.hex||'#888';
+      const img=c.front||getShirtPhotoUrl(p.id,cn,'front')||'';
+      const basePrice=parseFloat(p.price||p.base_retail||28);
+      const sizes=ps[idx]||{};
+      const itemCount=Object.values(sizes).reduce(function(a,b){return a+(b||0);},0);
+      if(!itemCount) return;
+
+      // Size breakdown: "S-2 M-4 XL-1"
+      const sizeBreakdown=Object.entries(sizes).filter(function([,q]){return q>0;}).map(function([sz,q]){return '<span style="background:#f0f0f0;border-radius:4px;padding:2px 6px;font-size:11px;font-weight:700">'+sz+'-'+q+'</span>';}).join(' ');
+
+      html += '<div style="padding:14px 20px;border-top:1px solid #f0f0f0;display:flex;gap:12px;align-items:flex-start">';
+      html += '<div style="width:52px;height:52px;border-radius:10px;overflow:hidden;background:#f5f5f5;flex-shrink:0;border:1px solid #e8e8e8"><img src="'+img+'" style="width:100%;height:100%;object-fit:contain"></div>';
+      html += '<div style="flex:1;min-width:0">';
+      html += '<div style="font-size:13px;font-weight:800;color:#111;margin-bottom:2px">'+(p.brand||'Gildan')+' '+(p.name||'')+'</div>';
+      html += '<div style="font-size:12px;color:#888;margin-bottom:6px;display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:'+ch+';display:inline-block;border:1px solid rgba(0,0,0,.1)"></span>'+cn+' &nbsp;·&nbsp; '+itemCount+' item'+(itemCount!==1?'s':'')+'</div>';
+      html += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px">'+sizeBreakdown+'</div>';
+      html += '<span onclick="goStep2()" style="font-size:11px;color:#7c3aed;font-weight:700;cursor:pointer;text-decoration:underline">Edit sizes</span>';
+      html += '</div>';
+      html += '<div style="font-size:13px;font-weight:800;color:#111;white-space:nowrap">$'+priceEach.toFixed(2)+' ea.</div>';
+      html += '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  // Update totals display in qty panel footer too
+  const grandEl = document.getElementById('step2-grand-total');
+  if(grandEl) grandEl.textContent = '$'+discountedTotal.toFixed(2);
 }
 
 // ── Canvas Mockup Renderer ──────────────────────────────
