@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v11.7 -->
+<!-- v11.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1364,7 +1364,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.7</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.8</span>
   </div>
 
 </nav>
@@ -2298,13 +2298,75 @@ footer{background:#111;padding:56px 32px 28px}
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
         </div>
         <div class="s-panel-body">
-          <div class="upload-zone" onclick="document.getElementById('s-file').click()">
+
+          <!-- Drop zone -->
+          <div class="upload-zone" onclick="document.getElementById('s-file').click()" id="upload-zone"
+            ondragover="event.preventDefault();this.style.borderColor='#7c3aed';this.style.background='#faf5ff'"
+            ondragleave="this.style.borderColor='';this.style.background=''"
+            ondrop="event.preventDefault();this.style.borderColor='';this.style.background='';handleUploadDrop(event)">
             <div class="upload-zone-icon">↑</div>
-            <div class="upload-zone-title">Click to upload your artwork</div>
-            <div class="upload-zone-sub">PNG, JPG · Transparent PNG recommended</div>
+            <div class="upload-zone-title">Click or drag to upload</div>
+            <div class="upload-zone-sub">PNG, JPG, SVG · Transparent PNG recommended</div>
             <div class="upload-zone-sub" style="margin-top:3px">Min 1500px for best print quality</div>
           </div>
           <input type="file" id="s-file" accept="image/*" style="display:none" onchange="handleUpload(event)">
+
+          <!-- Upload preview -->
+          <div id="upload-preview" style="display:none;margin-top:12px;border:1.5px solid #e8e8e8;border-radius:12px;overflow:hidden">
+            <div style="background:#f8f8f8;padding:12px;display:flex;align-items:center;justify-content:center;min-height:100px">
+              <img id="upload-preview-img" style="max-width:100%;max-height:120px;object-fit:contain;border-radius:6px">
+            </div>
+          </div>
+
+          <!-- Settings -->
+          <div style="margin-top:14px;border:1.5px solid #e8e8e8;border-radius:12px;overflow:hidden">
+            <div style="padding:10px 14px;background:#f9f9f9;border-bottom:1px solid #f0f0f0;font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.08em">Image Settings</div>
+
+            <!-- Remove Background -->
+            <div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f5f5f5">
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#111">Remove Background</div>
+                <div style="font-size:11px;color:#888;margin-top:1px">Erase background, keep your design</div>
+              </div>
+              <label style="position:relative;display:inline-block;width:40px;height:22px;cursor:pointer;flex-shrink:0">
+                <input type="checkbox" id="upload-rmbg" style="opacity:0;width:0;height:0" onchange="uploadToggleRmbg()">
+                <span id="upload-rmbg-track" style="position:absolute;inset:0;border-radius:11px;background:#ccc;transition:background .2s"></span>
+                <span id="upload-rmbg-knob" style="position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s"></span>
+              </label>
+            </div>
+
+            <!-- Make Single Color -->
+            <div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f5f5f5">
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#111">Single Color</div>
+                <div style="font-size:11px;color:#888;margin-top:1px">Convert to one-color design</div>
+              </div>
+              <label style="position:relative;display:inline-block;width:40px;height:22px;cursor:pointer;flex-shrink:0">
+                <input type="checkbox" id="upload-single" style="opacity:0;width:0;height:0" onchange="uploadApplyFilters()">
+                <span id="upload-single-track" style="position:absolute;inset:0;border-radius:11px;background:#ccc;transition:background .2s"></span>
+                <span id="upload-single-knob" style="position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s"></span>
+              </label>
+            </div>
+
+            <!-- B&W -->
+            <div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between">
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#111">Black &amp; White</div>
+                <div style="font-size:11px;color:#888;margin-top:1px">Great for dark shirts</div>
+              </div>
+              <label style="position:relative;display:inline-block;width:40px;height:22px;cursor:pointer;flex-shrink:0">
+                <input type="checkbox" id="upload-bw" style="opacity:0;width:0;height:0" onchange="uploadApplyFilters()">
+                <span id="upload-bw-track" style="position:absolute;inset:0;border-radius:11px;background:#ccc;transition:background .2s"></span>
+                <span id="upload-bw-knob" style="position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Apply button -->
+          <button id="upload-apply-btn" onclick="uploadApplyToShirt()" style="display:none;width:100%;margin-top:14px;padding:13px;background:#7c3aed;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif">
+            ✓ Place on Shirt
+          </button>
+
           <div style="margin-top:12px;padding:10px 12px;background:#fdf4ff;border-radius:10px;border:1px solid #e9d5ff">
             <div style="font-size:12px;color:#666;line-height:1.6">
               💡 <strong>Pro tip:</strong> Upload a PNG with a transparent background for the cleanest result on any shirt color.
@@ -4544,17 +4606,134 @@ function showDesignEditTools(){
   if(tools) tools.style.display = "block";
 }
 
+let uploadRawBase64 = null; // original uploaded image
+let uploadProcessedBase64 = null; // after filters applied
+
+function handleUploadDrop(e){
+  const f = e.dataTransfer.files[0];
+  if(f) processUploadedFile(f);
+}
+
 function handleUpload(e){
-  const f=(e.target.files||[])[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    uploadedImageBase64 = ev.target.result;
-    applyDesign(uploadedImageBase64);
-    sState.hasDesign=true;
-    sNtf("✓ Artwork placed on shirt!");
-    showDesignEditTools();
+  const f = (e.target.files||[])[0];
+  if(!f) return;
+  processUploadedFile(f);
+  e.target.value = ''; // reset so same file can be re-uploaded
+}
+
+function processUploadedFile(f){
+  const r = new FileReader();
+  r.onload = function(ev){
+    uploadRawBase64 = ev.target.result;
+    uploadProcessedBase64 = ev.target.result;
+
+    // Show preview
+    const prev = document.getElementById('upload-preview');
+    const prevImg = document.getElementById('upload-preview-img');
+    if(prev && prevImg){ prev.style.display='block'; prevImg.src=uploadRawBase64; }
+
+    // Show apply button
+    const btn = document.getElementById('upload-apply-btn');
+    if(btn) btn.style.display='block';
+
+    // Reset toggles
+    ['upload-rmbg','upload-single','upload-bw'].forEach(function(id){
+      const cb = document.getElementById(id);
+      if(cb) cb.checked = false;
+    });
+    uploadSyncToggles();
+
+    sNtf('✓ Image loaded — adjust settings then place on shirt');
   };
   r.readAsDataURL(f);
+}
+
+function uploadSyncToggles(){
+  ['rmbg','single','bw'].forEach(function(id){
+    const cb    = document.getElementById('upload-'+id);
+    const track = document.getElementById('upload-'+id+'-track');
+    const knob  = document.getElementById('upload-'+id+'-knob');
+    if(!cb||!track||!knob) return;
+    const on = cb.checked;
+    track.style.background = on ? '#7c3aed' : '#ccc';
+    knob.style.transform   = on ? 'translateX(18px)' : 'translateX(0)';
+  });
+}
+
+function uploadToggleRmbg(){
+  uploadSyncToggles();
+  if(!uploadRawBase64) return;
+  const tog = document.getElementById('upload-rmbg');
+  if(tog && tog.checked){
+    sNtf('Removing background...');
+    removeBackground(uploadRawBase64, function(cleanUrl){
+      uploadProcessedBase64 = cleanUrl;
+      const prevImg = document.getElementById('upload-preview-img');
+      if(prevImg) prevImg.src = cleanUrl;
+      sNtf('✓ Background removed!');
+    });
+  } else {
+    uploadProcessedBase64 = uploadRawBase64;
+    const prevImg = document.getElementById('upload-preview-img');
+    if(prevImg) prevImg.src = uploadRawBase64;
+  }
+}
+
+function uploadApplyFilters(){
+  uploadSyncToggles();
+  if(!uploadRawBase64) return;
+  const single = document.getElementById('upload-single')?.checked;
+  const bw     = document.getElementById('upload-bw')?.checked;
+  const prevImg = document.getElementById('upload-preview-img');
+
+  // Apply CSS filter to preview
+  let filter = 'none';
+  if(bw)     filter = 'grayscale(1) contrast(1.8)';
+  else if(single) filter = 'grayscale(1) sepia(.3) contrast(1.4)';
+  if(prevImg) prevImg.style.filter = filter;
+}
+
+function uploadApplyToShirt(){
+  if(!uploadRawBase64){ sNtf('Upload an image first'); return; }
+
+  const single = document.getElementById('upload-single')?.checked;
+  const bw     = document.getElementById('upload-bw')?.checked;
+  const src    = uploadProcessedBase64 || uploadRawBase64;
+
+  // If filter needed, composite via canvas
+  if(single || bw){
+    const img = new Image();
+    img.onload = function(){
+      const c = document.createElement('canvas');
+      c.width=img.naturalWidth; c.height=img.naturalHeight;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img,0,0);
+      const id = ctx.getImageData(0,0,c.width,c.height);
+      const d = id.data;
+      for(let i=0;i<d.length;i+=4){
+        if(d[i+3]===0) continue;
+        const gray = 0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];
+        if(bw){
+          const v = gray>128?255:0;
+          d[i]=d[i+1]=d[i+2]=v;
+        } else {
+          d[i]=d[i+1]=d[i+2]=Math.round(gray);
+        }
+      }
+      ctx.putImageData(id,0,0);
+      placeUploadedArt(c.toDataURL('image/png'));
+    };
+    img.src = src;
+  } else {
+    placeUploadedArt(src);
+  }
+}
+
+function placeUploadedArt(src){
+  applyDesign(src);
+  sState.hasDesign = true;
+  sClosePanel();
+  sNtf('✓ Artwork placed on shirt!');
 }
 
 let aiCurrentLayerId = null;
