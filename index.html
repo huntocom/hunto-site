@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v10.9 -->
+<!-- v11.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.9</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.0</span>
   </div>
 
 </nav>
@@ -6812,22 +6812,12 @@ function buildStep2(){
       return h;
     }
 
-    // Adult sizes — single row
-    const ADULT_MAIN = ['S','M','L','XL','2XL','3XL','4XL'];
+    // Adult sizes — ALL in one row
+    const ADULT_ALL = ['S','M','L','XL','2XL','3XL','4XL','5XL'];
     html += '<div style="padding:12px 20px;border-bottom:1px solid #f5f5f5">';
     html += '<div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Adult Sizes</div>';
-    html += '<div style="display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap">';
-    ADULT_MAIN.forEach(function(sz){ html += sizeBox(sz, idx, psizes[sz]||0, UP[sz]||0); });
-    html += '</div>';
-    // 5XL full width
-    const qty5xl = psizes['5XL']||0;
-    html += '<div style="margin-top:8px">';
-    html += '<div style="font-size:10px;font-weight:700;color:#666;margin-bottom:3px">5XL</div>';
-    html += '<input type="number" min="0" max="999" value="'+qty5xl+'" ';
-    html += 'data-pidx="'+idx+'" data-sz="5XL" ';
-    html += 'oninput="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
-    html += 'style="width:100%;height:38px;padding:0 12px;border:'+(qty5xl?'2px solid #7c3aed':'1px solid #ddd')+';border-radius:6px;font-size:13px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(qty5xl?'#faf5ff':'#fff')+';outline:none;box-sizing:border-box">';
-    html += '<div style="font-size:9px;color:#aaa;margin-top:2px">+$4.95</div>';
+    html += '<div style="display:flex;gap:5px;align-items:flex-start;flex-wrap:wrap">';
+    ADULT_ALL.forEach(function(sz){ html += sizeBox(sz, idx, psizes[sz]||0, UP[sz]||0); });
     html += '</div>';
     html += '</div>';
 
@@ -6852,16 +6842,10 @@ function buildStep2(){
   const fc = first?.color || {};
   const imgEl = document.getElementById('step2-shirt-img');
   if(imgEl){
-    const src = fc.back || fc.front || getShirtPhotoUrl(fp.id, fc.n||fc.name||'', 'back') || '';
-    if(src && !src.startsWith('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEs')){
-      imgEl.src = src;
-      imgEl.style.display = '';
-    } else {
-      // fallback to front
-      const fsrc = fc.front || getShirtPhotoUrl(fp.id, fc.n||fc.name||'', 'front') || '';
-      imgEl.src = fsrc;
-      imgEl.style.display = '';
-    }
+    // Show front of shirt with design
+    const src = fc.front || getShirtPhotoUrl(fp.id, fc.n||fc.name||'', 'front') || '';
+    imgEl.src = src;
+    imgEl.style.display = '';
   }
 
   // Show design overlay on the shirt
@@ -6871,8 +6855,9 @@ function buildStep2(){
     const imgElShirt = document.getElementById('s-shirt');
     if(wrap && imgElShirt){
       // Get shirt bounds and design layers, scale to full screen
+      // Show front-side layers (main design)
       const layers = Array.from(wrap.querySelectorAll("[data-type='image'],[data-type='text'],.txt-layer"))
-        .filter(function(el){ return el.style.display !== 'none'; });
+        .filter(function(el){ return el.style.display !== 'none' && el.dataset.side !== 'back'; });
       if(layers.length > 0){
         const wRect = wrap.getBoundingClientRect();
         overlay.innerHTML = layers.map(function(el){
@@ -7243,7 +7228,7 @@ window.addEventListener('load', updateDeliveryDates);
   </div>
 
   <!-- RIGHT: Quantity panel -->
-  <div id="step2-panel" class="step2-panel-animate" style="width:400px;flex-shrink:0;background:#fff;display:flex;flex-direction:column;box-shadow:-8px 0 32px rgba(0,0,0,.12)">
+  <div id="step2-panel" class="step2-panel-animate" style="width:420px;flex-shrink:0;background:#fff;display:flex;flex-direction:column;box-shadow:-8px 0 32px rgba(0,0,0,.12);height:100vh;overflow:hidden">
 
     <!-- Header -->
     <div style="padding:22px 24px 16px;border-bottom:1px solid #f0f0f0">
