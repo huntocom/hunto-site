@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v9.5 -->
+<!-- v9.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1352,7 +1352,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.5</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.6</span>
   </div>
 
 </nav>
@@ -3666,7 +3666,16 @@ async function aiSearchClipart(query){
 
     const rows = data.resources.slice(0,9).map(function(item){
       const url = item.previews.preview.url;
-      return '<div onclick="aiSelectImage(\'' + url + '\')" style="cursor:pointer;border-radius:8px;overflow:hidden;border:1.5px solid #e8e8e8;aspect-ratio:1;background:#f9f9f9;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='#7c3aed'" onmouseout="this.style.borderColor='#e8e8e8'"><img src="' + url + '" style="width:90%;height:90%;object-fit:contain" loading="lazy"></div>';
+      const div = document.createElement('div');
+      div.onclick = function(){ aiSelectImage(url); };
+      div.style.cssText = 'cursor:pointer;border-radius:8px;overflow:hidden;border:1.5px solid #e8e8e8;aspect-ratio:1;background:#f9f9f9;display:flex;align-items:center;justify-content:center;transition:border-color .15s';
+      div.onmouseover = function(){ this.style.borderColor='#7c3aed'; };
+      div.onmouseout  = function(){ this.style.borderColor='#e8e8e8'; };
+      const img = document.createElement('img');
+      img.src = url; img.loading = 'lazy';
+      img.style.cssText = 'width:90%;height:90%;object-fit:contain';
+      div.appendChild(img);
+      return div.outerHTML;
     });
     grid.innerHTML = rows.join('');
 
