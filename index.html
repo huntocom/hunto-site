@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v9.7 -->
+<!-- v9.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1044,53 +1044,6 @@ footer{background:#111;padding:56px 32px 28px}
 
 
 /* ══════════════════════════════════════════
-   4TH OF JULY THEME
-══════════════════════════════════════════ */
-.july-bar{
-  background:linear-gradient(90deg,#b91c1c,#dc2626,#b91c1c);
-  color:#fff;text-align:center;padding:10px 16px;
-  font-size:13px;font-weight:700;letter-spacing:.02em;
-  position:relative;overflow:hidden;
-}
-.july-bar em{font-style:normal;background:rgba(255,255,255,.2);padding:2px 10px;border-radius:20px;margin:0 4px}
-.july-bar-stars{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.july-bar .star{position:absolute;color:#fff;font-size:10px;opacity:.4;animation:starFloat 3s ease-in-out infinite}
-@keyframes starFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-4px) rotate(180deg)}}
-
-/* Fireworks canvas */
-#fireworks-canvas{position:absolute;inset:0;pointer-events:none;z-index:2;opacity:.7}
-
-/* 4th of July promo section */
-.july-promo{
-  background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 40%,#1e3a5f 100%);
-  padding:64px 32px;position:relative;overflow:hidden;
-}
-.july-promo-stars-bg{
-  position:absolute;inset:0;
-  background-image:radial-gradient(circle, rgba(255,255,255,.8) 1px, transparent 1px);
-  background-size:40px 40px;
-  opacity:.06;pointer-events:none;
-}
-.july-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(220,38,38,.2);border:1px solid rgba(220,38,38,.4);
-  border-radius:20px;padding:6px 16px;margin-bottom:20px;
-}
-.july-countdown{
-  display:flex;gap:16px;margin-top:24px;
-}
-.july-count-block{
-  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
-  border-radius:12px;padding:12px 20px;text-align:center;min-width:72px;
-}
-.july-count-num{font-size:28px;font-weight:900;color:#fff;line-height:1}
-.july-count-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
-.july-stripe{height:6px;background:repeating-linear-gradient(90deg,#dc2626 0,#dc2626 20px,#fff 20px,#fff 40px,#1d4ed8 40px,#1d4ed8 60px);opacity:.8}
-
-@keyframes sparkle{0%,100%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1)}}
-.spark{position:absolute;pointer-events:none;animation:sparkle 1.5s ease-in-out infinite}
-
-/* ══════════════════════════════════════════
    SAVED DESIGNS
 ══════════════════════════════════════════ */
 .designs-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
@@ -1400,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.7</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.8</span>
   </div>
 
 </nav>
@@ -1426,30 +1379,11 @@ footer{background:#111;padding:56px 32px 28px}
 <!-- ████ HOME PAGE ████ -->
 <div id="page-home" class="page active">
 
-  <!-- 4TH OF JULY HOLIDAY BAR -->
-  <div class="july-stripe"></div>
-  <div class="july-bar">
-    <div class="july-bar-stars">
-      <span class="star" style="left:5%;top:20%;animation-delay:0s">★</span>
-      <span class="star" style="left:15%;top:60%;animation-delay:.3s">★</span>
-      <span class="star" style="left:82%;top:30%;animation-delay:.6s">★</span>
-      <span class="star" style="left:93%;top:65%;animation-delay:.9s">★</span>
-    </div>
-    🎆 4th of July Sale — Use code <em>JULY4</em> for 15% off sitewide &nbsp;·&nbsp; Free Shipping Through July 4th 🎇
-  </div>
-  <div class="july-stripe"></div>
-
   <!-- HERO -->
   <section style="position:relative;background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 50%,#0a0a0a 100%);overflow:hidden;min-height:500px;display:flex;align-items:center">
     <!-- Background pattern -->
     <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(124,58,237,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(124,58,237,.1) 0%,transparent 40%);pointer-events:none"></div>
-    <!-- 4th of July fireworks canvas -->
-    <canvas id="fireworks-canvas"></canvas>
-    <!-- Patriotic star accents -->
-    <div style="position:absolute;top:12%;right:8%;font-size:18px;opacity:.3;animation:starFloat 2.5s ease-in-out infinite;color:#fff">★</div>
-    <div style="position:absolute;top:70%;right:15%;font-size:12px;opacity:.2;animation:starFloat 3.2s ease-in-out infinite .5s;color:#dc2626">★</div>
-    <div style="position:absolute;top:30%;left:5%;font-size:14px;opacity:.25;animation:starFloat 2.8s ease-in-out infinite 1s;color:#fff">★</div>
-    <div style="position:absolute;bottom:20%;left:8%;font-size:10px;opacity:.2;animation:starFloat 3.5s ease-in-out infinite .2s;color:#fff">★</div>
+    
     
     <div style="max-width:1300px;margin:0 auto;padding:60px 32px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;width:100%">
       <div>
@@ -1493,85 +1427,20 @@ footer{background:#111;padding:56px 32px 28px}
   <!-- MARQUEE -->
   <div class="marquee-wrap">
     <div class="marquee-track">
-      <span class="mqi">🎆 4th of July Sale</span><span class="mqi mqs">—</span>
-      <span class="mqi">Use Code JULY4 for 15% Off</span><span class="mqi mqs">—</span>
       <span class="mqi">AI Generated Art</span><span class="mqi mqs">—</span>
       <span class="mqi">DTF Printed In-House</span><span class="mqi mqs">—</span>
-      <span class="mqi">Ships Before July 4th 🇺🇸</span><span class="mqi mqs">—</span>
       <span class="mqi">No Minimums</span><span class="mqi mqs">—</span>
+      <span class="mqi">Ships in 48 Hours</span><span class="mqi mqs">—</span>
       <span class="mqi">Free Shipping</span><span class="mqi mqs">—</span>
-      <span class="mqi">🎇 Patriotic Apparel Sale</span><span class="mqi mqs">—</span>
       <span class="mqi">1.3M Community</span><span class="mqi mqs">—</span>
-      <span class="mqi">🎆 4th of July Sale</span><span class="mqi mqs">—</span>
-      <span class="mqi">Use Code JULY4 for 15% Off</span><span class="mqi mqs">—</span>
       <span class="mqi">AI Generated Art</span><span class="mqi mqs">—</span>
       <span class="mqi">DTF Printed In-House</span><span class="mqi mqs">—</span>
-      <span class="mqi">Ships Before July 4th 🇺🇸</span><span class="mqi mqs">—</span>
       <span class="mqi">No Minimums</span><span class="mqi mqs">—</span>
+      <span class="mqi">Ships in 48 Hours</span><span class="mqi mqs">—</span>
       <span class="mqi">Free Shipping</span><span class="mqi mqs">—</span>
-      <span class="mqi">🎇 Patriotic Apparel Sale</span><span class="mqi mqs">—</span>
       <span class="mqi">1.3M Community</span><span class="mqi mqs">—</span>
     </div>
   </div>
-
-  <!-- 4TH OF JULY PROMO SECTION -->
-  <div class="july-promo">
-    <div class="july-promo-stars-bg"></div>
-    <div style="max-width:1300px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;position:relative;z-index:1">
-      <div>
-        <div class="july-badge">
-          <span style="font-size:18px">🎆</span>
-          <span style="font-size:11px;font-weight:700;color:#fca5a5;text-transform:uppercase;letter-spacing:.1em">4th of July Sale</span>
-        </div>
-        <h2 style="font-size:clamp(32px,4vw,52px);font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1.05;margin-bottom:16px">Show Your <span style="color:#ef4444">American</span><br><span style="color:#60a5fa">Pride.</span></h2>
-        <p style="font-size:16px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:24px;max-width:440px">Custom patriotic tees, hoodies and apparel. Perfect for BBQs, fireworks shows, and family reunions. Ships in 48 hours — arrives before the 4th.</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px">
-          <button onclick="goPDP('8000')" style="height:48px;padding:0 28px;background:#dc2626;color:#fff;border:none;border-radius:24px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 4px 16px rgba(220,38,38,.4)">🎆 Design Your Shirt</button>
-          <button onclick="goShop('')" style="height:48px;padding:0 24px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:24px;font-size:15px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">Browse All</button>
-        </div>
-        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 16px">
-          <span style="font-size:20px">🏷️</span>
-          <div>
-            <div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Use code at checkout</div>
-            <div style="font-size:18px;font-weight:900;color:#fff;letter-spacing:.08em">JULY4 — 15% OFF</div>
-          </div>
-        </div>
-        <!-- Countdown -->
-        <div style="margin-top:24px">
-          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Sale ends in</div>
-          <div class="july-countdown">
-            <div class="july-count-block"><div class="july-count-num" id="july-days">00</div><div class="july-count-label">Days</div></div>
-            <div class="july-count-block"><div class="july-count-num" id="july-hours">00</div><div class="july-count-label">Hours</div></div>
-            <div class="july-count-block"><div class="july-count-num" id="july-mins">00</div><div class="july-count-label">Mins</div></div>
-            <div class="july-count-block"><div class="july-count-num" id="july-secs">00</div><div class="july-count-label">Secs</div></div>
-          </div>
-        </div>
-      </div>
-      <!-- Right side - patriotic shirt mockup -->
-      <div style="display:flex;justify-content:center;align-items:center">
-        <div style="position:relative;width:320px;height:320px;display:flex;align-items:center;justify-content:center">
-          <!-- Decorative rings -->
-          <div style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,255,255,.06)"></div>
-          <div style="position:absolute;inset:20px;border-radius:50%;border:2px solid rgba(255,255,255,.04)"></div>
-          <!-- Center content -->
-          <div style="text-align:center;z-index:1">
-            <div style="font-size:80px;margin-bottom:8px">🦅</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#fff;letter-spacing:4px;line-height:1">MADE IN</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;background:linear-gradient(90deg,#ef4444,#fff,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px">AMERICA</div>
-            <div style="display:flex;gap:4px;justify-content:center;margin-top:8px">
-              <span style="font-size:20px">🔴</span><span style="font-size:20px">⚪</span><span style="font-size:20px">🔵</span>
-            </div>
-          </div>
-          <!-- Floating sparks -->
-          <div class="spark" style="top:10%;left:15%;font-size:16px;animation-delay:0s">✦</div>
-          <div class="spark" style="top:20%;right:10%;font-size:12px;animation-delay:.4s;color:#ef4444">★</div>
-          <div class="spark" style="bottom:15%;left:20%;font-size:10px;animation-delay:.8s;color:#60a5fa">★</div>
-          <div class="spark" style="bottom:25%;right:15%;font-size:14px;animation-delay:1.2s;color:#fff">✦</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="july-stripe"></div>
 
   <!-- CATEGORY GRID -->
   <div style="max-width:1300px;margin:0 auto;padding:64px 32px">
@@ -3786,27 +3655,27 @@ async function aiSearchClipart(query){
   grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:12px;color:#bbb;font-size:12px">Searching clipart...</div>';
 
   try {
-    const targetUrl = 'https://openclipart.org/search/json/?query=' + encodeURIComponent(query) + '&amount=9';
-    const proxyUrl  = 'https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl);
-    const res  = await fetch(proxyUrl);
-    const wrap = await res.json();
-    const data = JSON.parse(wrap.contents);
+    // SVG Repo — 500k+ free vectors, CORS-enabled public API
+    const res  = await fetch('https://api.svgrepo.com/vectors?query=' + encodeURIComponent(query) + '&limit=9');
+    const data = await res.json();
 
-    if(!data.resources || data.resources.length === 0){
+    if(!data.vectors || data.vectors.length === 0){
       grid.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#bbb;text-align:center;padding:8px">No clipart found — try different keywords</div>';
       return;
     }
 
-    const rows = data.resources.slice(0,9).map(function(item){
-      const url = item.previews.preview.url;
+    const rows = data.vectors.slice(0,9).map(function(item){
+      const url = item.url || item.svg_url || '';
+      const thumb = item.thumbnail_url || url;
       const div = document.createElement('div');
       div.onclick = function(){ aiSelectImage(url); };
       div.style.cssText = 'cursor:pointer;border-radius:8px;overflow:hidden;border:1.5px solid #e8e8e8;aspect-ratio:1;background:#f9f9f9;display:flex;align-items:center;justify-content:center;transition:border-color .15s';
       div.onmouseover = function(){ this.style.borderColor='#7c3aed'; };
       div.onmouseout  = function(){ this.style.borderColor='#e8e8e8'; };
       const img = document.createElement('img');
-      img.src = url; img.loading = 'lazy';
-      img.style.cssText = 'width:90%;height:90%;object-fit:contain';
+      img.src = thumb; img.loading = 'lazy';
+      img.style.cssText = 'width:80%;height:80%;object-fit:contain';
+      img.onerror = function(){ this.parentNode.style.display='none'; };
       div.appendChild(img);
       return div.outerHTML;
     });
@@ -7050,94 +6919,6 @@ function updateDeliveryDates(){
 // Run on load
 window.addEventListener('load', updateDeliveryDates);
 
-// ═══════════════════════════════════════════════════
-// 4TH OF JULY — COUNTDOWN + FIREWORKS
-// ═══════════════════════════════════════════════════
-function july4Countdown(){
-  const target = new Date('2026-07-04T23:59:59');
-  function tick(){
-    const now = new Date();
-    const diff = target - now;
-    if(diff <= 0){
-      ['days','hours','mins','secs'].forEach(id=>{
-        const el=document.getElementById('july-'+id);
-        if(el) el.textContent='00';
-      });
-      return;
-    }
-    const days  = Math.floor(diff/86400000);
-    const hours = Math.floor((diff%86400000)/3600000);
-    const mins  = Math.floor((diff%3600000)/60000);
-    const secs  = Math.floor((diff%60000)/1000);
-    const pad = n=>String(n).padStart(2,'0');
-    const d=document.getElementById('july-days');   if(d) d.textContent=pad(days);
-    const h=document.getElementById('july-hours');  if(h) h.textContent=pad(hours);
-    const m=document.getElementById('july-mins');   if(m) m.textContent=pad(mins);
-    const s=document.getElementById('july-secs');   if(s) s.textContent=pad(secs);
-  }
-  tick();
-  setInterval(tick, 1000);
-}
-
-// Simple CSS fireworks on hero canvas
-function initFireworks(){
-  const canvas = document.getElementById('fireworks-canvas');
-  if(!canvas) return;
-  const hero = canvas.parentElement;
-  canvas.width  = hero.offsetWidth  || 800;
-  canvas.height = hero.offsetHeight || 500;
-  const ctx = canvas.getContext('2d');
-
-  const particles = [];
-  const COLORS = ['#ef4444','#ffffff','#3b82f6','#fbbf24','#f87171','#93c5fd'];
-
-  function burst(x, y){
-    const color = COLORS[Math.floor(Math.random()*COLORS.length)];
-    for(let i=0;i<30;i++){
-      const angle = (Math.PI*2/30)*i;
-      const speed = 1.5+Math.random()*2.5;
-      particles.push({
-        x, y, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed,
-        alpha:1, color, size:2+Math.random()*2, decay:.015+Math.random()*.01
-      });
-    }
-  }
-
-  function loop(){
-    ctx.fillStyle='rgba(0,0,0,.15)';
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    for(let i=particles.length-1;i>=0;i--){
-      const p=particles[i];
-      p.x+=p.vx; p.y+=p.vy; p.vy+=.04; p.alpha-=p.decay;
-      if(p.alpha<=0){particles.splice(i,1);continue;}
-      ctx.globalAlpha=p.alpha;
-      ctx.fillStyle=p.color;
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
-      ctx.fill();
-    }
-    ctx.globalAlpha=1;
-    requestAnimationFrame(loop);
-  }
-
-  // Launch bursts at random intervals
-  function launchBurst(){
-    const x = canvas.width*(0.15+Math.random()*0.7);
-    const y = canvas.height*(0.1+Math.random()*0.5);
-    burst(x, y);
-    setTimeout(launchBurst, 800+Math.random()*2000);
-  }
-
-  loop();
-  setTimeout(launchBurst, 500);
-  setTimeout(launchBurst, 1500);
-}
-
-// Init on page load
-document.addEventListener('DOMContentLoaded', function(){
-  july4Countdown();
-  setTimeout(initFireworks, 300);
-});
 
 </script>
 
