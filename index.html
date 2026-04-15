@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v13.3 -->
+<!-- v13.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1399,7 +1399,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v13.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v13.4</span>
   </div>
 
 </nav>
@@ -6248,11 +6248,14 @@ async function goShop(category) {
   } else {
     shopState.gender   = "";
     shopState.category = category || "";
-    shopState.search   = "";
+    // Safety needs a search hint since SS catalog may call it different things
+    if(category === 'Safety' && !shopState.search){
+      shopState.search = "safety";
+    }
   }
   shopState.brand = "";
   const searchEl = document.getElementById("shop-search");
-  if(searchEl) searchEl.value = "";
+  if(searchEl) searchEl.value = shopState.search || "";
   await shopLoadCatalog();
   shopRenderCats(); shopRenderBrands();
 }
@@ -6326,12 +6329,26 @@ function shopCardHTML(p){
   const dots=colors.map(c=>`<div class="shop-color-dot" style="background:${c.hex||"#888"};${(c.hex||"").toLowerCase()==="#ffffff"?"outline:1px solid #ddd":""}" title="${c.name||""}"></div>`).join("")+
     (p.colors&&p.colors.length>8?`<div style="font-size:10px;color:#aaa;font-weight:600;align-self:center">+${p.colors.length-8}</div>`:"");
   
-  // For safety products, prefer safety-colored images (green/orange/yellow)
-  let img = (p.colors&&p.colors[0]&&p.colors[0].front)||p.image||"";
-  if(p.colors && p.colors.length > 1){
-    const safetyColor = p.colors.find(c=>(c.name||"").toLowerCase().includes("safety")||
-      (c.name||"").toLowerCase().includes("hi-vis")||(c.name||"").toLowerCase().includes("high vis"));
-    if(safetyColor && safetyColor.front) img = safetyColor.front;
+  // Image: for Safety category always lead with safety-colored image
+  let img = (p.colors && p.colors[0] && p.colors[0].front) || p.image || '';
+  if(p.colors && p.colors.length > 0){
+    const isSafetyCat = shopState.category === 'Safety' ||
+      (shopState.search||'').toLowerCase().includes('hi-vis') ||
+      (shopState.search||'').toLowerCase().includes('safety');
+    const safetyColor = p.colors.find(function(c){
+      const n = (c.name||'').toLowerCase();
+      return n.includes('safety') || n.includes('hi-vis') || n.includes('high vis') || n.includes('lime');
+    });
+    if(isSafetyCat && safetyColor && safetyColor.front){
+      img = safetyColor.front; // Safety section: show safety color prominently
+    } else if(!isSafetyCat && safetyColor){
+      // Non-safety sections: skip safety colors, pick a neutral one
+      const neutral = p.colors.find(function(c){
+        const n = (c.name||'').toLowerCase();
+        return !n.includes('safety') && !n.includes('hi-vis') && c.front;
+      });
+      if(neutral && neutral.front) img = neutral.front;
+    }
   }
   
   const price=p.base_retail?`From $${parseFloat(p.base_retail).toFixed(2)}`:"See pricing";
@@ -6415,6 +6432,7 @@ function shopRenderCats(){
     {label:"Big & Tall",       type:"cat",    value:"BigTall"},
     {label:"Polos",            type:"cat",    value:"Polos"},
     {label:"Outerwear",        type:"cat",    value:"Outerwear"},
+    {label:"🦺 Safety & Hi-Vis",type:"cat",    value:"Safety"},
     {label:"Bottoms",          type:"cat",    value:"Bottoms"},
   ];
   wrap.innerHTML=catPills.map(c=>{
