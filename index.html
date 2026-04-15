@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v11.0 -->
+<!-- v11.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.1</span>
   </div>
 
 </nav>
@@ -6802,29 +6802,29 @@ function buildStep2(){
     function sizeBox(sz, pidx, qty, up){
       const active = qty > 0;
       let h = '<div style="text-align:center">';
-      h += '<div style="font-size:10px;font-weight:700;color:#666;margin-bottom:3px">'+sz+'</div>';
+      h += '<div style="font-size:9px;font-weight:700;color:#666;margin-bottom:3px">'+sz+'</div>';
       h += '<input type="number" min="0" max="999" value="'+(qty||0)+'" ';
       h += 'data-pidx="'+pidx+'" data-sz="'+sz+'" ';
       h += 'oninput="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
-      h += 'style="width:44px;height:40px;padding:0;border:'+(active?'2px solid #7c3aed':'1px solid #ddd')+';border-radius:6px;font-size:13px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(active?'#faf5ff':'#fff')+';outline:none;-moz-appearance:textfield">';
-      if(up) h += '<div style="font-size:9px;color:#aaa;margin-top:2px">+$'+up+'</div>';
+      h += 'style="width:38px;height:38px;padding:0;border:'+(active?'2px solid #7c3aed':'1px solid #ddd')+';border-radius:6px;font-size:13px;font-weight:700;text-align:center;font-family:Inter,sans-serif;color:#111;background:'+(active?'#faf5ff':'#fff')+';outline:none;-moz-appearance:textfield">';
+      if(up) h += '<div style="font-size:8px;color:#aaa;margin-top:2px">+$'+up+'</div>';
       h += '</div>';
       return h;
     }
 
     // Adult sizes — ALL in one row
     const ADULT_ALL = ['S','M','L','XL','2XL','3XL','4XL','5XL'];
-    html += '<div style="padding:12px 20px;border-bottom:1px solid #f5f5f5">';
+    html += '<div style="padding:12px 16px;border-bottom:1px solid #f5f5f5">';
     html += '<div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Adult Sizes</div>';
-    html += '<div style="display:flex;gap:5px;align-items:flex-start;flex-wrap:wrap">';
+    html += '<div style="display:flex;gap:4px;align-items:flex-start;flex-wrap:nowrap">';
     ADULT_ALL.forEach(function(sz){ html += sizeBox(sz, idx, psizes[sz]||0, UP[sz]||0); });
     html += '</div>';
     html += '</div>';
 
     // Youth sizes — single row
-    html += '<div style="padding:12px 20px 16px">';
+    html += '<div style="padding:12px 16px 16px">';
     html += '<div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Youth Sizes</div>';
-    html += '<div style="display:flex;gap:6px;align-items:flex-start">';
+    html += '<div style="display:flex;gap:4px;align-items:flex-start;flex-wrap:nowrap">';
     YOUTH.forEach(function(sz){ html += sizeBox(sz, idx, psizes[sz]||0, 0); });
     html += '</div></div>';
 
@@ -6848,35 +6848,9 @@ function buildStep2(){
     imgEl.style.display = '';
   }
 
-  // Show design overlay on the shirt
+  // Clear overlay — design visible in step 1
   const overlay = document.getElementById('step2-design-overlay');
-  if(overlay){
-    const wrap = document.getElementById('s-shirt-wrap');
-    const imgElShirt = document.getElementById('s-shirt');
-    if(wrap && imgElShirt){
-      // Get shirt bounds and design layers, scale to full screen
-      // Show front-side layers (main design)
-      const layers = Array.from(wrap.querySelectorAll("[data-type='image'],[data-type='text'],.txt-layer"))
-        .filter(function(el){ return el.style.display !== 'none' && el.dataset.side !== 'back'; });
-      if(layers.length > 0){
-        const wRect = wrap.getBoundingClientRect();
-        overlay.innerHTML = layers.map(function(el){
-          const lRect = el.getBoundingClientRect();
-          const left = ((lRect.left - wRect.left) / wRect.width * 100).toFixed(1);
-          const top  = ((lRect.top  - wRect.top)  / wRect.height * 100).toFixed(1);
-          const w    = (lRect.width  / wRect.width  * 100).toFixed(1);
-          const h    = (lRect.height / wRect.height * 100).toFixed(1);
-          const img  = el.querySelector('img');
-          if(img && img.src && !img.src.startsWith('data:image/jpeg;base64,/9j/4AAQ')){
-            return '<img src="'+img.src+'" style="position:absolute;left:'+left+'%;top:'+top+'%;width:'+w+'%;height:'+h+'%;object-fit:contain;pointer-events:none">';
-          }
-          return '';
-        }).join('');
-      } else {
-        overlay.innerHTML = '';
-      }
-    }
-  }
+  if(overlay) overlay.innerHTML = '';
 
   // Re-trigger slide animation
   const panel = document.getElementById('step2-panel');
@@ -7212,7 +7186,7 @@ window.addEventListener('load', updateDeliveryDates);
   <!-- LEFT: Garment + artwork preview -->
   <div style="flex:1;position:relative;background:#d1d1d1;overflow:hidden;display:flex;align-items:center;justify-content:center">
     <!-- Shirt fills left side -->
-    <img id="step2-shirt-img" src="" style="height:100%;width:100%;object-fit:cover;object-position:center top" onerror="this.style.display='none'">
+    <img id="step2-shirt-img" src="" style="max-height:85vh;max-width:85%;object-fit:contain" onerror="this.style.display='none'">
     <!-- Artwork overlay centered on shirt body -->
     <div id="step2-design-overlay" style="position:absolute;inset:0;pointer-events:none"></div>
     <!-- Step breadcrumb -->
