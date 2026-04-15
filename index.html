@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v11.9 -->
+<!-- v12.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1072,7 +1072,15 @@ footer{background:#111;padding:56px 32px 28px}
 .design-card:hover .design-card-del{display:flex}
 </style>
   <!-- ML Background Removal (runs 100% in browser, no API key needed) -->
-  <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser/index.js"></script>
+  <script>
+    // Load @imgly/background-removal as ESM and expose globally
+    import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser/index.js')
+      .then(function(mod){
+        window.BackgroundRemoval = mod;
+        console.log('Background removal library loaded ✓');
+      })
+      .catch(function(){ console.warn('bg-removal lib failed to load'); });
+  </script>
 </head>
 <body>
 
@@ -1366,7 +1374,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.9</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.0</span>
   </div>
 
 </nav>
@@ -6463,78 +6471,87 @@ typeAnim();
 async function removeBackground(imageUrl, callback){
   sNtf('Removing background... ⏳');
 
-  // Try @imgly/background-removal ML library
-  const lib = window.BackgroundRemoval;
-  const rmFn = lib && (lib.removeBackground || lib.default?.removeBackground);
-  if(typeof rmFn === 'function'){
+  // Convert data URL to Blob without fetch() — more reliable cross-browser
+  function dataUrlToBlob(dataUrl){
+    const parts = dataUrl.split(',');
+    const mime  = parts[0].match(/:(.*?);/)[1];
+    const bytes = atob(parts[1]);
+    const arr   = new Uint8Array(bytes.length);
+    for(let i=0;i<bytes.length;i++) arr[i]=bytes.charCodeAt(i);
+    return new Blob([arr], {type: mime});
+  }
+
+  // Try @imgly/background-removal (ML, browser-native, no API key)
+  // Library may expose under several globals depending on bundle format
+  const rmFn = (window.BackgroundRemoval?.removeBackground)
+    || (window['@imgly/background-removal']?.removeBackground)
+    || (window.imglyBackgroundRemoval?.removeBackground)
+    || null;
+
+  if(rmFn){
     try {
-      const res = await fetch(imageUrl);
-      const blob = await res.blob();
+      const blob = imageUrl.startsWith('data:') ? dataUrlToBlob(imageUrl) : await fetch(imageUrl).then(r=>r.blob());
       const resultBlob = await rmFn(blob, {
         publicPath: 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser/',
-        debug: false, model: 'small',
+        debug: false,
+        model: 'small',
       });
       const reader = new FileReader();
       reader.onload = function(e){ sNtf('✓ Background removed!'); callback(e.target.result); };
       reader.readAsDataURL(resultBlob);
       return;
-    } catch(e){ console.warn('ML bg removal failed:', e); }
+    } catch(e){ console.warn('ML bg removal failed:', e.message); }
   }
 
-  // Fallback: BFS canvas flood-fill (solid/simple backgrounds)
+  // Fallback: BFS canvas flood-fill (solid backgrounds only)
   const img = new Image();
   if(!imageUrl.startsWith('data:')) img.crossOrigin = 'anonymous';
   img.onload = function(){
-    const c = document.createElement('canvas');
-    const size = 900; c.width = size; c.height = size;
-    const ctx = c.getContext('2d');
-    ctx.drawImage(img, 0, 0, size, size);
-    let imageData;
-    try { imageData = ctx.getImageData(0, 0, size, size); }
-    catch(e){ callback(imageUrl); return; }
-    const d = imageData.data;
-    const w = size, h = size;
+    try {
+      const size = 900;
+      const c = document.createElement('canvas');
+      c.width = size; c.height = size;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0, size, size);
+      const imageData = ctx.getImageData(0, 0, size, size);
+      const d = imageData.data;
+      const w = size, h = size;
 
-    function px(x,y){ const i=(y*w+x)*4; return {r:d[i],g:d[i+1],b:d[i+2]}; }
-    // Sample many edge points for accurate bg color detection
-    const edgeSamples = [];
-    for(let i=0;i<10;i++){
-      edgeSamples.push(px(Math.floor(w*i/10),0), px(Math.floor(w*i/10),h-1));
-      edgeSamples.push(px(0,Math.floor(h*i/10)), px(w-1,Math.floor(h*i/10)));
-    }
-    const bg = {
-      r: Math.round(edgeSamples.reduce(function(s,p){return s+p.r;},0)/edgeSamples.length),
-      g: Math.round(edgeSamples.reduce(function(s,p){return s+p.g;},0)/edgeSamples.length),
-      b: Math.round(edgeSamples.reduce(function(s,p){return s+p.b;},0)/edgeSamples.length)
-    };
-
-    function diff(x,y){ const p=px(x,y); return Math.sqrt((p.r-bg.r)**2+(p.g-bg.g)**2+(p.b-bg.b)**2); }
-    const visited = new Uint8Array(w*h);
-    const queue = [];
-    for(let x=0;x<w;x++){ queue.push(x,0);queue.push(x,h-1);visited[x]=1;visited[(h-1)*w+x]=1; }
-    for(let y=1;y<h-1;y++){ queue.push(0,y);queue.push(w-1,y);visited[y*w]=1;visited[y*w+w-1]=1; }
-
-    const threshold = 40;
-    let qi=0;
-    while(qi<queue.length){
-      const x=queue[qi++], y=queue[qi++];
-      const dv=diff(x,y);
-      if(dv>threshold) continue;
-      const idx=(y*w+x)*4;
-      d[idx+3] = dv>20 ? Math.round((1-(dv-20)/(threshold-20))*d[idx+3]) : 0;
-      const ns=[[x-1,y],[x+1,y],[x,y-1],[x,y+1]];
-      for(let n=0;n<ns.length;n++){
-        const nx=ns[n][0], ny=ns[n][1];
-        if(nx<0||nx>=w||ny<0||ny>=h) continue;
-        const ni=ny*w+nx;
-        if(!visited[ni]){ visited[ni]=1; queue.push(nx,ny); }
+      function px(x,y){ const i=(y*w+x)*4; return {r:d[i],g:d[i+1],b:d[i+2]}; }
+      const edgeSamples = [];
+      for(let i=0;i<10;i++){
+        edgeSamples.push(px(Math.floor(w*i/10),0), px(Math.floor(w*i/10),h-1));
+        edgeSamples.push(px(0,Math.floor(h*i/10)), px(w-1,Math.floor(h*i/10)));
       }
-    }
-    ctx.putImageData(imageData,0,0);
-    sNtf('✓ Background removed!');
-    callback(c.toDataURL('image/png'));
+      const bg = {
+        r: Math.round(edgeSamples.reduce(function(s,p){return s+p.r;},0)/edgeSamples.length),
+        g: Math.round(edgeSamples.reduce(function(s,p){return s+p.g;},0)/edgeSamples.length),
+        b: Math.round(edgeSamples.reduce(function(s,p){return s+p.b;},0)/edgeSamples.length)
+      };
+      function diff(x,y){ const p=px(x,y); return Math.sqrt((p.r-bg.r)**2+(p.g-bg.g)**2+(p.b-bg.b)**2); }
+      const visited = new Uint8Array(w*h);
+      const queue = [];
+      for(let x=0;x<w;x++){ queue.push(x,0);queue.push(x,h-1);visited[x]=1;visited[(h-1)*w+x]=1; }
+      for(let y=1;y<h-1;y++){ queue.push(0,y);queue.push(w-1,y);visited[y*w]=1;visited[y*w+w-1]=1; }
+      const threshold=40; let qi=0;
+      while(qi<queue.length){
+        const x=queue[qi++], y=queue[qi++];
+        const dv=diff(x,y); if(dv>threshold) continue;
+        const idx=(y*w+x)*4;
+        d[idx+3]=dv>20?Math.round((1-(dv-20)/(threshold-20))*d[idx+3]):0;
+        const ns=[[x-1,y],[x+1,y],[x,y-1],[x,y+1]];
+        for(let n=0;n<ns.length;n++){
+          const nx=ns[n][0],ny=ns[n][1];
+          if(nx<0||nx>=w||ny<0||ny>=h) continue;
+          const ni=ny*w+nx; if(!visited[ni]){visited[ni]=1;queue.push(nx,ny);}
+        }
+      }
+      ctx.putImageData(imageData,0,0);
+      sNtf('✓ Background removed!');
+      callback(c.toDataURL('image/png'));
+    } catch(e){ sNtf('Could not process image'); callback(imageUrl); }
   };
-  img.onerror = function(){ sNtf('Could not process image'); callback(imageUrl); };
+  img.onerror = function(){ sNtf('Could not load image'); callback(imageUrl); };
   img.src = imageUrl;
 }
 
