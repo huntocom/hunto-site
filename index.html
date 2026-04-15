@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v11.2 -->
+<!-- v11.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.3</span>
   </div>
 
 </nav>
@@ -6842,9 +6842,11 @@ function buildStep2(){
   const fc = first?.color || {};
   const imgEl = document.getElementById('step2-shirt-img');
   if(imgEl){
-    // Show front of shirt with design
-    const src = fc.front || getShirtPhotoUrl(fp.id, fc.n||fc.name||'', 'front') || '';
-    imgEl.src = src;
+    // Use the thumbnail already loaded in the studio — guaranteed to have the right shirt
+    const thumbEl = document.getElementById('sth-f-img');
+    const thumbSrc = thumbEl?.src || '';
+    imgEl.src = thumbSrc && !thumbSrc.startsWith('data:') ? thumbSrc
+      : fc.front || getShirtPhotoUrl(fp.id, fc.n||fc.name||'', 'front') || '';
     imgEl.style.display = '';
   }
 
