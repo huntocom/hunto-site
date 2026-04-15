@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v12.7 -->
+<!-- v12.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -471,24 +471,34 @@ footer{background:#111;padding:56px 32px 28px}
 
 /* Left icon sidebar */
 .s-iconbar{
-  width:80px;flex-shrink:0;
-  background:#fff;border-right:1px solid #e8e8e8;
+  width:76px;flex-shrink:0;
+  background:#fff;border-right:1px solid #ebebeb;
   display:flex;flex-direction:column;align-items:center;
-  padding:10px 0;gap:2px;overflow-y:auto;
+  padding:8px 0 16px;gap:2px;overflow-y:auto;
 }
 .s-ibtn{
-  width:68px;display:flex;flex-direction:column;
-  align-items:center;gap:4px;padding:10px 4px;
-  border-radius:10px;cursor:pointer;
-  border:none;background:transparent;transition:background .15s;
+  width:64px;display:flex;flex-direction:column;
+  align-items:center;gap:5px;padding:10px 4px 8px;
+  border-radius:12px;cursor:pointer;
+  border:none;background:transparent;
+  transition:background .15s,color .15s;
+  -webkit-tap-highlight-color:transparent;
 }
 .s-ibtn:hover{background:#f5f5f5}
-.s-ibtn.on{background:#faf5ff}
+.s-ibtn.on{background:#ede9fe}
 .s-iconbar.nn-active-mode .s-ibtn:not(#sib-names){opacity:.25 !important;pointer-events:none !important;cursor:not-allowed !important;}
-.s-ibtn-icon{font-size:20px;line-height:1}
-.s-ibtn-label{font-size:9px;font-weight:700;color:#999;text-align:center;line-height:1.2;letter-spacing:.02em}
+.s-ibtn-icon{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:#f5f5f5;transition:background .15s;
+  flex-shrink:0;
+}
+.s-ibtn.on .s-ibtn-icon{background:#7c3aed}
+.s-ibtn.on .s-ibtn-icon svg{stroke:#fff !important}
+.s-ibtn.on .s-ibtn-icon .icon-fill{fill:#fff !important}
+.s-ibtn-label{font-size:9px;font-weight:700;color:#888;text-align:center;line-height:1.2;letter-spacing:.01em;text-transform:uppercase}
 .s-ibtn.on .s-ibtn-label{color:#7c3aed}
-.s-ibtn-sep{width:44px;height:1px;background:#f0f0f0;margin:3px 0}
+.s-ibtn-sep{width:40px;height:1px;background:#f0f0f0;margin:6px 0}
 
 /* Panel */
 .s-panel{
@@ -949,24 +959,26 @@ footer{background:#111;padding:56px 32px 28px}
   /* ── Iconbar: bottom tab bar ── */
   .s-iconbar{
     width:100%;flex-direction:row;flex-shrink:0;
-    border-right:none;border-top:1px solid #e8e8e8;
-    overflow-x:auto;padding:2px 4px;gap:0;
+    border-right:none;border-top:1px solid #ebebeb;
+    overflow-x:auto;padding:6px 8px;gap:4px;
     justify-content:flex-start;height:auto;
     order:3;background:#fff;
     -webkit-overflow-scrolling:touch;scrollbar-width:none;
   }
   .s-iconbar::-webkit-scrollbar{display:none}
   .s-ibtn{
-    width:auto;flex-direction:column;gap:1px;
-    padding:4px 10px;white-space:nowrap;
-    border-radius:8px;flex-shrink:0;
-    min-width:auto;height:auto;
+    width:auto;flex-direction:column;gap:4px;
+    padding:6px 8px;white-space:nowrap;
+    border-radius:10px;flex-shrink:0;
+    min-width:52px;height:auto;
   }
-  .s-ibtn-icon{font-size:16px}
-  .s-ibtn-label{font-size:9px}
+  .s-ibtn-icon{width:30px;height:30px;border-radius:8px;font-size:14px}
+  .s-ibtn-label{font-size:8px}
   .s-ibtn-sep{display:none}
-  .s-ibtn.on{background:#7c3aed;color:#fff}
-  .s-ibtn.on .s-ibtn-label{color:#fff}
+  .s-ibtn.on{background:#ede9fe}
+  .s-ibtn.on .s-ibtn-label{color:#7c3aed}
+  .s-ibtn.on .s-ibtn-icon{background:#7c3aed}
+  .s-ibtn.on .s-ibtn-icon svg{stroke:#fff !important}
 
   /* ── Panel: OVERLAY that slides up over canvas ── */
   .s-panel{
@@ -1370,7 +1382,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.7</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.8</span>
   </div>
 
 </nav>
@@ -1918,45 +1930,112 @@ footer{background:#111;padding:56px 32px 28px}
 
     <!-- Icon sidebar -->
     <div class="s-iconbar">
+
+      <!-- ── PRIMARY 4 ── -->
       <button class="s-ibtn on" id="sib-products" onclick="sPanel('products',this)">
-        <span class="s-ibtn-icon">👕</span>
+        <span class="s-ibtn-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H7v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V10h4.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
+          </svg>
+        </span>
         <span class="s-ibtn-label">Products</span>
       </button>
+
       <button class="s-ibtn" id="sib-text" onclick="sPanel('text',this)">
-        <span class="s-ibtn-icon">T</span>
+        <span class="s-ibtn-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 7 4 4 20 4 20 7"/>
+            <line x1="9" y1="20" x2="15" y2="20"/>
+            <line x1="12" y1="4" x2="12" y2="20"/>
+          </svg>
+        </span>
         <span class="s-ibtn-label">Add Text</span>
       </button>
-      <button class="s-ibtn" id="sib-ai" onclick="sPanel('ai',this)">
-        <span class="s-ibtn-icon">✦</span>
-        <span class="s-ibtn-label">AI Art</span>
-      </button>
+
       <button class="s-ibtn" id="sib-upload" onclick="sPanel('upload',this)">
-        <span class="s-ibtn-icon">↑</span>
+        <span class="s-ibtn-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </span>
         <span class="s-ibtn-label">Upload Art</span>
       </button>
+
+      <button class="s-ibtn" id="sib-ai" onclick="sPanel('ai',this)">
+        <span class="s-ibtn-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z"/>
+            <path d="M5 5l1.5 1.5M18.5 5 17 6.5M5 19l1.5-1.5M17 17.5l1.5 1.5"/>
+          </svg>
+        </span>
+        <span class="s-ibtn-label">AI Art</span>
+      </button>
+
       <div class="s-ibtn-sep"></div>
-      <button class="s-ibtn" id="sib-color" onclick="sPanel('color',this)" style="display:none">
-        <span class="s-ibtn-icon">🎨</span>
-        <span class="s-ibtn-label">Color</span>
-      </button>
-      <button class="s-ibtn" id="sib-size" onclick="sPanel('size',this)">
-        <span class="s-ibtn-icon">📐</span>
-        <span class="s-ibtn-label">Size</span>
-      </button>
-      <button class="s-ibtn" id="sib-qty" onclick="sPanel('qty',this)">
-        <span class="s-ibtn-icon">🛒</span>
-        <span class="s-ibtn-label">Quantities</span>
-      </button>
-      <div class="s-ibtn-sep"></div>
+
+      <!-- ── SECONDARY ── -->
       <button class="s-ibtn" id="sib-names" onclick="sPanel('names',this)">
-        <span class="s-ibtn-icon">🏷</span>
+        <span class="s-ibtn-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="2"/>
+            <line x1="16" y1="9" x2="16" y2="15"/>
+            <line x1="8" y1="9" x2="8" y2="15"/>
+            <line x1="12" y1="9" x2="12" y2="15"/>
+          </svg>
+        </span>
         <span class="s-ibtn-label">Names &amp; #s</span>
       </button>
+
+      <button class="s-ibtn" id="sib-size" onclick="sPanel('size',this)">
+        <span class="s-ibtn-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 3 21 3 21 9"/>
+            <polyline points="9 21 3 21 3 15"/>
+            <line x1="21" y1="3" x2="14" y2="10"/>
+            <line x1="3" y1="21" x2="10" y2="14"/>
+          </svg>
+        </span>
+        <span class="s-ibtn-label">Size</span>
+      </button>
+
+      <button class="s-ibtn" id="sib-qty" onclick="goStep2()">
+        <span class="s-ibtn-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"/>
+            <line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+        </span>
+        <span class="s-ibtn-label">Quantities</span>
+      </button>
+
+      <button class="s-ibtn" id="sib-color" onclick="sPanel('color',this)" style="display:none">
+        <span class="s-ibtn-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="12" r="2.5"/><circle cx="13.5" cy="17.5" r="2.5"/><circle cx="5" cy="12" r="2.5"/>
+          </svg>
+        </span>
+        <span class="s-ibtn-label">Color</span>
+      </button>
+
       <div class="s-ibtn-sep"></div>
+
       <button class="s-ibtn" id="sib-keith" onclick="sPanel('keith',this)">
-        <span class="s-ibtn-icon">✏</span>
+        <span class="s-ibtn-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M6 20v-2a6 6 0 0 1 12 0v2"/>
+            <polyline points="16 3 18 5 22 1" style="stroke:#7c3aed"/>
+          </svg>
+        </span>
         <span class="s-ibtn-label">Keith</span>
       </button>
+
     </div>
 
     <!-- Sliding panel -->
