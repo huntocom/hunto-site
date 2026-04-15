@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v11.8 -->
+<!-- v11.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1071,6 +1071,8 @@ footer{background:#111;padding:56px 32px 28px}
 .design-card-del{position:absolute;top:8px;right:8px;width:24px;height:24px;background:rgba(0,0,0,.5);border-radius:50%;border:none;color:#fff;font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center}
 .design-card:hover .design-card-del{display:flex}
 </style>
+  <!-- ML Background Removal (runs 100% in browser, no API key needed) -->
+  <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser/index.js"></script>
 </head>
 <body>
 
@@ -1364,7 +1366,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.8</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.9</span>
   </div>
 
 </nav>
@@ -4664,18 +4666,19 @@ function uploadToggleRmbg(){
   uploadSyncToggles();
   if(!uploadRawBase64) return;
   const tog = document.getElementById('upload-rmbg');
+  const prevImg = document.getElementById('upload-preview-img');
+  const btn = document.getElementById('upload-apply-btn');
   if(tog && tog.checked){
-    sNtf('Removing background...');
+    if(prevImg) prevImg.style.opacity='0.4';
+    if(btn){ btn.disabled=true; btn.textContent='Removing background...'; }
     removeBackground(uploadRawBase64, function(cleanUrl){
       uploadProcessedBase64 = cleanUrl;
-      const prevImg = document.getElementById('upload-preview-img');
-      if(prevImg) prevImg.src = cleanUrl;
-      sNtf('✓ Background removed!');
+      if(prevImg){ prevImg.src=cleanUrl; prevImg.style.opacity='1'; prevImg.style.filter='none'; }
+      if(btn){ btn.disabled=false; btn.textContent='✓ Place on Shirt'; }
     });
   } else {
     uploadProcessedBase64 = uploadRawBase64;
-    const prevImg = document.getElementById('upload-preview-img');
-    if(prevImg) prevImg.src = uploadRawBase64;
+    if(prevImg){ prevImg.src=uploadRawBase64; prevImg.style.opacity='1'; }
   }
 }
 
@@ -6457,75 +6460,83 @@ typeAnim();
 // ════════════════════════════════
 // BACKGROUND REMOVAL
 // ════════════════════════════════
-function removeBackground(imageUrl, callback){
+async function removeBackground(imageUrl, callback){
+  sNtf('Removing background... ⏳');
+
+  // Try @imgly/background-removal ML library
+  const lib = window.BackgroundRemoval;
+  const rmFn = lib && (lib.removeBackground || lib.default?.removeBackground);
+  if(typeof rmFn === 'function'){
+    try {
+      const res = await fetch(imageUrl);
+      const blob = await res.blob();
+      const resultBlob = await rmFn(blob, {
+        publicPath: 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser/',
+        debug: false, model: 'small',
+      });
+      const reader = new FileReader();
+      reader.onload = function(e){ sNtf('✓ Background removed!'); callback(e.target.result); };
+      reader.readAsDataURL(resultBlob);
+      return;
+    } catch(e){ console.warn('ML bg removal failed:', e); }
+  }
+
+  // Fallback: BFS canvas flood-fill (solid/simple backgrounds)
   const img = new Image();
-  img.crossOrigin = "anonymous";
-
-  img.onload = () => {
-    const c = document.createElement("canvas");
-    const size = 800;
-    c.width = size; c.height = size;
-    const ctx = c.getContext("2d");
-
-    // Draw image scaled to canvas
+  if(!imageUrl.startsWith('data:')) img.crossOrigin = 'anonymous';
+  img.onload = function(){
+    const c = document.createElement('canvas');
+    const size = 900; c.width = size; c.height = size;
+    const ctx = c.getContext('2d');
     ctx.drawImage(img, 0, 0, size, size);
-
-    const imageData = ctx.getImageData(0, 0, size, size);
+    let imageData;
+    try { imageData = ctx.getImageData(0, 0, size, size); }
+    catch(e){ callback(imageUrl); return; }
     const d = imageData.data;
     const w = size, h = size;
 
-    // Sample background color from corners (average of 4 corners)
-    function px(x,y){ const i=(y*w+x)*4; return {r:d[i],g:d[i+1],b:d[i+2],a:d[i+3]}; }
-    const samples = [px(0,0),px(w-1,0),px(0,h-1),px(w-1,h-1),
-                     px(1,1),px(w-2,1),px(1,h-2),px(w-2,h-2)];
+    function px(x,y){ const i=(y*w+x)*4; return {r:d[i],g:d[i+1],b:d[i+2]}; }
+    // Sample many edge points for accurate bg color detection
+    const edgeSamples = [];
+    for(let i=0;i<10;i++){
+      edgeSamples.push(px(Math.floor(w*i/10),0), px(Math.floor(w*i/10),h-1));
+      edgeSamples.push(px(0,Math.floor(h*i/10)), px(w-1,Math.floor(h*i/10)));
+    }
     const bg = {
-      r: Math.round(samples.reduce((s,p)=>s+p.r,0)/samples.length),
-      g: Math.round(samples.reduce((s,p)=>s+p.g,0)/samples.length),
-      b: Math.round(samples.reduce((s,p)=>s+p.b,0)/samples.length)
+      r: Math.round(edgeSamples.reduce(function(s,p){return s+p.r;},0)/edgeSamples.length),
+      g: Math.round(edgeSamples.reduce(function(s,p){return s+p.g;},0)/edgeSamples.length),
+      b: Math.round(edgeSamples.reduce(function(s,p){return s+p.b;},0)/edgeSamples.length)
     };
 
-    function diff(x,y){
-      const p=px(x,y);
-      return Math.sqrt(Math.pow(p.r-bg.r,2)+Math.pow(p.g-bg.g,2)+Math.pow(p.b-bg.b,2));
-    }
-
-    // BFS flood fill from all edges
+    function diff(x,y){ const p=px(x,y); return Math.sqrt((p.r-bg.r)**2+(p.g-bg.g)**2+(p.b-bg.b)**2); }
     const visited = new Uint8Array(w*h);
     const queue = [];
+    for(let x=0;x<w;x++){ queue.push(x,0);queue.push(x,h-1);visited[x]=1;visited[(h-1)*w+x]=1; }
+    for(let y=1;y<h-1;y++){ queue.push(0,y);queue.push(w-1,y);visited[y*w]=1;visited[y*w+w-1]=1; }
 
-    // Seed entire perimeter
-    for(let x=0;x<w;x++){ queue.push(x,0); queue.push(x,h-1); visited[x]=1; visited[(h-1)*w+x]=1; }
-    for(let y=1;y<h-1;y++){ queue.push(0,y); queue.push(w-1,y); visited[y*w]=1; visited[y*w+w-1]=1; }
-
-    const threshold = 28;
+    const threshold = 40;
     let qi=0;
     while(qi<queue.length){
       const x=queue[qi++], y=queue[qi++];
-      if(diff(x,y)>threshold) continue;
+      const dv=diff(x,y);
+      if(dv>threshold) continue;
       const idx=(y*w+x)*4;
-      d[idx+3]=0; // make transparent
-
-      const neighbors=[[x-1,y],[x+1,y],[x,y-1],[x,y+1]];
-      for(const[nx,ny] of neighbors){
+      d[idx+3] = dv>20 ? Math.round((1-(dv-20)/(threshold-20))*d[idx+3]) : 0;
+      const ns=[[x-1,y],[x+1,y],[x,y-1],[x,y+1]];
+      for(let n=0;n<ns.length;n++){
+        const nx=ns[n][0], ny=ns[n][1];
         if(nx<0||nx>=w||ny<0||ny>=h) continue;
         const ni=ny*w+nx;
         if(!visited[ni]){ visited[ni]=1; queue.push(nx,ny); }
       }
     }
-
     ctx.putImageData(imageData,0,0);
-    callback(c.toDataURL("image/png"));
+    sNtf('✓ Background removed!');
+    callback(c.toDataURL('image/png'));
   };
-
-  img.onerror = () => {
-    // Can't load — use directly
-    callback(imageUrl);
-  };
-
+  img.onerror = function(){ sNtf('Could not process image'); callback(imageUrl); };
   img.src = imageUrl;
 }
-
-
 
 // ════════════════════════════════
 // REAL SHIRT PHOTOS - GitHub CDN
