@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v12.4 -->
+<!-- v12.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1370,7 +1370,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.5</span>
   </div>
 
 </nav>
@@ -2302,91 +2302,103 @@ footer{background:#111;padding:56px 32px 28px}
 
       <!-- EDIT ARTWORK (shown when image layer selected) -->
       <div id="sp-edit-artwork" style="display:none">
-        <div class="s-panel-hdr">
+        <div class="s-panel-hdr" style="border-bottom:1px solid #f0f0f0">
           <div>
-            <div class="s-panel-title">Edit Your Artwork</div>
-            <div class="s-panel-sub">Adjust filters, size and effects</div>
+            <div style="font-size:9px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Upload Art</div>
+            <div class="s-panel-title" style="font-size:16px">Edit Your Artwork</div>
+            <div class="s-panel-sub">Filters, background removal, size &amp; more</div>
           </div>
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
         </div>
-        <div class="s-panel-body" style="padding-top:0">
+        <div class="s-panel-body" style="padding-top:12px">
 
-          <!-- Filter thumbnails -->
-          <div style="margin-bottom:16px">
-            <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.08em;padding:14px 0 10px">Filters</div>
-            <div style="display:flex;gap:10px">
-              <div id="ea-filter-normal" onclick="eaSetFilter('normal')" style="cursor:pointer;text-align:center;flex:1">
-                <div style="border-radius:8px;overflow:hidden;border:2.5px solid #7c3aed;aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center">
-                  <img id="ea-thumb-normal" style="width:100%;height:100%;object-fit:cover">
-                </div>
-                <div style="font-size:10px;font-weight:700;color:#7c3aed;margin-top:4px">Normal</div>
+          <!-- Filter thumbnails — bigger, like competitor -->
+          <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Filters</div>
+          <div style="display:flex;gap:8px;margin-bottom:18px">
+            <div id="ea-filter-normal" onclick="eaSetFilter('normal')" style="cursor:pointer;text-align:center;flex:1">
+              <div id="ea-filter-normal-box" style="border-radius:8px;overflow:hidden;border:2.5px solid #7c3aed;aspect-ratio:1;background:#f0f0f0">
+                <img id="ea-thumb-normal" style="width:100%;height:100%;object-fit:cover;display:block">
               </div>
-              <div id="ea-filter-single" onclick="eaSetFilter('single')" style="cursor:pointer;text-align:center;flex:1">
-                <div style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center">
-                  <img id="ea-thumb-single" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1) sepia(.4) contrast(1.3)">
-                </div>
-                <div style="font-size:10px;font-weight:600;color:#888;margin-top:4px">Single Color</div>
+              <div id="ea-filter-normal-lbl" style="font-size:10px;font-weight:800;color:#7c3aed;margin-top:5px">Normal</div>
+            </div>
+            <div id="ea-filter-single" onclick="eaSetFilter('single')" style="cursor:pointer;text-align:center;flex:1">
+              <div id="ea-filter-single-box" style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;aspect-ratio:1;background:#f0f0f0">
+                <img id="ea-thumb-single" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) sepia(.4) contrast(1.3)">
               </div>
-              <div id="ea-filter-bw" onclick="eaSetFilter('bw')" style="cursor:pointer;text-align:center;flex:1">
-                <div style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center">
-                  <img id="ea-thumb-bw" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.8)">
-                </div>
-                <div style="font-size:10px;font-weight:600;color:#888;margin-top:4px">Black/White</div>
+              <div id="ea-filter-single-lbl" style="font-size:10px;font-weight:600;color:#999;margin-top:5px">Single Color</div>
+            </div>
+            <div id="ea-filter-bw" onclick="eaSetFilter('bw')" style="cursor:pointer;text-align:center;flex:1">
+              <div id="ea-filter-bw-box" style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;aspect-ratio:1;background:#f0f0f0">
+                <img id="ea-thumb-bw" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) contrast(1.8)">
               </div>
+              <div id="ea-filter-bw-lbl" style="font-size:10px;font-weight:600;color:#999;margin-top:5px">Black/White</div>
             </div>
           </div>
 
-          <div style="border-top:1px solid #f0f0f0;margin-bottom:14px"></div>
+          <!-- Settings rows -->
+          <div style="border-top:1px solid #f0f0f0;padding-top:14px">
 
-          <!-- Remove Background -->
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-            <div>
-              <div style="font-size:13px;font-weight:700;color:#111;display:flex;align-items:center;gap:5px">
-                Remove Background
-                <span style="font-size:9px;background:#7c3aed;color:#fff;padding:1px 5px;border-radius:4px;font-weight:700">AI</span>
+            <!-- Remove Background -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#111">
+                  Remove Background
+                  <span style="font-size:9px;font-weight:800;background:#7c3aed;color:#fff;padding:2px 5px;border-radius:4px;letter-spacing:.03em">AI</span>
+                </div>
+                <div id="ea-rmbg-sub" style="font-size:11px;color:#aaa;margin-top:2px">Erase background, keep design</div>
               </div>
-              <div style="font-size:11px;color:#888;margin-top:1px">Erase background, keep design</div>
+              <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;flex-shrink:0">
+                <input type="checkbox" id="ea-rmbg" style="opacity:0;width:0;height:0" onchange="eaToggleRmbg()">
+                <span id="ea-rmbg-track" style="position:absolute;inset:0;border-radius:12px;background:#ddd;transition:background .2s"></span>
+                <span id="ea-rmbg-knob" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:transform .2s"></span>
+              </label>
             </div>
-            <label style="position:relative;display:inline-block;width:40px;height:22px;cursor:pointer;flex-shrink:0">
-              <input type="checkbox" id="ea-rmbg" style="opacity:0;width:0;height:0" onchange="eaToggleRmbg()">
-              <span id="ea-rmbg-track" style="position:absolute;inset:0;border-radius:11px;background:#ccc;transition:background .2s"></span>
-              <span id="ea-rmbg-knob" style="position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s"></span>
-            </label>
-          </div>
 
-          <!-- Size -->
-          <div style="margin-bottom:14px">
-            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-              <div style="font-size:12px;font-weight:700;color:#333">Size</div>
-              <div id="ea-size-val" style="font-size:12px;font-weight:700;color:#7c3aed">100%</div>
+            <!-- Size -->
+            <div style="margin-bottom:16px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <div style="font-size:13px;font-weight:700;color:#111">Size</div>
+                <div id="ea-size-val" style="font-size:13px;font-weight:800;color:#7c3aed;min-width:40px;text-align:right">100%</div>
+              </div>
+              <input type="range" id="ea-size" min="20" max="200" value="100" step="1"
+                style="width:100%;accent-color:#7c3aed;height:4px" oninput="eaApplyTransform()">
             </div>
-            <input type="range" id="ea-size" min="20" max="200" value="100" step="1"
-              style="width:100%;accent-color:#7c3aed" oninput="eaApplyTransform()">
-          </div>
 
-          <!-- Rotate -->
-          <div style="margin-bottom:18px">
-            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-              <div style="font-size:12px;font-weight:700;color:#333">Rotate</div>
-              <div id="ea-rotate-val" style="font-size:12px;font-weight:700;color:#7c3aed">0°</div>
+            <!-- Rotate -->
+            <div style="margin-bottom:18px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <div style="font-size:13px;font-weight:700;color:#111">Rotate</div>
+                <div id="ea-rotate-val" style="font-size:13px;font-weight:800;color:#7c3aed;min-width:40px;text-align:right">0°</div>
+              </div>
+              <input type="range" id="ea-rotate" min="-180" max="180" value="0" step="1"
+                style="width:100%;accent-color:#7c3aed;height:4px" oninput="eaApplyTransform()">
             </div>
-            <input type="range" id="ea-rotate" min="-180" max="180" value="0" step="1"
-              style="width:100%;accent-color:#7c3aed" oninput="eaApplyTransform()">
+
+            <!-- Reset -->
+            <button onclick="eaReset()" style="background:none;border:none;font-size:12px;font-weight:700;color:#7c3aed;cursor:pointer;font-family:Inter,sans-serif;padding:0;margin-bottom:18px">Reset to Defaults</button>
           </div>
 
           <!-- Bottom toolbar -->
-          <div style="border-top:1px solid #f0f0f0;padding-top:14px;display:flex;justify-content:space-around">
-            <button onclick="eaCenter()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 10px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
-              <span style="font-size:18px">⊕</span>Center
+          <div style="border-top:1px solid #f0f0f0;padding-top:14px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px">
+            <button onclick="eaCenter()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:1px solid #e8e8e8;cursor:pointer;font-size:9px;font-weight:700;color:#555;font-family:Inter,sans-serif;padding:8px 4px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+              Center
             </button>
-            <button onclick="eaFlip()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 10px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
-              <span style="font-size:18px">↔</span>Flip
+            <button onclick="eaFlip()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:1px solid #e8e8e8;cursor:pointer;font-size:9px;font-weight:700;color:#555;font-family:Inter,sans-serif;padding:8px 4px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              Flip
             </button>
-            <button onclick="eaDuplicate()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#555;font-family:Inter,sans-serif;padding:6px 10px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
-              <span style="font-size:18px">⧉</span>Duplicate
+            <button onclick="eaDuplicate()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:1px solid #e8e8e8;cursor:pointer;font-size:9px;font-weight:700;color:#555;font-family:Inter,sans-serif;padding:8px 4px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Duplicate
             </button>
-            <button onclick="eaDelete()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#dc2626;font-family:Inter,sans-serif;padding:6px 10px;border-radius:8px" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='none'">
-              <span style="font-size:18px">🗑</span>Delete
+            <button onclick="eaMoveLayerUp()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:1px solid #e8e8e8;cursor:pointer;font-size:9px;font-weight:700;color:#555;font-family:Inter,sans-serif;padding:8px 4px;border-radius:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Layers
+            </button>
+            <button onclick="eaDelete()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:1px solid #fca5a5;cursor:pointer;font-size:9px;font-weight:700;color:#dc2626;font-family:Inter,sans-serif;padding:8px 4px;border-radius:8px" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='none'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+              Delete
             </button>
           </div>
 
@@ -4729,14 +4741,15 @@ function processUploadedFile(f){
     uploadRawBase64 = ev.target.result;
     uploadProcessedBase64 = ev.target.result;
 
-    // Show preview
+    // ── Place immediately on shirt (competitor-style) ──
+    applyDesign(uploadRawBase64);
+    sState.hasDesign = true;
+    sNtf('✓ Artwork placed — use the Edit panel to adjust');
+
+    // Update upload preview in panel too
     const prev = document.getElementById('upload-preview');
     const prevImg = document.getElementById('upload-preview-img');
     if(prev && prevImg){ prev.style.display='block'; prevImg.src=uploadRawBase64; }
-
-    // Show apply button
-    const btn = document.getElementById('upload-apply-btn');
-    if(btn) btn.style.display='block';
 
     // Reset toggles
     ['upload-rmbg','upload-single','upload-bw'].forEach(function(id){
@@ -4744,8 +4757,6 @@ function processUploadedFile(f){
       if(cb) cb.checked = false;
     });
     uploadSyncToggles();
-
-    sNtf('✓ Image loaded — adjust settings then place on shirt');
   };
   r.readAsDataURL(f);
 }
@@ -4857,27 +4868,32 @@ function applyDesign(src){
 function addImageLayer(side, id, src){
   const wrap = document.getElementById("s-shirt-wrap");
   if(!wrap) return;
-  const wrapW = wrap.offsetWidth;
-  const layerW = 220, layerH = 220;
-  const printAreaTop = 185;
-  const printAreaLeft = (wrapW - 280) / 2;
-  const initLeft = printAreaLeft + (280 - layerW) / 2;
-  const initTop = printAreaTop + (320 - layerH) / 2;
-  const dz = document.createElement("div");
-  dz.id = id;
-  dz.dataset.side = side;
-  dz.dataset.type = "image";
-  dz.style.cssText = "position:absolute;z-index:"+(3+layerCounter)+";width:"+layerW+"px;height:"+layerH+"px;left:"+initLeft+"px;top:"+initTop+"px;cursor:move;outline:2px dashed transparent;transition:outline-color .15s;";
-  dz.innerHTML = '<img src="'+src+'" style="width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:normal;pointer-events:none;">';
-  wrap.appendChild(dz);
-  makeLayerDraggable(dz);
-  makeLayerResizable(dz, id);
-  makeLayerRotatable(dz, id);
-  dz.addEventListener("click", function(e){
-    e.stopPropagation();
-    selectLayer(id);
-  });
-  historySnapshot();
+  const wrapW = wrap.offsetWidth || 420;
+  const wrapH = wrap.offsetHeight || 600;
+
+  function placeLayer(natW, natH){
+    const nat = (natW && natH) ? natW/natH : 1;
+    // Place large like competitor — fill ~68% of shirt width
+    const layerW = Math.round(wrapW * 0.68);
+    const layerH = Math.min(Math.round(layerW / nat), Math.round(wrapH * 0.55));
+    const initLeft = Math.round((wrapW - layerW) / 2);
+    const initTop  = Math.round(wrapH * 0.22);
+    const dz = document.createElement("div");
+    dz.id = id; dz.dataset.side = side; dz.dataset.type = "image";
+    dz.style.cssText = "position:absolute;z-index:"+(3+layerCounter)+";width:"+layerW+"px;height:"+layerH+"px;left:"+initLeft+"px;top:"+initTop+"px;cursor:move;outline:2px dashed transparent;transition:outline-color .15s;";
+    dz.innerHTML = '<img src="'+src+'" style="width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;">';
+    wrap.appendChild(dz);
+    makeLayerDraggable(dz); makeLayerResizable(dz, id); makeLayerRotatable(dz, id);
+    dz.addEventListener("click", function(e){ e.stopPropagation(); selectLayer(id); });
+    historySnapshot();
+    setTimeout(function(){ selectLayer(id); }, 100);
+  }
+
+  // Detect natural size for correct aspect ratio
+  const probe = new Image();
+  probe.onload = function(){ placeLayer(probe.naturalWidth, probe.naturalHeight); };
+  probe.onerror = function(){ placeLayer(1, 1); };
+  probe.src = src;
 }
 
 
@@ -4923,12 +4939,12 @@ function eaOpenForLayer(id){
   // Store which layer we're editing
   window.eaCurrentLayerId = id;
 
-  // Set filter thumbnails from the layer's img src
+  // Set filter thumbnails from the layer's ORIGINAL src (before any filter)
   const img = dz.querySelector('img');
-  const src = img?.src || '';
+  const src = (eaOriginalSrc[id] || img?.src || '');
   ['normal','single','bw'].forEach(function(f){
     const thumb = document.getElementById('ea-thumb-'+f);
-    if(thumb) thumb.src = src;
+    if(thumb){ thumb.src = src; thumb.style.objectFit='cover'; }
   });
 
   // Reset sliders
@@ -4983,14 +4999,43 @@ function eaSetFilter(f, skipHighlight){
   }
   if(!skipHighlight){
     ['normal','single','bw'].forEach(function(key){
-      const wrap = document.getElementById('ea-filter-'+key);
-      if(!wrap) return;
-      const box = wrap.querySelector('div');
-      if(box) box.style.borderColor = key===f ? '#7c3aed' : '#e8e8e8';
-      const lbl = wrap.querySelector('div+div');
-      if(lbl){ lbl.style.color = key===f ? '#7c3aed' : '#888'; lbl.style.fontWeight = key===f ? '700':'600'; }
+      const box = document.getElementById('ea-filter-'+key+'-box');
+      const lbl = document.getElementById('ea-filter-'+key+'-lbl');
+      const on = key===f;
+      if(box) box.style.borderColor = on ? '#7c3aed' : '#e8e8e8';
+      if(box) box.style.borderWidth  = on ? '2.5px' : '2px';
+      if(lbl){ lbl.style.color = on ? '#7c3aed' : '#999'; lbl.style.fontWeight = on ? '800':'600'; }
     });
   }
+}
+
+function eaMoveLayerUp(){
+  const id = window.eaCurrentLayerId; if(!id) return;
+  moveLayerUp(id);
+}
+
+function eaReset(){
+  const id = window.eaCurrentLayerId; if(!id) return;
+  const el = document.getElementById(id);
+  if(!el) return;
+  // Restore original src if bg was removed
+  if(eaOriginalSrc[id]){ const img=el.querySelector('img'); if(img) img.src=eaOriginalSrc[id]; }
+  el.dataset.flipped='false'; el.dataset.filter='normal'; el.dataset.rmbgApplied='';
+  el.style.transform='';
+  const img=el.querySelector('img'); if(img){ img.style.filter='none'; img.style.opacity='1'; }
+  // Reset sliders
+  const sv=document.getElementById('ea-size'); const rv=document.getElementById('ea-rotate');
+  if(sv) sv.value=100; if(rv) rv.value=0;
+  eaUpdateLabels();
+  // Reset bg toggle
+  const tog=document.getElementById('ea-rmbg');
+  const track=document.getElementById('ea-rmbg-track');
+  const knob=document.getElementById('ea-rmbg-knob');
+  if(tog) tog.checked=false;
+  if(track) track.style.background='#ddd';
+  if(knob) knob.style.transform='translateX(0)';
+  eaSetFilter('normal');
+  sNtf('Reset to defaults');
 }
 
 function eaApplyTransform(){
@@ -5058,28 +5103,31 @@ function eaToggleRmbg(){
   const knob  = document.getElementById('ea-rmbg-knob');
   if(!tog) return;
   const on = tog.checked;
-  if(track) track.style.background = on ? '#7c3aed' : '#ccc';
-  if(knob)  knob.style.transform   = on ? 'translateX(18px)' : 'translateX(0)';
+  if(track) track.style.background = on ? '#7c3aed' : '#ddd';
+  if(knob)  knob.style.transform   = on ? 'translateX(20px)' : 'translateX(0)';
+  const sub = document.getElementById('ea-rmbg-sub');
 
   const id = window.eaCurrentLayerId; if(!id) return;
-  const el = document.getElementById(id);
-  const img = el?.querySelector('img'); if(!img) return;
+  const el = document.getElementById(id); if(!el) return;
+  if(!eaOriginalSrc[id]){ const img0=el.querySelector('img'); if(img0) eaOriginalSrc[id]=img0.src; }
 
   if(on){
-    // Store original src
-    if(!eaOriginalSrc[id]) eaOriginalSrc[id] = img.src;
-    img.style.opacity = '0.5';
+    if(sub) sub.textContent = 'Processing...';
+    const img2 = el.querySelector('img'); if(img2) img2.style.opacity='0.4';
     removeBackground(eaOriginalSrc[id], function(cleanUrl){
-      img.src = cleanUrl; img.style.opacity='1';
-      el.dataset.rmbgApplied = 'true';
-      // Update filter thumbs
+      const img3 = el.querySelector('img');
+      if(img3){ img3.src=cleanUrl; img3.style.opacity='1'; }
+      el.dataset.rmbgApplied='true';
       ['normal','single','bw'].forEach(function(f){ const t=document.getElementById('ea-thumb-'+f); if(t) t.src=cleanUrl; });
+      if(sub) sub.textContent='Background removed ✓';
     });
   } else {
-    // Restore original
-    if(eaOriginalSrc[id]){ img.src=eaOriginalSrc[id]; img.style.opacity='1'; }
-    el.dataset.rmbgApplied = '';
-    ['normal','single','bw'].forEach(function(f){ const t=document.getElementById('ea-thumb-'+f); if(t&&eaOriginalSrc[id]) t.src=eaOriginalSrc[id]; });
+    if(eaOriginalSrc[id]){
+      const img4=el.querySelector('img'); if(img4){ img4.src=eaOriginalSrc[id]; img4.style.opacity='1'; }
+      ['normal','single','bw'].forEach(function(f){ const t=document.getElementById('ea-thumb-'+f); if(t) t.src=eaOriginalSrc[id]; });
+    }
+    el.dataset.rmbgApplied='';
+    if(sub) sub.textContent='Erase background, keep design';
   }
 }
 
