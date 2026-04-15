@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v9.9 -->
+<!-- v10.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1353,7 +1353,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v9.9</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v10.0</span>
   </div>
 
 </nav>
@@ -3672,7 +3672,10 @@ async function aiSearchClipart(query){
       div.onmouseover = function(){ this.style.borderColor='#7c3aed'; };
       div.onmouseout  = function(){ this.style.borderColor='#e8e8e8'; };
       const img = document.createElement('img');
-      img.src = url; img.loading = 'lazy';
+      // Wikimedia SVGs need direct URL; use thumbnail proxy if needed
+      img.src = url.includes('commons.wikimedia') ? url.replace('/commons/','/commons/thumb/') + '/200px-' + url.split('/').pop() + '.png' : url;
+      img.onerror = function(){ this.src = url; }; // fallback to raw SVG
+      img.loading = 'lazy';
       img.style.cssText = 'width:85%;height:85%;object-fit:contain';
       img.onerror = function(){ this.parentNode.style.display='none'; };
       div.appendChild(img);
