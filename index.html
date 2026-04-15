@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v11.5 -->
+<!-- v11.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1364,7 +1364,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.5</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v11.7</span>
   </div>
 
 </nav>
@@ -3894,24 +3894,30 @@ async function aiSearchClipart(query){
       return;
     }
 
-    const rows = data.resources.slice(0,9).map(function(item){
-      const url = item.previews.preview.url;
+    const items = data.resources.slice(0,9);
+    grid.innerHTML = '';
+    items.forEach(function(item){
+      const url = item.previews?.preview?.url || item.url || '';
+      if(!url) return;
+
       const div = document.createElement('div');
-      div.onclick = function(){ aiSelectImage(url); };
       div.style.cssText = 'cursor:pointer;border-radius:8px;overflow:hidden;border:1.5px solid #e8e8e8;aspect-ratio:1;background:#f9f9f9;display:flex;align-items:center;justify-content:center;transition:border-color .15s';
       div.onmouseover = function(){ this.style.borderColor='#7c3aed'; };
       div.onmouseout  = function(){ this.style.borderColor='#e8e8e8'; };
+      div.onclick = function(){ aiSelectClipart(url); };
+
       const img = document.createElement('img');
-      // Wikimedia SVGs need direct URL; use thumbnail proxy if needed
-      img.src = url.includes('commons.wikimedia') ? url.replace('/commons/','/commons/thumb/') + '/200px-' + url.split('/').pop() + '.png' : url;
-      img.onerror = function(){ this.src = url; }; // fallback to raw SVG
+      // Wikimedia SVGs: use thumbnail proxy for display
+      const displayUrl = url.includes('commons.wikimedia')
+        ? url.replace('/commons/','/commons/thumb/') + '/200px-' + url.split('/').pop() + '.png'
+        : url;
+      img.src = displayUrl;
       img.loading = 'lazy';
-      img.style.cssText = 'width:85%;height:85%;object-fit:contain';
-      img.onerror = function(){ this.parentNode.style.display='none'; };
+      img.style.cssText = 'width:85%;height:85%;object-fit:contain;pointer-events:none';
+      img.onerror = function(){ this.src = url; }; // fallback to raw SVG
       div.appendChild(img);
-      return div.outerHTML;
+      grid.appendChild(div);
     });
-    grid.innerHTML = rows.join('');
 
   } catch(e){
     console.error('Clipart error:', e);
@@ -3924,6 +3930,14 @@ function aiRenderHistory(){
   if(!el) return;
   el.innerHTML = aiPromptHistory.length ?
     aiPromptHistory.map(p=>`<span onclick="setP('${p.replace(/'/g,"\\'")}');this.parentNode.querySelectorAll('span').forEach(s=>s.style.background='#f5f5f5');this.style.background='#ede9fe'" style="font-size:11px;font-weight:600;color:#7c3aed;background:#f5f5f5;padding:3px 8px;border-radius:20px;cursor:pointer;white-space:nowrap;border:1px solid #e8e8e8">${p.length>18?p.slice(0,18)+'…':p}</span>`).join('') : '';
+}
+
+function aiSelectClipart(url){
+  // Place clipart directly — no processing screen needed, it's already a clean image
+  applyDesign(url);
+  sState.hasDesign = true;
+  sClosePanel();
+  sNtf('✓ Clipart added to shirt!');
 }
 
 function aiSelectImage(url){
@@ -6304,7 +6318,7 @@ function removeBackground(imageUrl, callback){
     for(let x=0;x<w;x++){ queue.push(x,0); queue.push(x,h-1); visited[x]=1; visited[(h-1)*w+x]=1; }
     for(let y=1;y<h-1;y++){ queue.push(0,y); queue.push(w-1,y); visited[y*w]=1; visited[y*w+w-1]=1; }
 
-    const threshold = 35;
+    const threshold = 28;
     let qi=0;
     while(qi<queue.length){
       const x=queue[qi++], y=queue[qi++];
@@ -6317,23 +6331,6 @@ function removeBackground(imageUrl, callback){
         if(nx<0||nx>=w||ny<0||ny>=h) continue;
         const ni=ny*w+nx;
         if(!visited[ni]){ visited[ni]=1; queue.push(nx,ny); }
-      }
-    }
-
-    // Second pass: remove any leftover near-background pixels
-    // (islands of bg color not connected to edges)
-    const bgBrightness = (bg.r+bg.g+bg.b)/3;
-    const isBgLight = bgBrightness > 200;
-    for(let i=0;i<d.length;i+=4){
-      if(d[i+3]===0) continue;
-      const r=d[i],g=d[i+1],b=d[i+2];
-      const dr=r-bg.r, dg=g-bg.g, db=b-bg.b;
-      const dist=Math.sqrt(dr*dr+dg*dg+db*db);
-      if(dist<20){
-        d[i+3]=0;
-      } else if(dist<45){
-        // Soft edge — fade out
-        d[i+3]=Math.round((dist-20)/25 * 255);
       }
     }
 
