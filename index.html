@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v12.5 -->
+<!-- v12.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1370,7 +1370,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.5</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v12.6</span>
   </div>
 
 </nav>
@@ -6748,47 +6748,68 @@ typeAnim();
 async function removeBackground(imageUrl, callback){
   sNtf('Removing background... ⏳');
 
-  // Helper: data URL → base64 string
-  function dataUrlToBase64(dataUrl){ return dataUrl.split(',')[1]; }
-
-  // Helper: data URL → Blob (no fetch needed)
-  function dataUrlToBlob(dataUrl){
-    const parts = dataUrl.split(',');
-    const mime  = parts[0].match(/:(.*?);/)[1];
-    const bytes = atob(parts[1]);
-    const arr   = new Uint8Array(bytes.length);
-    for(let i=0;i<bytes.length;i++) arr[i]=bytes.charCodeAt(i);
-    return new Blob([arr], {type:mime});
+  // ── Resize image to max 1024px before sending (keeps under server body limits) ──
+  function resizeForUpload(dataUrl, maxPx, quality){
+    return new Promise(function(resolve){
+      const img = new Image();
+      img.onload = function(){
+        const scale = Math.min(1, maxPx / Math.max(img.naturalWidth, img.naturalHeight));
+        const w = Math.round(img.naturalWidth * scale);
+        const h = Math.round(img.naturalHeight * scale);
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL('image/jpeg', quality || 0.92));
+      };
+      img.onerror = function(){ resolve(dataUrl); };
+      img.src = dataUrl;
+    });
   }
 
-  // ── 1. Try remove.bg via Railway server (best quality, requires API key on server) ──
+  // ── 1. Try remove.bg via Railway server ──
   try {
-    const base64 = imageUrl.startsWith('data:') ? dataUrlToBase64(imageUrl) : null;
-    const body   = base64 ? JSON.stringify({image_file_b64: base64})
-                          : JSON.stringify({image_url: imageUrl});
+    // Resize to max 1024px to stay well under Express body limit
+    const smallUrl = imageUrl.startsWith('data:')
+      ? await resizeForUpload(imageUrl, 1024, 0.92)
+      : imageUrl;
+    const base64 = smallUrl.startsWith('data:') ? smallUrl.split(',')[1] : null;
+    const body = base64
+      ? JSON.stringify({ image_file_b64: base64 })
+      : JSON.stringify({ image_url: imageUrl });
+
     const res = await fetch('https://hunto-server-production.up.railway.app/remove-bg', {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body,
-      signal: AbortSignal.timeout(20000)
+      signal: AbortSignal.timeout(30000)
     });
+
     if(res.ok){
       const data = await res.json();
       if(data.result){ sNtf('✓ Background removed!'); callback(data.result); return; }
+      console.warn('remove-bg: no result in response', data);
+    } else {
+      const errText = await res.text();
+      console.warn('remove-bg server error', res.status, errText);
+      sNtf('remove.bg error: ' + res.status + ' — check console');
     }
-  } catch(e){ console.warn('Server remove-bg failed:', e.message); }
+  } catch(e){ console.warn('Server remove-bg failed:', e.message); sNtf('Server error: ' + e.message); }
 
   // ── 2. Try @imgly browser ML library ──
-  // Wait up to 3s for the module to finish loading if needed
   let rmFn = window.imglyRemoveBackground;
   if(!rmFn){
-    await new Promise(function(res){ setTimeout(res, 2000); });
+    await new Promise(function(res){ setTimeout(res, 1000); });
     rmFn = window.imglyRemoveBackground;
   }
   if(typeof rmFn === 'function'){
     try {
-      const blob = imageUrl.startsWith('data:') ? dataUrlToBlob(imageUrl)
-                 : await fetch(imageUrl).then(r=>r.blob());
+      let blob;
+      if(imageUrl.startsWith('data:')){
+        const parts=imageUrl.split(','), mime=parts[0].match(/:(.*?);/)[1];
+        const bytes=atob(parts[1]), arr=new Uint8Array(bytes.length);
+        for(let i=0;i<bytes.length;i++) arr[i]=bytes.charCodeAt(i);
+        blob = new Blob([arr],{type:mime});
+      } else { blob = await fetch(imageUrl).then(r=>r.blob()); }
       const resultBlob = await rmFn(blob, {
         publicPath: 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser/',
         debug: false, model: 'small',
