@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v14.4 -->
+<!-- v14.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1426,7 +1426,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v14.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v14.5</span>
   </div>
 
 </nav>
@@ -1486,69 +1486,49 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
 
-      <!-- Hero right - Dynamic shirt collage -->
+      <!-- Hero right - Real product photos loaded from catalog API -->
       <div style="position:relative;height:480px;width:100%">
-
-        <!-- Floating shirt cards with CSS animations -->
         <style>
           @keyframes float1{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(-4deg)}}
           @keyframes float2{0%,100%{transform:translateY(0) rotate(3deg)}50%{transform:translateY(-16px) rotate(3deg)}}
           @keyframes float3{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(-2deg)}}
           @keyframes float4{0%,100%{transform:translateY(0) rotate(5deg)}50%{transform:translateY(-14px) rotate(5deg)}}
           @keyframes float5{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(-3deg)}}
-          @keyframes shimmer{0%{opacity:.5}50%{opacity:1}100%{opacity:.5}}
-          .hcard{position:absolute;border-radius:20px;overflow:hidden;box-shadow:0 20px 48px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1)}
+          .hcard{position:absolute;border-radius:20px;overflow:hidden;box-shadow:0 20px 48px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.15);transition:transform .3s}
           .hcard img{width:100%;height:100%;object-fit:cover;display:block}
-          .hcard-badge{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);border-radius:10px;padding:8px 10px}
-          .hcard-badge-name{font-size:11px;font-weight:800;color:#fff;letter-spacing:.02em}
-          .hcard-badge-price{font-size:10px;color:rgba(255,255,255,.6)}
+          .hcard-badge{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.75));padding:24px 12px 12px;border-radius:0 0 20px 20px}
+          .hcard-badge-name{font-size:12px;font-weight:800;color:#fff;letter-spacing:.02em}
+          .hcard-badge-price{font-size:10px;color:rgba(255,255,255,.7);margin-top:2px}
         </style>
 
-        <!-- Card 1 - Large center-left, black hoodie -->
-        <div class="hcard" style="width:200px;height:230px;left:5%;top:20px;animation:float1 6s ease-in-out infinite;z-index:3;background:linear-gradient(135deg,#1a1a2e,#2d1b69)">
-          <div style="display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 110" style="width:70%;height:70%;opacity:.9">
-    <path d="M10,38 L25,20 C27,26 33,30 50,30 C67,30 73,26 75,20 L90,38 L82,50 L82,92 L18,92 L18,50 Z" fill="rgba(255,255,255,0.95)"/>
-    <path d="M25,20 Q32,29 50,27 Q68,29 75,20" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-    <rect x="39" y="17" width="22" height="10" rx="5" fill="rgba(255,255,255,.7)"/>
-  </svg></div>
-          <div class="hcard-badge"><div class="hcard-badge-name">Pullover Hoodie</div><div class="hcard-badge-price">From $45</div></div>
+        <!-- Card 1 - Large center-left, hoodie -->
+        <div class="hcard" id="hcard-1" style="width:200px;height:230px;left:5%;top:20px;animation:float1 6s ease-in-out infinite;z-index:3;background:#1a1a2e">
+          <img id="hcard-img-1" src="" alt="Hoodie" style="width:100%;height:100%;object-fit:cover;display:none">
+          <div class="hcard-badge"><div class="hcard-badge-name" id="hcard-name-1">Pullover Hoodie</div><div class="hcard-badge-price">From $45</div></div>
         </div>
 
-        <!-- Card 2 - Top right, royal blue tee -->
-        <div class="hcard" style="width:170px;height:196px;right:8%;top:10px;animation:float2 7s ease-in-out infinite .8s;z-index:2;background:linear-gradient(135deg,#1e3a5f,#1a56db)">
-          <div style="display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width:70%;height:70%;opacity:.9">
-    <path d="M15,35 L28,22 C30,28 36,32 50,31 C64,32 70,28 72,22 L85,35 L76,44 L76,80 L24,80 L24,44 Z" fill="rgba(255,255,255,0.95)"/>
-    <path d="M28,22 Q34,30 50,28 Q66,30 72,22" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-  </svg></div>
-          <div class="hcard-badge"><div class="hcard-badge-name">Classic Tee</div><div class="hcard-badge-price">From $28</div></div>
+        <!-- Card 2 - Top right, tee -->
+        <div class="hcard" id="hcard-2" style="width:170px;height:196px;right:8%;top:10px;animation:float2 7s ease-in-out infinite .8s;z-index:2;background:#1a3a6b">
+          <img id="hcard-img-2" src="" alt="T-Shirt" style="width:100%;height:100%;object-fit:cover;display:none">
+          <div class="hcard-badge"><div class="hcard-badge-name" id="hcard-name-2">Classic Tee</div><div class="hcard-badge-price">From $28</div></div>
         </div>
 
-        <!-- Card 3 - Mid right, safety green -->
-        <div class="hcard" style="width:155px;height:178px;right:2%;top:220px;animation:float3 5.5s ease-in-out infinite .4s;z-index:4;background:linear-gradient(135deg,#14532d,#16a34a)">
-          <div style="display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width:70%;height:70%;opacity:.9">
-    <path d="M15,35 L28,22 C30,28 36,32 50,31 C64,32 70,28 72,22 L85,35 L76,44 L76,80 L24,80 L24,44 Z" fill="rgba(255,255,255,0.95)"/>
-    <path d="M28,22 Q34,30 50,28 Q66,30 72,22" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-  </svg></div>
-          <div class="hcard-badge"><div class="hcard-badge-name">Safety Green</div><div class="hcard-badge-price">From $28</div></div>
+        <!-- Card 3 - Mid right -->
+        <div class="hcard" id="hcard-3" style="width:155px;height:178px;right:2%;top:220px;animation:float3 5.5s ease-in-out infinite .4s;z-index:4;background:#145228">
+          <img id="hcard-img-3" src="" alt="Shirt" style="width:100%;height:100%;object-fit:cover;display:none">
+          <div class="hcard-badge"><div class="hcard-badge-name" id="hcard-name-3">Safety Green</div><div class="hcard-badge-price">From $28</div></div>
         </div>
 
-        <!-- Card 4 - Bottom left, red crewneck -->
-        <div class="hcard" style="width:175px;height:200px;left:0%;top:240px;animation:float4 6.5s ease-in-out infinite 1.2s;z-index:2;background:linear-gradient(135deg,#7f1d1d,#dc2626)">
-          <div style="display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 110" style="width:70%;height:70%;opacity:.9">
-    <path d="M10,38 L25,20 C27,26 33,30 50,30 C67,30 73,26 75,20 L90,38 L82,50 L82,92 L18,92 L18,50 Z" fill="rgba(255,255,255,0.95)"/>
-    <path d="M25,20 Q32,29 50,27 Q68,29 75,20" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-    <rect x="39" y="17" width="22" height="10" rx="5" fill="rgba(255,255,255,.7)"/>
-  </svg></div>
-          <div class="hcard-badge"><div class="hcard-badge-name">Crewneck</div><div class="hcard-badge-price">From $42</div></div>
+        <!-- Card 4 - Bottom left -->
+        <div class="hcard" id="hcard-4" style="width:175px;height:200px;left:0%;top:240px;animation:float4 6.5s ease-in-out infinite 1.2s;z-index:2;background:#7f1d1d">
+          <img id="hcard-img-4" src="" alt="Crewneck" style="width:100%;height:100%;object-fit:cover;display:none">
+          <div class="hcard-badge"><div class="hcard-badge-name" id="hcard-name-4">Crewneck</div><div class="hcard-badge-price">From $42</div></div>
         </div>
 
-        <!-- Card 5 - Center mid, white tee with badge -->
-        <div class="hcard" style="width:158px;height:182px;left:34%;top:130px;animation:float5 5s ease-in-out infinite .6s;z-index:5;background:linear-gradient(135deg,#334155,#0f172a)">
-          <div style="display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width:70%;height:70%;opacity:.9">
-    <path d="M15,35 L28,22 C30,28 36,32 50,31 C64,32 70,28 72,22 L85,35 L76,44 L76,80 L24,80 L24,44 Z" fill="rgba(255,255,255,0.95)"/>
-    <path d="M28,22 Q34,30 50,28 Q66,30 72,22" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-  </svg></div>
-          <div class="hcard-badge"><div class="hcard-badge-name">✦ AI Art Ready</div><div class="hcard-badge-price">Instant placement</div></div>
+        <!-- Card 5 - Center mid -->
+        <div class="hcard" id="hcard-5" style="width:158px;height:182px;left:34%;top:130px;animation:float5 5s ease-in-out infinite .6s;z-index:5;background:#0f172a">
+          <img id="hcard-img-5" src="" alt="T-Shirt" style="width:100%;height:100%;object-fit:cover;display:none">
+          <div class="hcard-badge"><div class="hcard-badge-name" id="hcard-name-5">Design Yours</div><div class="hcard-badge-price">✦ AI Art · No Minimum</div></div>
         </div>
 
         <!-- Floating sparkle badges -->
@@ -1607,66 +1587,63 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
 
-      <!-- Right: 2x3 category card grid -->
+      <!-- Right: 2x3 category card grid - images loaded by loadHomepageImages() -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-
-        <div onclick="goShop('T-Shirts')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
-          <div style="background:#e8edf5;height:130px;display:flex;align-items:center;justify-content:center;position:relative">
-            <img src="https://images.ssactivewear.com/im/products/17927_front_FRMK.jpg" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px">
-              <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.18"><path d="M15,40 L28,22 Q35,16 50,16 Q65,16 72,22 L85,40 L76,50 L76,84 L24,84 L24,50 Z" fill="#333"/></svg>
-              <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
-            </div>
+        <div onclick="goShop('T-Shirts')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e4e4e4;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,.06)'">
+          <div id="catimg-tshirt-wrap" style="height:140px;overflow:hidden;background:#dde5f0;display:flex;align-items:center;justify-content:center;position:relative">
+            <img id="catimg-tshirt" src="" alt="T-Shirts" style="width:100%;height:100%;object-fit:cover;display:none">
+            <div id="catimg-tshirt-loading" style="font-size:28px;opacity:.3">👕</div>
           </div>
-          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">T-Shirts</div></div>
-        </div>
-
-        <div onclick="goShop('T-Shirts - Long Sleeve')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
-          <div style="background:#dde8f0;height:130px;display:flex;align-items:center;justify-content:center;position:relative">
-            <img src="https://images.ssactivewear.com/im/products/8400_front_FRMK.jpg" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px">
-              <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.18"><path d="M10,40 L25,20 Q35,14 50,14 Q65,14 75,20 L90,40 L80,50 L80,84 L20,84 L20,50 Z" fill="#333"/></svg>
-              <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
-            </div>
+          <div style="padding:11px 14px;border-top:1px solid #f0f0f0">
+            <div style="font-size:13px;font-weight:800;color:#111">T-Shirts</div>
           </div>
-          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">Long Sleeve T-Shirts</div></div>
         </div>
-
-        <div onclick="goShop('Fleece - Core - Hood')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
-          <div style="background:#e5dff5;height:130px;display:flex;align-items:center;justify-content:center;position:relative">
-            <img src="https://images.ssactivewear.com/im/products/19961_front_FRMK.jpg" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px">
-              <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.18"><path d="M10,38 L25,20 Q35,12 50,12 Q65,12 75,20 L90,38 L80,50 L80,84 L20,84 L20,50 Z" fill="#333"/><rect x="40" y="10" width="20" height="10" rx="5" fill="#333"/></svg>
-              <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
-            </div>
+        <div onclick="goShop('T-Shirts - Long Sleeve')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e4e4e4;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,.06)'">
+          <div id="catimg-longsleeve-wrap" style="height:140px;overflow:hidden;background:#d8e8f5;display:flex;align-items:center;justify-content:center;position:relative">
+            <img id="catimg-longsleeve" src="" alt="Long Sleeve" style="width:100%;height:100%;object-fit:cover;display:none">
+            <div id="catimg-longsleeve-loading" style="font-size:28px;opacity:.3">👕</div>
           </div>
-          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">Hoodies</div></div>
-        </div>
-
-        <div onclick="goShop('Outerwear')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
-          <div style="background:#dff0e8;height:130px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px">
-            <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.25"><path d="M8,36 L22,18 Q32,10 50,10 Q68,10 78,18 L92,36 L80,48 L80,85 L20,85 L20,48 Z" fill="#333"/></svg>
-            <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
+          <div style="padding:11px 14px;border-top:1px solid #f0f0f0">
+            <div style="font-size:13px;font-weight:800;color:#111">Long Sleeve</div>
           </div>
-          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">Jackets</div></div>
         </div>
-
-        <div onclick="goShop('Polos')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
-          <div style="background:#f0e8df;height:130px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px">
-            <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.25"><path d="M15,40 L28,22 Q35,16 50,16 Q65,16 72,22 L85,40 L76,50 L76,84 L24,84 L24,50 Z" fill="#333"/><line x1="50" y1="16" x2="50" y2="30" stroke="#333" stroke-width="6"/></svg>
-            <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
+        <div onclick="goShop('Fleece - Core - Hood')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e4e4e4;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,.06)'">
+          <div id="catimg-hoodie-wrap" style="height:140px;overflow:hidden;background:#e4ddf5;display:flex;align-items:center;justify-content:center;position:relative">
+            <img id="catimg-hoodie" src="" alt="Hoodies" style="width:100%;height:100%;object-fit:cover;display:none">
+            <div id="catimg-hoodie-loading" style="font-size:28px;opacity:.3">👕</div>
           </div>
-          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">Hats &amp; Caps</div></div>
-        </div>
-
-        <div onclick="goShop('')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
-          <div style="background:#f5e8f0;height:130px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px">
-            <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.25"><rect x="15" y="30" width="70" height="50" rx="8" fill="#333"/><path d="M35,30 L35,20 Q35,12 50,12 Q65,12 65,20 L65,30" fill="none" stroke="#333" stroke-width="6"/></svg>
-            <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
+          <div style="padding:11px 14px;border-top:1px solid #f0f0f0">
+            <div style="font-size:13px;font-weight:800;color:#111">Hoodies</div>
           </div>
-          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">Promotional</div></div>
         </div>
-
+        <div onclick="goShop('Outerwear')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e4e4e4;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,.06)'">
+          <div id="catimg-jacket-wrap" style="height:140px;overflow:hidden;background:#d8eee4;display:flex;align-items:center;justify-content:center;position:relative">
+            <img id="catimg-jacket" src="" alt="Jackets" style="width:100%;height:100%;object-fit:cover;display:none">
+            <div id="catimg-jacket-loading" style="font-size:28px;opacity:.3">👕</div>
+          </div>
+          <div style="padding:11px 14px;border-top:1px solid #f0f0f0">
+            <div style="font-size:13px;font-weight:800;color:#111">Jackets</div>
+          </div>
+        </div>
+        <div onclick="goShop('Polos')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e4e4e4;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,.06)'">
+          <div id="catimg-polo-wrap" style="height:140px;overflow:hidden;background:#f0e8d8;display:flex;align-items:center;justify-content:center;position:relative">
+            <img id="catimg-polo" src="" alt="Hats & Caps" style="width:100%;height:100%;object-fit:cover;display:none">
+            <div id="catimg-polo-loading" style="font-size:28px;opacity:.3">👕</div>
+          </div>
+          <div style="padding:11px 14px;border-top:1px solid #f0f0f0">
+            <div style="font-size:13px;font-weight:800;color:#111">Hats & Caps</div>
+          </div>
+        </div>
+        <div onclick="goShop('')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e4e4e4;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,.06)'">
+          <div id="catimg-promo-wrap" style="height:140px;overflow:hidden;background:#f0d8e8;display:flex;align-items:center;justify-content:center;position:relative">
+            <img id="catimg-promo" src="" alt="Promotional" style="width:100%;height:100%;object-fit:cover;display:none">
+            <div id="catimg-promo-loading" style="font-size:28px;opacity:.3">👕</div>
+          </div>
+          <div style="padding:11px 14px;border-top:1px solid #f0f0f0">
+            <div style="font-size:13px;font-weight:800;color:#111">Promotional</div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -6349,6 +6326,99 @@ async function loadBestSellers(category, tabEl){
 
 // Load best sellers on home page init
 window.addEventListener("load", ()=>{ if(document.getElementById("best-sellers-grid")) loadBestSellers("T-Shirts", document.querySelector(".bs-tab")); });
+window.addEventListener("load", ()=>{ loadHomepageImages(); });
+
+async function loadHomepageImages(){
+  const SERVER = 'https://hunto-server-production.up.railway.app';
+  function setCardImg(imgId, src, name){
+    const img = document.getElementById(imgId);
+    const loading = document.getElementById(imgId + '-loading');
+    const wrap = document.getElementById(imgId + '-wrap');
+    if(!img || !src) return;
+    img.onload = function(){
+      img.style.display = 'block';
+      if(loading) loading.style.display = 'none';
+    };
+    img.onerror = function(){
+      img.style.display = 'none';
+      if(loading){ loading.style.display = 'flex'; loading.textContent = '👕'; }
+      // Try gradient fallback
+      if(wrap) wrap.style.background = 'linear-gradient(135deg,#7c3aed22,#ec489922)';
+    };
+    img.src = src;
+  }
+
+  // Fetch by category and populate category cards
+  const catFetches = [
+    { params: 'category=T-Shirts+-+Core&limit=1',         imgId: 'catimg-tshirt'    },
+    { params: 'category=T-Shirts+-+Long+Sleeve&limit=1',  imgId: 'catimg-longsleeve'},
+    { params: 'category=Fleece+-+Core+-+Hood&limit=1',    imgId: 'catimg-hoodie'    },
+    { params: 'category=Outerwear&limit=1',               imgId: 'catimg-jacket'    },
+    { params: 'category=Polos&limit=1',                   imgId: 'catimg-polo'      },
+    { params: 'brand=Gildan&limit=4',                     imgId: 'catimg-promo'     },
+  ];
+
+  // Hero card configs: which search to do and which color to pick
+  const heroCards = [
+    { params: 'brand=Gildan&category=Fleece+-+Core+-+Hood&limit=6', colorHint: 'black',  imgId: 'hcard-img-1', nameId: 'hcard-name-1' },
+    { params: 'brand=Gildan&category=T-Shirts+-+Core&limit=1',      colorHint: 'royal',  imgId: 'hcard-img-2', nameId: 'hcard-name-2' },
+    { params: 'brand=Gildan&category=T-Shirts+-+Core&limit=3',      colorHint: 'safety', imgId: 'hcard-img-3', nameId: 'hcard-name-3' },
+    { params: 'brand=Gildan&category=Fleece+-+Core+-+Crew&limit=3', colorHint: 'red',    imgId: 'hcard-img-4', nameId: 'hcard-name-4' },
+    { params: 'brand=Gildan&category=T-Shirts+-+Core&limit=8',      colorHint: 'white',  imgId: 'hcard-img-5', nameId: 'hcard-name-5' },
+  ];
+
+  function pickColorImg(product, hint){
+    if(!product || !product.colors) return product && product.image ? product.image : null;
+    const h = (hint||'').toLowerCase();
+    // Try to match color by name hint
+    let match = product.colors.find(function(c){
+      return c.front && (c.name||'').toLowerCase().includes(h);
+    });
+    if(!match) match = product.colors.find(function(c){ return c.front; });
+    return match ? match.front : (product.image || null);
+  }
+
+  // Load hero cards
+  heroCards.forEach(function(cfg){
+    fetch(SERVER + '/catalog/products?' + cfg.params)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        const products = data.products || [];
+        if(!products.length) return;
+        // Pick a product with the right color
+        let chosen = null;
+        for(var i=0;i<products.length;i++){
+          const img = pickColorImg(products[i], cfg.colorHint);
+          if(img){ chosen = {product: products[i], img: img}; break; }
+        }
+        if(!chosen){ const img = pickColorImg(products[0], ''); if(img) chosen={product:products[0],img:img}; }
+        if(chosen){
+          setCardImg(cfg.imgId, chosen.img, chosen.product.title);
+          // Update card background based on actual product image
+          const card = document.getElementById(cfg.imgId);
+          if(card && card.parentElement) card.parentElement.style.background='#111';
+          // Update name if it's a simple label
+          const nameEl = document.getElementById(cfg.nameId);
+          if(nameEl && chosen.product.title && cfg.nameId !== 'hcard-name-5'){
+            nameEl.textContent = chosen.product.title.split(' ').slice(0,3).join(' ');
+          }
+        }
+      }).catch(function(){});
+  });
+
+  // Load category cards
+  catFetches.forEach(function(cfg){
+    fetch(SERVER + '/catalog/products?' + cfg.params)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        const products = data.products || [];
+        if(!products.length) return;
+        const p = products[0];
+        const img = pickColorImg(p, '');
+        if(img) setCardImg(cfg.imgId, img, p.title || '');
+      }).catch(function(){});
+  });
+}
 
 // ── Search Autocomplete ────────────────────────────────────
 let searchTimer;
