@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v15.2 -->
+<!-- v15.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1426,7 +1426,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v15.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v15.3</span>
   </div>
 
 </nav>
@@ -1599,7 +1599,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px">
         <div onclick="goShop('T-Shirts')" style="cursor:pointer;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e0e0e0;transition:all .22s;box-shadow:0 2px 10px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.06)'">
           <div id="catimg-tshirt-wrap" style="height:200px;background:#f4f4f6;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
-            <img id="catimg-tshirt" src="" alt="T-Shirts" style="width:100%;height:100%;object-fit:contain;display:block">
+            <img id="catimg-tshirt" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-tshirt-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
             <div class="cat-ydh"><span>YOUR</span><span>DESIGN</span><span>HERE</span></div>
           </div>
@@ -1609,7 +1609,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
         <div onclick="goShop('T-Shirts - Long Sleeve')" style="cursor:pointer;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e0e0e0;transition:all .22s;box-shadow:0 2px 10px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.06)'">
           <div id="catimg-longsleeve-wrap" style="height:200px;background:#f4f4f6;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
-            <img id="catimg-longsleeve" src="" alt="Long Sleeve" style="width:100%;height:100%;object-fit:contain;display:block">
+            <img id="catimg-longsleeve" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-longsleeve-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
             <div class="cat-ydh"><span>YOUR</span><span>DESIGN</span><span>HERE</span></div>
           </div>
@@ -1619,7 +1619,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
         <div onclick="goShop('Fleece - Core - Hood')" style="cursor:pointer;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e0e0e0;transition:all .22s;box-shadow:0 2px 10px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.06)'">
           <div id="catimg-hoodie-wrap" style="height:200px;background:#f4f4f6;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
-            <img id="catimg-hoodie" src="" alt="Hoodies" style="width:100%;height:100%;object-fit:contain;display:block">
+            <img id="catimg-hoodie" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-hoodie-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
             <div class="cat-ydh"><span>YOUR</span><span>DESIGN</span><span>HERE</span></div>
           </div>
@@ -1629,7 +1629,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
         <div onclick="goShop('Outerwear')" style="cursor:pointer;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e0e0e0;transition:all .22s;box-shadow:0 2px 10px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.06)'">
           <div id="catimg-jacket-wrap" style="height:200px;background:#f4f4f6;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
-            <img id="catimg-jacket" src="" alt="Jackets" style="width:100%;height:100%;object-fit:contain;display:block">
+            <img id="catimg-jacket" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-jacket-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
             <div class="cat-ydh"><span>YOUR</span><span>DESIGN</span><span>HERE</span></div>
           </div>
@@ -6322,58 +6322,68 @@ window.addEventListener("load", ()=>{ loadHomepageImages(); });
 async function loadHomepageImages(){
   const SERVER = 'https://hunto-server-production.up.railway.app';
 
-  function pickColor(product, hints){
-    if(!product || !product.colors) return null;
-    for(var h of hints){
-      const match = product.colors.find(function(c){
-        return c.front && (c.name||'').toLowerCase().includes(h.toLowerCase());
-      });
-      if(match && match.front) return match.front;
+  // Pick best color image from a product's color list
+  function pickImg(product, hints){
+    if(!product) return null;
+    const colors = product.colors || [];
+    // Try each hint
+    for(const h of hints){
+      const c = colors.find(x => x.front && (x.name||'').toLowerCase().includes(h));
+      if(c) return c.front;
     }
-    const any = product.colors.find(function(c){ return c.front; });
-    return any ? any.front : null;
+    // Any color with a front image
+    const any = colors.find(x => x.front);
+    if(any) return any.front;
+    return product.image || null;
   }
 
-  function applyImg(imgId, src, cover){
-    const img = document.getElementById(imgId);
-    const loading = document.getElementById(imgId + '-loading');
-    if(!img || !src) return;
-    const temp = new Image();
-    temp.onload = function(){
+  // Show image once loaded, hide loading spinner
+  function showImg(id, src){
+    if(!src) return;
+    const img = document.getElementById(id);
+    const loading = document.getElementById(id + '-loading');
+    if(!img) return;
+    const tmp = new Image();
+    tmp.onload = () => {
       img.src = src;
-      img.style.objectFit = cover ? 'cover' : 'contain';
       img.style.display = 'block';
-      img.style.width = '100%';
-      img.style.height = '100%';
       if(loading) loading.style.display = 'none';
     };
-    temp.src = src;
+    tmp.src = src;
   }
 
-  async function fetchBest(params, imgId, hints, cover){
-    try{
-      const r = await fetch(SERVER + '/catalog/products?' + params);
-      const data = await r.json();
+  // Fetch products and find best color match
+  async function load(imgId, category, brand, hints, limit){
+    try {
+      let url = SERVER + '/catalog/products?limit=' + (limit||20);
+      if(category) url += '&category=' + encodeURIComponent(category);
+      if(brand)    url += '&brand='    + encodeURIComponent(brand);
+      const data = await (await fetch(url)).json();
       const products = data.products || [];
       for(const p of products){
-        const img = pickColor(p, hints);
-        if(img){ applyImg(imgId, img, cover); return; }
+        const img = pickImg(p, hints);
+        if(img){ showImg(imgId, img); return; }
       }
-    } catch(e){}
+      // Last resort: just show anything from the first product
+      if(products[0]){
+        const img = pickImg(products[0], []);
+        if(img) showImg(imgId, img);
+      }
+    } catch(e){ console.warn('loadHomepageImages:', imgId, e.message); }
   }
 
-  // Category grid — 4 cards, each a unique vibrant color
-  fetchBest('category=T-Shirts+-+Core&brand=Gildan&limit=30',         'catimg-tshirt',     ['red','cardinal','cherry','crimson','scarlet'], false);
-  fetchBest('category=T-Shirts+-+Long+Sleeve&limit=30',               'catimg-longsleeve', ['kelly','forest','bright green','lime green','green'], false);
-  fetchBest('category=Fleece+-+Core+-+Hood&brand=Gildan&limit=30',    'catimg-hoodie',     ['purple','violet','plum','iris','berry'], false);
-  fetchBest('category=Outerwear&limit=30',                            'catimg-jacket',     ['orange','safety orange','burnt','gold','amber'], false);
+  // ── Category grid (vibrant distinct colors) ──────────────
+  load('catimg-tshirt',    'T-Shirts - Core',        'Gildan', ['red','cardinal','cherry','scarlet','crimson'], 30);
+  load('catimg-longsleeve','T-Shirts - Long Sleeve',  '',      ['kelly','forest','bright green','green'], 20);
+  load('catimg-hoodie',    'Fleece - Core - Hood',    'Gildan', ['purple','violet','plum','berry','iris'], 30);
+  load('catimg-jacket',    'Outerwear',               '',      ['orange','navy','black','charcoal'], 20);
 
-  // Hero floating cards — vibrant Gildan colors, cover mode
-  fetchBest('brand=Gildan&category=Fleece+-+Core+-+Hood&limit=30',  'hcard-img-1', ['black','charcoal','dark charcoal'], true);
-  fetchBest('brand=Gildan&category=T-Shirts+-+Core&limit=30',       'hcard-img-2', ['royal','cobalt','sapphire','blue'], true);
-  fetchBest('brand=Gildan&category=T-Shirts+-+Core&limit=50',       'hcard-img-3', ['safety green','lime','neon green'], true);
-  fetchBest('brand=Gildan&category=Fleece+-+Core+-+Hood&limit=50',  'hcard-img-4', ['red','fire red','cardinal','scarlet'], true);
-  fetchBest('brand=Gildan&category=T-Shirts+-+Core&limit=20',       'hcard-img-5', ['white','natural','ash grey'], true);
+  // ── Hero floating cards ───────────────────────────────────
+  load('hcard-img-1', 'Fleece - Core - Hood',   'Gildan', ['black','dark charcoal','charcoal'], 30);
+  load('hcard-img-2', 'T-Shirts - Core',        'Gildan', ['royal','cobalt','blue'], 30);
+  load('hcard-img-3', 'T-Shirts - Core',        'Gildan', ['safety green','lime','neon'], 50);
+  load('hcard-img-4', 'Fleece - Core - Hood',   'Gildan', ['red','fire red','cardinal','scarlet'], 50);
+  load('hcard-img-5', 'T-Shirts - Core',        'Gildan', ['white','natural','ash'], 20);
 }
 
 // ── Search Autocomplete ────────────────────────────────────
@@ -7175,7 +7185,7 @@ typeAnim();
   const hash = window.location.hash.replace("#","");
   if(hash === "shop")   { goShop(""); }
   else if(hash === "studio") { openStudio(null); }
-  else if(hash === "pdp") { /* stay on home, need product data */ }
+  else if(hash === "pdp") { goPDP("8000"); }
   else { showPage("home"); }
 })();
 
