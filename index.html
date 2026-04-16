@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v14.3 -->
+<!-- v14.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1426,7 +1426,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v14.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v14.4</span>
   </div>
 
 </nav>
@@ -1576,76 +1576,127 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
   </div>
 
-  <!-- CATEGORY GRID -->
-  <div style="max-width:1300px;margin:0 auto;padding:64px 32px">
-    <div style="text-align:center;margin-bottom:40px">
-      <div style="font-size:12px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Shop by Category</div>
-      <h2 style="font-size:clamp(28px,3vw,40px);font-weight:900;color:#111;letter-spacing:-1px">Everything you need to print</h2>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px">
-      <div onclick="goShop('T-Shirts')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#7c3aed';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(124,58,237,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
-        <img src="https://www.ssactivewear.com/Images/Color/17927_f_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.opacity='0'">
-        <div style="font-size:13px;font-weight:700;color:#111">T-Shirts</div>
-        <div style="font-size:11px;color:#aaa;margin-top:2px">From $28</div>
+  <!-- VALUE PROP + CATEGORY GRID (competitor-matching) -->
+  <div style="background:#f0f2f5;padding:48px 32px">
+    <div style="max-width:1300px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center">
+
+      <!-- Left: headline + CTAs + delivery -->
+      <div>
+        <h2 style="font-size:clamp(28px,3.5vw,46px);font-weight:900;line-height:1.1;color:#111;letter-spacing:-.5px;margin-bottom:16px">Custom T-Shirts &amp;<br>Apparel on Any Deadline</h2>
+        <p style="font-size:16px;color:#555;margin-bottom:28px;line-height:1.6">Personalize t-shirts, hoodies, polos, and more for your group or business — no minimums, ships in 48 hours.</p>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px">
+          <button onclick="goShop('')" style="height:50px;padding:0 28px;background:#7c3aed;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:all .18s;box-shadow:0 4px 14px rgba(124,58,237,.3)" onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='#7c3aed'">Shop Products</button>
+          <button onclick="openStudio(null)" style="height:50px;padding:0 28px;background:#fff;color:#7c3aed;border:2px solid #7c3aed;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:all .18s" onmouseover="this.style.background='#faf5ff'" onmouseout="this.style.background='#fff'">Start Designing</button>
+        </div>
+
+        <!-- Delivery info -->
+        <div style="display:flex;gap:0;border-top:1px solid #ddd;padding-top:20px">
+          <div style="padding-right:24px;border-right:1px solid #ddd">
+            <div style="font-size:13px;font-weight:800;color:#111">Free Delivery</div>
+            <div style="font-size:12px;color:#888;margin-top:2px" id="hp-free-date">Wed, Apr 29</div>
+          </div>
+          <div style="padding:0 24px;border-right:1px solid #ddd">
+            <div style="font-size:13px;font-weight:800;color:#111">Rush Delivery</div>
+            <div style="font-size:12px;color:#888;margin-top:2px" id="hp-rush-date">Fri, Apr 17</div>
+          </div>
+          <div style="padding-left:24px">
+            <div style="font-size:13px;font-weight:800;color:#111">Need it Sooner?</div>
+            <div style="font-size:12px;color:#7c3aed;font-weight:600;margin-top:2px;cursor:pointer">Call (800) HUNTO or Live Chat</div>
+          </div>
+        </div>
       </div>
-      <div onclick="goShop('Fleece - Core - Hood')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#7c3aed';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(124,58,237,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
-        <img src="https://www.ssactivewear.com/Images/Color/19961_f_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.opacity='0'">
-        <div style="font-size:13px;font-weight:700;color:#111">Hoodies</div>
-        <div style="font-size:11px;color:#aaa;margin-top:2px">From $45</div>
-      </div>
-      <div onclick="goShop('T-Shirts - Long Sleeve')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#7c3aed';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(124,58,237,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
-        <img src="https://www.ssactivewear.com/Images/Style/167_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.opacity='0'">
-        <div style="font-size:13px;font-weight:700;color:#111">Long Sleeve</div>
-        <div style="font-size:11px;color:#aaa;margin-top:2px">From $32</div>
-      </div>
-      <div onclick="goShop('Polos')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#7c3aed';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(124,58,237,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
-        <img src="https://www.ssactivewear.com/Images/Color/18514_f_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.opacity='0'">
-        <div style="font-size:13px;font-weight:700;color:#111">Polo Shirts</div>
-        <div style="font-size:11px;color:#aaa;margin-top:2px">From $29</div>
-      </div>
-      <div onclick="goShop('Outerwear')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#7c3aed';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(124,58,237,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
-        <img src="https://www.ssactivewear.com/Images/Style/11017_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.opacity='0'">
-        <div style="font-size:13px;font-weight:700;color:#111">Outerwear</div>
-        <div style="font-size:11px;color:#aaa;margin-top:2px">From $55</div>
-      </div>
-      <div onclick="goShop('Fleece - Premium - Crew')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#7c3aed';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(124,58,237,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
-        <img src="https://www.ssactivewear.com/Images/Style/372_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.opacity='0'">
-        <div style="font-size:13px;font-weight:700;color:#111">Crewnecks</div>
-        <div style="font-size:11px;color:#aaa;margin-top:2px">From $42</div>
-      </div>
-      <div onclick="goShopGender('ladies','')" style="cursor:pointer;border-radius:16px;overflow:hidden;background:#f8f9fb;border:1.5px solid #e8e8e8;transition:all .2s;text-align:center;padding:20px 12px" onmouseover="this.style.borderColor='#7c3aed';this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(124,58,237,.15)'" onmouseout="this.style.borderColor='#e8e8e8';this.style.transform='';this.style.boxShadow=''">
-        <img src="https://www.ssactivewear.com/Images/Style/3480_fm.jpg" style="width:80px;height:80px;object-fit:contain;margin-bottom:10px" onerror="this.style.opacity='0'">
-        <div style="font-size:13px;font-weight:700;color:#111">Women's</div>
-        <div style="font-size:11px;color:#aaa;margin-top:2px">From $26</div>
+
+      <!-- Right: 2x3 category card grid -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+
+        <div onclick="goShop('T-Shirts')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
+          <div style="background:#e8edf5;height:130px;display:flex;align-items:center;justify-content:center;position:relative">
+            <img src="https://images.ssactivewear.com/im/products/17927_front_FRMK.jpg" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px">
+              <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.18"><path d="M15,40 L28,22 Q35,16 50,16 Q65,16 72,22 L85,40 L76,50 L76,84 L24,84 L24,50 Z" fill="#333"/></svg>
+              <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
+            </div>
+          </div>
+          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">T-Shirts</div></div>
+        </div>
+
+        <div onclick="goShop('T-Shirts - Long Sleeve')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
+          <div style="background:#dde8f0;height:130px;display:flex;align-items:center;justify-content:center;position:relative">
+            <img src="https://images.ssactivewear.com/im/products/8400_front_FRMK.jpg" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px">
+              <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.18"><path d="M10,40 L25,20 Q35,14 50,14 Q65,14 75,20 L90,40 L80,50 L80,84 L20,84 L20,50 Z" fill="#333"/></svg>
+              <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
+            </div>
+          </div>
+          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">Long Sleeve T-Shirts</div></div>
+        </div>
+
+        <div onclick="goShop('Fleece - Core - Hood')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
+          <div style="background:#e5dff5;height:130px;display:flex;align-items:center;justify-content:center;position:relative">
+            <img src="https://images.ssactivewear.com/im/products/19961_front_FRMK.jpg" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px">
+              <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.18"><path d="M10,38 L25,20 Q35,12 50,12 Q65,12 75,20 L90,38 L80,50 L80,84 L20,84 L20,50 Z" fill="#333"/><rect x="40" y="10" width="20" height="10" rx="5" fill="#333"/></svg>
+              <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
+            </div>
+          </div>
+          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">Hoodies</div></div>
+        </div>
+
+        <div onclick="goShop('Outerwear')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
+          <div style="background:#dff0e8;height:130px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px">
+            <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.25"><path d="M8,36 L22,18 Q32,10 50,10 Q68,10 78,18 L92,36 L80,48 L80,85 L20,85 L20,48 Z" fill="#333"/></svg>
+            <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
+          </div>
+          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">Jackets</div></div>
+        </div>
+
+        <div onclick="goShop('Polos')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
+          <div style="background:#f0e8df;height:130px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px">
+            <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.25"><path d="M15,40 L28,22 Q35,16 50,16 Q65,16 72,22 L85,40 L76,50 L76,84 L24,84 L24,50 Z" fill="#333"/><line x1="50" y1="16" x2="50" y2="30" stroke="#333" stroke-width="6"/></svg>
+            <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
+          </div>
+          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">Hats &amp; Caps</div></div>
+        </div>
+
+        <div onclick="goShop('')" style="cursor:pointer;background:#fff;border-radius:14px;overflow:hidden;border:1.5px solid #e0e0e0;transition:all .18s;box-shadow:0 1px 4px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'">
+          <div style="background:#f5e8f0;height:130px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px">
+            <svg width="52" height="52" viewBox="0 0 100 100" style="opacity:.25"><rect x="15" y="30" width="70" height="50" rx="8" fill="#333"/><path d="M35,30 L35,20 Q35,12 50,12 Q65,12 65,20 L65,30" fill="none" stroke="#333" stroke-width="6"/></svg>
+            <span style="font-size:10px;font-weight:800;color:rgba(0,0,0,.35);letter-spacing:.08em;text-transform:uppercase">Your Design</span>
+          </div>
+          <div style="padding:10px 12px"><div style="font-size:13px;font-weight:800;color:#111">Promotional</div></div>
+        </div>
+
       </div>
     </div>
   </div>
 
   <!-- BEST SELLERS -->
-  <div style="background:#f8f9fb;padding:64px 32px">
+  <div style="background:#fff;padding:56px 32px">
     <div style="max-width:1300px;margin:0 auto">
-      <div style="text-align:center;margin-bottom:32px">
-        <div style="font-size:12px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Most Popular</div>
-        <h2 style="font-size:clamp(28px,3vw,40px);font-weight:900;color:#111;letter-spacing:-1px;margin-bottom:8px">Explore Best Sellers</h2>
-        <p style="font-size:15px;color:#888">The most-loved products customers can't get enough of</p>
+      <h2 style="font-size:clamp(24px,3vw,38px);font-weight:900;color:#111;letter-spacing:-.5px;text-align:center;margin-bottom:6px">Explore Best Sellers</h2>
+      <p style="font-size:15px;color:#888;text-align:center;margin-bottom:28px">The most-loved products customers can't get enough of</p>
+
+      <!-- Tabs -->
+      <div style="display:flex;justify-content:center;gap:6px;margin-bottom:28px;flex-wrap:wrap" id="bs-tabs">
+        <button onclick="loadBestSellers('T-Shirts',this)" class="bs-tab on" style="padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;border:1.5px solid #7c3aed;background:#7c3aed;color:#fff;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s">T-Shirts</button>
+        <button onclick="loadBestSellers('Fleece',this)" class="bs-tab" style="padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;border:1.5px solid #e0e0e0;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s">Hoodies</button>
+        <button onclick="loadBestSellers('Polos',this)" class="bs-tab" style="padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;border:1.5px solid #e0e0e0;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s">Polos</button>
+        <button onclick="loadBestSellers('Outerwear',this)" class="bs-tab" style="padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;border:1.5px solid #e0e0e0;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s">Jackets</button>
+        <button onclick="loadBestSellers('T-Shirts - Long Sleeve',this)" class="bs-tab" style="padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;border:1.5px solid #e0e0e0;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s">Long Sleeve</button>
+        <button onclick="loadBestSellers('ladies',this)" class="bs-tab" style="padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;border:1.5px solid #e0e0e0;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s">Women's</button>
       </div>
 
-      <!-- Category tabs -->
-      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:32px;flex-wrap:wrap" id="bs-tabs">
-        <button onclick="loadBestSellers('T-Shirts',this)" class="bs-tab on" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #7c3aed;background:#7c3aed;color:#fff;cursor:pointer;font-family:Inter,sans-serif">T-Shirts</button>
-        <button onclick="loadBestSellers('Fleece',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Hoodies</button>
-        <button onclick="loadBestSellers('Polos',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Polos</button>
-        <button onclick="loadBestSellers('Outerwear',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Outerwear</button>
-        <button onclick="loadBestSellers('Long Sleeve',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Long Sleeve</button>
-        <button onclick="loadBestSellers('Ladies',this)" class="bs-tab" style="padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;border:1.5px solid #e8e8e8;background:#fff;color:#555;cursor:pointer;font-family:Inter,sans-serif">Women's</button>
-      </div>
-
-      <!-- Best seller grid -->
+      <!-- Product grid -->
       <div id="best-sellers-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px"></div>
+
+      <div style="text-align:center;margin-top:32px">
+        <button onclick="goShop('')" style="height:48px;padding:0 36px;background:#7c3aed;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:all .18s;box-shadow:0 4px 14px rgba(124,58,237,.3)" onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='#7c3aed'" id="bs-shop-btn">Shop T-Shirts</button>
+      </div>
     </div>
   </div>
 
-  <!-- HOW IT WORKS -->
+    <!-- HOW IT WORKS -->
   <div style="max-width:1300px;margin:0 auto;padding:64px 32px">
     <div style="text-align:center;margin-bottom:48px">
       <div style="font-size:12px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">The Process</div>
@@ -6250,9 +6301,13 @@ function shopSearchHeader(val){
 async function loadBestSellers(category, tabEl){
   // Update tabs
   document.querySelectorAll(".bs-tab").forEach(t=>{
-    t.style.background="#fff"; t.style.color="#555"; t.style.borderColor="#e8e8e8";
+    t.style.background="#fff"; t.style.color="#555"; t.style.borderColor="#e0e0e0";
   });
   if(tabEl){ tabEl.style.background="#7c3aed"; tabEl.style.color="#fff"; tabEl.style.borderColor="#7c3aed"; }
+  // Update shop button label
+  const shopBtn = document.getElementById('bs-shop-btn');
+  const bsLabels = {'T-Shirts':'Shop T-Shirts','Fleece':'Shop Hoodies','Polos':'Shop Polos','Outerwear':'Shop Jackets','T-Shirts - Long Sleeve':'Shop Long Sleeve','ladies':'Shop Women\'s'};
+  if(shopBtn) shopBtn.textContent = bsLabels[category] || 'Shop All';
 
   const grid = document.getElementById("best-sellers-grid");
   if(!grid) return;
