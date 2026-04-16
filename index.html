@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v15.3 -->
+<!-- v15.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1426,7 +1426,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v15.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v15.4</span>
   </div>
 
 </nav>
@@ -1638,11 +1638,10 @@ footer{background:#111;padding:56px 32px 28px}
           </div>
         </div>
       </div>
-      </div>
     </div>
   </div>
 
-    <!-- HOW IT WORKS -->
+  <!-- HOW IT WORKS -->
   <div style="max-width:1300px;margin:0 auto;padding:64px 32px">
     <div style="text-align:center;margin-bottom:48px">
       <div style="font-size:12px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">The Process</div>
@@ -6355,28 +6354,28 @@ async function loadHomepageImages(){
   // Fetch products and find best color match
   async function load(imgId, category, brand, hints, limit){
     try {
-      let url = SERVER + '/catalog/products?limit=' + (limit||20);
-      if(category) url += '&category=' + encodeURIComponent(category);
-      if(brand)    url += '&brand='    + encodeURIComponent(brand);
-      const data = await (await fetch(url)).json();
+      const params = new URLSearchParams({limit: limit || 20});
+      if(category) params.set('category', category);
+      if(brand)    params.set('brand', brand);
+      const data = await (await fetch(SERVER + '/catalog/products?' + params)).json();
       const products = data.products || [];
       for(const p of products){
         const img = pickImg(p, hints);
         if(img){ showImg(imgId, img); return; }
       }
-      // Last resort: just show anything from the first product
-      if(products[0]){
+      // fallback: first product any color
+      if(products.length){
         const img = pickImg(products[0], []);
         if(img) showImg(imgId, img);
       }
-    } catch(e){ console.warn('loadHomepageImages:', imgId, e.message); }
+    } catch(e){ console.warn('img load failed:', imgId, e.message); }
   }
 
   // ── Category grid (vibrant distinct colors) ──────────────
-  load('catimg-tshirt',    'T-Shirts - Core',        'Gildan', ['red','cardinal','cherry','scarlet','crimson'], 30);
-  load('catimg-longsleeve','T-Shirts - Long Sleeve',  '',      ['kelly','forest','bright green','green'], 20);
-  load('catimg-hoodie',    'Fleece - Core - Hood',    'Gildan', ['purple','violet','plum','berry','iris'], 30);
-  load('catimg-jacket',    'Outerwear',               '',      ['orange','navy','black','charcoal'], 20);
+  load('catimg-tshirt',    'T-Shirts',          'Gildan', ['red','cardinal','cherry','scarlet','crimson'], 30);
+  load('catimg-longsleeve','T-Shirts - Long Sleeve', '', ['kelly','bright green','forest','green','lime'], 30);
+  load('catimg-hoodie',    'Fleece',            'Gildan', ['purple','violet','plum','berry','iris'], 30);
+  load('catimg-jacket',    'Outerwear',         '',      ['navy','dark navy','black','charcoal','iron'], 30);
 
   // ── Hero floating cards ───────────────────────────────────
   load('hcard-img-1', 'Fleece - Core - Hood',   'Gildan', ['black','dark charcoal','charcoal'], 30);
