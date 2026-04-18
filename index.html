@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v20.7 -->
+<!-- v21.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -771,6 +771,24 @@ footer{background:#111;padding:56px 32px 28px}
   .product-modal-cats{flex-direction:row;gap:6px;white-space:nowrap}
   .product-modal-grid-wrap{padding:12px;flex:1;overflow-y:auto;max-height:none}
   .product-modal-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+}
+
+/* Cart drawer — slide-out from right */
+.cart-drawer{position:fixed;inset:0;z-index:10001;display:flex;align-items:stretch;justify-content:flex-end}
+.cart-drawer-backdrop{flex:1;background:rgba(0,0,0,.3);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.cart-drawer-panel{width:420px;max-width:100%;background:#fff;display:flex;flex-direction:column;height:100%;box-shadow:-8px 0 40px rgba(0,0,0,.15);animation:slideInRight .25s ease}
+@keyframes slideInRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.cart-drawer-hdr{padding:16px 20px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cart-drawer-body{flex:1;overflow-y:auto;padding:0}
+.cart-drawer-footer{padding:16px 20px;border-top:1px solid #f0f0f0;flex-shrink:0;background:#fff}
+.cart-item{display:grid;grid-template-columns:80px 1fr;gap:12px;padding:16px 20px;border-bottom:1px solid #f5f5f5}
+.cart-item-img{width:80px;height:80px;background:#f5f7fa;border-radius:8px;object-fit:contain}
+.cart-item-name{font-size:14px;font-weight:700;color:#222;margin-bottom:2px}
+.cart-item-detail{font-size:13px;color:#888;margin-bottom:4px}
+.cart-item-price{font-size:15px;font-weight:700;color:#222}
+.cart-item-remove{font-size:12px;color:#dc2626;cursor:pointer;background:none;border:none;font-weight:600;padding:0;margin-top:4px}
+@media(max-width:768px){
+  .cart-drawer-panel{width:100%}
 }
 
 /* Social proof toast — bottom left */
@@ -1686,7 +1704,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.7</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v21.0</span>
   </div>
 
 </nav>
@@ -2325,6 +2343,58 @@ footer{background:#111;padding:56px 32px 28px}
 
 </div>
 
+<!-- ── Cart Drawer (slide-out from right) ── -->
+<div id="cart-drawer" class="cart-drawer" style="display:none">
+  <div class="cart-drawer-backdrop" onclick="closeCartDrawer()"></div>
+  <div class="cart-drawer-panel">
+    <div class="cart-drawer-hdr">
+      <span style="font-size:18px;font-weight:700;color:#222">Your Cart</span>
+      <button onclick="closeCartDrawer()" style="background:none;border:none;font-size:22px;color:#555;cursor:pointer;padding:4px">×</button>
+    </div>
+    <div class="cart-drawer-body" id="cart-drawer-body">
+      <div style="text-align:center;padding:48px 20px;color:#888">
+        <div style="font-size:40px;margin-bottom:12px">🛒</div>
+        <div style="font-size:16px;font-weight:600">Your cart is empty</div>
+        <div style="font-size:14px;margin-top:6px">Design something amazing and add it here</div>
+      </div>
+    </div>
+    <!-- Free shipping progress bar -->
+    <div id="cart-shipping-bar" style="display:none;padding:12px 20px;background:#f0fdf4;border-top:1px solid #d1fae5">
+      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:6px">
+        <span id="cart-ship-msg" style="color:#16a34a">Free shipping on orders over $100!</span>
+        <span id="cart-ship-amt" style="color:#16a34a"></span>
+      </div>
+      <div style="height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden">
+        <div id="cart-ship-fill" style="height:100%;background:#16a34a;border-radius:3px;width:0%;transition:width .4s"></div>
+      </div>
+    </div>
+    <!-- Volume discount nudge -->
+    <div id="cart-volume-nudge" style="display:none;padding:10px 20px;background:#f0f7ff;border-top:1px solid #d0e3f7;font-size:13px;color:#0071ce;font-weight:600">
+      <span id="cart-volume-msg"></span>
+    </div>
+    <div class="cart-drawer-footer">
+      <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;color:#222;margin-bottom:12px">
+        <span>Subtotal</span>
+        <span id="cart-drawer-total">$0.00</span>
+      </div>
+      <button onclick="goToShopifyCheckout()" style="width:100%;height:48px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+        Checkout →
+      </button>
+      <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;flex-wrap:wrap">
+        <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">VISA</span>
+        <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">MC</span>
+        <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">AMEX</span>
+        <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">PayPal</span>
+        <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">Apple Pay</span>
+      </div>
+      <div style="text-align:center;margin-top:8px;font-size:12px;color:#16a34a;font-weight:600">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Secure checkout · Satisfaction guaranteed
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── Product Picker Modal ── -->
 <div id="product-modal" class="product-modal-overlay" style="display:none">
   <div class="product-modal-inner">
@@ -2391,7 +2461,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.7</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v21.0</span>
   </div>
 
   <div class="studio-body">
@@ -2665,7 +2735,21 @@ footer{background:#111;padding:56px 32px 28px}
 
           <!-- ── SCREEN 1: Generate ── -->
           <div id="ai-screen-1" style="padding:14px 16px">
-            <p style="font-size:13px;color:#888;line-height:1.5;margin-bottom:12px">Use our AI image generator to create stunning logos and designs. Short or long prompts, just try it.</p>
+            <!-- Design Templates -->
+            <div style="margin-bottom:16px">
+              <div style="font-size:12px;font-weight:700;color:#939393;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Start from a template</div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px" id="ai-templates">
+                <button onclick="setP('bold sports team logo with flames and a shield')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🏀<br>Sports</button>
+                <button onclick="setP('professional corporate logo, clean minimal design')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">💼<br>Business</button>
+                <button onclick="setP('fun party event celebration design with confetti')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎉<br>Events</button>
+                <button onclick="setP('cool music band rock and roll graphic design')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎵<br>Music</button>
+                <button onclick="setP('majestic animal illustration, detailed and colorful')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🦁<br>Animals</button>
+                <button onclick="setP('abstract geometric art, modern colorful shapes')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎨<br>Abstract</button>
+                <button onclick="setP('vintage retro distressed badge with banner ribbon')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">📜<br>Vintage</button>
+                <button onclick="setP('funny humorous cartoon meme style illustration')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">😂<br>Funny</button>
+              </div>
+            </div>
+            <p style="font-size:14px;color:#888;line-height:1.5;margin-bottom:12px">Or describe your own design — AI generates it instantly.</p>
             <textarea class="ai-ta" id="ai-prompt" placeholder="e.g. neon wolf howling at the moon, cyberpunk style..." style="margin-bottom:8px"></textarea>
             <!-- Prompt history -->
             <div id="ai-prev-prompts" style="margin-bottom:10px;display:flex;flex-wrap:wrap;gap:5px"></div>
@@ -7602,6 +7686,96 @@ function mebToggleRmbg(id){
   }
 }
 
+// ════════════════════════════════════
+// CART DRAWER
+// ════════════════════════════════════
+function openCartDrawer(){
+  var d = document.getElementById('cart-drawer');
+  if(d) d.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  renderCartItems();
+}
+function closeCartDrawer(){
+  var d = document.getElementById('cart-drawer');
+  if(d) d.style.display = 'none';
+  document.body.style.overflow = '';
+}
+function renderCartItems(){
+  var body = document.getElementById('cart-drawer-body');
+  var total = document.getElementById('cart-drawer-total');
+  var shipBar = document.getElementById('cart-shipping-bar');
+  var shipMsg = document.getElementById('cart-ship-msg');
+  var shipAmt = document.getElementById('cart-ship-amt');
+  var shipFill = document.getElementById('cart-ship-fill');
+  var volNudge = document.getElementById('cart-volume-nudge');
+  var volMsg = document.getElementById('cart-volume-msg');
+  if(!body) return;
+
+  var units = orderState?.totalUnits || 0;
+  var grand = orderState?.grand || 0;
+
+  if(units === 0){
+    body.innerHTML = '<div style="text-align:center;padding:48px 20px;color:#888"><div style="font-size:40px;margin-bottom:12px">🛒</div><div style="font-size:16px;font-weight:600">Your cart is empty</div><div style="font-size:14px;margin-top:6px">Design something amazing and add it here</div></div>';
+    if(shipBar) shipBar.style.display = 'none';
+    if(volNudge) volNudge.style.display = 'none';
+    if(total) total.textContent = '$0.00';
+    return;
+  }
+
+  // Build cart items
+  var html = '';
+  var product = sState.product;
+  var color = sState.color;
+  var shirtImg = color?.front || product?.image || '';
+  html += '<div class="cart-item">';
+  html += '<img class="cart-item-img" src="'+shirtImg+'" onerror="this.style.display=\'none\'">';
+  html += '<div>';
+  html += '<div class="cart-item-name">'+(product?.name||'Custom Garment')+'</div>';
+  html += '<div class="cart-item-detail">'+(color?.n||'')+(sState.hasDesign?' · Custom Design':'')+'</div>';
+  html += '<div class="cart-item-detail">'+units+' items</div>';
+  html += '<div class="cart-item-price">$'+grand.toFixed(2)+'</div>';
+  html += '</div></div>';
+
+  body.innerHTML = html;
+  if(total) total.textContent = '$'+grand.toFixed(2);
+
+  // Free shipping progress bar
+  var FREE_SHIP_THRESHOLD = 100;
+  if(shipBar && shipFill){
+    shipBar.style.display = 'block';
+    var pct = Math.min(100, (grand/FREE_SHIP_THRESHOLD)*100);
+    shipFill.style.width = pct+'%';
+    if(grand >= FREE_SHIP_THRESHOLD){
+      if(shipMsg) shipMsg.textContent = 'You qualify for FREE shipping!';
+      if(shipAmt) shipAmt.textContent = '';
+      shipFill.style.background = '#16a34a';
+    } else {
+      var remaining = (FREE_SHIP_THRESHOLD - grand).toFixed(2);
+      if(shipMsg) shipMsg.textContent = 'Add $'+remaining+' for FREE shipping';
+      if(shipAmt) shipAmt.textContent = '$'+grand.toFixed(2)+' / $'+FREE_SHIP_THRESHOLD;
+    }
+  }
+
+  // Volume discount nudge
+  if(volNudge && volMsg){
+    if(units < 6){
+      volNudge.style.display = 'block';
+      volMsg.textContent = 'Add '+(6-units)+' more for 3% bulk discount!';
+    } else if(units < 12){
+      volNudge.style.display = 'block';
+      volMsg.textContent = 'Add '+(12-units)+' more for 7% bulk discount! Currently saving 3%.';
+    } else if(units < 24){
+      volNudge.style.display = 'block';
+      volMsg.textContent = 'Add '+(24-units)+' more for 10% bulk discount! Currently saving 7%.';
+    } else {
+      volNudge.style.display = 'block';
+      volMsg.innerHTML = '🎉 Max bulk discount applied — saving 10%!';
+      volNudge.style.background = '#f0fdf4';
+      volNudge.style.color = '#16a34a';
+    }
+  }
+}
+
 function ensureLayersVisible(){
   var cv = sView || 'front';
   document.querySelectorAll("[data-type='image'][data-side='"+cv+"'],[data-type='text'][data-side='"+cv+"']").forEach(function(el){
@@ -8511,10 +8685,14 @@ function closeReviewPanel(){
 }
 
 function proceedToCheckout(){
-  // No login wall — go straight to checkout, offer account creation post-purchase
+  // Open cart drawer first — show items, upsells, trust signals before Shopify handoff
   closeReviewPanel();
+  openCartDrawer();
+}
+function goToShopifyCheckout(){
+  closeCartDrawer();
   showSaveDesignPrompt(function(){
-    sNtf('Redirecting to checkout...');
+    sNtf('Redirecting to secure checkout...');
     setTimeout(function(){ window.location.href='https://hunto-5642.myshopify.com/checkout'; }, 600);
   });
 }
