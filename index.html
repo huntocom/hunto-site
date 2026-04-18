@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v20.5 -->
+<!-- v20.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -22,6 +22,7 @@ body{
 }
 .page{display:none}
 .page.active{display:block}
+#page-studio.active{display:flex;flex-direction:column;overflow:hidden;height:100vh;height:100dvh}
 button{font-family:'DM Sans',sans-serif;cursor:pointer}
 input,textarea,select{font-family:'DM Sans',sans-serif}
 
@@ -438,7 +439,7 @@ footer{background:#111;padding:56px 32px 28px}
 /* ══════════════════════════════════════════
    STUDIO PAGE
 ══════════════════════════════════════════ */
-.studio-page{display:flex;flex-direction:column;height:calc(100vh - 110px);height:calc(100dvh - 110px);overflow:hidden;max-height:calc(100vh - 110px);max-height:calc(100dvh - 110px)}
+.studio-page{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
 
 /* Studio top bar — product tray style */
 .studio-topbar{
@@ -1684,7 +1685,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.5</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.6</span>
   </div>
 
 </nav>
@@ -2389,7 +2390,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.5</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.6</span>
   </div>
 
   <div class="studio-body">
@@ -3748,6 +3749,9 @@ function showPage(id){
   // Hide "Start Designing" button in header when in studio (all sizes)
   var designBtn = document.querySelector('.hdr-design-btn');
   if(designBtn) designBtn.style.display = isStudio ? 'none' : '';
+  // Lock body scroll when in studio — no page scrolling at all
+  document.body.style.overflow = isStudio ? 'hidden' : '';
+  document.documentElement.style.overflow = isStudio ? 'hidden' : '';
 }
 function goHome(){showPage("home")}
 async function goPDP(id){
