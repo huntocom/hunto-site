@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v20.3 -->
+<!-- v20.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -992,6 +992,10 @@ footer{background:#111;padding:56px 32px 28px}
   /* Show cart icon on mobile */
   .hdr-action.cart-action{display:flex !important}
 
+  /* Trust bar — 2x2 on mobile */
+  #hp-trust-bar{grid-template-columns:1fr 1fr !important;gap:12px !important}
+  #hp-trust-bar span{font-size:11px !important}
+
   /* ═══════════════════════════════════════
      MOBILE SEARCH BAR — full width strip
   ═══════════════════════════════════════ */
@@ -1680,7 +1684,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.4</span>
   </div>
 
 </nav>
@@ -1722,7 +1726,7 @@ footer{background:#111;padding:56px 32px 28px}
           <span style="color:#0071ce;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">✦ AI-Powered Custom Printing</span>
         </div>
         <h1 style="font-size:clamp(36px,5vw,64px);font-weight:700;color:#fff;letter-spacing:-2px;line-height:1.05;margin-bottom:20px;font-family:'Space Grotesk',sans-serif">Custom Apparel<br>on <em style="color:#0071ce;font-style:normal">Any Deadline</em></h1>
-        <p style="font-size:17px;color:rgba(255,255,255,.7);margin-bottom:32px;line-height:1.7;max-width:480px">Design t-shirts, hoodies, and apparel with AI-generated art. In-house DTF printing. No minimums. Ships in 48 hours.</p>
+        <p style="font-size:17px;color:rgba(255,255,255,.7);margin-bottom:32px;line-height:1.7;max-width:480px">Design t-shirts, hoodies, and apparel with AI-generated art. Premium in-house printing. No minimums. Ships in 48 hours.</p>
         
 
 
@@ -1803,18 +1807,40 @@ footer{background:#111;padding:56px 32px 28px}
   <!-- MARQUEE -->
   <div class="marquee-wrap">
     <div class="marquee-track">
-      <span class="mqi">AI Generated Art</span><span class="mqi mqs">—</span>
-      <span class="mqi">DTF Printed In-House</span><span class="mqi mqs">—</span>
+      <span class="mqi">AI-Powered Design Studio</span><span class="mqi mqs">—</span>
+      <span class="mqi">Printed In-House</span><span class="mqi mqs">—</span>
       <span class="mqi">No Minimums</span><span class="mqi mqs">—</span>
       <span class="mqi">Ships in 48 Hours</span><span class="mqi mqs">—</span>
       <span class="mqi">Free Shipping</span><span class="mqi mqs">—</span>
-      <span class="mqi">1.3M Community</span><span class="mqi mqs">—</span>
-      <span class="mqi">AI Generated Art</span><span class="mqi mqs">—</span>
-      <span class="mqi">DTF Printed In-House</span><span class="mqi mqs">—</span>
+      <span class="mqi">Satisfaction Guaranteed</span><span class="mqi mqs">—</span>
+      <span class="mqi">AI-Powered Design Studio</span><span class="mqi mqs">—</span>
+      <span class="mqi">Printed In-House</span><span class="mqi mqs">—</span>
       <span class="mqi">No Minimums</span><span class="mqi mqs">—</span>
       <span class="mqi">Ships in 48 Hours</span><span class="mqi mqs">—</span>
       <span class="mqi">Free Shipping</span><span class="mqi mqs">—</span>
-      <span class="mqi">1.3M Community</span><span class="mqi mqs">—</span>
+      <span class="mqi">Satisfaction Guaranteed</span><span class="mqi mqs">—</span>
+    </div>
+  </div>
+
+  <!-- TRUST BAR — like CustomInk's 4-value bar -->
+  <div style="background:#fff;padding:20px 32px;border-bottom:1px solid #f0f0f0">
+    <div style="max-width:1300px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center" id="hp-trust-bar">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071ce" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+        <span style="font-size:13px;font-weight:700;color:#222">Satisfaction Guaranteed</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071ce" stroke-width="2"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z"/></svg>
+        <span style="font-size:13px;font-weight:700;color:#222">AI Design Tools</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071ce" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span style="font-size:13px;font-weight:700;color:#222">Free Standard Shipping</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071ce" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span style="font-size:13px;font-weight:700;color:#222">48-Hour Production</span>
+      </div>
     </div>
   </div>
 
@@ -1918,7 +1944,7 @@ footer{background:#111;padding:56px 32px 28px}
         <div style="width:52px;height:52px;background:#0071ce;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">🖨️</div>
         <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 03</div>
         <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">We print it</div>
-        <p style="font-size:13px;color:#888;line-height:1.6">In-house DTF printing delivers vibrant, long-lasting results on any garment.</p>
+        <p style="font-size:13px;color:#888;line-height:1.6">Premium in-house printing delivers vibrant, long-lasting results on any garment.</p>
       </div>
       <div style="text-align:center;padding:32px 24px;background:#f5f7fa;border-radius:20px;border:1.5px solid #e8e8e8">
         <div style="width:52px;height:52px;background:#0071ce;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">📦</div>
@@ -2047,7 +2073,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div class="footer-grid">
         <div>
           <div class="footer-logo">hunt<em>o</em></div>
-          <p class="footer-tagline">Real Gildan blanks, AI-generated designs, in-house DTF printing. No minimums. Ships in 48 hours.</p>
+          <p class="footer-tagline">Real Gildan blanks, AI-generated designs, premium in-house printing. No minimums. Ships in 48 hours.</p>
         </div>
         <div>
           <div class="footer-col-title">Garments</div>
@@ -2248,7 +2274,7 @@ footer{background:#111;padding:56px 32px 28px}
       <!-- Trust badges -->
       <div class="pdp-trust">
         <div class="pdp-trust-item"><span class="pdp-check">✓</span> No minimums</div>
-        <div class="pdp-trust-item"><span class="pdp-check">✓</span> In-house DTF</div>
+        <div class="pdp-trust-item"><span class="pdp-check">✓</span> Printed in-house</div>
         <div class="pdp-trust-item"><span class="pdp-check">✓</span> Ships in 48hrs</div>
         <div class="pdp-trust-item"><span class="pdp-check">✓</span> Free shipping</div>
         <div class="pdp-trust-item"><span class="pdp-check">✓</span> Keith's edit +$20</div>
@@ -2363,7 +2389,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.3</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.4</span>
   </div>
 
   <div class="studio-body">
@@ -2745,7 +2771,7 @@ footer{background:#111;padding:56px 32px 28px}
             <!-- Keith upsell -->
             <div style="margin:0 16px 16px;padding:12px;background:#f0f7ff;border-radius:10px;border:1px solid #e9d5ff">
               <div style="font-size:12px;font-weight:700;color:#0071ce;margin-bottom:4px">✏ Keith's Designer Edit — +$20</div>
-              <div style="font-size:12px;color:#888;line-height:1.5;margin-bottom:8px">Our in-house designer optimizes your art for perfect DTF printing.</div>
+              <div style="font-size:12px;color:#888;line-height:1.5;margin-bottom:8px">Our in-house designer optimizes your art for perfect printing.</div>
               <button id="keith-ai-btn" onclick="toggleKeith()" style="width:100%;padding:8px;border:1.5px solid #0071ce;border-radius:8px;background:#fff;color:#0071ce;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">+ Add Keith's Edit</button>
             </div>
           </div>
@@ -3200,7 +3226,7 @@ footer{background:#111;padding:56px 32px 28px}
             <div style="font-size:40px;margin-bottom:10px">✏</div>
             <div style="font-size:19px;font-weight:800;color:#111;margin-bottom:6px">Keith's Designer Edit</div>
             <div style="font-size:22px;font-weight:900;color:#0071ce;margin-bottom:10px">+$20</div>
-            <div style="font-size:13px;color:#888;line-height:1.65;margin-bottom:16px">Our in-house designer reviews your artwork, fixes resolution, optimizes colors for DTF printing, and perfects placement.</div>
+            <div style="font-size:13px;color:#888;line-height:1.65;margin-bottom:16px">Our in-house designer reviews your artwork, fixes resolution, optimizes colors for printing, and perfects placement.</div>
             <button class="keith-toggle" id="keith-main-btn" onclick="toggleKeith()">+ Add Keith's Edit<div class="keith-sub">Perfect for complex designs and uploads</div></button>
           </div>
         </div>
