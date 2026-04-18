@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v22.0 -->
+<!-- v22.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1012,6 +1012,8 @@ footer{background:#111;padding:56px 32px 28px}
   /* Show cart icon on mobile */
   .hdr-action.cart-action{display:flex !important}
 
+  /* Preview grid stacks on mobile */
+  #preview-grid{grid-template-columns:1fr !important;gap:12px !important}
   /* Trust bar — 2x2 on mobile */
   #hp-trust-bar{grid-template-columns:1fr 1fr !important;gap:12px !important}
   #hp-trust-bar span{font-size:11px !important}
@@ -1705,7 +1707,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v22.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v22.1</span>
   </div>
 
 </nav>
@@ -2461,22 +2463,34 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 </div>
 
-<!-- ── Preview on Model Modal ── -->
-<div id="model-preview-modal" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:16px">
-  <div style="max-width:500px;width:100%;text-align:center">
+<!-- ── Preview Modal — Front & Back ── -->
+<div id="model-preview-modal" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:16px">
+  <div style="max-width:700px;width:100%;text-align:center">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <span style="font-size:18px;font-weight:700;color:#fff">Preview on Model</span>
-      <button onclick="document.getElementById('model-preview-modal').style.display='none'" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer">×</button>
+      <span style="font-size:20px;font-weight:700;color:#fff">Design Preview</span>
+      <button onclick="document.getElementById('model-preview-modal').style.display='none'" style="background:none;border:none;color:#fff;font-size:28px;cursor:pointer;padding:4px">×</button>
     </div>
-    <div id="model-preview-canvas" style="position:relative;background:#222;border-radius:12px;overflow:hidden;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center">
-      <img id="model-preview-shirt" style="width:100%;height:100%;object-fit:contain">
-      <div id="model-preview-design" style="position:absolute;top:28%;left:32%;width:36%;pointer-events:none">
-        <img id="model-preview-design-img" style="width:100%;height:auto;object-fit:contain">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" id="preview-grid">
+      <!-- Front -->
+      <div style="background:#fff;border-radius:12px;overflow:hidden;padding:16px">
+        <div style="font-size:14px;font-weight:700;color:#222;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Front</div>
+        <div style="position:relative;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center">
+          <img id="preview-front-shirt" style="width:100%;height:100%;object-fit:contain">
+          <div id="preview-front-designs" style="position:absolute;inset:0;pointer-events:none"></div>
+        </div>
+      </div>
+      <!-- Back -->
+      <div style="background:#fff;border-radius:12px;overflow:hidden;padding:16px">
+        <div style="font-size:14px;font-weight:700;color:#222;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Back</div>
+        <div style="position:relative;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center">
+          <img id="preview-back-shirt" style="width:100%;height:100%;object-fit:contain">
+          <div id="preview-back-designs" style="position:absolute;inset:0;pointer-events:none"></div>
+        </div>
       </div>
     </div>
     <div style="display:flex;gap:8px;margin-top:16px;justify-content:center">
-      <button onclick="shareModelPreview()" style="height:44px;padding:0 24px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Share Preview</button>
-      <button onclick="document.getElementById('model-preview-modal').style.display='none'" style="height:44px;padding:0 24px;background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Close</button>
+      <button onclick="shareModelPreview()" style="height:48px;padding:0 28px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Share Design</button>
+      <button onclick="document.getElementById('model-preview-modal').style.display='none'" style="height:48px;padding:0 28px;background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Close</button>
     </div>
   </div>
 </div>
@@ -2547,7 +2561,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v22.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v22.1</span>
   </div>
 
   <div class="studio-body">
@@ -2821,21 +2835,7 @@ footer{background:#111;padding:56px 32px 28px}
 
           <!-- ── SCREEN 1: Generate ── -->
           <div id="ai-screen-1" style="padding:14px 16px">
-            <!-- Design Templates -->
-            <div style="margin-bottom:16px">
-              <div style="font-size:12px;font-weight:700;color:#939393;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Start from a template</div>
-              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px" id="ai-templates">
-                <button onclick="setTemplate('bold sports team logo with flames and a shield')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🏀<br>Sports</button>
-                <button onclick="setTemplate('professional corporate logo, clean minimal design')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">💼<br>Business</button>
-                <button onclick="setTemplate('fun party event celebration design with confetti')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎉<br>Events</button>
-                <button onclick="setTemplate('cool music band rock and roll graphic design')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎵<br>Music</button>
-                <button onclick="setTemplate('majestic animal illustration, detailed and colorful')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🦁<br>Animals</button>
-                <button onclick="setTemplate('abstract geometric art, modern colorful shapes')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎨<br>Abstract</button>
-                <button onclick="setTemplate('vintage retro distressed badge with banner ribbon')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">📜<br>Vintage</button>
-                <button onclick="setTemplate('funny humorous cartoon meme style illustration')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">😂<br>Funny</button>
-              </div>
-            </div>
-            <p style="font-size:14px;color:#888;line-height:1.5;margin-bottom:12px">Or describe your own design — AI generates it instantly.</p>
+            <p style="font-size:14px;color:#888;line-height:1.5;margin-bottom:12px">Describe your design and our AI generates it instantly.</p>
             <textarea class="ai-ta" id="ai-prompt" placeholder="e.g. neon wolf howling at the moon, cyberpunk style..." style="margin-bottom:8px"></textarea>
             <!-- Prompt history -->
             <div id="ai-prev-prompts" style="margin-bottom:10px;display:flex;flex-wrap:wrap;gap:5px"></div>
@@ -9288,30 +9288,55 @@ function openModelPreview(){
   if(!modal) return;
   modal.style.display = 'flex';
 
-  // Get current shirt image
-  var shirtImg = document.getElementById('s-shirt');
-  var previewShirt = document.getElementById('model-preview-shirt');
-  if(shirtImg && previewShirt) previewShirt.src = shirtImg.src;
-
-  // Get first design layer
-  var designImg = document.getElementById('model-preview-design-img');
+  var color = sState.color || {};
+  var product = sState.product || {};
   var wrap = document.getElementById('s-shirt-wrap');
-  if(wrap && designImg){
-    var firstImg = wrap.querySelector('[data-type="image"] img');
-    var firstTxt = wrap.querySelector('[data-type="text"]');
-    if(firstImg) designImg.src = firstImg.src;
-    else if(firstTxt){
-      // Convert text to image via canvas
-      var c = document.createElement('canvas');
-      c.width = 400; c.height = 200;
-      var ctx = c.getContext('2d');
-      ctx.font = (firstTxt.style.fontSize||'36px')+' '+(firstTxt.style.fontFamily||'DM Sans');
-      ctx.fillStyle = firstTxt.style.color||'#000';
-      ctx.textAlign = 'center';
-      ctx.fillText(firstTxt.textContent, 200, 120);
-      designImg.src = c.toDataURL();
+
+  // Get front and back shirt images
+  var frontImg = color.front || product.image || getShirtPhotoUrl(product.id, color.n||'', 'front') || '';
+  var backImg = color.back || color.front || getShirtPhotoUrl(product.id, color.n||'', 'back') || frontImg;
+
+  var pf = document.getElementById('preview-front-shirt');
+  var pb = document.getElementById('preview-back-shirt');
+  if(pf) pf.src = frontImg;
+  if(pb) pb.src = backImg;
+
+  // Render designs on correct sides
+  var frontContainer = document.getElementById('preview-front-designs');
+  var backContainer = document.getElementById('preview-back-designs');
+  if(frontContainer) frontContainer.innerHTML = '';
+  if(backContainer) backContainer.innerHTML = '';
+
+  if(!wrap) return;
+
+  // Get all design layers and sort by side
+  wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
+    var side = el.dataset.side || 'front';
+    var container = side === 'back' ? backContainer : frontContainer;
+    if(!container) return;
+
+    // Calculate position as percentage of wrap
+    var wrapW = wrap.offsetWidth || 420;
+    var wrapH = wrap.offsetHeight || 600;
+    var left = (parseFloat(el.style.left) || 0) / wrapW * 100;
+    var top = (parseFloat(el.style.top) || 0) / wrapH * 100;
+    var width = (el.offsetWidth || 100) / wrapW * 100;
+
+    if(el.dataset.type === 'image'){
+      var img = el.querySelector('img');
+      if(img && img.src){
+        var div = document.createElement('div');
+        div.style.cssText = 'position:absolute;left:'+left+'%;top:'+top+'%;width:'+width+'%;';
+        div.innerHTML = '<img src="'+img.src+'" style="width:100%;height:auto;object-fit:contain;display:block">';
+        container.appendChild(div);
+      }
+    } else if(el.dataset.type === 'text'){
+      var div = document.createElement('div');
+      div.style.cssText = 'position:absolute;left:'+left+'%;top:'+top+'%;font-size:'+((parseFloat(el.style.fontSize)||24)*0.5)+'px;font-weight:'+(el.style.fontWeight||'700')+';color:'+(el.style.color||'#000')+';font-family:'+(el.style.fontFamily||'DM Sans')+';white-space:nowrap;';
+      div.textContent = el.textContent;
+      container.appendChild(div);
     }
-  }
+  });
 }
 
 function shareModelPreview(){
