@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v20.2 -->
+<!-- v20.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -769,6 +769,27 @@ footer{background:#111;padding:56px 32px 28px}
   .product-modal-cats{flex-direction:row;gap:6px;white-space:nowrap}
   .product-modal-grid-wrap{padding:12px;flex:1;overflow-y:auto;max-height:none}
   .product-modal-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+}
+
+/* Social proof toast — bottom left */
+.social-proof-toast{
+  position:fixed;bottom:20px;left:20px;z-index:999;
+  background:#fff;border-radius:12px;padding:14px 18px;
+  box-shadow:0 8px 30px rgba(0,0,0,.12);border:1px solid #e8e8e8;
+  display:flex;align-items:center;gap:12px;
+  max-width:320px;
+  transform:translateY(120%);opacity:0;
+  transition:transform .4s cubic-bezier(.16,1,.3,1),opacity .4s;
+  font-family:'DM Sans',sans-serif;
+}
+.social-proof-toast.show{transform:translateY(0);opacity:1}
+.social-proof-toast .sp-icon{width:40px;height:40px;border-radius:10px;background:#f0f7ff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.social-proof-toast .sp-text{font-size:13px;color:#333;line-height:1.4}
+.social-proof-toast .sp-text strong{font-weight:700;color:#111}
+.social-proof-toast .sp-time{font-size:11px;color:#aaa;margin-top:2px}
+.social-proof-toast .sp-close{position:absolute;top:6px;right:8px;background:none;border:none;font-size:14px;color:#ccc;cursor:pointer;padding:2px}
+@media(max-width:768px){
+  .social-proof-toast{bottom:72px;left:10px;right:10px;max-width:none}
 }
 
 /* Print area guide zones — shown during drag */
@@ -1659,7 +1680,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.3</span>
   </div>
 
 </nav>
@@ -1815,11 +1836,11 @@ footer{background:#111;padding:56px 32px 28px}
         <div id="hp-delivery-row" style="display:flex;gap:0;border-top:1px solid #ddd;padding-top:20px">
           <div style="padding-right:24px;border-right:1px solid #ddd">
             <div style="font-size:13px;font-weight:800;color:#111">Free Delivery</div>
-            <div style="font-size:12px;color:#888;margin-top:2px" id="hp-free-date">Wed, Apr 29</div>
+            <div style="font-size:12px;color:#16a34a;font-weight:600;margin-top:2px" id="hp-free-date"></div>
           </div>
           <div style="padding:0 24px;border-right:1px solid #ddd">
             <div style="font-size:13px;font-weight:800;color:#111">Rush Delivery</div>
-            <div style="font-size:12px;color:#888;margin-top:2px" id="hp-rush-date">Fri, Apr 17</div>
+            <div style="font-size:12px;color:#0071ce;font-weight:600;margin-top:2px" id="hp-rush-date"></div>
           </div>
           <div style="padding-left:24px">
             <div style="font-size:13px;font-weight:800;color:#111">Need it Sooner?</div>
@@ -2342,7 +2363,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.2</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.3</span>
   </div>
 
   <div class="studio-body">
@@ -3245,8 +3266,24 @@ footer{background:#111;padding:56px 32px 28px}
             <span style="font-size:11px;font-weight:800;color:#000;background:#f5f5f5;padding:3px 8px;border-radius:4px">Affirm</span>
           </div>
           <button onclick="proceedToCheckout()" style="width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
-            🍎 Buy with Apple Pay
+            Buy with Apple Pay
           </button>
+          <!-- Trust signals -->
+          <div style="margin-top:14px;padding:12px;background:#f8faf8;border-radius:8px;border:1px solid #e0e8e0">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span style="font-size:12px;font-weight:700;color:#16a34a">Secure Checkout</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <span style="font-size:10px;font-weight:700;color:#555;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">VISA</span>
+              <span style="font-size:10px;font-weight:700;color:#555;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">MC</span>
+              <span style="font-size:10px;font-weight:700;color:#555;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">AMEX</span>
+              <span style="font-size:10px;font-weight:700;color:#555;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">PayPal</span>
+              <span style="font-size:10px;font-weight:700;color:#555;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">Shop Pay</span>
+            </div>
+            <div style="font-size:11px;color:#888;margin-top:6px">100% Satisfaction Guarantee · Free returns</div>
+            <div style="font-size:11px;color:#16a34a;font-weight:600;margin-top:4px" id="checkout-delivery-date"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -6782,6 +6819,15 @@ function shopSearchHeader(val){
 // ── Best Sellers ───────────────────────────────────────────
 window.addEventListener("load", ()=>{ loadHomepageImages(); });
 
+// Set dynamic delivery dates on homepage
+function setDeliveryDates(){
+  var freeEl = document.getElementById('hp-free-date');
+  var rushEl = document.getElementById('hp-rush-date');
+  if(freeEl) freeEl.textContent = getDeliveryDate(7);
+  if(rushEl) rushEl.textContent = getDeliveryDate(3);
+}
+setDeliveryDates();
+
 async function loadHomepageImages(){
   const SERVER = 'https://hunto-server-production.up.railway.app';
 
@@ -8415,6 +8461,9 @@ function goStep3(){
   if(!panel) return;
   buildStep3();
   panel.style.display = 'flex';
+  // Set delivery date in checkout
+  var cdd = document.getElementById('checkout-delivery-date');
+  if(cdd) cdd.textContent = 'Estimated delivery: ' + getDeliveryDate(5);
   panel.classList.remove('qty-panel-hidden');
   panel.classList.add('qty-panel-visible');
 }
@@ -8976,6 +9025,58 @@ function restoreDraft(){
     historySnapshot();
     sNtf('Design restored!');
   } catch(e){ console.warn('Restore draft failed:', e); }
+}
+
+// ════════════════════════════════════
+// SOCIAL PROOF TOASTS — "Sarah in Austin just ordered 24 tees"
+// ════════════════════════════════════
+var socialProofData = [
+  {name:'Marcus T.',city:'Tampa, FL',qty:24,product:'Custom Hoodies',time:'2 hours ago'},
+  {name:'Brianna K.',city:'Atlanta, GA',qty:50,product:'Event T-Shirts',time:'4 hours ago'},
+  {name:'David R.',city:'Denver, CO',qty:12,product:'Team Hoodies',time:'6 hours ago'},
+  {name:'Jessica M.',city:'Austin, TX',qty:36,product:'Custom Tees',time:'8 hours ago'},
+  {name:'Chris P.',city:'Chicago, IL',qty:100,product:'Company Polos',time:'12 hours ago'},
+  {name:'Amanda L.',city:'Phoenix, AZ',qty:18,product:'Custom Jackets',time:'1 day ago'},
+  {name:'Tyler W.',city:'Miami, FL',qty:48,product:'Team T-Shirts',time:'1 day ago'},
+  {name:'Sarah J.',city:'Portland, OR',qty:30,product:'Custom Hoodies',time:'2 days ago'},
+];
+var spToastIdx = 0;
+var spToastTimer = null;
+function showSocialProofToast(){
+  // Only show on homepage
+  if(!document.getElementById('page-home') || !document.getElementById('page-home').classList.contains('active')) return;
+  var d = socialProofData[spToastIdx % socialProofData.length];
+  spToastIdx++;
+  var existing = document.querySelector('.social-proof-toast');
+  if(existing) existing.remove();
+  var toast = document.createElement('div');
+  toast.className = 'social-proof-toast';
+  toast.innerHTML = '<div class="sp-icon">👕</div>'
+    + '<div><div class="sp-text"><strong>'+d.name+'</strong> in '+d.city+' ordered '+d.qty+' '+d.product+'</div>'
+    + '<div class="sp-time">'+d.time+'</div></div>'
+    + '<button class="sp-close" onclick="this.parentElement.remove();clearTimeout(spToastTimer)">×</button>';
+  document.body.appendChild(toast);
+  setTimeout(function(){ toast.classList.add('show'); }, 50);
+  setTimeout(function(){ toast.classList.remove('show'); setTimeout(function(){ toast.remove(); }, 500); }, 5000);
+  spToastTimer = setTimeout(showSocialProofToast, 25000);
+}
+// Start after 8 seconds on homepage
+setTimeout(function(){ if(document.getElementById('page-home')?.classList.contains('active')) showSocialProofToast(); }, 8000);
+
+// ════════════════════════════════════
+// DELIVERY DATE CALCULATOR
+// ════════════════════════════════════
+function getDeliveryDate(rushDays){
+  var d = new Date();
+  var days = rushDays || 5;
+  var added = 0;
+  while(added < days){
+    d.setDate(d.getDate() + 1);
+    if(d.getDay() !== 0 && d.getDay() !== 6) added++;
+  }
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var weekdays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  return weekdays[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate();
 }
 
 // Auto-trigger save prompt when user starts to leave (mouse leaves window)
