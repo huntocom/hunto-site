@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v22.4 -->
+<!-- v22.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1708,7 +1708,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v22.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v22.5</span>
   </div>
 
 </nav>
@@ -1779,43 +1779,45 @@ footer{background:#111;padding:56px 32px 28px}
           .hcard-badge{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.75));padding:24px 12px 12px;border-radius:0 0 20px 20px}
           .hcard-badge-name{font-size:14px;font-weight:800;color:#fff;letter-spacing:.02em}
           .hcard-badge-price{font-size:12px;color:rgba(255,255,255,.7);margin-top:2px}
-          .ydh{position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;z-index:2;background:rgba(0,0,0,.3);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.15)}
-          .ydh span{display:block;font-family:'DM Sans',sans-serif;font-weight:700;font-style:normal;color:rgba(255,255,255,.9);text-shadow:none;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;font-size:13px !important}
+          .ydh{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;z-index:2;width:40%;max-width:80px}
+          .ydh img{width:100%;height:auto;filter:brightness(10);opacity:.8}
+          .ydh span{display:none}
           .ydh-lg .ydh span{font-size:26px}
           .ydh-md .ydh span{font-size:21px}
           .ydh-sm .ydh span{font-size:17px}
           .catimg-wrap{position:relative;overflow:hidden}
-          .cat-ydh{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;z-index:2;background:rgba(0,0,0,.35);padding:8px 14px;border-radius:6px;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
-          .cat-ydh span{display:block;font-family:'DM Sans',sans-serif;font-weight:700;font-style:normal;color:#fff;font-size:12px;text-shadow:none;line-height:1.3;letter-spacing:.06em;text-transform:uppercase}
+          .cat-ydh{position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;z-index:2;width:35%;max-width:90px}
+          .cat-ydh img{width:100%;height:auto;opacity:.85;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
+          .cat-ydh span{display:none}
         </style>
 
         <!-- Card 1 - Large center-left, hoodie -->
         <div class="hcard" id="hcard-1" style="width:210px;height:240px;left:5%;top:20px;animation:float1 6s ease-in-out infinite;z-index:3;background:linear-gradient(135deg,#1a1a2e,#2d1b4e)">
-          <img id="hcard-img-1" src="" alt="Hoodie" style="width:100%;height:100%;object-fit:cover;display:none"><div class="ydh ydh-lg"><span>your art here</span></div>
+          <img id="hcard-img-1" src="" alt="Hoodie" style="width:100%;height:100%;object-fit:cover;display:none"><div class="ydh ydh-lg"><img src="ydh.png" alt="Your Design Here"></div>
           <div class="hcard-badge"><div class="hcard-badge-name" id="hcard-name-1">Pullover Hoodie</div><div class="hcard-badge-price">From $45</div></div>
         </div>
 
         <!-- Card 2 - Top right, tee -->
         <div class="hcard" id="hcard-2" style="width:180px;height:206px;right:6%;top:10px;animation:float2 7s ease-in-out infinite .8s;z-index:2;background:linear-gradient(135deg,#1a3a6b,#2563eb)">
-          <img id="hcard-img-2" src="" alt="T-Shirt" style="width:100%;height:100%;object-fit:cover;display:none"><div class="ydh ydh-md"><span>your art here</span></div>
+          <img id="hcard-img-2" src="" alt="T-Shirt" style="width:100%;height:100%;object-fit:cover;display:none"><div class="ydh ydh-md"><img src="ydh.png" alt="Your Design Here"></div>
           <div class="hcard-badge"><div class="hcard-badge-name" id="hcard-name-2">Classic Tee</div><div class="hcard-badge-price">From $28</div></div>
         </div>
 
         <!-- Card 3 - Mid right -->
         <div class="hcard" id="hcard-3" style="width:165px;height:188px;right:0%;top:220px;animation:float3 5.5s ease-in-out infinite .4s;z-index:4;background:linear-gradient(135deg,#145228,#16a34a)">
-          <img id="hcard-img-3" src="" alt="Shirt" style="width:100%;height:100%;object-fit:cover;display:none"><div class="ydh ydh-md"><span>your art here</span></div>
+          <img id="hcard-img-3" src="" alt="Shirt" style="width:100%;height:100%;object-fit:cover;display:none"><div class="ydh ydh-md"><img src="ydh.png" alt="Your Design Here"></div>
           <div class="hcard-badge"><div class="hcard-badge-name" id="hcard-name-3">Safety Green</div><div class="hcard-badge-price">From $28</div></div>
         </div>
 
         <!-- Card 4 - Bottom left -->
         <div class="hcard" id="hcard-4" style="width:185px;height:210px;left:0%;top:240px;animation:float4 6.5s ease-in-out infinite 1.2s;z-index:2;background:linear-gradient(135deg,#7f1d1d,#dc2626)">
-          <img id="hcard-img-4" src="" alt="Crewneck" style="width:100%;height:100%;object-fit:cover;display:none"><div class="ydh ydh-md"><span>your art here</span></div>
+          <img id="hcard-img-4" src="" alt="Crewneck" style="width:100%;height:100%;object-fit:cover;display:none"><div class="ydh ydh-md"><img src="ydh.png" alt="Your Design Here"></div>
           <div class="hcard-badge"><div class="hcard-badge-name" id="hcard-name-4">Crewneck</div><div class="hcard-badge-price">From $42</div></div>
         </div>
 
         <!-- Card 5 - Center mid -->
         <div class="hcard" id="hcard-5" style="width:168px;height:192px;left:32%;top:130px;animation:float5 5s ease-in-out infinite .6s;z-index:5;background:linear-gradient(135deg,#0f172a,#1e3a5f)">
-          <img id="hcard-img-5" src="" alt="T-Shirt" style="width:100%;height:100%;object-fit:cover;display:none"><div class="ydh ydh-sm"><span>your art here</span></div>
+          <img id="hcard-img-5" src="" alt="T-Shirt" style="width:100%;height:100%;object-fit:cover;display:none"><div class="ydh ydh-sm"><img src="ydh.png" alt="Your Design Here"></div>
           <div class="hcard-badge"><div class="hcard-badge-name" id="hcard-name-5">Design Yours</div><div class="hcard-badge-price">AI Art · No Minimum</div></div>
         </div>
 
@@ -1903,7 +1905,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div id="catimg-tshirt-wrap" style="height:200px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
             <img id="catimg-tshirt" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-tshirt-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
-            <div class="cat-ydh"><span>your art here</span></div>
+            <div class="cat-ydh"><img src="ydh.png" alt="Your Design Here"></div>
           </div>
           <div style="padding:13px 16px;border-top:1px solid #f0f0f0">
             <div style="font-size:14px;font-weight:800;color:#111">T-Shirts</div>
@@ -1913,7 +1915,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div id="catimg-longsleeve-wrap" style="height:200px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
             <img id="catimg-longsleeve" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-longsleeve-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
-            <div class="cat-ydh"><span>your art here</span></div>
+            <div class="cat-ydh"><img src="ydh.png" alt="Your Design Here"></div>
           </div>
           <div style="padding:13px 16px;border-top:1px solid #f0f0f0">
             <div style="font-size:14px;font-weight:800;color:#111">Long Sleeve</div>
@@ -1923,7 +1925,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div id="catimg-hoodie-wrap" style="height:200px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
             <img id="catimg-hoodie" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-hoodie-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
-            <div class="cat-ydh"><span>your art here</span></div>
+            <div class="cat-ydh"><img src="ydh.png" alt="Your Design Here"></div>
           </div>
           <div style="padding:13px 16px;border-top:1px solid #f0f0f0">
             <div style="font-size:14px;font-weight:800;color:#111">Hoodies</div>
@@ -1933,7 +1935,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div id="catimg-jacket-wrap" style="height:200px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
             <img id="catimg-jacket" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-jacket-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
-            <div class="cat-ydh"><span>your art here</span></div>
+            <div class="cat-ydh"><img src="ydh.png" alt="Your Design Here"></div>
           </div>
           <div style="padding:13px 16px;border-top:1px solid #f0f0f0">
             <div style="font-size:14px;font-weight:800;color:#111">Jackets</div>
@@ -2559,7 +2561,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v22.4</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v22.5</span>
   </div>
 
   <div class="studio-body">
