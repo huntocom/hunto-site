@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v19.8 -->
+<!-- v19.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1659,7 +1659,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.8</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.9</span>
   </div>
 
 </nav>
@@ -2342,7 +2342,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.8</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.9</span>
   </div>
 
   <div class="studio-body">
@@ -2429,18 +2429,10 @@ footer{background:#111;padding:56px 32px 28px}
           </button>
 
           <!-- Customization method -->
-          <div style="margin-top:20px">
-            <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Customization Method</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-              <div style="padding:12px;border:2px solid #0071ce;border-radius:10px;background:#f0f7ff;text-align:center;cursor:default">
-                <div style="font-size:14px;font-weight:700;color:#0071ce">Printing</div>
-                <div style="font-size:11px;color:#888;margin-top:2px">No Minimum</div>
-              </div>
-              <div style="padding:12px;border:2px solid #e8e8e8;border-radius:10px;text-align:center;cursor:pointer;color:#aaa"
-                onclick="alert('Embroidery coming soon!')">
-                <div style="font-size:14px;font-weight:600">Embroidery</div>
-                <div style="font-size:11px;margin-top:2px">Coming soon</div>
-              </div>
+          <div style="margin-top:16px;padding:10px 14px;background:#f0f7ff;border-radius:8px;border:1.5px solid #d0e3f7">
+            <div style="font-size:13px;font-weight:700;color:#0071ce;display:flex;align-items:center;gap:6px">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+              DTF Printing · No Minimum
             </div>
           </div>
         </div>
@@ -7459,18 +7451,15 @@ function showMobileEditBar(id){
   bar.id = 'mobile-edit-bar';
   bar.style.cssText = 'position:fixed;bottom:64px;left:0;right:0;z-index:9998;background:rgba(30,30,30,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:8px 12px;display:flex;flex-direction:column;gap:6px;';
 
-  bar.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between">'
-    + '<div style="display:flex;align-items:center;gap:8px;flex:1">'
-    + '<span style="font-size:11px;font-weight:600;color:#fff;width:36px">Size</span>'
-    + '<input type="range" id="meb-size" min="20" max="200" value="'+curSize+'" style="flex:1;accent-color:#0071ce;height:3px" oninput="mebApply(\''+id+'\')">'
-    + '<span id="meb-size-val" style="font-size:11px;font-weight:700;color:#0071ce;width:32px;text-align:right">'+curSize+'%</span>'
+  bar.innerHTML = '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">'
+    + '<span style="font-size:12px;font-weight:700;color:#fff;width:50px;flex-shrink:0">Size</span>'
+    + '<input type="range" id="meb-size" min="30" max="180" value="'+Math.min(180,curSize)+'" style="flex:1;accent-color:#0071ce;height:6px;border-radius:3px" oninput="mebApply(\''+id+'\')">'
+    + '<span id="meb-size-val" style="font-size:12px;font-weight:700;color:#0071ce;width:36px;text-align:right">'+curSize+'%</span>'
     + '</div>'
-    + '<div style="width:1px;height:20px;background:rgba(255,255,255,.15);margin:0 8px"></div>'
-    + '<div style="display:flex;align-items:center;gap:8px;flex:1">'
-    + '<span style="font-size:11px;font-weight:600;color:#fff;width:36px">Rotate</span>'
-    + '<input type="range" id="meb-rotate" min="-180" max="180" value="'+curRot+'" style="flex:1;accent-color:#0071ce;height:3px" oninput="mebApply(\''+id+'\')">'
-    + '<span id="meb-rot-val" style="font-size:11px;font-weight:700;color:#0071ce;width:28px;text-align:right">'+curRot+'°</span>'
-    + '</div>'
+    + '<div style="display:flex;align-items:center;gap:6px">'
+    + '<span style="font-size:12px;font-weight:700;color:#fff;width:50px;flex-shrink:0">Rotate</span>'
+    + '<input type="range" id="meb-rotate" min="-180" max="180" value="'+curRot+'" style="flex:1;accent-color:#0071ce;height:6px;border-radius:3px" oninput="mebApply(\''+id+'\')">'
+    + '<span id="meb-rot-val" style="font-size:12px;font-weight:700;color:#0071ce;width:32px;text-align:right">'+curRot+'°</span>'
     + '</div>'
     + '<div style="display:flex;align-items:center;gap:8px">'
     + '<button id="meb-rmbg-btn" onclick="mebToggleRmbg(\''+id+'\')" style="flex:1;height:38px;border-radius:6px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;'+(rmbgOn?'background:#0071ce;color:#fff':'background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)')+'">'
@@ -7486,6 +7475,7 @@ function showMobileEditBar(id){
 function mebApply(id){
   var el = document.getElementById(id);
   if(!el) return;
+  var wrap = document.getElementById('s-shirt-wrap');
   var size = parseFloat(document.getElementById('meb-size')?.value||100);
   var rot = parseFloat(document.getElementById('meb-rotate')?.value||0);
   document.getElementById('meb-size-val').textContent = size+'%';
@@ -7495,8 +7485,17 @@ function mebApply(id){
   var oldW = el.offsetWidth||newPx, oldH = el.offsetHeight||newPx;
   var oldL = parseFloat(el.style.left)||0, oldT = parseFloat(el.style.top)||0;
   var cx = oldL+oldW/2, cy = oldT+oldH/2;
+  var newL = cx-newPx/2, newT = cy-newPx/2;
+  // Constrain within shirt bounds
+  if(wrap){
+    var maxW = wrap.offsetWidth, maxH = wrap.offsetHeight;
+    if(newL < -newPx*0.3) newL = -newPx*0.3;
+    if(newT < -newPx*0.3) newT = -newPx*0.3;
+    if(newL + newPx > maxW + newPx*0.3) newL = maxW - newPx*0.7;
+    if(newT + newPx > maxH + newPx*0.3) newT = maxH - newPx*0.7;
+  }
   el.style.width = newPx+'px'; el.style.height = newPx+'px';
-  el.style.left = (cx-newPx/2)+'px'; el.style.top = (cy-newPx/2)+'px';
+  el.style.left = newL+'px'; el.style.top = newT+'px';
   var flip = el.dataset.flipped==='true'?' scaleX(-1)':'';
   el.style.transform = 'rotate('+rot+'deg)'+flip;
   el.dataset.rotation = rot;
