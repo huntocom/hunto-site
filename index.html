@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v22.2 -->
+<!-- v22.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -440,7 +440,7 @@ footer{background:#111;padding:56px 32px 28px}
 /* ══════════════════════════════════════════
    STUDIO PAGE
 ══════════════════════════════════════════ */
-.studio-page{display:flex;flex-direction:column;height:calc(100vh - 116px);height:calc(100dvh - 116px);height:calc(100svh - 116px);overflow:hidden}
+.studio-page{display:flex;flex-direction:column;height:calc(100vh - 68px);height:calc(100dvh - 68px);height:calc(100svh - 68px);overflow:hidden}
 .s-bottombar,.studio-actions{padding-bottom:env(safe-area-inset-bottom,0px) !important}
 
 /* Studio top bar — product tray style */
@@ -1708,7 +1708,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v22.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v22.3</span>
   </div>
 
 </nav>
@@ -2562,7 +2562,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v22.2</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v22.3</span>
   </div>
 
   <div class="studio-body">
@@ -3926,17 +3926,16 @@ function showPage(id){
   if(hdr)  hdr.style.display  = (isStudio && isMobile) ? "none" : "";
   if(msb)  msb.style.display  = (isStudio && isMobile) ? "none" : "";
   if(mNav) mNav.style.display = (isStudio && isMobile) ? "none" : "";
-  // Hide "Start Designing" button in header when in studio (all sizes)
+  // Hide Start Designing button, topbar, and mega-nav when in studio
   var designBtn = document.querySelector('.hdr-design-btn');
+  var topbar = document.querySelector('.topbar');
+  var megaNav = document.querySelector('.mega-nav');
   if(designBtn) designBtn.style.display = isStudio ? 'none' : '';
-  // Lock body scroll when in studio on mobile only
-  if(isMobile){
-    document.body.style.overflow = isStudio ? 'hidden' : '';
-    document.documentElement.style.overflow = isStudio ? 'hidden' : '';
-  } else {
-    document.body.style.overflow = '';
-    document.documentElement.style.overflow = '';
-  }
+  if(topbar) topbar.style.display = isStudio ? 'none' : '';
+  if(megaNav) megaNav.style.display = isStudio ? 'none' : '';
+  // Lock body scroll when in studio
+  document.body.style.overflow = isStudio ? 'hidden' : '';
+  document.documentElement.style.overflow = isStudio ? 'hidden' : '';
 }
 function goHome(){showPage("home")}
 async function goPDP(id){
