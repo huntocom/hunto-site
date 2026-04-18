@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v19.3 -->
+<!-- v19.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -735,16 +735,19 @@ footer{background:#111;padding:56px 32px 28px}
 
 /* Corner handles on selected layers (ROT style) */
 .corner-handle{
-  position:absolute;width:28px;height:28px;border-radius:50%;
-  background:#222;display:flex;align-items:center;justify-content:center;
+  position:absolute;width:30px;height:30px;border-radius:50%;
+  background:#fff;display:flex;align-items:center;justify-content:center;
   cursor:pointer;z-index:20;pointer-events:auto;
-  box-shadow:0 1px 4px rgba(0,0,0,.3);
+  box-shadow:0 1px 5px rgba(0,0,0,.35);
+  border:1px solid rgba(0,0,0,.08);
   -webkit-tap-highlight-color:transparent;
   touch-action:manipulation;
 }
 .corner-handle:active{transform:scale(1.15)}
-.ch-delete{top:-14px;left:-14px}
-.ch-edit{bottom:-14px;left:-14px;background:#0071ce}
+.ch-delete{top:-15px;left:-15px;background:#fff}
+.ch-edit{bottom:-15px;left:-15px;background:#0071ce}
+.ch-forward{top:-15px;right:-15px;background:#fff}
+.ch-backward{bottom:-15px;right:-15px;background:#fff}
 
 /* Print area guide zones — shown during drag */
 .print-guides{pointer-events:none}
@@ -1167,23 +1170,25 @@ footer{background:#111;padding:56px 32px 28px}
   .s-ibtn.on .s-ibtn-icon{background:transparent !important}
   .s-ibtn.on .s-ibtn-icon svg{stroke:#fff !important}
 
-  /* ── Panel — FIXED above dark 64px iconbar ── */
+  /* ── Panel — FIXED above dark 64px iconbar, semi-transparent ── */
   .s-panel{
     position:fixed !important;
     bottom:64px !important;
     left:0 !important; right:0 !important; width:100% !important;
     max-height:45vh !important; overflow-y:auto;
     z-index:9999 !important;
-    background:#fff; border-radius:12px 12px 0 0;
+    background:rgba(255,255,255,.88) !important;
+    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+    border-radius:12px 12px 0 0;
     border-top:none;
-    box-shadow:0 -4px 20px rgba(0,0,0,.15);
+    box-shadow:0 -4px 20px rgba(0,0,0,.12);
     -webkit-overflow-scrolling:touch;
   }
   .s-panel::before{
     content:''; display:block; width:32px; height:3px;
-    background:#d9d9d9; border-radius:2px; margin:6px auto 2px;
+    background:rgba(0,0,0,.15); border-radius:2px; margin:6px auto 2px;
   }
-  .s-panel-hdr{background:#fff !important;padding:10px 16px 8px !important;border-bottom:1px solid #f0f0f0 !important}
+  .s-panel-hdr{background:transparent !important;padding:10px 16px 8px !important;border-bottom:1px solid rgba(0,0,0,.06) !important}
   .s-panel-body{padding:12px 16px !important}
   .s-panel-inner{padding:14px 16px}
   .s-panel[style*="display: none"],.s-panel[style*="display:none"]{display:none !important}
@@ -1632,7 +1637,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.4</span>
   </div>
 
 </nav>
@@ -2316,7 +2321,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.3</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.4</span>
   </div>
 
   <div class="studio-body">
@@ -5483,7 +5488,8 @@ function selectLayer(id){
     // Switch to the layer's view
     if(dz.dataset.side && dz.dataset.side !== sView) sSetView(dz.dataset.side);
   }
-  dz.style.outline = "2px solid rgba(0,113,206,.6)";
+  dz.style.outline = "2px solid rgba(0,113,206,.5)";
+  dz.style.outlineOffset = "3px";
   // On mobile: show overlay toolbar only (no panel). On desktop: open edit panel too.
   if(window.innerWidth <= 768){
     buildCanvasOverlay(id);
@@ -5498,6 +5504,7 @@ function deselectAllLayers(){
   selectedLayerId = null;
   document.querySelectorAll("[data-type='image']").forEach(el => {
     el.style.outline = "2px dashed transparent";
+    el.style.outlineOffset = "0";
     const rzh = document.getElementById("rzh-"+el.id);
     if(rzh) rzh.style.display = "none";
   });
@@ -5543,20 +5550,39 @@ function buildCanvasOverlay(id){
   delHandle.addEventListener('touchend', delAction, {passive:false});
   dz.appendChild(delHandle);
 
-  // Edit handle — bottom left (like ROT)
+  // Edit handle — bottom left
   var editHandle = document.createElement('div');
   editHandle.id = 'ch-edit-'+id;
   editHandle.className = 'corner-handle ch-edit';
-  editHandle.innerHTML = '<span style="font-size:10px;font-weight:700;color:#fff">edit</span>';
+  editHandle.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
   function editAction(e){ e.stopPropagation(); e.preventDefault(); if(isText){ sPanel('text',document.getElementById('sib-text')); } else { eaOpenForLayer(id); sPanel('edit-artwork',null); } }
   editHandle.addEventListener('click', editAction);
   editHandle.addEventListener('touchend', editAction, {passive:false});
   dz.appendChild(editHandle);
 
+  // Forward handle — top right
+  var fwdHandle = document.createElement('div');
+  fwdHandle.id = 'ch-fwd-'+id;
+  fwdHandle.className = 'corner-handle ch-forward';
+  fwdHandle.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>';
+  function fwdAction(e){ e.stopPropagation(); e.preventDefault(); moveLayerUp(id); sNtf('Layer forward'); }
+  fwdHandle.addEventListener('click', fwdAction);
+  fwdHandle.addEventListener('touchend', fwdAction, {passive:false});
+  dz.appendChild(fwdHandle);
+
+  // Backward handle — bottom right
+  var bwdHandle = document.createElement('div');
+  bwdHandle.id = 'ch-bwd-'+id;
+  bwdHandle.className = 'corner-handle ch-backward';
+  bwdHandle.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>';
+  function bwdAction(e){ e.stopPropagation(); e.preventDefault(); moveLayerDown(id); sNtf('Layer backward'); }
+  bwdHandle.addEventListener('click', bwdAction);
+  bwdHandle.addEventListener('touchend', bwdAction, {passive:false});
+  dz.appendChild(bwdHandle);
+
   // Store cleanup function
   dz._cleanupHandles = function(){
-    var d = document.getElementById('ch-del-'+id); if(d) d.remove();
-    var e = document.getElementById('ch-edit-'+id); if(e) e.remove();
+    ['ch-del-','ch-edit-','ch-fwd-','ch-bwd-'].forEach(function(p){ var el=document.getElementById(p+id); if(el) el.remove(); });
   };
 }
 
@@ -6051,7 +6077,7 @@ function hideDragGuides(){
 function makeLayerDraggable(dz){
   let startX, startY, startLeft, startTop;
   function onDown(e){
-    if(e.target.closest("[onclick]") || e.target.closest("[id^='rh-']") || e.target.closest("[id^='rzh-']") || e.target.closest(".corner-handle")) return;
+    if(e.target.closest(".corner-handle") || e.target.closest("[onclick]") || e.target.closest("[id^='rh-']") || e.target.closest("[id^='rzh-']")) return;
     e.preventDefault();
     const pt = e.touches ? e.touches[0] : e;
     const wrap = document.getElementById("s-shirt-wrap");
