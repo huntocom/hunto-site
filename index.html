@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v16.2 -->
+<!-- v16.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1038,26 +1038,29 @@ footer{background:#111;padding:56px 32px 28px}
   /* ── Canvas: fills ALL remaining space ── */
   .s-canvas{
     flex:1; min-height:0;
-    display:flex; align-items:center; justify-content:center;
+    display:flex; align-items:stretch; justify-content:center;
     position:relative; background:#f0f0f0;
-    overflow:hidden;
+    overflow:visible;  /* must be visible so float pills & overlay are clickable */
   }
   .s-shirt-stage{
-    width:100%; height:100%;
+    flex:1; position:relative;  /* position:relative needed for float-pills absolute positioning */
     display:flex; align-items:center; justify-content:center;
   }
   #s-shirt-wrap{
     display:flex; align-items:center; justify-content:center;
-    max-width:100%; max-height:100%;
+    max-width:100%;
   }
   .s-shirt-img{
     width:auto !important;
-    max-width:94vw !important;
+    max-width:92vw !important;
     max-height:calc(100dvh - 52px - 60px - 50px) !important;
     object-fit:contain !important;
     height:auto !important;
     display:block;
   }
+  /* Float pills must sit above everything in the canvas */
+  .float-pills{z-index:20 !important; pointer-events:auto}
+  .float-pill{pointer-events:auto; min-height:44px}
 
   /* ── Hide thumb strip (replaced by ROTATE btn) ── */
   .s-thumbs{display:none !important}
@@ -1568,7 +1571,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v16.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v16.3</span>
   </div>
 
 </nav>
@@ -5373,11 +5376,20 @@ function buildCanvasOverlay(id){
   // Position below the layer - will be updated on scroll/resize
   function positionOverlay(){
     const rect = dz.getBoundingClientRect();
-    overlay.style.top  = (rect.bottom + 8) + 'px';
-    overlay.style.left = (rect.left + rect.width/2) + 'px';
+    const isMobile = window.innerWidth <= 768;
+    if(isMobile){
+      // On mobile: position ABOVE the element so it's not hidden by iconbar
+      overlay.style.top  = Math.max(60, rect.top - 8) + 'px';
+      overlay.style.left = '50%';
+      overlay.style.transform = 'translate(-50%, -100%)';
+    } else {
+      overlay.style.top  = (rect.bottom + 8) + 'px';
+      overlay.style.left = (rect.left + rect.width/2) + 'px';
+      overlay.style.transform = 'translateX(-50%)';
+    }
   }
 
-  overlay.style.cssText = 'position:fixed;z-index:9000;transform:translateX(-50%);display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:auto';
+  overlay.style.cssText = 'position:fixed;z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:auto';
 
   // Row 1 — Remove Background toggle
   const rmbgApplied = dz.dataset.rmbgApplied === 'true';
@@ -5392,7 +5404,7 @@ function buildCanvasOverlay(id){
       </label>
     </div>
     <div style="background:rgba(255,255,255,.97);border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.18);border:1px solid #e8e8e8;padding:0;display:flex;overflow:hidden">
-      <button onclick="eaOpenForLayer('${id}');sPanel('edit-artwork',null)" style="padding:7px 14px;border:none;background:none;font-size:12px;font-weight:700;color:#333;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px;border-right:1px solid #f0f0f0" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
+      <button onclick="eaOpenForLayer('${id}');sPanel('edit-artwork',null)" style="padding:10px 16px;border:none;background:none;font-size:13px;font-weight:700;color:#333;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:6px;border-right:1px solid #f0f0f0;min-height:44px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         Edit
       </button>
@@ -5404,7 +5416,7 @@ function buildCanvasOverlay(id){
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         Backward
       </button>
-      <button onclick="removeLayer('${id}');document.getElementById('canvas-overlay')?.remove()" style="padding:7px 14px;border:none;background:none;font-size:12px;font-weight:700;color:#dc2626;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='none'">
+      <button onclick="removeLayer('${id}');document.getElementById('canvas-overlay')?.remove()" style="padding:10px 16px;border:none;background:none;font-size:13px;font-weight:700;color:#dc2626;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:6px;min-height:44px" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='none'">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
         Delete
       </button>
