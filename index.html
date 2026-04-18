@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v18.2 -->
+<!-- v18.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1092,7 +1092,7 @@ footer{background:#111;padding:56px 32px 28px}
   .s-shirt-img{
     width:auto !important; height:auto !important;
     max-width:100% !important;
-    max-height:calc(100dvh - 50px - 62px) !important;
+    max-height:calc(100dvh - 50px - 64px) !important;
     object-fit:contain !important; display:block;
   }
 
@@ -1104,8 +1104,8 @@ footer{background:#111;padding:56px 32px 28px}
     -webkit-tap-highlight-color:rgba(0,113,206,.15);
   }
 
-  /* ── ROTATE button — top right of canvas ── */
-  .mobile-rotate-btn{display:flex}
+  /* ── ROTATE button — top right of canvas, above everything ── */
+  .mobile-rotate-btn{display:flex !important;z-index:50 !important;position:absolute !important;right:10px !important;top:10px !important}
   /* ── SHARE button — bottom right of canvas ── */
   .mobile-share-btn{display:flex}
 
@@ -1606,7 +1606,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v18.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v18.3</span>
   </div>
 
 </nav>
