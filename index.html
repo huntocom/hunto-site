@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v19.0 -->
+<!-- v19.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1632,7 +1632,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.1</span>
   </div>
 
 </nav>
@@ -2316,7 +2316,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.1</span>
   </div>
 
   <div class="studio-body">
@@ -5527,18 +5527,20 @@ function buildCanvasOverlay(id){
   delHandle.id = 'ch-del-'+id;
   delHandle.className = 'corner-handle ch-delete';
   delHandle.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>';
-  delHandle.onclick = function(e){ e.stopPropagation(); if(isText){ dz.remove(); } else { removeLayer(id); } hideLayerToolbar(); };
+  function delAction(e){ e.stopPropagation(); e.preventDefault(); if(isText){ dz.remove(); updateFloatPills(); } else { removeLayer(id); } hideLayerToolbar(); }
+  delHandle.addEventListener('click', delAction);
+  delHandle.addEventListener('touchend', delAction, {passive:false});
   dz.appendChild(delHandle);
 
-  // Edit handle — bottom left (mobile only, like ROT)
-  if(isMobile){
-    var editHandle = document.createElement('div');
-    editHandle.id = 'ch-edit-'+id;
-    editHandle.className = 'corner-handle ch-edit';
-    editHandle.innerHTML = '<span style="font-size:10px;font-weight:700;color:#fff">edit</span>';
-    editHandle.onclick = function(e){ e.stopPropagation(); if(isText){ sPanel('text',document.getElementById('sib-text')); } else { eaOpenForLayer(id); sPanel('edit-artwork',null); } };
-    dz.appendChild(editHandle);
-  }
+  // Edit handle — bottom left (like ROT)
+  var editHandle = document.createElement('div');
+  editHandle.id = 'ch-edit-'+id;
+  editHandle.className = 'corner-handle ch-edit';
+  editHandle.innerHTML = '<span style="font-size:10px;font-weight:700;color:#fff">edit</span>';
+  function editAction(e){ e.stopPropagation(); e.preventDefault(); if(isText){ sPanel('text',document.getElementById('sib-text')); } else { eaOpenForLayer(id); sPanel('edit-artwork',null); } }
+  editHandle.addEventListener('click', editAction);
+  editHandle.addEventListener('touchend', editAction, {passive:false});
+  dz.appendChild(editHandle);
 
   // Store cleanup function
   dz._cleanupHandles = function(){
@@ -6030,7 +6032,7 @@ function hideDragGuides(){
 function makeLayerDraggable(dz){
   let startX, startY, startLeft, startTop;
   function onDown(e){
-    if(e.target.closest("[onclick]") || e.target.closest("[id^='rh-']") || e.target.closest("[id^='rzh-']")) return;
+    if(e.target.closest("[onclick]") || e.target.closest("[id^='rh-']") || e.target.closest("[id^='rzh-']") || e.target.closest(".corner-handle")) return;
     e.preventDefault();
     const pt = e.touches ? e.touches[0] : e;
     const wrap = document.getElementById("s-shirt-wrap");
