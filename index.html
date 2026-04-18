@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v15.9 -->
+<!-- v16.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1005,9 +1005,6 @@ footer{background:#111;padding:56px 32px 28px}
   .studio-page{height:100vh;height:100dvh;overflow:hidden;flex-direction:column}
   .studio-topbar{padding:0 10px;gap:8px;height:52px;position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #e8e8e8}
   /* Hide search bar in studio on mobile */
-  #page-studio .mobile-search-bar{display:none !important}
-  #page-studio .hdr-search{display:none !important}
-  #page-studio .main-header{display:none !important}
   /* Mobile studio topbar: steps left + Save+Next right */
   .studio-topbar{padding:0 12px;gap:8px;height:52px;background:#fff;border-bottom:1px solid #e8e8e8}
   .studio-steps{gap:8px}
@@ -1500,7 +1497,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v15.9</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v16.0</span>
   </div>
 
 </nav>
@@ -3482,8 +3479,16 @@ function showPage(id){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById("page-"+id).classList.add("active");
   window.scrollTo(0,0);
-  // Update URL hash so refresh restores the page
   history.replaceState(null, "", "#"+id);
+  // Hide main header + mobile search bar when in studio on mobile
+  const isStudio = (id === "studio");
+  const isMobile = window.innerWidth <= 768;
+  const hdr = document.querySelector(".main-header");
+  const msb = document.querySelector(".mobile-search-bar");
+  const mNav = document.querySelector(".mega-nav");
+  if(hdr)  hdr.style.display  = (isStudio && isMobile) ? "none" : "";
+  if(msb)  msb.style.display  = (isStudio && isMobile) ? "none" : "";
+  if(mNav) mNav.style.display = (isStudio && isMobile) ? "none" : "";
 }
 function goHome(){showPage("home")}
 async function goPDP(id){
