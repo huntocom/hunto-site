@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v15.5 -->
+<!-- v15.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -888,196 +888,184 @@ footer{background:#111;padding:56px 32px 28px}
 .shop-brand-check input{accent-color:#7c3aed}
 
 @media(max-width:768px){
-  #page-shop > div { padding:12px; }
-  #page-shop [style*="grid-template-columns:220px"] { grid-template-columns:1fr !important; }
-  #page-shop [style*="position:sticky"] { position:static !important; display:none; }
-  #shop-grid { grid-template-columns:repeat(2,1fr) !important; gap:10px !important; }
-}
 
-══════════════════════════════════════════ */
-@media(max-width:768px){
-  /* ── Nav ── */
+  /* ═══════════════════════════════════════
+     HEADER — compact like RushOrderTees
+  ═══════════════════════════════════════ */
+  .topbar{display:none}
+  .mega-nav{display:none}
   .nav-links{display:none}
   .nav-reviews{display:none}
-  .nbtn{display:none}
-  .hamburger{display:flex}
-  .main-header{padding:0 16px;height:56px;gap:10px}
-  .hdr-logo{font-size:24px}
-  .hdr-search{flex:1}
-  .hdr-search input{font-size:14px;padding:9px 14px 9px 36px}
   .hdr-actions .hdr-action{display:none}
   .hdr-design-btn{display:none}
-  .mega-nav{display:none}
   .mobile-hdr-menu{display:flex}
-  .topbar{display:none}
+  .main-header{padding:0 12px;height:52px;gap:8px}
+  .hdr-logo img{height:30px}
+  .hdr-search{flex:1;max-width:none}
+  .hdr-search input{font-size:14px;padding:9px 14px 9px 36px;border-radius:24px}
+  /* Show cart icon on mobile */
+  .hdr-action.cart-action{display:flex !important}
 
-  /* ── Hero ── */
-  .hero{grid-template-columns:1fr;max-height:none;min-height:auto}
-  .hero-left{padding:32px 20px 28px;order:2}
-  .hero h1{font-size:34px;line-height:1.1}
-  .hero-sub{font-size:15px;margin-bottom:24px}
-  .hero-right{order:1;padding:20px;min-height:200px;overflow:visible;display:flex;align-items:center;justify-content:center}
-  .hero-shirt-img{width:180px;max-width:60vw;height:auto}
-  .hero-shirt-wrap{width:100%;display:flex;flex-direction:column;align-items:center}
-  .hero-stats{gap:16px;flex-wrap:wrap}
-  .hero-btns{flex-direction:column;gap:8px}
-  .hero-btn-primary,.hero-btn-secondary{width:100%;text-align:center;justify-content:center;display:flex;align-items:center}
+  /* ═══════════════════════════════════════
+     MOBILE SEARCH BAR — full width strip
+  ═══════════════════════════════════════ */
+  .mobile-search-bar{display:block}
+
+  /* ═══════════════════════════════════════
+     HOMEPAGE HERO — image top, text below
+  ═══════════════════════════════════════ */
+  .hero{grid-template-columns:1fr;max-height:none;min-height:auto;background:#f0f2f5}
+  .hero-right{order:1;padding:16px 16px 0;min-height:auto;display:flex;align-items:center;justify-content:center;background:#f0f2f5}
+  .hero-left{order:2;padding:20px 16px 28px;background:#f0f2f5}
+  .hero h1{font-size:30px;line-height:1.1;color:#111;letter-spacing:-.5px;margin-bottom:10px}
+  .hero-sub{font-size:14px;color:#555;margin-bottom:20px}
+  .hero-stats{gap:16px;flex-wrap:wrap;margin-bottom:20px}
   .stat-n{font-size:20px}
+  /* Full-width pill buttons like RushOrderTees */
+  .hero-btns{flex-direction:column;gap:10px;width:100%}
+  .hero-btn-primary{width:100%;text-align:center;justify-content:center;height:50px;border-radius:25px;font-size:16px}
+  .hero-btn-secondary{width:100%;text-align:center;justify-content:center;height:50px;border-radius:25px;font-size:16px}
 
-  /* ── Home ── */
-  .products-grid{grid-template-columns:1fr}
-  .pcard{grid-template-columns:1fr}
-  .pcard-img-area{min-height:200px;padding:24px;overflow:visible;display:flex;align-items:center;justify-content:center}
-  .pcard-shirt{max-width:200px;width:80%;height:auto}
-  .products-section{padding:40px 16px}
-  .section-title{font-size:28px}
-  .sec-h{font-size:28px;letter-spacing:-1px}
-  .sec-sub{font-size:14px;margin-bottom:32px}
+  /* ═══════════════════════════════════════
+     VALUE PROP + CATEGORY GRID
+  ═══════════════════════════════════════ */
+  /* Stack delivery info as individual cards */
+  #hp-delivery-row{flex-direction:column;gap:8px;border-top:1px solid #e0e0e0;padding-top:16px}
+  #hp-delivery-row > div{padding:12px 16px;border-right:none !important;border-bottom:none;background:#f8f8f8;border-radius:10px;display:flex;align-items:center;gap:12px}
+  /* Category grid goes 2-col on mobile (already looks good) */
+  #hp-cat-grid{grid-template-columns:repeat(2,1fr) !important;gap:10px}
+  /* Value prop section stacks */
+  #hp-value-section{grid-template-columns:1fr !important;gap:24px;padding:32px 16px !important}
 
-  /* ── How it works ── */
+  /* ═══════════════════════════════════════
+     CUSTOMER GALLERY — 2 columns mobile
+  ═══════════════════════════════════════ */
+  #gallery-grid{columns:2 !important;column-gap:8px}
+
+  /* ═══════════════════════════════════════
+     HOW IT WORKS — single column
+  ═══════════════════════════════════════ */
   .how{padding:40px 16px}
   .steps{grid-template-columns:1fr}
   .step-card{border-right:none;border-bottom:1px solid #eee;padding:24px 0}
 
-  /* ── Reviews ── */
+  /* ═══════════════════════════════════════
+     REVIEWS — single column
+  ═══════════════════════════════════════ */
   .reviews-section{padding:40px 16px}
   .reviews-grid{grid-template-columns:1fr}
 
-  /* ── CTA ── */
+  /* ═══════════════════════════════════════
+     CTA BAND
+  ═══════════════════════════════════════ */
   .cta-band{padding:40px 16px;text-align:center}
 
-  /* ── Footer ── */
-  .footer-grid{grid-template-columns:1fr 1fr;gap:24px}
-  .footer{padding:40px 16px 24px}
+  /* ═══════════════════════════════════════
+     SHOP PAGE — horizontal cards like ROT
+  ═══════════════════════════════════════ */
+  #page-shop > div{padding:12px}
+  /* Hide filter sidebar */
+  #page-shop [style*="grid-template-columns:220px"]{grid-template-columns:1fr !important}
+  #page-shop [style*="position:sticky"]{position:static !important;display:none}
+  /* Horizontal product cards */
+  #shop-grid{grid-template-columns:1fr !important;gap:10px !important}
+  .shop-card{display:grid !important;grid-template-columns:120px 1fr;height:auto !important}
+  .shop-card-img{width:120px;height:120px;object-fit:contain;border-radius:10px 0 0 10px}
+  .shop-card-body{padding:12px}
+  .shop-card-name{font-size:13px;white-space:normal;line-height:1.3;margin-bottom:6px}
+  .shop-card-brand{font-size:10px;margin-bottom:3px}
+  .shop-card-colors{gap:3px;margin-bottom:8px}
+  .shop-color-dot{width:14px;height:14px}
+  .shop-card-footer{flex-direction:column;align-items:flex-start;gap:8px}
+  .shop-card-price{font-size:14px}
+  .shop-card-btn{height:32px;padding:0 14px;font-size:12px;width:100%;border-radius:8px}
+  /* Mobile filter button */
+  #shop-mobile-filter-btn{display:flex}
 
-  /* ── Shop ── */
-  .shop-grid{grid-template-columns:repeat(2,1fr) !important;gap:10px !important}
-
-  /* ── PDP ── */
+  /* ═══════════════════════════════════════
+     PDP — full width, fixed bottom CTA
+  ═══════════════════════════════════════ */
   .pdp-wrap{grid-template-columns:1fr;padding:16px 16px 80px;gap:0}
   .pdp-thumbs{flex-direction:row;position:static;margin-bottom:12px;gap:8px}
-  .pdp-main{max-height:350px;aspect-ratio:auto;overflow:visible}
-  .pdp-main-img{width:70%;height:auto;max-height:300px;padding:16px}
+  .pdp-main{max-height:320px;aspect-ratio:auto;overflow:visible}
+  .pdp-main-img{width:75%;height:auto;max-height:280px;padding:16px}
   .ship-cards{grid-template-columns:1fr 1fr}
-  .style-grid{grid-template-columns:repeat(3,1fr)}
+  .style-grid{grid-template-columns:1fr}
+  /* Style cards full width with border like ROT */
+  .style-opt{border:1.5px solid #e0e0e0;border-radius:12px;padding:16px;margin-bottom:8px}
+  .style-opt.selected{border-color:#7c3aed}
   .pdp-title{font-size:22px}
-  .pdp-price{font-size:28px}
-  .pdp-cta{height:52px;font-size:16px;border-radius:14px}
+  .pdp-price{font-size:26px}
+  /* Fixed bottom CTA bar */
+  .pdp-fixed-cta{display:flex}
 
-  /* ── Studio ── */
+  /* ═══════════════════════════════════════
+     STUDIO — scrollable bottom toolbar
+  ═══════════════════════════════════════ */
   .studio-page{height:100vh;height:100dvh;overflow:hidden;flex-direction:column}
-  .studio-topbar{
-    padding:0 10px;gap:4px;height:46px;
-    position:sticky;top:0;z-index:100;
-  }
+  .studio-topbar{padding:0 10px;gap:4px;height:46px;position:sticky;top:0;z-index:100}
   .studio-price{font-size:16px}
   .stbtn{height:30px;padding:0 8px;font-size:11px}
   .stbtn.blue{height:34px;padding:0 12px;font-size:12px}
   .studio-steps .sstep-label{display:none}
   .studio-steps .sstep-div{width:8px}
-
   .studio-body{flex-direction:column;overflow:hidden;flex:1;min-height:0;position:relative}
-
-  /* ── Canvas takes all available space ── */
-  .s-canvas{
-    min-height:0;flex:1;order:1;overflow:hidden;
-    display:flex;align-items:center;justify-content:center;
-  }
+  .s-canvas{min-height:0;flex:1;order:1;overflow:hidden;display:flex;align-items:center;justify-content:center}
   .s-shirt-stage{min-height:0;height:100%;display:flex;align-items:center;justify-content:center}
   .s-shirt-img{width:min(300px,75vw);max-height:100%;object-fit:contain}
-
-  /* ── View thumbs: compact horizontal strip ── */
-  .s-thumbs{
-    width:100%;flex-direction:row;flex-shrink:0;
-    border-left:none;border-top:1px solid #e8e8e8;
-    padding:3px 8px;overflow-x:auto;justify-content:center;
-    gap:6px;order:2;height:auto;max-height:44px;
-    -webkit-overflow-scrolling:touch;background:#fff;
-  }
+  /* Thumbs — compact horizontal */
+  .s-thumbs{width:100%;flex-direction:row;flex-shrink:0;border-left:none;border-top:1px solid #e8e8e8;padding:3px 8px;overflow-x:auto;justify-content:center;gap:6px;order:2;height:auto;max-height:44px;-webkit-overflow-scrolling:touch;background:#fff}
   .s-thumb{width:36px;flex-shrink:0;border-radius:6px}
   .s-thumb-img{height:36px}
-  .s-thumb-label{display:none}
-  .s-thumb-div{display:none}
-  .s-thumb-action{display:none}
-
-  /* ── Iconbar: bottom tab bar ── */
-  .s-iconbar{
-    width:100%;flex-direction:row;flex-shrink:0;
-    border-right:none;border-top:1px solid #ebebeb;
-    overflow-x:auto;padding:6px 8px;gap:4px;
-    justify-content:flex-start;height:auto;
-    order:3;background:#fff;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none;
-  }
+  .s-thumb-label,.s-thumb-div,.s-thumb-action{display:none}
+  /* Iconbar — scrollable bottom tabs */
+  .s-iconbar{width:100%;flex-direction:row;flex-shrink:0;border-right:none;border-top:1px solid #ebebeb;overflow-x:auto;padding:6px 8px;gap:4px;justify-content:flex-start;height:auto;order:3;background:#fff;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .s-iconbar::-webkit-scrollbar{display:none}
-  .s-ibtn{
-    width:auto;flex-direction:column;gap:4px;
-    padding:6px 8px;white-space:nowrap;
-    border-radius:10px;flex-shrink:0;
-    min-width:52px;height:auto;
-  }
-  .s-ibtn-icon{width:30px;height:30px;border-radius:8px;font-size:14px}
-  .s-ibtn-label{font-size:8px}
+  .s-ibtn{width:auto;flex-direction:column;gap:4px;padding:6px 10px;white-space:nowrap;border-radius:10px;flex-shrink:0;min-width:56px;height:auto}
+  .s-ibtn-icon{width:32px;height:32px;border-radius:8px;font-size:14px}
+  .s-ibtn-label{font-size:9px;font-weight:700}
   .s-ibtn-sep{display:none}
   .s-ibtn.on{background:#ede9fe}
   .s-ibtn.on .s-ibtn-label{color:#7c3aed}
   .s-ibtn.on .s-ibtn-icon{background:#7c3aed}
   .s-ibtn.on .s-ibtn-icon svg{stroke:#fff !important}
-
-  /* ── Panel: OVERLAY that slides up over canvas ── */
-  .s-panel{
-    position:absolute;bottom:0;left:0;right:0;
-    width:100%;border-right:none;border-top:1px solid #e8e8e8;
-    max-height:55vh;overflow-y:auto;z-index:80;
-    background:#fff;border-radius:16px 16px 0 0;
-    box-shadow:0 -4px 24px rgba(0,0,0,.12);
-    -webkit-overflow-scrolling:touch;
-    transform:translateY(0);transition:transform .25s ease;
-  }
-  .s-panel::before{
-    content:'';display:block;width:36px;height:4px;
-    background:#ddd;border-radius:2px;
-    margin:8px auto 4px;flex-shrink:0;
-  }
+  /* Panel — slides up as sheet */
+  .s-panel{position:absolute;bottom:0;left:0;right:0;width:100%;border-right:none;border-top:1px solid #e8e8e8;max-height:58vh;overflow-y:auto;z-index:80;background:#fff;border-radius:16px 16px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,.12);-webkit-overflow-scrolling:touch}
+  .s-panel::before{content:'';display:block;width:36px;height:4px;background:#ddd;border-radius:2px;margin:10px auto 4px;flex-shrink:0}
   .s-panel-inner{padding:12px 16px}
-  .s-panel[style*="display: none"],.s-panel[style*="display:none"]{transform:translateY(100%)}
-
-  /* ── Bottom bar: compact ── */
-  .s-bottombar{
-    padding:4px 10px;gap:6px;position:relative;bottom:auto;
-    background:#fff;border-top:1px solid #e8e8e8;
-    z-index:90;flex-shrink:0;order:4;
-  }
+  .s-panel[style*="display: none"],.s-panel[style*="display:none"]{display:none !important}
+  /* Bottom bar */
+  .s-bottombar{padding:6px 12px;gap:6px;background:#fff;border-top:1px solid #e8e8e8;z-index:90;flex-shrink:0;order:4}
   .s-bottom-info{display:none}
   .s-bot-btn{height:36px;padding:0 12px;font-size:12px}
-  .s-bot-btn.next{
-    height:42px;padding:0 18px;font-size:13px;
-    flex:1;border-radius:12px;
-  }
-
-  /* Float pills */
-  .float-pill{font-size:12px;padding:8px 14px;gap:6px}
+  .s-bot-btn.next{height:44px;padding:0 20px;font-size:14px;flex:1;border-radius:22px}
+  .float-pill{font-size:12px;padding:8px 14px}
   .s-floats{gap:6px;bottom:8px}
 
-  /* Step 2 mobile */
-  #page-step2 .studio-topbar{height:46px}
-  #page-step2 .studio-actions .stbtn:first-child{display:none}
+  /* ═══════════════════════════════════════
+     MARQUEE
+  ═══════════════════════════════════════ */
+  .marquee-wrap{padding:8px 0}
+  .mqi{font-size:12px}
 
-  /* Step 3 mobile */
-  #page-step3 > .studio-page > div:last-child{
-    grid-template-columns:1fr !important;
-    padding:16px !important;
-  }
+  /* ═══════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════ */
+  .footer-grid{grid-template-columns:1fr 1fr;gap:24px}
+  .footer{padding:40px 16px 24px}
 }
-
 @media(max-width:480px){
-  .hero h1{font-size:28px}
+  .hero h1{font-size:26px}
   .hero-sub{font-size:14px}
   .products-section{padding:32px 14px}
   .how{padding:32px 14px}
   .steps{grid-template-columns:1fr}
   .pdp-title{font-size:20px}
   .pdp-cta{height:50px;font-size:15px}
+  .shop-card{grid-template-columns:100px 1fr}
+  .shop-card-img{width:100px;height:100px}
+  #hp-cat-grid{grid-template-columns:repeat(2,1fr) !important}
+  .hero-btn-primary,.hero-btn-secondary{height:48px;font-size:15px}
   .s-shirt-img{width:min(240px,70vw)}
   .s-panel{max-height:50vh}
   .s-ibtn{padding:4px 8px}
@@ -1207,6 +1195,15 @@ footer{background:#111;padding:56px 32px 28px}
 .hdr-design-btn{height:40px;padding:0 22px;background:#7c3aed;color:#fff;border:none;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;transition:all .15s;box-shadow:0 3px 10px rgba(124,58,237,.3)}
 .hdr-design-btn:hover{background:#6d28d9;transform:translateY(-1px)}
 
+/* ── Mobile-only elements ── */
+.pdp-fixed-cta{display:none;position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:#fff;border-top:1px solid #e8e8e8;z-index:200;box-shadow:0 -4px 16px rgba(0,0,0,.1)}
+.pdp-fixed-cta button{width:100%;height:50px;background:#7c3aed;color:#fff;border:none;border-radius:25px;font-size:16px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif}
+#shop-mobile-filter-btn{display:none;position:fixed;bottom:80px;right:16px;z-index:100;height:44px;padding:0 20px;background:#7c3aed;color:#fff;border:none;border-radius:22px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 4px 16px rgba(124,58,237,.4);align-items:center;gap:6px}
+.mobile-search-bar{display:none;padding:8px 12px;background:#fff;border-bottom:1px solid #e8e8e8}
+.mobile-search-bar input{width:100%;padding:10px 16px 10px 36px;border:1.5px solid #e8e8e8;border-radius:22px;font-size:14px;font-family:Inter,sans-serif;outline:none;background:#f8f8f8;box-sizing:border-box}
+.mobile-search-bar-wrap{position:relative}
+.mobile-search-bar-wrap::before{content:'🔍';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px}
+
 /* ── Mega nav bar ── */
 .mega-nav{background:#fff;border-bottom:2px solid #e8e8e8;padding:0 24px;display:flex;align-items:center;gap:0;position:sticky;top:64px;z-index:299}
 .mega-nav-item{position:relative}
@@ -1298,6 +1295,16 @@ footer{background:#111;padding:56px 32px 28px}
     <span></span><span></span><span></span>
   </button>
 </header>
+
+<!-- MOBILE SEARCH BAR (hidden on desktop) -->
+<div class="mobile-search-bar">
+  <div class="mobile-search-bar-wrap">
+    <input type="text" placeholder="Search t-shirts, hoodies, and more..."
+      oninput="searchAutocomplete(this.value)"
+      onkeydown="if(event.key==='Enter'){closeSearchDropdown();goShop('');shopSearch(this.value)}"
+      autocomplete="off">
+  </div>
+</div>
 
 <!-- MEGA NAV -->
 <nav class="mega-nav">
@@ -1460,7 +1467,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v15.5</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v15.6</span>
   </div>
 
 </nav>
@@ -1600,7 +1607,7 @@ footer{background:#111;padding:56px 32px 28px}
 
   <!-- VALUE PROP + CATEGORY GRID (competitor-matching) -->
   <div style="background:#f0f2f5;padding:48px 32px">
-    <div style="max-width:1300px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center">
+    <div id="hp-value-section" style="max-width:1300px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center">
 
       <!-- Left: headline + CTAs + delivery -->
       <div>
@@ -1613,7 +1620,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
 
         <!-- Delivery info -->
-        <div style="display:flex;gap:0;border-top:1px solid #ddd;padding-top:20px">
+        <div id="hp-delivery-row" style="display:flex;gap:0;border-top:1px solid #ddd;padding-top:20px">
           <div style="padding-right:24px;border-right:1px solid #ddd">
             <div style="font-size:13px;font-weight:800;color:#111">Free Delivery</div>
             <div style="font-size:12px;color:#888;margin-top:2px" id="hp-free-date">Wed, Apr 29</div>
@@ -1630,7 +1637,7 @@ footer{background:#111;padding:56px 32px 28px}
       </div>
 
       <!-- Right: 2x2 category card grid -->
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px">
+      <div id="hp-cat-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px">
         <div onclick="goShop('T-Shirts')" style="cursor:pointer;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e0e0e0;transition:all .22s;box-shadow:0 2px 10px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.06)'">
           <div id="catimg-tshirt-wrap" style="height:200px;background:#f4f4f6;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
             <img id="catimg-tshirt" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
@@ -2000,7 +2007,12 @@ footer{background:#111;padding:56px 32px 28px}
       </div>
 
       <!-- CTA -->
-      <button class="pdp-cta" onclick="openPDPStudio()" style="margin-bottom:16px">✏ Start Designing</button>
+      <!-- MOBILE FIXED BOTTOM CTA -->
+<div class="pdp-fixed-cta">
+  <button onclick="openPDPStudio()">Start Designing →</button>
+</div>
+
+<button class="pdp-cta" onclick="openPDPStudio()" style="margin-bottom:16px">✏ Start Designing</button>
 
       <!-- Explore more -->
       <div id="pdp-explore" style="text-align:center;margin-bottom:20px">
