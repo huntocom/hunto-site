@@ -117,6 +117,13 @@ User's choice. Site is in preview mode. Password stored in `sessionStorage` — 
 | v15.3 | Fixed garment images: URLSearchParams + display:none on empty img |
 | v15.4 | Fixed broken links: stray div removed + URLSearchParams for API |
 | v15.5 | Password gate added (password: Fart) |
+| v15.6 | Full mobile layout matching RushOrderTees |
+| v15.7–v15.9 | Mobile studio: fix topbar, hide undo/redo, Save+Next, ROTATE button |
+| v16.0–v16.1 | Hide header/search in mobile studio, fit screen on any phone |
+| v16.2 | Shirt fills screen, bigger icons, bigger X, clean layout |
+| v16.3–v16.5 | Fix pills clickable, delete button, panel position:fixed, touch events |
+| v16.6 | Mobile studio definitive fix: full-screen shirt, working panels |
+| v16.7–v16.8 | Fix iconbar at bottom, full mobile audit across all resolutions |
 
 ---
 
@@ -133,6 +140,17 @@ Added 9 customer photos (~413kb of base64) directly into the HTML. File balloone
 
 ### `encodeURIComponent` for API Params
 Used `encodeURIComponent` for category names in API URLs. Resulted in wrong encoding — server couldn't match category. Took 2 iterations to diagnose.
+
+### Background Removal Provider Churn (v12.x)
+Went through multiple iterations on the `/remove-bg` endpoint:
+1. remove.bg with form-data → too expensive ($0.25/image)
+2. remove.bg with JSON body → worked but still expensive
+3. Fal.ai `fal-ai/imageutils/rembg` → final choice (~$0.002/image)
+
+Also had issues with: dynamic `import()` vs `require()`, wrong env var names (`REMOVE_BG_KEY` vs `REMOVEBG_API_KEY` vs `FAL_API_KEY`). Lesson: pick one approach and stick with it.
+
+### Clipart Provider Churn (v9.x–v10.0)
+Tried OpenClipart (CORS issues), SVG Repo, corsproxy.io, allorigins.win, then finally Wikimedia Commons via Railway server proxy. The `/clipart` endpoint on the server solved all CORS issues.
 
 ### Best Sellers Section on Homepage
 Added a tabbed best sellers grid to the homepage. Looked good but the API calls were slow to load and "No products found" appeared frequently. Removed at user request. The shop page handles this better.
@@ -169,11 +187,21 @@ Added as category cards. User pointed out: "We don't have hats or promotional ri
 
 ---
 
-## Current State (v15.5)
+## Current State (v16.8)
 
 Site is password protected (pw: Fart) and fully functional at:
 https://luxury-bienenstitch-8254ae.netlify.app
 
 Homepage shows real Gildan product photos, customer gallery with 9 real order photos, proper "YOUR DESIGN HERE" overlays. Studio is fully functional with AI art, background removal, text, upload, names & numbers. Checkout goes straight to Shopify (no login gate).
 
-Main gaps remaining: domain not yet connected, no real Shopify cart integration, no abandoned design email recovery, mobile layout untested.
+Main gaps remaining: domain not yet connected, no real Shopify cart integration, no abandoned design email recovery.
+
+### Mobile (v15.6–v16.8)
+Mobile layout fully addressed. Studio uses full-screen shirt canvas, bottom iconbar with bigger icons, position:fixed sliding panels, touch events on pills, and hidden header/search bar. Homepage is responsive with hero, category grid, and customer gallery working on all phone sizes (iPhone SE through Android large).
+
+### Mobile Lessons Learned
+- `position:fixed` is essential for mobile panels — `absolute` gets lost in scroll
+- Pills need `ontouchstart` not just `onclick` for responsive mobile taps
+- Header and search bar must be explicitly hidden in studio mode on mobile
+- Iconbar must be fixed at bottom with enough z-index to stay above canvas
+- Took ~13 iterations (v15.6–v16.8) to get mobile studio right

@@ -114,12 +114,20 @@ Called on page load. Fetches real Gildan product photos from catalog API.
 
 ## Design Studio
 
-### Layout
+### Desktop Layout
 - **Thin topbar**: Step indicator (1 DESIGN → 2 QUANTITY & SIZES → 3 REVIEW) + live price (`#s-price-each`, `#s-price-sub`)
 - **Left iconbar**: 5 buttons — Products (blue), Add Text (purple), Upload Art (green), AI Art (red/orange), Names & #s (pink)
 - **Center canvas**: Product mockup with draggable/resizable layers
 - **Right panel** (100px): Front/Back thumbnails + Undo/Redo/Layers/Save
 - **Bottom action bar**: ← Back, Save Design, Next Step →
+
+### Mobile Layout (v15.6+)
+- **Topbar**: Save + Next buttons, step indicator
+- **Full-screen canvas**: Shirt fills available height, no thumbnail strip
+- **Bottom iconbar**: Fixed at bottom, bigger icons, ROTATE button
+- **Sliding panels**: position:fixed, slide up from bottom over canvas
+- **Touch events**: Pills use ontouchstart for responsive taps
+- **Header/search**: Hidden in studio mode on mobile
 
 ### Iconbar Panels
 - **Products** (`sp-products`) — Color picker, garment switcher
@@ -245,7 +253,7 @@ os.unlink(fname)
 
 ## Versioning
 - Version tracked in HTML comment `<!-- vX.X -->` and visible span `>vX.X<`
-- Current version: **v15.5**
+- Current version: **v16.8**
 - Bump with: `sed -i "s/<!-- v[0-9]*\.[0-9]* -->/<!-- vX.X -->/" index.html`
 
 ---
@@ -264,7 +272,7 @@ os.unlink(fname)
 - [ ] Connect hunto.com domain to Netlify
 - [ ] Shopify cart integration — wire "ADD TO CART" to real Shopify cart
 - [ ] Abandoned design recovery emails — server `/save-design` needs DB + email trigger
-- [ ] Mobile layout — never addressed
+- [x] Mobile layout — full responsive redesign (v15.6–v16.8)
 - [ ] Customer photo gallery — currently base64 embedded; needs CDN hosting long-term
 - [ ] Verify `hi-vis` search returns correct safety products with orange/green primary images
 
@@ -293,3 +301,8 @@ os.unlink(fname)
 - ✅ Product detail page
 - ✅ Bulk discount pricing tiers
 - ✅ Apple Pay button in review panel
+- ✅ Mobile studio: full-screen shirt, bottom iconbar, sliding panels, Save+Next topbar
+- ✅ Mobile homepage: responsive hero, category grid, customer gallery
+- ✅ Mobile-specific: bigger icons, ROTATE button, touch events on pills, position:fixed panels
+- ✅ Clipart search via Wikimedia Commons (server /clipart endpoint)
+- ✅ CLAUDE.md, context.md, skills.md, memory.md project docs

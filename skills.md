@@ -403,3 +403,34 @@ with open('/home/claude/full_logo_b64.txt') as f:
     logo_b64 = f.read().strip()
 # Then replace hdr-logo img src with f"data:image/png;base64,{logo_b64}"
 ```
+
+---
+
+## 16. Playwright Browser Testing
+
+Available at `/home/claude/.npm-global/lib/node_modules/playwright`
+
+```js
+const { chromium } = require('playwright');
+// Unlock: fill password 'Fart', click 'Unlock'
+// Devices: {w:375,h:667} iPhone SE, {w:390,h:844} iPhone 14, {w:412,h:915} Android
+```
+
+---
+
+## 17. Deploy via Claude Code (local machine)
+
+The standard deploy pattern used in Claude Code terminal:
+```
+Copy /Users/hunto/Downloads/index.html to current directory,
+commit and push "vX.X - description", delete download
+```
+
+This runs:
+```bash
+cp /Users/hunto/Downloads/index.html /Users/hunto/Documents/GitHub/hunto-site/index.html
+git add index.html
+git commit -m "vX.X - description"
+git push https://<token>@github.com/huntocom/hunto-site.git main
+rm /Users/hunto/Downloads/index.html
+```
