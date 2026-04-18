@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v22.1 -->
+<!-- v22.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -440,7 +440,8 @@ footer{background:#111;padding:56px 32px 28px}
 /* ══════════════════════════════════════════
    STUDIO PAGE
 ══════════════════════════════════════════ */
-.studio-page{display:flex;flex-direction:column;height:calc(100vh - 116px);height:calc(100dvh - 116px);overflow:hidden}
+.studio-page{display:flex;flex-direction:column;height:calc(100vh - 116px);height:calc(100dvh - 116px);height:calc(100svh - 116px);overflow:hidden}
+.s-bottombar,.studio-actions{padding-bottom:env(safe-area-inset-bottom,0px) !important}
 
 /* Studio top bar — product tray style */
 .studio-topbar{
@@ -877,15 +878,15 @@ footer{background:#111;padding:56px 32px 28px}
 
 /* Studio bottom bar */
 .s-bottombar{
-  height:60px;background:#fff;border-top:1px solid #e0e0e0;
+  height:68px;background:#fff;border-top:1px solid #e0e0e0;
   display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0;
 }
 .s-bottom-info{flex:1;font-size:12px;color:#aaa;font-weight:500;line-height:1.5}
 .s-bottom-info strong{color:#555;font-weight:700;font-size:13px}
 .s-bot-btn{
-  height:44px;padding:0 20px;
+  height:46px;padding:0 22px;
   border:1.5px solid #e0e0e0;border-radius:12px;
-  background:#fff;font-size:13px;font-weight:700;color:#444;
+  background:#fff;font-size:14px;font-weight:700;color:#444;
   transition:all .18s;white-space:nowrap;
   display:flex;align-items:center;gap:8px;
   cursor:pointer;font-family:'DM Sans',sans-serif;
@@ -893,7 +894,7 @@ footer{background:#111;padding:56px 32px 28px}
 .s-bot-btn:hover{border-color:#0071ce;color:#0071ce;background:#f0f7ff}
 .s-bot-btn.next{
   background:#0071ce;border-color:#0071ce;color:#fff;
-  height:48px;padding:0 32px;font-size:15px;font-weight:800;
+  height:50px;padding:0 36px;font-size:16px;font-weight:800;
   border-radius:14px;box-shadow:0 4px 16px rgba(0,113,206,.35);
   letter-spacing:.02em;
 }
@@ -1707,7 +1708,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v22.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v22.2</span>
   </div>
 
 </nav>
@@ -2561,7 +2562,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v22.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v22.2</span>
   </div>
 
   <div class="studio-body">
