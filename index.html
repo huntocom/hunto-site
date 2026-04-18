@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v15.7 -->
+<!-- v15.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1480,7 +1480,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v15.7</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v15.8</span>
   </div>
 
 </nav>
@@ -3861,7 +3861,12 @@ function initStudio(){
 
   if(!studioInited){ studioInited=true; }
   sInitProducts(); // init multi-product array
-  sPanel("products",document.getElementById("sib-products"));
+  // Mobile: start clean canvas like RushOrderTees. Desktop: open Products panel.
+  if(window.innerWidth <= 768){
+    sClosePanel();
+  } else {
+    sPanel("products",document.getElementById("sib-products"));
+  }
   initKeyField();
   buildSGarments();
   buildSColors();
