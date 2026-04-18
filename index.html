@@ -496,29 +496,31 @@ footer{background:#111;padding:56px 32px 28px}
   background:#222020;
   border-radius:8px 0 0 8px;
   display:flex;flex-direction:column;align-items:center;
-  padding:8px 0 16px;gap:2px;overflow-y:auto;
+  padding:32px 0 16px;gap:0;overflow-y:auto;
 }
 .s-ibtn{
-  width:60px;display:flex;flex-direction:column;
-  align-items:center;gap:4px;padding:10px 4px 8px;
+  width:100%;display:flex;flex-direction:column;
+  align-items:center;gap:2px;padding:8px 0;
   border-radius:0;cursor:pointer;
   border:none;background:transparent;
   border-left:3px solid transparent;
+  border-right:1px solid transparent;
   transition:all .15s ease;
   -webkit-tap-highlight-color:transparent;
   position:relative;
 }
-.s-ibtn:hover{background:rgba(255,255,255,.08)}
-.s-ibtn.on{background:#fff;border-left:3px solid #0071ce;border-radius:0}
+.s-ibtn:hover{background:rgba(255,255,255,.06)}
+.s-ibtn.on{background:#fff;border-left:3px solid #0071ce;border-right-color:#d9d9d9}
 .s-iconbar.nn-active-mode .s-ibtn:not(#sib-names){opacity:.28 !important;pointer-events:none !important;cursor:not-allowed !important;}
 
 .s-ibtn-icon{
-  width:36px;height:36px;border-radius:0;
+  width:48px;height:48px;border-radius:0;
   display:flex;align-items:center;justify-content:center;
   transition:all .15s ease;
   flex-shrink:0;background:transparent;
+  margin:-4px 0;
 }
-/* No colored gradients — uniform white icons on dark bg */
+/* No colored gradients — uniform icons on dark bg */
 #sib-products .s-ibtn-icon,
 #sib-text .s-ibtn-icon,
 #sib-upload .s-ibtn-icon,
@@ -534,12 +536,13 @@ footer{background:#111;padding:56px 32px 28px}
 #sib-ai.on .s-ibtn-icon,
 #sib-names.on .s-ibtn-icon{box-shadow:none}
 
-/* SVG white on dark, dark when active */
-.s-ibtn-icon svg{stroke:#fff !important}
+/* SVG: white on dark → #bfbfbf inactive, #222 active */
+.s-ibtn-icon svg{stroke:#bfbfbf !important;width:28px;height:28px}
+.s-ibtn:hover .s-ibtn-icon svg{stroke:#d9d9d9 !important}
 .s-ibtn.on .s-ibtn-icon svg{stroke:#222 !important}
 
-.s-ibtn-label{font-size:8px;font-weight:600;color:rgba(255,255,255,.55);text-align:center;line-height:1.2;letter-spacing:.02em;text-transform:capitalize}
-.s-ibtn.on .s-ibtn-label{color:#222;font-weight:700}
+.s-ibtn-label{font-size:13px;font-weight:500;color:#bfbfbf;text-align:center;line-height:1.25;letter-spacing:0;text-transform:capitalize;padding:0 2px}
+.s-ibtn.on .s-ibtn-label{color:#222;font-weight:600}
 .s-ibtn-sep{width:40px;height:1px;background:rgba(255,255,255,.12);margin:4px 0}
 
 /* Panel — opens beside dark toolbar */
@@ -732,8 +735,8 @@ footer{background:#111;padding:56px 32px 28px}
 
 /* Canvas bottom label */
 .s-canvas-label{
-  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
-  font-size:11px;color:#939393;white-space:nowrap;font-weight:500;
+  position:absolute;bottom:12px;left:14px;
+  font-size:13px;color:#939393;white-space:nowrap;font-weight:500;
 }
 .s-ntf{
   position:absolute;top:14px;left:50%;transform:translateX(-50%);
@@ -1110,36 +1113,36 @@ footer{background:#111;padding:56px 32px 28px}
   .s-thumbs{display:none !important}
   .s-bottombar{display:none !important}
 
-  /* ── Iconbar — dark bottom bar like CustomInk mobile ── */
+  /* ── Iconbar — dark bottom bar like CustomInk mobile (64px, 47px icons, 11px labels) ── */
   .s-iconbar{
     width:100%; height:64px; flex-shrink:0;
     order:2;
-    display:flex; flex-direction:row; align-items:center;
-    border-right:none; border-top:none;
-    overflow-x:auto; padding:0 8px; gap:2px;
+    display:flex; flex-direction:row; align-items:center; justify-content:space-evenly;
+    border-right:none; border-top:none; border-left:none;
+    overflow-x:auto; padding:0; gap:0;
     background:#181818e6;
     -webkit-overflow-scrolling:touch; scrollbar-width:none;
     border-radius:0;
   }
   .s-iconbar::-webkit-scrollbar{display:none}
   .s-ibtn{
-    width:auto; flex-direction:column; gap:3px;
-    padding:6px 10px; white-space:nowrap;
-    border-radius:0; flex-shrink:0;
-    min-width:56px; height:54px;
+    width:auto; flex-direction:column; gap:0;
+    padding:0; white-space:nowrap;
+    border-radius:0; flex-shrink:0; flex:1 1 auto;
+    min-width:66px; height:100%;
     display:flex; align-items:center; justify-content:center;
-    border-left:none;
+    border-left:none !important; border-right:none !important;
   }
-  .s-ibtn-icon{width:28px !important; height:28px !important; border-radius:0 !important; background:transparent !important}
-  .s-ibtn-icon svg{width:20px !important; height:20px !important; stroke:#fff !important}
-  .s-ibtn-label{font-size:8px !important; font-weight:600; color:rgba(255,255,255,.55) !important}
+  .s-ibtn-icon{width:47px !important; height:47px !important; border-radius:0 !important; background:transparent !important; margin:-.2rem 0 -1rem !important}
+  .s-ibtn-icon svg{width:24px !important; height:24px !important; stroke:#fff !important; fill:transparent !important}
+  .s-ibtn-label{font-size:11px !important; font-weight:500 !important; color:#fff !important; margin-top:7px !important; letter-spacing:0 !important; line-height:12px !important}
   .s-ibtn-sep{display:none}
-  .s-ibtn.on{background:rgba(255,255,255,.1)}
-  .s-ibtn.on .s-ibtn-label{color:#fff !important; font-weight:700 !important}
+  .s-ibtn.on{background:rgba(255,255,255,.12)}
+  .s-ibtn.on .s-ibtn-label{color:#fff !important; font-weight:600 !important}
   .s-ibtn.on .s-ibtn-icon{background:transparent !important}
   .s-ibtn.on .s-ibtn-icon svg{stroke:#fff !important}
 
-  /* ── Panel — FIXED above dark iconbar ── */
+  /* ── Panel — FIXED above dark 64px iconbar ── */
   .s-panel{
     position:fixed !important;
     bottom:64px !important;
@@ -1191,9 +1194,9 @@ footer{background:#111;padding:56px 32px 28px}
   #hp-cat-grid{grid-template-columns:repeat(2,1fr) !important}
   .hero-btn-primary,.hero-btn-secondary{height:48px;font-size:15px}
   .s-panel{max-height:50vh}
-  .s-ibtn{padding:4px 8px}
-  .s-ibtn-icon{font-size:14px}
-  .s-ibtn-label{font-size:8px}
+  .s-ibtn{min-width:58px}
+  .s-ibtn-icon svg{width:22px !important; height:22px !important}
+  .s-ibtn-label{font-size:10px !important}
   .studio-topbar{height:42px;padding:0 8px}
   .stbtn{height:28px;padding:0 6px;font-size:10px}
   .stbtn.blue{height:30px;padding:0 10px;font-size:11px}
@@ -3337,11 +3340,13 @@ footer{background:#111;padding:56px 32px 28px}
       <div class="s-canvas-label" id="s-canvas-label">Front — Gildan 8000 · White · M</div>
       <button onclick="clearCurrentDesign()" style="
         position:absolute;bottom:14px;right:14px;
-        padding:5px 12px;background:rgba(255,255,255,0.9);
-        border:1px solid #ddd;border-radius:8px;
-        font-size:11px;font-weight:600;color:#888;
+        padding:8px 16px;background:#fff;
+        border:2px solid #e0e0e0;border-radius:6px;
+        font-size:14px;font-weight:600;color:#555;
         cursor:pointer;font-family:'DM Sans',sans-serif;
-      ">Clear this side</button>
+        box-shadow:0 1px 4px rgba(0,0,0,.1);
+        transition:all .15s;z-index:5;
+      " onmouseover="this.style.borderColor='#dc2626';this.style.color='#dc2626'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">Clear this side</button>
     </div>
 
     <!-- Right thumbnails -->
