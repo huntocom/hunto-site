@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v20.0 -->
+<!-- v20.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1659,7 +1659,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.1</span>
   </div>
 
 </nav>
@@ -2342,7 +2342,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.1</span>
   </div>
 
   <div class="studio-body">
@@ -7444,14 +7444,14 @@ function showMobileEditBar(id){
   bar.id = 'mobile-edit-bar';
   bar.style.cssText = 'position:fixed;bottom:64px;left:0;right:0;z-index:9998;background:rgba(30,30,30,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:8px 12px;display:flex;flex-direction:column;gap:6px;';
 
-  bar.innerHTML = '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">'
+  bar.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:4px 0 12px">'
     + '<span style="font-size:12px;font-weight:700;color:#fff;width:50px;flex-shrink:0">Size</span>'
-    + '<input type="range" id="meb-size" min="30" max="180" value="'+Math.min(180,curSize)+'" style="flex:1;accent-color:#0071ce;height:6px;border-radius:3px" oninput="mebApply(\''+id+'\')">'
+    + '<input type="range" id="meb-size" min="30" max="180" value="'+Math.min(180,curSize)+'" style="flex:1;accent-color:#0071ce;height:8px;border-radius:4px" oninput="mebApply(\''+id+'\')">'
     + '<span id="meb-size-val" style="font-size:12px;font-weight:700;color:#0071ce;width:36px;text-align:right">'+curSize+'%</span>'
     + '</div>'
-    + '<div style="display:flex;align-items:center;gap:6px">'
+    + '<div style="display:flex;align-items:center;gap:8px;padding:4px 0">'
     + '<span style="font-size:12px;font-weight:700;color:#fff;width:50px;flex-shrink:0">Rotate</span>'
-    + '<input type="range" id="meb-rotate" min="-180" max="180" value="'+curRot+'" style="flex:1;accent-color:#0071ce;height:6px;border-radius:3px" oninput="mebApply(\''+id+'\')">'
+    + '<input type="range" id="meb-rotate" min="-180" max="180" value="'+curRot+'" style="flex:1;accent-color:#0071ce;height:8px;border-radius:4px" oninput="mebApply(\''+id+'\')">'
     + '<span id="meb-rot-val" style="font-size:12px;font-weight:700;color:#0071ce;width:32px;text-align:right">'+curRot+'°</span>'
     + '</div>'
     + '<div style="display:flex;align-items:center;gap:8px">'
