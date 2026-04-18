@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v19.1 -->
+<!-- v19.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1632,7 +1632,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.2</span>
   </div>
 
 </nav>
@@ -2316,7 +2316,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.2</span>
   </div>
 
   <div class="studio-body">
@@ -4156,6 +4156,11 @@ function sClosePanel(){
   document.querySelectorAll(".s-ibtn").forEach(b=>b.classList.remove("on"));
   activePanelId=null;
   nnClearPreview();
+  // Safety: ensure all layers on the current view are visible
+  var cv = sView || 'front';
+  document.querySelectorAll("[data-type='image'][data-side='"+cv+"'],[data-type='text'][data-side='"+cv+"']").forEach(function(el){
+    if(el.style.display === 'none') el.style.display = 'block';
+  });
   // Only exit jersey mode when user explicitly closes the N&N panel (× button)
   // Jersey mode persists if user is just switching to another panel
 }
@@ -5424,7 +5429,7 @@ function applyDesign(src){
   updateFloatPills();
   // Auto-open edit panel on desktop; close panel on mobile so user sees the design
   if(window.innerWidth <= 768){
-    setTimeout(function(){ sClosePanel(); }, 100);
+    setTimeout(function(){ sClosePanel(); ensureLayersVisible(); }, 100);
   } else {
     setTimeout(function(){ eaOpenForLayer(id); }, 100);
   }
@@ -5472,6 +5477,12 @@ function selectLayer(id){
   selectedLayerId = id;
   const dz = document.getElementById(id);
   if(!dz) return;
+  // Ensure layer is visible (might be hidden from view switch)
+  if(dz.style.display === 'none'){
+    dz.style.display = 'block';
+    // Switch to the layer's view
+    if(dz.dataset.side && dz.dataset.side !== sView) sSetView(dz.dataset.side);
+  }
   dz.style.outline = "2px solid rgba(0,113,206,.6)";
   // On mobile: show overlay toolbar only (no panel). On desktop: open edit panel too.
   if(window.innerWidth <= 768){
@@ -7348,6 +7359,15 @@ function txtPlace(){
   sNtf("Text placed! Drag to reposition.");
   // On mobile, close panel so user can see the placed text
   if(window.innerWidth <= 768) sClosePanel();
+  // Ensure all layers on current view are visible
+  ensureLayersVisible();
+}
+
+function ensureLayersVisible(){
+  var cv = sView || 'front';
+  document.querySelectorAll("[data-type='image'][data-side='"+cv+"'],[data-type='text'][data-side='"+cv+"']").forEach(function(el){
+    if(el.style.display === 'none') el.style.display = 'block';
+  });
 }
 
 function showTextToolbar(id){
