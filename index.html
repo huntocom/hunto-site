@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v16.7 -->
+<!-- v16.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -899,7 +899,9 @@ footer{background:#111;padding:56px 32px 28px}
   .hdr-actions .hdr-action{display:none}
   .hdr-design-btn{display:none}
   .mobile-hdr-menu{display:flex}
-  .main-header{padding:0 12px;height:52px;gap:8px}
+  .main-header{padding:0 12px;height:52px;gap:8px;overflow:visible}
+  .hdr-actions{gap:8px}
+  .mobile-hdr-menu{width:36px;height:36px}
   .hdr-logo img{height:30px}
   .hdr-search{flex:1;max-width:none}
   .hdr-search input{font-size:14px;padding:9px 14px 9px 36px;border-radius:24px}
@@ -914,17 +916,20 @@ footer{background:#111;padding:56px 32px 28px}
   /* ═══════════════════════════════════════
      HOMEPAGE HERO — image top, text below
   ═══════════════════════════════════════ */
-  .hero{grid-template-columns:1fr;max-height:none;min-height:auto;background:#f0f2f5}
-  .hero-right{order:1;padding:16px 16px 0;min-height:auto;display:flex;align-items:center;justify-content:center;background:#f0f2f5}
-  .hero-left{order:2;padding:20px 16px 28px;background:#f0f2f5}
-  .hero h1{font-size:30px;line-height:1.1;color:#111;letter-spacing:-.5px;margin-bottom:10px}
+  .hero{grid-template-columns:1fr;max-height:none;min-height:auto;background:#f0f2f5;overflow:hidden}
+  .hero-right{order:1;padding:16px 16px 0;min-height:180px;display:flex;align-items:center;justify-content:center;background:#f0f2f5;overflow:hidden}
+  .hero-left{order:2;padding:20px 16px 28px;background:#f0f2f5;min-width:0;overflow:hidden}
+  .hero h1{font-size:28px;line-height:1.15;color:#111;letter-spacing:-.5px;margin-bottom:10px;word-break:break-word}
   .hero-sub{font-size:14px;color:#555;margin-bottom:20px}
-  .hero-stats{gap:16px;flex-wrap:wrap;margin-bottom:20px}
+  .hero-stats{gap:12px;flex-wrap:wrap;margin-bottom:20px}
   .stat-n{font-size:20px}
-  /* Full-width pill buttons like RushOrderTees */
+  /* Full-width pill buttons */
   .hero-btns{flex-direction:column;gap:10px;width:100%}
   .hero-btn-primary{width:100%;text-align:center;justify-content:center;height:50px;border-radius:25px;font-size:16px}
   .hero-btn-secondary{width:100%;text-align:center;justify-content:center;height:50px;border-radius:25px;font-size:16px}
+  /* Floating hero cards — smaller on mobile */
+  .hero-card{max-width:130px !important;font-size:10px !important}
+  .hero-card-img{height:90px !important}
 
   /* ═══════════════════════════════════════
      VALUE PROP + CATEGORY GRID
@@ -1041,7 +1046,8 @@ footer{background:#111;padding:56px 32px 28px}
     font-weight:800; flex-shrink:0;
   }
   .sstep.active .sstep-num{background:#7c3aed; color:#fff}
-  .sstep-label{font-size:8px; font-weight:700; color:#bbb; text-transform:uppercase; letter-spacing:.03em; white-space:nowrap}
+  .sstep-label{font-size:8px; font-weight:700; color:#bbb; text-transform:uppercase; letter-spacing:.03em; white-space:nowrap; overflow:hidden; max-width:80px; text-overflow:ellipsis}
+  .sstep:not(.active) .sstep-label{display:none}  /* only show label for active step on small screens */
   .sstep.active .sstep-label{color:#7c3aed}
   .sstep-div{width:10px; height:2px; background:#e0e0e0; flex-shrink:0}
 
@@ -1163,7 +1169,8 @@ footer{background:#111;padding:56px 32px 28px}
   .footer{padding:40px 16px 24px}
 }
 @media(max-width:480px){
-  .hero h1{font-size:26px}
+  html,body{overflow-x:hidden;max-width:100vw}
+  .hero h1{font-size:24px}
   .hero-sub{font-size:14px}
   .products-section{padding:32px 14px}
   .how{padding:32px 14px}
@@ -1184,7 +1191,7 @@ footer{background:#111;padding:56px 32px 28px}
   .pcard-img-area{min-height:160px;padding:16px}
   .footer-grid{grid-template-columns:1fr;gap:20px}
   .ship-cards{grid-template-columns:1fr}
-  .style-grid{grid-template-columns:repeat(3,1fr)}
+  .style-grid{grid-template-columns:1fr}
   .reviews-grid{grid-template-columns:1fr}
 
   /* Step 2 size grid — 2 cols on small phones */
@@ -2277,14 +2284,14 @@ footer{background:#111;padding:56px 32px 28px}
     <div class="s-iconbar">
 
       <!-- ── PRIMARY 4 ── -->
-      <button class="s-ibtn on" id="sib-products" onclick="sPanel('products',this)">
+      <button class="s-ibtn on" id="sib-products" ontouchend="event.preventDefault();sPanel('products',this)" onclick="sPanel('products',this)">
         <span class="s-ibtn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H7v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V10h4.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
           </svg></span>
         <span class="s-ibtn-label">Products</span>
       </button>
 
-      <button class="s-ibtn" id="sib-text" onclick="sPanel('text',this)">
+      <button class="s-ibtn" id="sib-text" ontouchend="event.preventDefault();sPanel('text',this)" onclick="sPanel('text',this)">
         <span class="s-ibtn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="4 7 4 4 20 4 20 7"/>
             <line x1="9" y1="20" x2="15" y2="20"/>
@@ -3290,13 +3297,19 @@ footer{background:#111;padding:56px 32px 28px}
           <div id="s-dzone-back" style="position:absolute;z-index:3;display:none;cursor:move;"></div>
         </div>
         <div class="float-pills" id="s-floats">
-          <button class="float-pill" onclick="sPanel('text',document.getElementById('sib-text'))">
+          <button class="float-pill"
+            ontouchend="event.preventDefault();sPanel('text',document.getElementById('sib-text'))"
+            onclick="sPanel('text',document.getElementById('sib-text'))">
             <span class="float-pill-icon">T</span> Add Text
           </button>
-          <button class="float-pill" onclick="sPanel('ai',document.getElementById('sib-ai'))">
+          <button class="float-pill"
+            ontouchend="event.preventDefault();sPanel('ai',document.getElementById('sib-ai'))"
+            onclick="sPanel('ai',document.getElementById('sib-ai'))">
             <span class="float-pill-icon">✦</span> AI Art
           </button>
-          <button class="float-pill" onclick="sPanel('upload',document.getElementById('sib-upload'))">
+          <button class="float-pill"
+            ontouchend="event.preventDefault();sPanel('upload',document.getElementById('sib-upload'))"
+            onclick="sPanel('upload',document.getElementById('sib-upload'))">
             <span class="float-pill-icon">↑</span> Upload Art
           </button>
         </div>
@@ -4068,13 +4081,23 @@ function sClosePanel(){
 /* Mobile: tap canvas to dismiss panel overlay */
 document.addEventListener('DOMContentLoaded',function(){
   const canvas=document.querySelector('.s-canvas');
-  if(canvas) canvas.addEventListener('click',function(e){
-    if(window.innerWidth>768) return;
-    const panel=document.getElementById('s-panel');
-    if(panel && panel.style.display!=='none' && !e.target.closest('.s-dzone') && !e.target.closest('.txt-layer')){
-      sClosePanel();
-    }
-  });
+  if(canvas){
+    canvas.addEventListener('click',function(e){
+      if(window.innerWidth>768) return;
+      // Don't close panel if clicking float-pills
+      if(e.target.closest('.float-pill')) return;
+      const panel=document.getElementById('s-panel');
+      if(panel && panel.style.display!=='none' && !e.target.closest('.s-dzone') && !e.target.closest('.txt-layer')){
+        sClosePanel();
+      }
+    });
+    // Prevent canvas touchstart from swallowing pill button taps
+    canvas.addEventListener('touchstart',function(e){
+      if(e.target.closest('.float-pill')){
+        e.stopPropagation(); // Don't let drag handlers intercept pill taps
+      }
+    },{passive:true});
+  }
 });
 
 function buildSGarments(){
