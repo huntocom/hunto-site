@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v17.1 -->
+<!-- v17.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -917,22 +917,18 @@ footer{background:#111;padding:56px 32px 28px}
   .mobile-search-bar{display:block}
 
   /* ═══════════════════════════════════════
-     HOMEPAGE HERO — image top, text below
+     HOMEPAGE HERO — single column, text only
   ═══════════════════════════════════════ */
-  .hero{grid-template-columns:1fr;max-height:none;min-height:auto;background:#f5f7fa;overflow:hidden}
-  .hero-right{order:1;padding:16px 16px 0;min-height:180px;display:flex;align-items:center;justify-content:center;background:#f5f7fa;overflow:hidden}
-  .hero-left{order:2;padding:20px 16px 28px;background:#f5f7fa;min-width:0;overflow:hidden}
-  .hero h1{font-size:28px;line-height:1.15;color:#111;letter-spacing:-.5px;margin-bottom:10px;word-break:break-word}
-  .hero-sub{font-size:14px;color:#555;margin-bottom:20px}
-  .hero-stats{gap:12px;flex-wrap:wrap;margin-bottom:20px}
-  .stat-n{font-size:20px}
-  /* Full-width pill buttons */
-  .hero-btns{flex-direction:column;gap:10px;width:100%}
-  .hero-btn-primary{width:100%;text-align:center;justify-content:center;height:50px;border-radius:25px;font-size:16px}
-  .hero-btn-secondary{width:100%;text-align:center;justify-content:center;height:50px;border-radius:25px;font-size:16px}
-  /* Floating hero cards — smaller on mobile */
-  .hero-card{max-width:130px !important;font-size:10px !important}
-  .hero-card-img{height:90px !important}
+  .hp-hero{min-height:auto !important}
+  .hp-hero-grid{grid-template-columns:1fr !important;gap:24px !important;padding:40px 20px !important}
+  .hp-hero-cards{display:none !important}
+  .hp-hero-text h1{font-size:32px !important;letter-spacing:-1px !important}
+  .hp-hero-text p{font-size:15px !important}
+  .hp-hero-text button{width:100%;justify-content:center;text-align:center}
+  .hp-hero-stats{gap:16px !important;flex-wrap:wrap;margin-top:24px !important;padding-top:20px !important}
+  .hp-hero-stats > div > div:first-child{font-size:18px !important}
+  .hp-hero-btns{flex-direction:column !important;width:100%}
+  .hp-hero-btns button{width:100% !important;justify-content:center !important}
 
   /* ═══════════════════════════════════════
      VALUE PROP + CATEGORY GRID
@@ -948,20 +944,20 @@ footer{background:#111;padding:56px 32px 28px}
   /* ═══════════════════════════════════════
      CUSTOMER GALLERY — 2 columns mobile
   ═══════════════════════════════════════ */
+  .hp-gallery{padding:40px 16px !important}
   #gallery-grid{columns:2 !important;column-gap:8px}
 
   /* ═══════════════════════════════════════
-     HOW IT WORKS — single column
+     HOW IT WORKS — 2 columns on tablet, 1 on phone
   ═══════════════════════════════════════ */
-  .how{padding:40px 16px}
-  .steps{grid-template-columns:1fr}
-  .step-card{border-right:none;border-bottom:1px solid #eee;padding:24px 0}
+  .hp-how{padding:40px 16px !important}
+  .hp-steps{grid-template-columns:repeat(2,1fr) !important;gap:12px !important}
 
   /* ═══════════════════════════════════════
      REVIEWS — single column
   ═══════════════════════════════════════ */
-  .reviews-section{padding:40px 16px}
-  .reviews-grid{grid-template-columns:1fr}
+  .hp-reviews{padding:40px 16px !important}
+  .hp-reviews-grid{grid-template-columns:1fr !important}
 
   /* ═══════════════════════════════════════
      CTA BAND
@@ -1176,8 +1172,8 @@ footer{background:#111;padding:56px 32px 28px}
   .hero h1{font-size:24px}
   .hero-sub{font-size:14px}
   .products-section{padding:32px 14px}
-  .how{padding:32px 14px}
-  .steps{grid-template-columns:1fr}
+  .hp-how{padding:32px 14px !important}
+  .hp-steps{grid-template-columns:1fr !important}
   .pdp-title{font-size:20px}
   .pdp-cta{height:50px;font-size:15px}
   .shop-card{grid-template-columns:100px 1fr}
@@ -1195,7 +1191,7 @@ footer{background:#111;padding:56px 32px 28px}
   .footer-grid{grid-template-columns:1fr;gap:20px}
   .ship-cards{grid-template-columns:1fr}
   .style-grid{grid-template-columns:1fr}
-  .reviews-grid{grid-template-columns:1fr}
+  .hp-reviews-grid{grid-template-columns:1fr !important}
 
   /* Step 2 size grid — 2 cols on small phones */
   #step2-size-grid > div{grid-template-columns:repeat(2,1fr) !important}
@@ -1596,7 +1592,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v17.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v17.2</span>
   </div>
 
 </nav>
@@ -1623,7 +1619,7 @@ footer{background:#111;padding:56px 32px 28px}
 <div id="page-home" class="page active">
 
   <!-- HERO -->
-  <section style="position:relative;background:linear-gradient(135deg,#0a1628 0%,#0d2240 40%,#0a1830 70%,#060e1a 100%);overflow:hidden;min-height:520px;display:flex;align-items:center">
+  <section class="hp-hero" style="position:relative;background:linear-gradient(135deg,#0a1628 0%,#0d2240 40%,#0a1830 70%,#060e1a 100%);overflow:hidden;min-height:520px;display:flex;align-items:center">
     <!-- Background effects -->
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 50%,rgba(0,113,206,.18) 0%,transparent 70%);pointer-events:none"></div>
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 20% 30%,rgba(236,72,153,.1) 0%,transparent 60%);pointer-events:none"></div>
@@ -1632,8 +1628,8 @@ footer{background:#111;padding:56px 32px 28px}
     <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(0,113,206,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(0,113,206,.1) 0%,transparent 40%);pointer-events:none"></div>
     
     
-    <div style="max-width:1300px;margin:0 auto;padding:60px 32px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;width:100%">
-      <div>
+    <div class="hp-hero-grid" style="max-width:1300px;margin:0 auto;padding:60px 32px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;width:100%">
+      <div class="hp-hero-text">
         <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,113,206,.15);border:1px solid rgba(0,113,206,.3);border-radius:20px;padding:6px 16px;margin-bottom:24px">
           <span style="color:#0071ce;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">✦ AI-Powered Custom Printing</span>
         </div>
@@ -1642,13 +1638,13 @@ footer{background:#111;padding:56px 32px 28px}
         
 
 
-        <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div class="hp-hero-btns" style="display:flex;gap:12px;flex-wrap:wrap">
           <button onclick="goPDP('8000')" style="height:52px;padding:0 32px;background:#0071ce;color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;box-shadow:0 4px 20px rgba(0,113,206,.4)">✦ Start Designing Free</button>
           <button onclick="goShop('')" style="height:52px;padding:0 28px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:26px;font-size:16px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s">Browse Products</button>
         </div>
 
         <!-- Stats -->
-        <div style="display:flex;gap:32px;margin-top:36px;padding-top:32px;border-top:1px solid rgba(255,255,255,.1)">
+        <div class="hp-hero-stats" style="display:flex;gap:32px;margin-top:36px;padding-top:32px;border-top:1px solid rgba(255,255,255,.1)">
           <div><div style="font-size:22px;font-weight:900;color:#fff">1.3M+</div><div style="font-size:12px;color:rgba(255,255,255,.5);font-weight:500">Happy Customers</div></div>
           <div><div style="font-size:22px;font-weight:900;color:#fff">48HR</div><div style="font-size:12px;color:rgba(255,255,255,.5);font-weight:500">Ships Out</div></div>
           <div><div style="font-size:22px;font-weight:900;color:#fff">$0</div><div style="font-size:12px;color:rgba(255,255,255,.5);font-weight:500">Minimum Order</div></div>
@@ -1657,7 +1653,7 @@ footer{background:#111;padding:56px 32px 28px}
       </div>
 
       <!-- Hero right - Real product photos loaded from catalog API -->
-      <div style="position:relative;height:480px;width:100%">
+      <div class="hp-hero-cards" style="position:relative;height:480px;width:100%">
         <style>
           @keyframes float1{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(-4deg)}}
           @keyframes float2{0%,100%{transform:translateY(0) rotate(3deg)}50%{transform:translateY(-16px) rotate(3deg)}}
@@ -1812,12 +1808,12 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 
   <!-- HOW IT WORKS -->
-  <div style="max-width:1300px;margin:0 auto;padding:64px 32px">
+  <div class="hp-how" style="max-width:1300px;margin:0 auto;padding:64px 32px">
     <div style="text-align:center;margin-bottom:48px">
       <div style="font-size:12px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">The Process</div>
       <h2 style="font-size:clamp(28px,3vw,40px);font-weight:700;color:#1a1a1a;letter-spacing:-1px;font-family:'Space Grotesk',sans-serif">Four steps. One shirt.</h2>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
+    <div class="hp-steps" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
       <div style="text-align:center;padding:32px 24px;background:#f5f7fa;border-radius:20px;border:1.5px solid #e8e8e8">
         <div style="width:52px;height:52px;background:#0071ce;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">👕</div>
         <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 01</div>
@@ -1846,7 +1842,7 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 
   <!-- CUSTOMER GALLERY -->
-  <div style="background:#f8f8f8;padding:60px 32px">
+  <div class="hp-gallery" style="background:#f8f8f8;padding:60px 32px">
     <div style="max-width:1300px;margin:0 auto">
       <div style="text-align:center;margin-bottom:40px">
         <div style="font-size:12px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Real Orders. Real People.</div>
@@ -1919,7 +1915,7 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 
   <!-- REVIEWS -->
-  <div style="background:#f5f7fa;padding:64px 32px">
+  <div class="hp-reviews" style="background:#f5f7fa;padding:64px 32px">
     <div style="max-width:1300px;margin:0 auto">
       <div style="text-align:center;margin-bottom:40px">
         <div style="font-size:12px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Real Orders</div>
@@ -1930,7 +1926,7 @@ footer{background:#111;padding:56px 32px 28px}
           <span style="font-size:14px;color:#aaa">· 28,000+ reviews</span>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div class="hp-reviews-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
         <div style="background:#fff;border-radius:16px;padding:28px;border:1.5px solid #e8e8e8">
           <div style="color:#f59e0b;font-size:16px;margin-bottom:12px">★★★★★</div>
           <p style="font-size:14px;color:#444;line-height:1.7;margin-bottom:16px">"I typed in a description and the shirt arrived looking exactly like I imagined. The quality blew me away. My whole crew wants one."</p>
@@ -2090,10 +2086,10 @@ footer{background:#111;padding:56px 32px 28px}
     <button onclick="history.back()" style="background:none;border:none;font-size:13px;color:#888;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;display:flex;align-items:center;gap:4px">← Back</button>
   </div>
 
-  <div style="max-width:1400px;margin:0 auto;padding:16px 24px 48px;display:grid;grid-template-columns:80px 1fr 480px;gap:20px;align-items:start">
+  <div class="pdp-wrap" style="max-width:1400px;margin:0 auto;padding:16px 24px 48px;display:grid;grid-template-columns:80px 1fr 480px;gap:20px;align-items:start">
 
     <!-- Thumbnail rail -->
-    <div id="pdp-thumb-rail" style="display:flex;flex-direction:column;gap:8px;position:sticky;top:124px"></div>
+    <div id="pdp-thumb-rail" class="pdp-thumbs" style="display:flex;flex-direction:column;gap:8px;position:sticky;top:124px"></div>
 
     <!-- Main image -->
     <div style="position:sticky;top:124px">
@@ -7567,8 +7563,8 @@ async function removeBackground(imageUrl, callback){
 // ════════════════════════════════
 // REAL SHIRT PHOTOS - GitHub CDN
 // ════════════════════════════════
-const BASE = "https://raw.githubusercontent.com/huntocom/hunto-site/main/";
-const SHIRT_PHOTOS_8000 = {
+var BASE = "https://raw.githubusercontent.com/huntocom/hunto-site/main/";
+var SHIRT_PHOTOS_8000 = {
     "Ash":               {f:BASE+"ASHFRONT.jpg",              b:BASE+"ASHBACK.jpg"},
     "Azalea":            {f:BASE+"AZALAFRONT.jpg",            b:BASE+"AZALABACK.jpg"},
     "Black":             {f:BASE+"BLACKFRONT.jpg",            b:BASE+"BLACKBACK.jpg"},
