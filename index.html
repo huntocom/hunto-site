@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v18.3 -->
+<!-- v18.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1606,7 +1606,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v18.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v18.4</span>
   </div>
 
 </nav>
@@ -4450,9 +4450,11 @@ function sSetView(v){
   document.querySelectorAll("[data-type='image'],[data-type='text']").forEach(el => {
     el.style.display = el.dataset.side === v ? "block" : "none";
   });
-  // Show/hide float pills
+  // Show/hide float pills — hide if ANY design exists on this side (image or text layers)
   const fp = document.getElementById("s-floats");
-  if(fp) fp.classList.toggle("hidden", (sLayers[v]||[]).length > 0);
+  var hasImageLayers = (sLayers[v]||[]).length > 0;
+  var hasTextLayers = document.querySelectorAll('.txt-layer[data-side="'+v+'"]').length > 0;
+  if(fp) fp.classList.toggle("hidden", hasImageLayers || hasTextLayers);
 
   const img=document.getElementById("s-shirt");
   img.style.mixBlendMode="normal";
@@ -5880,8 +5882,9 @@ function removeLayer(id){
   const side = el ? el.dataset.side : sView;
   if(el) el.remove();
   sLayers[side] = (sLayers[side]||[]).filter(l => l.id !== id);
-  const total = (sLayers.front||[]).length + (sLayers.back||[]).length;
-  if(total === 0){
+  var total = (sLayers.front||[]).length + (sLayers.back||[]).length;
+  var totalText = document.querySelectorAll('.txt-layer').length;
+  if(total === 0 && totalText === 0){
     sState.hasDesign = false;
     const fp = document.getElementById("s-floats");
     if(fp) fp.classList.remove("hidden");
@@ -6058,7 +6061,12 @@ function clearCurrentDesign(){
   const side = sView === "back" ? "back" : "front";
   (sLayers[side]||[]).slice().forEach(l => removeLayer(l.id));
   sLayers[side] = [];
-  if((sLayers.front||[]).length === 0 && (sLayers.back||[]).length === 0){
+  // Also remove text layers on this side
+  document.querySelectorAll('.txt-layer[data-side="'+side+'"]').forEach(el => el.remove());
+  // Show float pills only if BOTH sides are completely empty
+  var anyFront = (sLayers.front||[]).length > 0 || document.querySelectorAll('.txt-layer[data-side="front"]').length > 0;
+  var anyBack = (sLayers.back||[]).length > 0 || document.querySelectorAll('.txt-layer[data-side="back"]').length > 0;
+  if(!anyFront && !anyBack){
     const fp=document.getElementById("s-floats");
     if(fp)fp.classList.remove("hidden");
     sState.hasDesign = false;
