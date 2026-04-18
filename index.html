@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v16.4 -->
+<!-- v16.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1018,7 +1018,7 @@ footer{background:#111;padding:56px 32px 28px}
     display:flex; align-items:center;
   }
   .studio-price{display:none !important}
-  .mobile-studio-actions{display:flex}
+  .mobile-studio-actions{display:flex !important}
 
   /* Steps */
   .studio-steps{flex:1; gap:6px}
@@ -1032,7 +1032,7 @@ footer{background:#111;padding:56px 32px 28px}
   .studio-body{
     flex:1; min-height:0;
     display:flex; flex-direction:column;
-    overflow:hidden; position:relative;
+    overflow:visible; position:relative;
   }
 
   /* ── Canvas: fills ALL remaining space ── */
@@ -1058,9 +1058,9 @@ footer{background:#111;padding:56px 32px 28px}
     height:auto !important;
     display:block;
   }
-  /* Float pills must sit above everything in the canvas */
-  .float-pills{z-index:20 !important; pointer-events:auto}
-  .float-pill{pointer-events:auto; min-height:44px}
+  /* Float pills — must be tappable */
+  .float-pills{z-index:20 !important; pointer-events:auto !important; touch-action:auto}
+  .float-pill{pointer-events:auto !important; touch-action:auto; min-height:44px; -webkit-tap-highlight-color:rgba(124,58,237,.1)}
 
   /* ── Hide thumb strip (replaced by ROTATE btn) ── */
   .s-thumbs{display:none !important}
@@ -1098,13 +1098,17 @@ footer{background:#111;padding:56px 32px 28px}
   /* Hide bottom action bar — Save+Next are in the topbar on mobile */
   .s-bottombar{display:none !important}
 
-  /* ── Panel slides up as sheet ── */
+  /* ── Panel slides up as sheet — FIXED so overflow:hidden can't clip it ── */
   .s-panel{
-    position:absolute; bottom:0; left:0; right:0;
-    width:100%; border-right:none; border-top:1px solid #e8e8e8;
-    max-height:60vh; overflow-y:auto; z-index:200;
+    position:fixed !important;
+    bottom:60px !important;   /* sit above iconbar */
+    left:0 !important; right:0 !important;
+    width:100% !important;
+    max-height:55vh !important; overflow-y:auto;
+    z-index:9999 !important;
     background:#fff; border-radius:18px 18px 0 0;
-    box-shadow:0 -6px 28px rgba(0,0,0,.15);
+    border-top:1px solid #e8e8e8;
+    box-shadow:0 -8px 32px rgba(0,0,0,.2);
     -webkit-overflow-scrolling:touch;
   }
   .s-panel::before{
@@ -1566,7 +1570,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v16.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v16.5</span>
   </div>
 
 </nav>
