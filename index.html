@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v18.9 -->
+<!-- v19.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -733,6 +733,19 @@ footer{background:#111;padding:56px 32px 28px}
 .float-pill:hover{border-color:#0071ce;color:#0071ce;background:#fff;box-shadow:0 2px 8px rgba(0,113,206,.15)}
 .float-pill-icon{font-size:18px}
 
+/* Corner handles on selected layers (ROT style) */
+.corner-handle{
+  position:absolute;width:28px;height:28px;border-radius:50%;
+  background:#222;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:20;pointer-events:auto;
+  box-shadow:0 1px 4px rgba(0,0,0,.3);
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.corner-handle:active{transform:scale(1.15)}
+.ch-delete{top:-14px;left:-14px}
+.ch-edit{bottom:-14px;left:-14px;background:#0071ce}
+
 /* Print area guide zones — shown during drag */
 .print-guides{pointer-events:none}
 .guide-zone{pointer-events:none;box-sizing:border-box}
@@ -1167,10 +1180,11 @@ footer{background:#111;padding:56px 32px 28px}
     -webkit-overflow-scrolling:touch;
   }
   .s-panel::before{
-    content:''; display:block; width:36px; height:4px;
-    background:#d9d9d9; border-radius:2px; margin:10px auto 4px;
+    content:''; display:block; width:32px; height:3px;
+    background:#d9d9d9; border-radius:2px; margin:6px auto 2px;
   }
-  .s-panel-hdr{background:#fff !important}
+  .s-panel-hdr{background:#fff !important;padding:10px 16px 8px !important;border-bottom:1px solid #f0f0f0 !important}
+  .s-panel-body{padding:12px 16px !important}
   .s-panel-inner{padding:14px 16px}
   .s-panel[style*="display: none"],.s-panel[style*="display:none"]{display:none !important}
 
@@ -1618,7 +1632,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v18.9</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.0</span>
   </div>
 
 </nav>
@@ -2302,7 +2316,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v18.9</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.0</span>
   </div>
 
   <div class="studio-body">
@@ -5499,59 +5513,38 @@ function showLayerToolbar(id){
 function buildCanvasOverlay(id){
   // Remove existing
   const old = document.getElementById('canvas-overlay');
-  if(old) old.remove();
+  if(old){ clearInterval(old._posTimer); old.remove(); }
 
   const dz = document.getElementById(id);
   if(!dz) return;
 
-  const overlay = document.createElement('div');
-  overlay.id = 'canvas-overlay';
+  const isMobile = window.innerWidth <= 768;
+  const isText = dz.dataset.type === 'text';
 
-  // Position below the layer - will be updated on scroll/resize
-  function positionOverlay(){
-    const rect = dz.getBoundingClientRect();
-    const isMobile = window.innerWidth <= 768;
-    if(isMobile){
-      // On mobile: fixed at bottom above the iconbar
-      overlay.style.bottom = '72px';
-      overlay.style.left = '50%';
-      overlay.style.transform = 'translateX(-50%)';
-      overlay.style.top = 'auto';
-    } else {
-      overlay.style.top  = (rect.bottom + 8) + 'px';
-      overlay.style.left = (rect.left + rect.width/2) + 'px';
-      overlay.style.transform = 'translateX(-50%)';
-      overlay.style.bottom = 'auto';
-    }
+  // Add corner handles directly to the element (ROT style)
+  // Delete handle — top left
+  var delHandle = document.createElement('div');
+  delHandle.id = 'ch-del-'+id;
+  delHandle.className = 'corner-handle ch-delete';
+  delHandle.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>';
+  delHandle.onclick = function(e){ e.stopPropagation(); if(isText){ dz.remove(); } else { removeLayer(id); } hideLayerToolbar(); };
+  dz.appendChild(delHandle);
+
+  // Edit handle — bottom left (mobile only, like ROT)
+  if(isMobile){
+    var editHandle = document.createElement('div');
+    editHandle.id = 'ch-edit-'+id;
+    editHandle.className = 'corner-handle ch-edit';
+    editHandle.innerHTML = '<span style="font-size:10px;font-weight:700;color:#fff">edit</span>';
+    editHandle.onclick = function(e){ e.stopPropagation(); if(isText){ sPanel('text',document.getElementById('sib-text')); } else { eaOpenForLayer(id); sPanel('edit-artwork',null); } };
+    dz.appendChild(editHandle);
   }
 
-  overlay.style.cssText = 'position:fixed;z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:auto';
-
-  overlay.innerHTML = `
-    <div style="background:rgba(255,255,255,.97);border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.18);border:1px solid #e8e8e8;padding:0;display:flex;overflow:hidden">
-      <button onclick="eaOpenForLayer('${id}');sPanel('edit-artwork',null)" style="padding:10px 16px;border:none;background:none;font-size:13px;font-weight:700;color:#333;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;border-right:1px solid #f0f0f0;min-height:44px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        Edit
-      </button>
-      <button onclick="coToggleFront('${id}')" style="padding:7px 14px;border:none;background:none;font-size:12px;font-weight:700;color:#333;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;border-right:1px solid #f0f0f0" title="Bring to Front" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
-        Forward
-      </button>
-      <button onclick="coToggleBack('${id}')" style="padding:7px 14px;border:none;background:none;font-size:12px;font-weight:700;color:#333;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;border-right:1px solid #f0f0f0" title="Send to Back" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='none'">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-        Backward
-      </button>
-      <button onclick="removeLayer('${id}');document.getElementById('canvas-overlay')?.remove()" style="padding:10px 16px;border:none;background:none;font-size:13px;font-weight:700;color:#dc2626;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;min-height:44px" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='none'">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-        Delete
-      </button>
-    </div>`;
-
-  positionOverlay();
-  document.body.appendChild(overlay);
-
-  // Keep overlay positioned even if layer moves
-  overlay._posTimer = setInterval(positionOverlay, 100);
+  // Store cleanup function
+  dz._cleanupHandles = function(){
+    var d = document.getElementById('ch-del-'+id); if(d) d.remove();
+    var e = document.getElementById('ch-edit-'+id); if(e) e.remove();
+  };
 }
 
 function coToggleRmbg(id){
@@ -5627,6 +5620,9 @@ function hideLayerToolbar(){
   const co = document.getElementById("canvas-overlay");
   if(co){ clearInterval(co._posTimer); co.remove(); }
   document.querySelectorAll("[id^='rot-handle-']").forEach(h => h.remove());
+  // Clean up corner handles
+  document.querySelectorAll('.corner-handle').forEach(h => h.remove());
+  document.querySelectorAll('[data-type]').forEach(el => { if(el._cleanupHandles) el._cleanupHandles(); });
 }
 
 // ── Edit Artwork Panel Functions ──────────────────────
@@ -6171,8 +6167,6 @@ function deselectEverything(){
   hideLayerToolbar();
   const sp = document.getElementById("size-popup");
   if(sp) sp.remove();
-  const co = document.getElementById("canvas-overlay");
-  if(co){ clearInterval(co._posTimer); co.remove(); }
 }
 document.addEventListener("click", deselectEverything);
 
@@ -7358,29 +7352,32 @@ function showTextToolbar(id){
   hideLayerToolbar();
   const div = document.getElementById(id);
   if(!div) return;
-  const dzRect = div.getBoundingClientRect();
 
+  // On mobile: use corner handles (ROT style) instead of floating toolbar
+  if(window.innerWidth <= 768){
+    buildCanvasOverlay(id);
+    return;
+  }
+
+  // Desktop: floating toolbar below text
+  const dzRect = div.getBoundingClientRect();
   const tb = document.createElement("div");
   tb.id = "layer-toolbar";
-  tb.style.cssText = "position:fixed;z-index:9999;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.18);border:1px solid #e8e8e8;display:flex;align-items:center;gap:0;overflow:hidden;";
+  tb.style.cssText = "position:fixed;z-index:9999;background:#fff;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.15);border:1px solid #e0e0e0;display:flex;align-items:center;gap:0;overflow:hidden;";
   tb.style.top = (dzRect.bottom + 8) + "px";
   tb.style.left = (dzRect.left + dzRect.width/2) + "px";
   tb.style.transform = "translateX(-50%)";
 
-  const btns = [
-    {icon:"🗑", label:"Delete", fn:()=>{ div.remove(); hideLayerToolbar(); }},
-    {icon:"🔼", label:"Forward", fn:()=>{ moveLayerUp(id); }},
-    {icon:"🔽", label:"Backward", fn:()=>{ moveLayerDown(id); }},
-    {icon:"↺", label:"Rotate", fn:()=>{ quickRotate(id); }},
+  var btns = [
+    {icon:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>', label:"Edit", fn:function(){ sPanel('text',document.getElementById('sib-text')); }},
+    {icon:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>', label:"Delete", color:"#dc2626", fn:function(){ div.remove(); hideLayerToolbar(); updateFloatPills(); }},
   ];
 
-  btns.forEach((b,i)=>{
-    const btn=document.createElement("button");
-    btn.style.cssText="border:none;background:transparent;padding:8px 12px;cursor:pointer;font-size:12px;font-weight:600;color:#333;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:DM Sans,sans-serif;"+(i>0?"border-left:1px solid #f0f0f0":"");
-    btn.innerHTML='<span style="font-size:15px">'+b.icon+'</span><span style="font-size:9px;color:#888">'+b.label+'</span>';
-    btn.onclick=(e)=>{ e.stopPropagation(); b.fn(); };
-    btn.onmouseover=()=>btn.style.background="#f0f7ff";
-    btn.onmouseout=()=>btn.style.background="transparent";
+  btns.forEach(function(b,i){
+    var btn=document.createElement("button");
+    btn.style.cssText="border:none;background:transparent;padding:8px 14px;cursor:pointer;font-size:12px;font-weight:600;color:"+(b.color||"#333")+";display:flex;align-items:center;gap:6px;font-family:DM Sans,sans-serif;"+(i>0?"border-left:1px solid #f0f0f0":"");
+    btn.innerHTML=b.icon+'<span>'+b.label+'</span>';
+    btn.onclick=function(e){ e.stopPropagation(); b.fn(); };
     tb.appendChild(btn);
   });
 
