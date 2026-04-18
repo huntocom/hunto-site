@@ -28,3 +28,9 @@ node_modules/
 # Environment files
 .env
 .env.local
+
+# never commit these
+.env
+*.token
+*secret*
+
