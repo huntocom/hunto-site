@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v20.6 -->
+<!-- v20.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -18,7 +18,7 @@ body{
   font-family:'DM Sans',sans-serif;
   background:#fff;color:#111;
   -webkit-font-smoothing:antialiased;
-  font-size:15px;
+  font-size:16px;
 }
 .page{display:none}
 .page.active{display:block}
@@ -45,7 +45,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .nav-logo em{color:#004a8f;font-style:normal}
 .nav-links{display:flex;gap:2px}
 .nav-link{
-  padding:7px 13px;font-size:13px;
+  padding:8px 14px;font-size:14px;
   font-weight:500;color:#666;
   border:none;background:none;
   border-radius:8px;transition:all .15s;
@@ -55,7 +55,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .nav-reviews{
   display:flex;align-items:center;gap:6px;
-  font-size:12px;font-weight:500;color:#888;
+  font-size:14px;font-weight:500;color:#888;
 }
 .nav-stars{color:#f59e0b;font-size:13px}
 .nbtn{
@@ -69,6 +69,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
   color:#444;
 }
 .nbtn-outline:hover{border-color:#bbb;color:#111}
+/* Global font-size bumps for public-facing pages */
 .nbtn-blue{
   background:linear-gradient(135deg, #0071ce, #004a8f);color:#fff;
   box-shadow:0 2px 8px rgba(0,113,206,.3);
@@ -157,7 +158,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
   flex-wrap:wrap;
 }
 .stat-n{font-size:26px;font-weight:800;color:#111;letter-spacing:-1px}
-.stat-l{font-size:11px;font-weight:500;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+.stat-l{font-size:13px;font-weight:500;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
 
 .hero-right{
   background:#f0f7ff;
@@ -199,7 +200,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 
 /* HOW IT WORKS */
 .how{padding:96px 32px;max-width:1100px;margin:0 auto}
-.sec-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#0071ce;margin-bottom:12px}
+.sec-tag{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#0071ce;margin-bottom:12px}
 .sec-h{font-size:clamp(30px,4vw,46px);font-weight:900;letter-spacing:-1.5px;color:#111;margin-bottom:10px;line-height:1.1}
 .sec-sub{font-size:16px;color:#888;font-weight:400;max-width:480px;line-height:1.65;margin-bottom:52px}
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid #eee;border-radius:18px;overflow:hidden}
@@ -210,8 +211,8 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .step-card:nth-child(2) .step-num{background:#004a8f}
 .step-card:nth-child(3) .step-num{background:#fbbf24}
 .step-card:nth-child(4) .step-num{background:#f472b6}
-.step-title{font-size:15px;font-weight:700;color:#111;margin-bottom:8px}
-.step-desc{font-size:13px;color:#888;line-height:1.65;font-weight:400}
+.step-title{font-size:17px;font-weight:700;color:#111;margin-bottom:8px}
+.step-desc{font-size:14px;color:#888;line-height:1.65;font-weight:400}
 
 /* PRODUCTS SECTION */
 .products-section{background:#f0f7ff;padding:96px 32px}
@@ -306,9 +307,9 @@ footer{background:#111;padding:56px 32px 28px}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:40px}
 .footer-logo{font-size:22px;font-weight:900;color:#fff;letter-spacing:-1.5px;margin-bottom:10px;font-family:"Arial Black",Arial,sans-serif}
 .footer-logo em{color:#004a8f;font-style:normal;font-weight:900}
-.footer-tagline{font-size:13px;color:#555;line-height:1.7;max-width:240px;font-weight:400}
-.footer-col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#444;margin-bottom:14px}
-.footer-link{display:block;font-size:13px;color:#555;text-decoration:none;margin-bottom:10px;cursor:pointer;transition:color .15s;font-weight:400}
+.footer-tagline{font-size:14px;color:#555;line-height:1.7;max-width:280px;font-weight:400}
+.footer-col-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#444;margin-bottom:14px}
+.footer-link{display:block;font-size:14px;color:#555;text-decoration:none;margin-bottom:10px;cursor:pointer;transition:color .15s;font-weight:400}
 .footer-link:hover{color:#999}
 .footer-bottom{border-top:1px solid #222;padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .footer-copy{font-size:11px;color:#444;font-weight:400}
@@ -944,8 +945,8 @@ footer{background:#111;padding:56px 32px 28px}
 }
 .shop-card:hover .shop-card-img{transform:scale(1.04)}
 .shop-card-body{padding:14px}
-.shop-card-brand{font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
-.shop-card-name{font-size:14px;font-weight:700;color:#111;margin-bottom:8px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shop-card-brand{font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.shop-card-name{font-size:15px;font-weight:700;color:#111;margin-bottom:8px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .shop-card-colors{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
 .shop-color-dot{width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.08);flex-shrink:0}
 .shop-card-footer{display:flex;align-items:center;justify-content:space-between}
@@ -1397,7 +1398,7 @@ footer{background:#111;padding:56px 32px 28px}
 .hdr-action:hover{color:#0071ce}
 .hdr-action-icon{font-size:18px}
 .hdr-action-sub{font-size:10px;color:#bbb;font-weight:400}
-.hdr-design-btn{height:40px;padding:0 22px;background:#0071ce;color:#fff;border:none;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all .15s;box-shadow:0 3px 10px rgba(0,113,206,.3)}
+.hdr-design-btn{height:44px;padding:0 24px;background:#0071ce;color:#fff;border:none;border-radius:22px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all .15s;box-shadow:0 3px 10px rgba(0,113,206,.3)}
 .hdr-design-btn:hover{background:#005baa;transform:translateY(-1px)}
 
 /* ── Mobile studio topbar elements (hidden on desktop) ── */
@@ -1425,7 +1426,7 @@ footer{background:#111;padding:56px 32px 28px}
 /* ── Mega nav bar ── */
 .mega-nav{background:#fff;border-bottom:2px solid #e8e8e8;padding:0 24px;display:flex;align-items:center;gap:0;position:sticky;top:64px;z-index:299}
 .mega-nav-item{position:relative}
-.mega-nav-btn{height:46px;padding:0 16px;border:none;background:transparent;font-size:13px;font-weight:600;color:#333;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;transition:color .15s;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-2px}
+.mega-nav-btn{height:46px;padding:0 16px;border:none;background:transparent;font-size:14px;font-weight:600;color:#333;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;transition:color .15s;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-2px}
 .mega-nav-btn:hover,.mega-nav-btn.on{color:#0071ce;border-bottom-color:#0071ce}
 .mega-nav-btn .chevron{font-size:9px;transition:transform .2s}
 .mega-nav-item:hover .chevron{transform:rotate(180deg)}
@@ -1685,7 +1686,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.6</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.7</span>
   </div>
 
 </nav>
@@ -1828,19 +1829,19 @@ footer{background:#111;padding:56px 32px 28px}
     <div style="max-width:1300px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center" id="hp-trust-bar">
       <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071ce" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
-        <span style="font-size:13px;font-weight:700;color:#222">Satisfaction Guaranteed</span>
+        <span style="font-size:14px;font-weight:700;color:#222">Satisfaction Guaranteed</span>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071ce" stroke-width="2"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z"/></svg>
-        <span style="font-size:13px;font-weight:700;color:#222">AI Design Tools</span>
+        <span style="font-size:14px;font-weight:700;color:#222">AI Design Tools</span>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071ce" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        <span style="font-size:13px;font-weight:700;color:#222">Free Standard Shipping</span>
+        <span style="font-size:14px;font-weight:700;color:#222">Free Standard Shipping</span>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071ce" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span style="font-size:13px;font-weight:700;color:#222">48-Hour Production</span>
+        <span style="font-size:14px;font-weight:700;color:#222">48-Hour Production</span>
       </div>
     </div>
   </div>
@@ -2390,7 +2391,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.6</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.7</span>
   </div>
 
   <div class="studio-body">
