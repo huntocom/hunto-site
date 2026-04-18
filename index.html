@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v19.5 -->
+<!-- v19.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1637,7 +1637,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.5</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.6</span>
   </div>
 
 </nav>
@@ -2321,7 +2321,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.5</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.6</span>
   </div>
 
   <div class="studio-body">
@@ -5976,6 +5976,20 @@ function removeLayer(id){
   }
   updateFloatPills();
   historySnapshot();
+  // Clear upload preview if no image layers remain
+  if((sLayers.front||[]).length === 0 && (sLayers.back||[]).length === 0){
+    var prev = document.getElementById('upload-preview');
+    if(prev) prev.style.display = 'none';
+    uploadRawBase64 = null;
+    uploadProcessedBase64 = null;
+    ['upload-rmbg','upload-single','upload-bw'].forEach(function(tid){
+      var cb = document.getElementById(tid); if(cb) cb.checked = false;
+    });
+    uploadSyncToggles();
+  }
+  // Remove mobile edit bar if open
+  var meb = document.getElementById('mobile-edit-bar');
+  if(meb) meb.remove();
 }
 
 function toggleLayerMenuNew(id){
@@ -7431,17 +7445,12 @@ function showMobileEditBar(id){
     + '<span id="meb-rot-val" style="font-size:11px;font-weight:700;color:#0071ce;width:28px;text-align:right">'+curRot+'°</span>'
     + '</div>'
     + '</div>'
-    + '<div style="display:flex;align-items:center;justify-content:space-between">'
     + '<div style="display:flex;align-items:center;gap:8px">'
-    + '<span style="font-size:11px;font-weight:600;color:#fff">Remove BG</span>'
-    + '<span style="font-size:8px;font-weight:800;background:#0071ce;color:#fff;padding:1px 4px;border-radius:3px">AI</span>'
-    + '<label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer">'
-    + '<input type="checkbox" id="meb-rmbg" '+(rmbgOn?'checked':'')+' style="opacity:0;width:0;height:0" onchange="mebToggleRmbg(\''+id+'\')">'
-    + '<span id="meb-rmbg-track" style="position:absolute;inset:0;border-radius:10px;background:'+(rmbgOn?'#0071ce':'#555')+';transition:background .2s"></span>'
-    + '<span id="meb-rmbg-knob" style="position:absolute;top:2px;left:'+(rmbgOn?'16':'2')+'px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.4);transition:left .2s"></span>'
-    + '</label>'
-    + '</div>'
-    + '<button onclick="document.getElementById(\'mobile-edit-bar\').remove()" style="background:none;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:4px 12px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif">Done</button>'
+    + '<button id="meb-rmbg-btn" onclick="mebToggleRmbg(\''+id+'\')" style="flex:1;height:38px;border-radius:6px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;'+(rmbgOn?'background:#0071ce;color:#fff':'background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)')+'">'
+    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>'
+    + (rmbgOn ? 'BG Removed ✓' : 'Remove Background')
+    + '</button>'
+    + '<button onclick="document.getElementById(\'mobile-edit-bar\').remove()" style="height:38px;padding:0 16px;background:rgba(255,255,255,.15);border:none;border-radius:6px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif">Done</button>'
     + '</div>';
 
   document.body.appendChild(bar);
@@ -7467,18 +7476,29 @@ function mebApply(id){
 }
 
 function mebToggleRmbg(id){
-  var tog = document.getElementById('meb-rmbg');
-  var track = document.getElementById('meb-rmbg-track');
-  var knob = document.getElementById('meb-rmbg-knob');
-  if(!tog) return;
-  var on = tog.checked;
-  if(track) track.style.background = on ? '#0071ce' : '#555';
-  if(knob) knob.style.left = on ? '16px' : '2px';
+  var el = document.getElementById(id);
+  if(!el) return;
+  var wasOn = el.dataset.rmbgApplied === 'true';
+  var btn = document.getElementById('meb-rmbg-btn');
+
   window.eaCurrentLayerId = id;
   // Sync with main panel toggle
   var panelTog = document.getElementById('ea-rmbg');
-  if(panelTog) panelTog.checked = on;
+  if(panelTog) panelTog.checked = !wasOn;
   eaToggleRmbg();
+
+  // Update button appearance
+  if(btn){
+    if(!wasOn){
+      btn.style.background = '#0071ce'; btn.style.color = '#fff'; btn.style.border = 'none';
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg> Removing...';
+      // Update text after processing
+      setTimeout(function(){ if(btn) btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg> BG Removed ✓'; }, 3000);
+    } else {
+      btn.style.background = 'rgba(255,255,255,.12)'; btn.style.color = '#fff'; btn.style.border = '1px solid rgba(255,255,255,.2)';
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg> Remove Background';
+    }
+  }
 }
 
 function ensureLayersVisible(){
