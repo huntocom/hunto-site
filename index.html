@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v17.0 -->
+<!-- v17.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -41,7 +41,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
   color:#111;letter-spacing:-0.8px;
   cursor:pointer;margin-right:24px;
 }
-.nav-logo em{color:#d84315;font-style:normal}
+.nav-logo em{color:#004a8f;font-style:normal}
 .nav-links{display:flex;gap:2px}
 .nav-link{
   padding:7px 13px;font-size:13px;
@@ -69,10 +69,10 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 }
 .nbtn-outline:hover{border-color:#bbb;color:#111}
 .nbtn-blue{
-  background:linear-gradient(135deg, #ff5722, #d84315);color:#fff;
-  box-shadow:0 2px 8px rgba(255,87,34,.3);
+  background:linear-gradient(135deg, #0071ce, #004a8f);color:#fff;
+  box-shadow:0 2px 8px rgba(0,113,206,.3);
 }
-.nbtn-blue:hover{background:#e64a19;box-shadow:0 4px 12px rgba(255,87,34,.4)}
+.nbtn-blue:hover{background:#005baa;box-shadow:0 4px 12px rgba(0,113,206,.4)}
 
 /* hamburger */
 .hamburger{display:none;flex-direction:column;gap:5px;padding:6px;background:none;border:none}
@@ -114,7 +114,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 }
 .hero-badge{
   display:inline-flex;align-items:center;gap:7px;
-  background:#fff8f5;color:#ff5722;
+  background:#f0f7ff;color:#0071ce;
   font-size:12px;font-weight:700;
   padding:6px 14px;border-radius:20px;
   margin-bottom:24px;width:fit-content;
@@ -126,7 +126,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
   line-height:1.05;color:#111;
   margin-bottom:18px;
 }
-.hero h1 em{color:#ff5722;font-style:normal}
+.hero h1 em{color:#0071ce;font-style:normal}
 .hero-sub{
   font-size:17px;color:#888;
   font-weight:400;line-height:1.65;
@@ -135,13 +135,13 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:44px}
 .hero-btn-primary{
   height:52px;padding:0 32px;
-  background:linear-gradient(135deg, #ff5722, #d84315);color:#fff;
+  background:linear-gradient(135deg, #0071ce, #004a8f);color:#fff;
   border:none;border-radius:14px;
   font-size:16px;font-weight:700;
-  box-shadow:0 4px 16px rgba(255,87,34,.35);
+  box-shadow:0 4px 16px rgba(0,113,206,.35);
   transition:all .2s;
 }
-.hero-btn-primary:hover{background:#e64a19;transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,87,34,.45)}
+.hero-btn-primary:hover{background:#005baa;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,113,206,.45)}
 .hero-btn-secondary{
   height:52px;padding:0 28px;
   background:#fff;color:#444;
@@ -159,7 +159,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .stat-l{font-size:11px;font-weight:500;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
 
 .hero-right{
-  background:#fff8f5;
+  background:#f0f7ff;
   display:flex;align-items:center;
   justify-content:center;
   position:relative;overflow:hidden;padding:48px;
@@ -171,7 +171,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
   transition:filter .3s;
 }
 .hero-shirt-wrap:hover .hero-shirt-img{
-  filter:drop-shadow(0 28px 56px rgba(255,87,34,.22));
+  filter:drop-shadow(0 28px 56px rgba(0,113,206,.22));
 }
 .hero-type-pill{
   margin-top:20px;
@@ -183,14 +183,14 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 }
 .hero-type-icon{font-size:16px}
 .hero-type-text{font-size:13px;font-weight:500;color:#888;flex:1;text-align:left}
-.cursor{display:inline-block;width:2px;height:13px;background:#ff5722;animation:blink 1s infinite;vertical-align:middle;margin-left:1px}
+.cursor{display:inline-block;width:2px;height:13px;background:#0071ce;animation:blink 1s infinite;vertical-align:middle;margin-left:1px}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 @keyframes inkReveal{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 .ink-reveal{opacity:0;transform:translateY(24px) scale(.98)}
 .ink-visible{animation:inkReveal .6s cubic-bezier(.16,1,.3,1) forwards}
 
 /* MARQUEE */
-.marquee-wrap{background:#1a1a1a;padding:10px 0;overflow:hidden}
+.marquee-wrap{background:#0a1628;padding:10px 0;overflow:hidden}
 .marquee-track{display:flex;white-space:nowrap;animation:mq 24s linear infinite}
 .mqi{font-size:11px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:.14em;text-transform:uppercase;padding:0 28px}
 .mqs{color:rgba(255,255,255,.35)}
@@ -198,22 +198,22 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 
 /* HOW IT WORKS */
 .how{padding:96px 32px;max-width:1100px;margin:0 auto}
-.sec-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#ff5722;margin-bottom:12px}
+.sec-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#0071ce;margin-bottom:12px}
 .sec-h{font-size:clamp(30px,4vw,46px);font-weight:900;letter-spacing:-1.5px;color:#111;margin-bottom:10px;line-height:1.1}
 .sec-sub{font-size:16px;color:#888;font-weight:400;max-width:480px;line-height:1.65;margin-bottom:52px}
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid #eee;border-radius:18px;overflow:hidden}
 .step-card{background:#fff;padding:36px 28px;transition:background .2s;border-right:1px solid #eee}
 .step-card:last-child{border-right:none}
-.step-card:hover{background:#fdf4ff}
-.step-num{width:36px;height:36px;background:#ff5722;color:#fff;border-radius:10px;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
-.step-card:nth-child(2) .step-num{background:#d84315}
+.step-card:hover{background:#f0f7ff}
+.step-num{width:36px;height:36px;background:#0071ce;color:#fff;border-radius:10px;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.step-card:nth-child(2) .step-num{background:#004a8f}
 .step-card:nth-child(3) .step-num{background:#fbbf24}
 .step-card:nth-child(4) .step-num{background:#f472b6}
 .step-title{font-size:15px;font-weight:700;color:#111;margin-bottom:8px}
 .step-desc{font-size:13px;color:#888;line-height:1.65;font-weight:400}
 
 /* PRODUCTS SECTION */
-.products-section{background:#fdf4ff;padding:96px 32px}
+.products-section{background:#f0f7ff;padding:96px 32px}
 .products-inner{max-width:1100px;margin:0 auto}
 .products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:52px}
 
@@ -224,9 +224,9 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
   cursor:pointer;transition:all .2s;
   display:grid;grid-template-columns:240px 1fr;
 }
-.pcard:hover{box-shadow:0 12px 40px rgba(255,87,34,.12), 0 0 20px rgba(236,72,153,.15);border-color:#d8b4fe;transform:translateY(-2px)}
+.pcard:hover{box-shadow:0 12px 40px rgba(0,113,206,.12), 0 0 20px rgba(236,72,153,.15);border-color:#a8c8e8;transform:translateY(-2px)}
 .pcard-img-area{
-  background:#fff8f5;
+  background:#f0f7ff;
   display:flex;align-items:center;justify-content:center;
   padding:28px 20px;position:relative;overflow:hidden;
   min-height:260px;transition:background .3s;
@@ -245,7 +245,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
   font-size:10px;font-weight:700;
   text-transform:uppercase;letter-spacing:.08em;color:#888;z-index:3;
 }
-.pcard-tag.premium{color:#ff5722}
+.pcard-tag.premium{color:#0071ce}
 .pcard-body{padding:28px 24px;display:flex;flex-direction:column}
 .pcard-sku{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#ccc;margin-bottom:5px}
 .pcard-name{font-size:20px;font-weight:800;color:#111;letter-spacing:-.5px;margin-bottom:5px;line-height:1.2}
@@ -258,7 +258,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
   transition:all .12s;flex-shrink:0;
 }
 .pcdot:hover{transform:scale(1.2)}
-.pcdot.on{border-color:#ff5722;transform:scale(1.1)}
+.pcdot.on{border-color:#0071ce;transform:scale(1.1)}
 .pcard-cname{font-size:11px;font-weight:500;color:#bbb;margin-bottom:18px}
 .pcard-sizes{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:20px}
 .pcard-sz{padding:3px 8px;font-size:10px;font-weight:600;color:#bbb;border:1.5px solid #eee;border-radius:6px}
@@ -267,31 +267,31 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .pcard-price-sub{font-size:11px;color:#bbb;font-weight:500;margin-top:1px}
 .pcard-btn{
   height:40px;padding:0 20px;
-  background:#ff5722;color:#fff;border:none;
+  background:#0071ce;color:#fff;border:none;
   border-radius:10px;font-size:13px;font-weight:700;
   transition:all .15s;white-space:nowrap;
 }
-.pcard-btn:hover{background:#e64a19;transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,87,34,.3)}
+.pcard-btn:hover{background:#005baa;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,113,206,.3)}
 
 /* REVIEWS */
 .reviews-section{padding:96px 32px}
 .reviews-inner{max-width:1100px;margin:0 auto}
 .reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:52px}
-.review-card{background:#fdf4ff;border-radius:16px;padding:28px;border:1px solid #f3e8ff}
+.review-card{background:#f0f7ff;border-radius:16px;padding:28px;border:1px solid #f3e8ff}
 .review-stars{color:#f59e0b;font-size:15px;letter-spacing:-1px;margin-bottom:12px}
 .review-text{font-size:14px;color:#444;line-height:1.7;font-style:italic;margin-bottom:18px;font-weight:400}
 .review-author{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em}
 
 /* CTA BAND */
 .cta-band{
-  background:#1a1a1a;
+  background:#0a1628;
   padding:96px 32px;text-align:center;
 }
 .cta-band h2{font-size:clamp(34px,5vw,56px);font-weight:700;letter-spacing:-2px;color:#fff;margin-bottom:12px;line-height:1.05;font-family:'Space Grotesk',sans-serif}
 .cta-band p{font-size:17px;color:rgba(255,255,255,.75);margin-bottom:36px;font-weight:400}
 .cta-band-btn{
   height:56px;padding:0 44px;
-  background:#ff5722;color:#fff;
+  background:#0071ce;color:#fff;
   border:none;border-radius:16px;
   font-size:17px;font-weight:800;
   transition:all .2s;box-shadow:0 4px 16px rgba(0,0,0,.15);
@@ -304,7 +304,7 @@ footer{background:#111;padding:56px 32px 28px}
 .footer-inner{max-width:1100px;margin:0 auto}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:40px}
 .footer-logo{font-size:22px;font-weight:900;color:#fff;letter-spacing:-1.5px;margin-bottom:10px;font-family:"Arial Black",Arial,sans-serif}
-.footer-logo em{color:#d84315;font-style:normal;font-weight:900}
+.footer-logo em{color:#004a8f;font-style:normal;font-weight:900}
 .footer-tagline{font-size:13px;color:#555;line-height:1.7;max-width:240px;font-weight:400}
 .footer-col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#444;margin-bottom:14px}
 .footer-link{display:block;font-size:13px;color:#555;text-decoration:none;margin-bottom:10px;cursor:pointer;transition:color .15s;font-weight:400}
@@ -333,11 +333,11 @@ footer{background:#111;padding:56px 32px 28px}
   display:flex;align-items:center;justify-content:center;
 }
 .pdp-thumb:hover{border-color:#bbb}
-.pdp-thumb.on{border-color:#ff5722}
+.pdp-thumb.on{border-color:#0071ce}
 .pdp-thumb img{width:100%;height:100%;object-fit:contain;padding:4px}
 .pdp-main{
   border-radius:20px;overflow:hidden;
-  background:#fff8f5;position:relative;
+  background:#f0f7ff;position:relative;
   aspect-ratio:1;max-height:640px;
   display:flex;align-items:center;justify-content:center;
 }
@@ -378,7 +378,7 @@ footer{background:#111;padding:56px 32px 28px}
   padding:16px;cursor:pointer;transition:all .15s;text-align:center;
 }
 .style-opt:hover{border-color:#bbb}
-.style-opt.on{border-color:#ff5722;background:#fff8f5}
+.style-opt.on{border-color:#0071ce;background:#f0f7ff}
 .style-opt-name{font-size:17px;font-weight:800;color:#111;margin-bottom:4px}
 .style-opt-desc{font-size:12px;color:#888;line-height:1.4;margin-bottom:6px}
 .style-opt-badge{
@@ -386,7 +386,7 @@ footer{background:#111;padding:56px 32px 28px}
   border-radius:4px;padding:2px 8px;
   font-size:10px;font-weight:700;color:#888;margin-bottom:4px;
 }
-.style-opt.on .style-opt-badge{background:#e8f3ff;color:#ff5722}
+.style-opt.on .style-opt-badge{background:#e8f3ff;color:#0071ce}
 .style-opt-price{font-size:12px;font-weight:600;color:#aaa}
 
 /* Color picker */
@@ -400,7 +400,7 @@ footer{background:#111;padding:56px 32px 28px}
   transition:all .12s;flex-shrink:0;position:relative;
 }
 .pdp-cdot:hover{transform:scale(1.1)}
-.pdp-cdot.on{border-color:#ff5722}
+.pdp-cdot.on{border-color:#0071ce}
 .pdp-cdot.on::after{
   content:'✓';position:absolute;inset:0;
   display:flex;align-items:center;justify-content:center;
@@ -412,14 +412,14 @@ footer{background:#111;padding:56px 32px 28px}
 /* CTA */
 .pdp-cta{
   width:100%;height:58px;
-  background:#ff5722;color:#fff;
+  background:#0071ce;color:#fff;
   border:none;border-radius:16px;
   font-size:18px;font-weight:800;
   transition:all .2s;margin-bottom:18px;
-  box-shadow:0 4px 16px rgba(255,87,34,.3);
+  box-shadow:0 4px 16px rgba(0,113,206,.3);
   display:flex;align-items:center;justify-content:center;gap:10px;
 }
-.pdp-cta:hover{background:#e64a19;transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,87,34,.4)}
+.pdp-cta:hover{background:#005baa;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,113,206,.4)}
 
 /* Ship cards */
 .ship-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
@@ -456,9 +456,9 @@ footer{background:#111;padding:56px 32px 28px}
   display:flex;align-items:center;justify-content:center;
   transition:all .2s;
 }
-.sstep.active .sstep-num{background:#ff5722;color:#fff;box-shadow:0 2px 8px rgba(255,87,34,.35)}
+.sstep.active .sstep-num{background:#0071ce;color:#fff;box-shadow:0 2px 8px rgba(0,113,206,.35)}
 .sstep-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#ccc;transition:color .2s}
-.sstep.active .sstep-label{color:#ff5722}
+.sstep.active .sstep-label{color:#0071ce}
 .sstep-div{width:28px;height:2px;background:#e8e8e8;margin:0 4px;border-radius:2px}
 .studio-price{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;cursor:pointer}
 
@@ -476,14 +476,14 @@ footer{background:#111;padding:56px 32px 28px}
   transition:all .18s;display:flex;align-items:center;gap:6px;
   cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;
 }
-.stbtn:hover{border-color:#ff5722;color:#ff5722;background:#fff8f5}
+.stbtn:hover{border-color:#0071ce;color:#0071ce;background:#f0f7ff}
 .stbtn.blue{
-  background:#ff5722;border-color:#ff5722;color:#fff;
+  background:#0071ce;border-color:#0071ce;color:#fff;
   padding:0 24px;font-size:14px;height:44px;
-  box-shadow:0 4px 14px rgba(255,87,34,.35);
+  box-shadow:0 4px 14px rgba(0,113,206,.35);
   margin-left:auto;
 }
-.stbtn.blue:hover{background:#e64a19;box-shadow:0 4px 18px rgba(255,87,34,.45)}
+.stbtn.blue:hover{background:#005baa;box-shadow:0 4px 18px rgba(0,113,206,.45)}
 
 /* Studio body */
 .studio-body{flex:1;display:flex;overflow:hidden}
@@ -515,7 +515,7 @@ footer{background:#111;padding:56px 32px 28px}
 }
 /* Unique gradient per button */
 #sib-products .s-ibtn-icon{background:linear-gradient(145deg,#60a5fa,#2563eb);box-shadow:0 3px 10px rgba(37,99,235,.35)}
-#sib-text     .s-ibtn-icon{background:linear-gradient(145deg,#a78bfa,#e64a19);box-shadow:0 3px 10px rgba(109,40,217,.35)}
+#sib-text     .s-ibtn-icon{background:linear-gradient(145deg,#a78bfa,#005baa);box-shadow:0 3px 10px rgba(109,40,217,.35)}
 #sib-upload   .s-ibtn-icon{background:linear-gradient(145deg,#4ade80,#16a34a);box-shadow:0 3px 10px rgba(22,163,74,.35)}
 #sib-ai       .s-ibtn-icon{background:linear-gradient(145deg,#fb923c,#dc2626);box-shadow:0 3px 10px rgba(220,38,38,.35)}
 #sib-names    .s-ibtn-icon{background:linear-gradient(145deg,#f472b6,#be185d);box-shadow:0 3px 10px rgba(190,24,93,.35)}
@@ -533,7 +533,7 @@ footer{background:#111;padding:56px 32px 28px}
 .s-ibtn-icon svg{stroke:#fff !important}
 
 .s-ibtn-label{font-size:9px;font-weight:700;color:#999;text-align:center;line-height:1.2;letter-spacing:.04em;text-transform:uppercase}
-.s-ibtn.on .s-ibtn-label{color:#e64a19;font-weight:800}
+.s-ibtn.on .s-ibtn-label{color:#005baa;font-weight:800}
 .s-ibtn-sep{width:44px;height:1px;background:#e4e4e7;margin:6px 0}
 
 /* Panel */
@@ -563,10 +563,10 @@ footer{background:#111;padding:56px 32px 28px}
   padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .15s;
 }
 .s-gcard:hover{border-color:#bbb}
-.s-gcard.on{border-color:#ff5722;background:#fff8f5}
+.s-gcard.on{border-color:#0071ce;background:#f0f7ff}
 .s-gcard-name{font-size:14px;font-weight:700;color:#111;margin-bottom:2px}
 .s-gcard-sub{font-size:11px;color:#aaa;font-weight:400}
-.s-gcard-price{font-size:15px;font-weight:800;color:#ff5722;margin-top:5px}
+.s-gcard-price{font-size:15px;font-weight:800;color:#0071ce;margin-top:5px}
 
 /* AI panel */
 .ai-ta{
@@ -578,7 +578,7 @@ footer{background:#111;padding:56px 32px 28px}
   transition:border-color .2s;line-height:1.5;
   font-family:'DM Sans',sans-serif;
 }
-.ai-ta:focus{border-color:#ff5722}
+.ai-ta:focus{border-color:#0071ce}
 .ai-ta::placeholder{color:#ccc}
 .ai-chips{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
 .ai-chip{
@@ -586,23 +586,23 @@ footer{background:#111;padding:56px 32px 28px}
   border-radius:20px;font-size:11px;font-weight:600;
   color:#888;cursor:pointer;transition:all .15s;background:#fff;
 }
-.ai-chip:hover{border-color:#ff5722;color:#ff5722}
+.ai-chip:hover{border-color:#0071ce;color:#0071ce}
 .ai-gen-btn{
-  width:100%;height:42px;background:#ff5722;
+  width:100%;height:42px;background:#0071ce;
   border:none;border-radius:10px;color:#fff;
   font-size:14px;font-weight:700;
   transition:background .15s;margin-top:8px;
   display:flex;align-items:center;justify-content:center;gap:8px;
   font-family:'DM Sans',sans-serif;
 }
-.ai-gen-btn:hover{background:#e64a19}
+.ai-gen-btn:hover{background:#005baa}
 .ai-gen-btn:disabled{opacity:.5;cursor:not-allowed}
 .upload-zone{
   border:2px dashed #e9d5ff;border-radius:12px;
   padding:24px 16px;text-align:center;cursor:pointer;
   transition:all .2s;margin-top:8px;background:#f8fcff;
 }
-.upload-zone:hover{border-color:#ff5722;background:#fff8f5}
+.upload-zone:hover{border-color:#0071ce;background:#f0f7ff}
 .upload-zone-icon{font-size:30px;margin-bottom:8px}
 .upload-zone-title{font-size:13px;font-weight:700;color:#333;margin-bottom:3px}
 .upload-zone-sub{font-size:11px;color:#aaa}
@@ -614,7 +614,7 @@ footer{background:#111;padding:56px 32px 28px}
   border-radius:8px;font-size:12px;font-weight:700;
   color:#888;background:#fff;cursor:pointer;transition:all .15s;
 }
-.s-sz.on{background:#ff5722;border-color:#ff5722;color:#fff}
+.s-sz.on{background:#0071ce;border-color:#0071ce;color:#fff}
 .s-sz:hover:not(.on){border-color:#aaa;color:#333}
 
 /* Placement */
@@ -627,8 +627,8 @@ footer{background:#111;padding:56px 32px 28px}
   font-family:'DM Sans',sans-serif;border:1.5px solid #e8e8e8;
 }
 .s-plc::before{content:'';width:7px;height:7px;border-radius:50%;border:2px solid #ddd;flex-shrink:0;transition:all .15s}
-.s-plc.on{border-color:#ff5722;color:#ff5722;background:#fff8f5}
-.s-plc.on::before{background:#ff5722;border-color:#ff5722}
+.s-plc.on{border-color:#0071ce;color:#0071ce;background:#f0f7ff}
+.s-plc.on::before{background:#0071ce;border-color:#0071ce}
 .s-plc:hover:not(.on){border-color:#bbb;color:#333}
 
 /* Color panel */
@@ -639,7 +639,7 @@ footer{background:#111;padding:56px 32px 28px}
   transition:all .12s;flex-shrink:0;
 }
 .s-cdot:hover{transform:scale(1.18)}
-.s-cdot.on{border-color:#ff5722;transform:scale(1.1)}
+.s-cdot.on{border-color:#0071ce;transform:scale(1.1)}
 .s-color-current{font-size:11px;font-weight:600;color:#bbb;text-transform:uppercase;letter-spacing:.06em;margin-top:7px}
 .view-btns{display:flex;gap:5px;margin-bottom:12px}
 .vbtn{
@@ -649,7 +649,7 @@ footer{background:#111;padding:56px 32px 28px}
   transition:all .15s;text-transform:uppercase;letter-spacing:.04em;
   font-family:'DM Sans',sans-serif;
 }
-.vbtn.on{background:#ff5722;border-color:#ff5722;color:#fff}
+.vbtn.on{background:#0071ce;border-color:#0071ce;color:#fff}
 
 /* Keith toggle */
 .keith-toggle{
@@ -690,8 +690,8 @@ footer{background:#111;padding:56px 32px 28px}
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;cursor:move;
 }
-.s-dzone-border{position:absolute;inset:0;border:2px dashed rgba(255,87,34,.4);transition:border-color .2s;pointer-events:none}
-.s-dzone:hover .s-dzone-border{border-color:rgba(255,87,34,.8)}
+.s-dzone-border{position:absolute;inset:0;border:2px dashed rgba(0,113,206,.4);transition:border-color .2s;pointer-events:none}
+.s-dzone:hover .s-dzone-border{border-color:rgba(0,113,206,.8)}
 .s-dzone img{
   width:100%;height:100%;
   object-fit:contain;
@@ -700,7 +700,7 @@ footer{background:#111;padding:56px 32px 28px}
 }
 .s-dzone.dk img{mix-blend-mode:screen}
 .s-dzone{background:transparent !important}
-.s-dzone-hint{font-size:10px;font-weight:700;color:rgba(255,87,34,.45);text-align:center;line-height:1.8;text-transform:uppercase;letter-spacing:.06em;pointer-events:none}
+.s-dzone-hint{font-size:10px;font-weight:700;color:rgba(0,113,206,.45);text-align:center;line-height:1.8;text-transform:uppercase;letter-spacing:.06em;pointer-events:none}
 
 /* Floating action pills — ON the shirt */
 .float-pills{
@@ -721,7 +721,7 @@ footer{background:#111;padding:56px 32px 28px}
   box-shadow:0 2px 12px rgba(0,0,0,.1);
   transition:all .15s;font-family:'DM Sans',sans-serif;
 }
-.float-pill:hover{border-color:#ff5722;color:#ff5722;background:#fff}
+.float-pill:hover{border-color:#0071ce;color:#0071ce;background:#fff}
 .float-pill-icon{font-size:16px}
 
 /* Canvas bottom label */
@@ -752,11 +752,11 @@ footer{background:#111;padding:56px 32px 28px}
   background:#fff;transition:all .18s;
   box-shadow:0 1px 4px rgba(0,0,0,.08);
 }
-.s-thumb.on{border-color:#ff5722;box-shadow:0 2px 12px rgba(255,87,34,.22)}
-.s-thumb:hover:not(.on){border-color:#d8b4fe;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.s-thumb.on{border-color:#0071ce;box-shadow:0 2px 12px rgba(0,113,206,.22)}
+.s-thumb:hover:not(.on){border-color:#a8c8e8;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .s-thumb-img{width:100%;height:80px;object-fit:contain;display:block;padding:4px;box-sizing:border-box}
 .s-thumb-label{text-align:center;font-size:9px;font-weight:800;color:#aaa;padding:2px 0 6px;text-transform:uppercase;letter-spacing:.06em}
-.s-thumb.on .s-thumb-label{color:#ff5722}
+.s-thumb.on .s-thumb-label{color:#0071ce}
 .s-thumb-div{width:50px;height:1px;background:#e8e8e8;margin:6px 0}
 .s-thumb-action{
   width:76px;display:flex;flex-direction:column;align-items:center;gap:5px;
@@ -789,21 +789,21 @@ footer{background:#111;padding:56px 32px 28px}
   display:flex;align-items:center;gap:8px;
   cursor:pointer;font-family:'DM Sans',sans-serif;
 }
-.s-bot-btn:hover{border-color:#ff5722;color:#ff5722;background:#fff8f5}
+.s-bot-btn:hover{border-color:#0071ce;color:#0071ce;background:#f0f7ff}
 .s-bot-btn.next{
-  background:#ff5722;border-color:#ff5722;color:#fff;
+  background:#0071ce;border-color:#0071ce;color:#fff;
   height:48px;padding:0 32px;font-size:15px;font-weight:800;
-  border-radius:14px;box-shadow:0 4px 16px rgba(255,87,34,.35);
+  border-radius:14px;box-shadow:0 4px 16px rgba(0,113,206,.35);
   letter-spacing:.02em;
 }
-.s-bot-btn.next:hover{background:#e64a19;box-shadow:0 6px 20px rgba(255,87,34,.45);transform:translateY(-1px)}
+.s-bot-btn.next:hover{background:#005baa;box-shadow:0 6px 20px rgba(0,113,206,.45);transform:translateY(-1px)}
 
 
 /* ── PRINT AREA ── */
 .dzone-label{
   position:absolute;
   bottom:-20px;left:50%;transform:translateX(-50%);
-  font-size:10px;font-weight:600;color:rgba(255,87,34,.6);
+  font-size:10px;font-weight:600;color:rgba(0,113,206,.6);
   white-space:nowrap;letter-spacing:.04em;text-transform:uppercase;
   pointer-events:none;
 }
@@ -821,8 +821,8 @@ footer{background:#111;padding:56px 32px 28px}
   white-space:pre;
   line-height:1.2;
 }
-.txt-layer.selected{border-color:rgba(255,87,34,.7)}
-.txt-layer:hover{border-color:rgba(255,87,34,.3)}
+.txt-layer.selected{border-color:rgba(0,113,206,.7)}
+.txt-layer:hover{border-color:rgba(0,113,206,.3)}
 .txt-delete-btn{
   position:absolute;
   top:-10px;right:-10px;
@@ -850,8 +850,8 @@ footer{background:#111;padding:56px 32px 28px}
   transition:all .2s;
 }
 .shop-card:hover{
-  box-shadow:0 8px 32px rgba(255,87,34,.12);
-  border-color:#d8b4fe;
+  box-shadow:0 8px 32px rgba(0,113,206,.12);
+  border-color:#a8c8e8;
   transform:translateY(-2px);
 }
 .shop-card-img{
@@ -870,13 +870,13 @@ footer{background:#111;padding:56px 32px 28px}
 .shop-card-price{font-size:16px;font-weight:900;color:#111;letter-spacing:-.5px}
 .shop-card-btn{
   height:32px;padding:0 14px;
-  background:#ff5722;color:#fff;
+  background:#0071ce;color:#fff;
   border:none;border-radius:8px;
   font-size:12px;font-weight:700;
   cursor:pointer;font-family:'DM Sans',sans-serif;
   transition:all .15s;white-space:nowrap;
 }
-.shop-card-btn:hover{background:#e64a19}
+.shop-card-btn:hover{background:#005baa}
 .shop-cat-pill{
   padding:7px 16px;border-radius:20px;
   font-size:13px;font-weight:600;
@@ -885,10 +885,10 @@ footer{background:#111;padding:56px 32px 28px}
   cursor:pointer;transition:all .15s;
   white-space:nowrap;
 }
-.shop-cat-pill:hover{border-color:#ff5722;color:#ff5722}
-.shop-cat-pill.on{background:#ff5722;border-color:#ff5722;color:#fff}
+.shop-cat-pill:hover{border-color:#0071ce;color:#0071ce}
+.shop-cat-pill.on{background:#0071ce;border-color:#0071ce;color:#fff}
 .shop-brand-check{display:flex;align-items:center;gap:7px;font-size:13px;color:#444;cursor:pointer;padding:3px 0}
-.shop-brand-check input{accent-color:#ff5722}
+.shop-brand-check input{accent-color:#0071ce}
 
 @media(max-width:768px){
 
@@ -919,9 +919,9 @@ footer{background:#111;padding:56px 32px 28px}
   /* ═══════════════════════════════════════
      HOMEPAGE HERO — image top, text below
   ═══════════════════════════════════════ */
-  .hero{grid-template-columns:1fr;max-height:none;min-height:auto;background:#f5f0eb;overflow:hidden}
-  .hero-right{order:1;padding:16px 16px 0;min-height:180px;display:flex;align-items:center;justify-content:center;background:#f5f0eb;overflow:hidden}
-  .hero-left{order:2;padding:20px 16px 28px;background:#f5f0eb;min-width:0;overflow:hidden}
+  .hero{grid-template-columns:1fr;max-height:none;min-height:auto;background:#f5f7fa;overflow:hidden}
+  .hero-right{order:1;padding:16px 16px 0;min-height:180px;display:flex;align-items:center;justify-content:center;background:#f5f7fa;overflow:hidden}
+  .hero-left{order:2;padding:20px 16px 28px;background:#f5f7fa;min-width:0;overflow:hidden}
   .hero h1{font-size:28px;line-height:1.15;color:#111;letter-spacing:-.5px;margin-bottom:10px;word-break:break-word}
   .hero-sub{font-size:14px;color:#555;margin-bottom:20px}
   .hero-stats{gap:12px;flex-wrap:wrap;margin-bottom:20px}
@@ -1001,7 +1001,7 @@ footer{background:#111;padding:56px 32px 28px}
   .style-grid{grid-template-columns:1fr}
   /* Style cards full width with border like ROT */
   .style-opt{border:1.5px solid #e0e0e0;border-radius:12px;padding:16px;margin-bottom:8px}
-  .style-opt.selected{border-color:#ff5722}
+  .style-opt.selected{border-color:#0071ce}
   .pdp-title{font-size:22px}
   .pdp-price{font-size:26px}
   /* Fixed bottom CTA bar */
@@ -1035,7 +1035,7 @@ footer{background:#111;padding:56px 32px 28px}
   }
   .mob-next-btn{
     height:34px; padding:0 14px;
-    background:#ff5722; color:#fff; border:none;
+    background:#0071ce; color:#fff; border:none;
     border-radius:17px; font-size:13px; font-weight:800;
     cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; flex-shrink:0;
   }
@@ -1048,10 +1048,10 @@ footer{background:#111;padding:56px 32px 28px}
     display:flex; align-items:center; justify-content:center;
     font-weight:800; flex-shrink:0;
   }
-  .sstep.active .sstep-num{background:#ff5722; color:#fff}
+  .sstep.active .sstep-num{background:#0071ce; color:#fff}
   .sstep-label{font-size:8px; font-weight:700; color:#bbb; text-transform:uppercase; letter-spacing:.03em; white-space:nowrap; overflow:hidden; max-width:80px; text-overflow:ellipsis}
   .sstep:not(.active) .sstep-label{display:none}  /* only show label for active step on small screens */
-  .sstep.active .sstep-label{color:#ff5722}
+  .sstep.active .sstep-label{color:#0071ce}
   .sstep-div{width:10px; height:2px; background:#e0e0e0; flex-shrink:0}
 
   /* ── Studio body ── */
@@ -1095,7 +1095,7 @@ footer{background:#111;padding:56px 32px 28px}
   .float-pill{
     pointer-events:auto !important; touch-action:auto;
     min-height:44px; font-size:14px !important; font-weight:700 !important;
-    -webkit-tap-highlight-color:rgba(255,87,34,.15);
+    -webkit-tap-highlight-color:rgba(0,113,206,.15);
   }
 
   /* ── ROTATE button — top right of canvas ── */
@@ -1129,9 +1129,9 @@ footer{background:#111;padding:56px 32px 28px}
   .s-ibtn-icon svg{width:18px !important; height:18px !important}
   .s-ibtn-label{font-size:9px !important; font-weight:700}
   .s-ibtn-sep{display:none}
-  .s-ibtn.on{background:#fbe9e2}
-  .s-ibtn.on .s-ibtn-label{color:#ff5722}
-  .s-ibtn.on .s-ibtn-icon{background:#ff5722}
+  .s-ibtn.on{background:#e0efff}
+  .s-ibtn.on .s-ibtn-label{color:#0071ce}
+  .s-ibtn.on .s-ibtn-icon{background:#0071ce}
   .s-ibtn.on .s-ibtn-icon svg{stroke:#fff !important}
 
   /* ── Panel — FIXED above iconbar, can't be clipped ── */
@@ -1224,8 +1224,8 @@ footer{background:#111;padding:56px 32px 28px}
 .designs-header{padding:24px 28px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between}
 .designs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;padding:24px 28px}
 .design-card{border:1.5px solid #e8e8e8;border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s}
-.design-card:hover{border-color:#ff5722;box-shadow:0 6px 20px rgba(255,87,34,.12);transform:translateY(-2px)}
-.design-card-img{aspect-ratio:1;background:#f5f0eb;display:flex;align-items:center;justify-content:center;position:relative}
+.design-card:hover{border-color:#0071ce;box-shadow:0 6px 20px rgba(0,113,206,.12);transform:translateY(-2px)}
+.design-card-img{aspect-ratio:1;background:#f5f7fa;display:flex;align-items:center;justify-content:center;position:relative}
 .design-card-body{padding:12px}
 .design-card-name{font-size:13px;font-weight:700;color:#111;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .design-card-meta{font-size:11px;color:#aaa;font-weight:500}
@@ -1248,9 +1248,9 @@ footer{background:#111;padding:56px 32px 28px}
   // Build gate
   var gate = document.createElement('div');
   gate.id = 'pw-gate';
-  gate.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#1a1410;display:flex;align-items:center;justify-content:center;font-family:DM Sans,sans-serif';
+  gate.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#0a1628;display:flex;align-items:center;justify-content:center;font-family:DM Sans,sans-serif';
   gate.innerHTML = [
-    '<div style="text-align:center;padding:48px 40px;background:#1a1030;border-radius:24px;border:1.5px solid rgba(255,87,34,.3);box-shadow:0 24px 60px rgba(0,0,0,.5);max-width:360px;width:90%">',
+    '<div style="text-align:center;padding:48px 40px;background:#1a1030;border-radius:24px;border:1.5px solid rgba(0,113,206,.3);box-shadow:0 24px 60px rgba(0,0,0,.5);max-width:360px;width:90%">',
       '<div style="font-size:42px;margin-bottom:16px">🔒</div>',
       '<div style="font-size:22px;font-weight:900;color:#fff;margin-bottom:6px">hunto.com</div>',
       '<div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:28px">Preview access only</div>',
@@ -1258,7 +1258,7 @@ footer{background:#111;padding:56px 32px 28px}
         ' style="width:100%;box-sizing:border-box;padding:14px 16px;border-radius:12px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;font-size:15px;font-family:DM Sans,sans-serif;outline:none;margin-bottom:12px"',
         ' onkeydown="if(event.key===\'Enter\')document.getElementById(\'pw-btn\').click()">',
       '<div id="pw-err" style="color:#f87171;font-size:13px;margin-bottom:10px;min-height:18px"></div>',
-      '<button id="pw-btn" style="width:100%;padding:14px;background:#ff5722;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif"',
+      '<button id="pw-btn" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif"',
         ' onclick="(function(){',
           'var v=document.getElementById(\'pw-input\').value;',
           'if(v===\'Fart\'){sessionStorage.setItem(\'hunto_unlocked\',\'1\');document.getElementById(\'pw-gate\').remove();}',
@@ -1281,17 +1281,17 @@ footer{background:#111;padding:56px 32px 28px}
 .search-dropdown{position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.15);border:1px solid #e8e8e8;z-index:500;overflow:hidden;display:none;max-height:480px;overflow-y:auto}
 .search-dropdown.open{display:block}
 .search-result{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;transition:background .1s;border-bottom:1px solid #f8f8f8}
-.search-result:hover{background:#fff8f5}
+.search-result:hover{background:#f0f7ff}
 .search-result-img{width:44px;height:44px;border-radius:8px;object-fit:contain;background:#f8f8f8;flex-shrink:0}
 .search-result-info{flex:1;min-width:0}
 .search-result-name{font-size:13px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .search-result-brand{font-size:11px;color:#aaa;font-weight:500;margin-top:2px}
-.search-result-price{font-size:12px;font-weight:700;color:#ff5722;flex-shrink:0}
+.search-result-price{font-size:12px;font-weight:700;color:#0071ce;flex-shrink:0}
 .search-cat-label{padding:8px 16px 4px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.1em;background:#f8f8f8}
-.search-view-all{display:block;text-align:center;padding:13px;font-size:13px;font-weight:700;color:#ff5722;cursor:pointer;border-top:1px solid #f0f0f0}
-.search-view-all:hover{background:#fff8f5}
+.search-view-all{display:block;text-align:center;padding:13px;font-size:13px;font-weight:700;color:#0071ce;cursor:pointer;border-top:1px solid #f0f0f0}
+.search-view-all:hover{background:#f0f7ff}
 
-.topbar{background:#fff8f5;border-bottom:1px solid #fbe9e2;padding:7px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#ff5722;font-weight:600}
+.topbar{background:#f0f7ff;border-bottom:1px solid #e0efff;padding:7px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#0071ce;font-weight:600}
 .topbar-left{display:flex;align-items:center;gap:6px}
 .topbar-left span{cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .topbar-right{display:flex;align-items:center;gap:20px;font-size:11px;color:#888;font-weight:500}
@@ -1299,24 +1299,24 @@ footer{background:#111;padding:56px 32px 28px}
 /* ── Main header ── */
 .main-header{background:#fff;border-bottom:1px solid #e8e8e8;padding:0 24px;height:64px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:300;box-shadow:0 1px 8px rgba(0,0,0,.06)}
 .hdr-logo{font-size:28px;font-weight:900;color:#111;letter-spacing:-1.5px;cursor:pointer;flex-shrink:0;margin-right:8px;font-family:"Arial Black",Arial,sans-serif}
-.hdr-logo em{color:#ff5722;font-style:normal;font-weight:900}
+.hdr-logo em{color:#0071ce;font-style:normal;font-weight:900}
 .hdr-search{flex:1;max-width:480px;position:relative}
 .hdr-search input{width:100%;padding:10px 16px 10px 40px;border:1.5px solid #e8e8e8;border-radius:24px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;background:#f8f8f8;transition:all .2s;box-sizing:border-box}
-.hdr-search input:focus{border-color:#ff5722;background:#fff;box-shadow:0 0 0 3px rgba(255,87,34,.1)}
+.hdr-search input:focus{border-color:#0071ce;background:#fff;box-shadow:0 0 0 3px rgba(0,113,206,.1)}
 .hdr-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#aaa;font-size:14px}
 .hdr-actions{margin-left:auto;display:flex;align-items:center;gap:20px}
 .hdr-action{display:flex;flex-direction:column;align-items:center;font-size:11px;color:#888;font-weight:600;cursor:pointer;gap:2px;transition:color .15s}
-.hdr-action:hover{color:#ff5722}
+.hdr-action:hover{color:#0071ce}
 .hdr-action-icon{font-size:18px}
 .hdr-action-sub{font-size:10px;color:#bbb;font-weight:400}
-.hdr-design-btn{height:40px;padding:0 22px;background:#ff5722;color:#fff;border:none;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all .15s;box-shadow:0 3px 10px rgba(255,87,34,.3)}
-.hdr-design-btn:hover{background:#e64a19;transform:translateY(-1px)}
+.hdr-design-btn{height:40px;padding:0 22px;background:#0071ce;color:#fff;border:none;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all .15s;box-shadow:0 3px 10px rgba(0,113,206,.3)}
+.hdr-design-btn:hover{background:#005baa;transform:translateY(-1px)}
 
 /* ── Mobile studio topbar elements (hidden on desktop) ── */
 .mobile-studio-actions{display:none;align-items:center;gap:8px;flex-shrink:0}
 .mob-save-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;color:#555;padding:4px 8px;border-radius:8px}
 .mob-save-btn:hover{background:#f5f5f5}
-.mob-next-btn{height:36px;padding:0 16px;background:#ff5722;color:#fff;border:none;border-radius:18px;font-size:13px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.mob-next-btn{height:36px;padding:0 16px;background:#0071ce;color:#fff;border:none;border-radius:18px;font-size:13px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
 /* Mobile ROTATE button — hidden on desktop */
 .mobile-rotate-btn{display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:10;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,.95);border:1.5px solid #e0e0e0;border-radius:12px;padding:10px 8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:800;color:#333;letter-spacing:.04em;box-shadow:0 2px 12px rgba(0,0,0,.12)}
 .mobile-rotate-btn:active{background:#f0f0f0}
@@ -1326,8 +1326,8 @@ footer{background:#111;padding:56px 32px 28px}
 
 /* ── Mobile-only elements ── */
 .pdp-fixed-cta{display:none;position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:#fff;border-top:1px solid #e8e8e8;z-index:200;box-shadow:0 -4px 16px rgba(0,0,0,.1)}
-.pdp-fixed-cta button{width:100%;height:50px;background:#ff5722;color:#fff;border:none;border-radius:25px;font-size:16px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif}
-#shop-mobile-filter-btn{display:none;position:fixed;bottom:80px;right:16px;z-index:100;height:44px;padding:0 20px;background:#ff5722;color:#fff;border:none;border-radius:22px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 16px rgba(255,87,34,.4);align-items:center;gap:6px}
+.pdp-fixed-cta button{width:100%;height:50px;background:#0071ce;color:#fff;border:none;border-radius:25px;font-size:16px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif}
+#shop-mobile-filter-btn{display:none;position:fixed;bottom:80px;right:16px;z-index:100;height:44px;padding:0 20px;background:#0071ce;color:#fff;border:none;border-radius:22px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 16px rgba(0,113,206,.4);align-items:center;gap:6px}
 .mobile-search-bar{display:none;padding:8px 12px;background:#fff;border-bottom:1px solid #e8e8e8}
 .mobile-search-bar input{width:100%;padding:10px 16px 10px 36px;border:1.5px solid #e8e8e8;border-radius:22px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#f8f8f8;box-sizing:border-box}
 .mobile-search-bar-wrap{position:relative}
@@ -1337,22 +1337,22 @@ footer{background:#111;padding:56px 32px 28px}
 .mega-nav{background:#fff;border-bottom:2px solid #e8e8e8;padding:0 24px;display:flex;align-items:center;gap:0;position:sticky;top:64px;z-index:299}
 .mega-nav-item{position:relative}
 .mega-nav-btn{height:46px;padding:0 16px;border:none;background:transparent;font-size:13px;font-weight:600;color:#333;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;transition:color .15s;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-2px}
-.mega-nav-btn:hover,.mega-nav-btn.on{color:#ff5722;border-bottom-color:#ff5722}
+.mega-nav-btn:hover,.mega-nav-btn.on{color:#0071ce;border-bottom-color:#0071ce}
 .mega-nav-btn .chevron{font-size:9px;transition:transform .2s}
 .mega-nav-item:hover .chevron{transform:rotate(180deg)}
 .mega-nav-item:hover .mega-dropdown{display:block}
 .mega-dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #e8e8e8;border-radius:0 12px 12px 12px;box-shadow:0 8px 32px rgba(0,0,0,.12);min-width:220px;padding:12px 0;z-index:400}
 .mega-dropdown a,.mega-dropdown button{display:block;width:100%;padding:9px 20px;font-size:13px;font-weight:500;color:#444;text-align:left;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;text-decoration:none;box-sizing:border-box}
-.mega-dropdown a:hover,.mega-dropdown button:hover{background:#fff8f5;color:#ff5722}
+.mega-dropdown a:hover,.mega-dropdown button:hover{background:#f0f7ff;color:#0071ce}
 .mega-dropdown-sep{height:1px;background:#f0f0f0;margin:6px 12px}
-.nav-popular{background:#ff5722;color:#fff;font-size:9px;padding:2px 6px;border-radius:8px;font-weight:700;margin-left:4px;vertical-align:middle}
+.nav-popular{background:#0071ce;color:#fff;font-size:9px;padding:2px 6px;border-radius:8px;font-weight:700;margin-left:4px;vertical-align:middle}
 .mega-dropdown-wide{width:680px!important;padding:20px 8px!important}
 .mega-dropdown-wide-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
 .mega-col{padding:0 14px}
 .mega-col:not(:last-child){border-right:1px solid #f0f0f0}
-.mega-col-hdr{font-size:11px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #ff5722}
+.mega-col-hdr{font-size:11px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #0071ce}
 .mega-col button{display:block;width:100%;text-align:left;padding:7px 0;border:none;background:none;font-size:13px;color:#555;cursor:pointer;font-family:'DM Sans',sans-serif;transition:color .15s}
-.mega-col button:hover{color:#ff5722}
+.mega-col button:hover{color:#0071ce}
 .mega-dropdown-header{padding:8px 20px 4px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em}
 .mega-nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
 .nav-stars-sm{color:#f59e0b;font-size:11px}
@@ -1451,7 +1451,7 @@ footer{background:#111;padding:56px 32px 28px}
       <button onclick="shopState.search='';goShopGender('ladies','T-Shirts')">Women's T-Shirts</button>
       <button onclick="shopState.search='';goShopGender('youth','T-Shirts')">Kids' T-Shirts</button>
       <div class="mega-dropdown-sep"></div>
-      <button onclick="goShop('T-Shirts')" style="color:#ff5722;font-weight:700">View All T-Shirts →</button>
+      <button onclick="goShop('T-Shirts')" style="color:#0071ce;font-weight:700">View All T-Shirts →</button>
     </div>
   </div>
 
@@ -1469,7 +1469,7 @@ footer{background:#111;padding:56px 32px 28px}
       <button onclick="goShopGender('ladies','Fleece')">Women's Sweatshirts</button>
       <button onclick="goShopGender('youth','Fleece')">Kids Sweatshirts</button>
       <div class="mega-dropdown-sep"></div>
-      <button onclick="goShop('Fleece')" style="color:#ff5722;font-weight:700">View All Sweatshirts →</button>
+      <button onclick="goShop('Fleece')" style="color:#0071ce;font-weight:700">View All Sweatshirts →</button>
     </div>
   </div>
 
@@ -1484,7 +1484,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div class="mega-dropdown-sep"></div>
       <button onclick="goShopGender('ladies','Polos')">Women's Polos</button>
       <div class="mega-dropdown-sep"></div>
-      <button onclick="goShop('Polos')" style="color:#ff5722;font-weight:700">View All Polos →</button>
+      <button onclick="goShop('Polos')" style="color:#0071ce;font-weight:700">View All Polos →</button>
     </div>
   </div>
 
@@ -1499,7 +1499,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div class="mega-dropdown-sep"></div>
       <button onclick="goShopGender('ladies','Outerwear')">Women's Outerwear</button>
       <div class="mega-dropdown-sep"></div>
-      <button onclick="goShop('Outerwear')" style="color:#ff5722;font-weight:700">View All Outerwear →</button>
+      <button onclick="goShop('Outerwear')" style="color:#0071ce;font-weight:700">View All Outerwear →</button>
     </div>
   </div>
 
@@ -1514,7 +1514,7 @@ footer{background:#111;padding:56px 32px 28px}
       <button onclick="goShopGender('toddler','')">Toddler</button>
       <button onclick="goShopGender('toddler','')">Baby / Infant</button>
       <div class="mega-dropdown-sep"></div>
-      <button onclick="goShopGender('youth','')" style="color:#ff5722;font-weight:700">View All Kids &rarr;</button>
+      <button onclick="goShopGender('youth','')" style="color:#0071ce;font-weight:700">View All Kids &rarr;</button>
     </div>
   </div>
 
@@ -1527,7 +1527,7 @@ footer{background:#111;padding:56px 32px 28px}
       <button onclick="shopState.search='reflective';goShop('Safety')">Reflective Gear</button>
       <button onclick="shopState.search='hi-vis';goShop('Outerwear')">Hi-Vis Jackets &amp; Vests</button>
       <div class="mega-dropdown-sep"></div>
-      <button onclick="goShop('Safety')" style="color:#ff5722;font-weight:700">View All Safety &rarr;</button>
+      <button onclick="goShop('Safety')" style="color:#0071ce;font-weight:700">View All Safety &rarr;</button>
     </div>
   </div>
 
@@ -1546,7 +1546,7 @@ footer{background:#111;padding:56px 32px 28px}
       <button onclick="shopState.brand='Sport-Tek';goShop('')">Sport-Tek</button>
       <button onclick="shopState.brand='Port & Company';goShop('')">Port & Company</button>
       <div class="mega-dropdown-sep"></div>
-      <button onclick="goShop('')" style="color:#ff5722;font-weight:700">View All Brands →</button>
+      <button onclick="goShop('')" style="color:#0071ce;font-weight:700">View All Brands →</button>
     </div>
   </div>
 
@@ -1560,14 +1560,14 @@ footer{background:#111;padding:56px 32px 28px}
         <button onclick="shopState.search='';goShopGender('ladies','T-Shirts')">Women's T-Shirts</button>
         <button onclick="goShopGender('ladies','Fleece')">Women's Hoodies</button>
         <button onclick="goShopGender('ladies','Polos')">Women's Polos</button>
-        <button onclick="goShopGender('ladies','')" style="color:#ff5722;font-weight:600">View All Women's →</button>
+        <button onclick="goShopGender('ladies','')" style="color:#0071ce;font-weight:600">View All Women's →</button>
       </div>
       <div class="mega-col">
         <div class="mega-col-hdr">Men's Apparel</div>
         <button onclick="goShopGender('mens','T-Shirts')">Men's T-Shirts</button>
         <button onclick="goShopGender('mens','Fleece')">Men's Hoodies</button>
         <button onclick="goShopGender('mens','Polos')">Men's Polos</button>
-        <button onclick="goShopGender('mens','')" style="color:#ff5722;font-weight:600">View All Men's →</button>
+        <button onclick="goShopGender('mens','')" style="color:#0071ce;font-weight:600">View All Men's →</button>
       </div>
       <div class="mega-col">
         <div class="mega-col-hdr">Kids Apparel</div>
@@ -1575,7 +1575,7 @@ footer{background:#111;padding:56px 32px 28px}
         <button onclick="goShopGender('youth','Fleece')">Kids Sweatshirts</button>
         <button onclick="goShopGender('toddler','')">Toddler</button>
         <button onclick="goShopGender('toddler','')">Baby / Infant</button>
-        <button onclick="goShopGender('youth','')" style="color:#ff5722;font-weight:600">View All Kids →</button>
+        <button onclick="goShopGender('youth','')" style="color:#0071ce;font-weight:600">View All Kids →</button>
       </div>
       <div class="mega-col">
         <div class="mega-col-hdr">More Categories</div>
@@ -1596,7 +1596,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v17.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v17.1</span>
   </div>
 
 </nav>
@@ -1614,7 +1614,7 @@ footer{background:#111;padding:56px 32px 28px}
   <button class="mobile-nav-link" onclick="goShop('Safety');closeMobileMenu()">🦺 Safety &amp; Hi-Vis</button>
   <button class="mobile-nav-link" onclick="goShop('');closeMobileMenu()">🛍 All Products</button>
   <div style="margin-top:16px">
-    <button style="width:100%;height:52px;background:#ff5722;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;font-family:'DM Sans',sans-serif" onclick="openStudio(null);closeMobileMenu()">Start Designing →</button>
+    <button style="width:100%;height:52px;background:#0071ce;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;font-family:'DM Sans',sans-serif" onclick="openStudio(null);closeMobileMenu()">Start Designing →</button>
   </div>
 </div>
 
@@ -1623,27 +1623,27 @@ footer{background:#111;padding:56px 32px 28px}
 <div id="page-home" class="page active">
 
   <!-- HERO -->
-  <section style="position:relative;background:linear-gradient(135deg,#1a1a1a 0%,#2c1810 40%,#1a1410 70%,#0a0a0a 100%);overflow:hidden;min-height:520px;display:flex;align-items:center">
+  <section style="position:relative;background:linear-gradient(135deg,#0a1628 0%,#0d2240 40%,#0a1830 70%,#060e1a 100%);overflow:hidden;min-height:520px;display:flex;align-items:center">
     <!-- Background effects -->
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 50%,rgba(255,87,34,.18) 0%,transparent 70%);pointer-events:none"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 50%,rgba(0,113,206,.18) 0%,transparent 70%);pointer-events:none"></div>
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 20% 30%,rgba(236,72,153,.1) 0%,transparent 60%);pointer-events:none"></div>
     <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;mask-image:radial-gradient(ellipse at center,black 40%,transparent 80%)"></div>
     <!-- Background pattern -->
-    <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(255,87,34,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(255,87,34,.1) 0%,transparent 40%);pointer-events:none"></div>
+    <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(0,113,206,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(0,113,206,.1) 0%,transparent 40%);pointer-events:none"></div>
     
     
     <div style="max-width:1300px;margin:0 auto;padding:60px 32px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;width:100%">
       <div>
-        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,87,34,.15);border:1px solid rgba(255,87,34,.3);border-radius:20px;padding:6px 16px;margin-bottom:24px">
-          <span style="color:#ff5722;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">✦ AI-Powered Custom Printing</span>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,113,206,.15);border:1px solid rgba(0,113,206,.3);border-radius:20px;padding:6px 16px;margin-bottom:24px">
+          <span style="color:#0071ce;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">✦ AI-Powered Custom Printing</span>
         </div>
-        <h1 style="font-size:clamp(36px,5vw,64px);font-weight:700;color:#fff;letter-spacing:-2px;line-height:1.05;margin-bottom:20px;font-family:'Space Grotesk',sans-serif">Custom Apparel<br>on <em style="color:#ff5722;font-style:normal">Any Deadline</em></h1>
+        <h1 style="font-size:clamp(36px,5vw,64px);font-weight:700;color:#fff;letter-spacing:-2px;line-height:1.05;margin-bottom:20px;font-family:'Space Grotesk',sans-serif">Custom Apparel<br>on <em style="color:#0071ce;font-style:normal">Any Deadline</em></h1>
         <p style="font-size:17px;color:rgba(255,255,255,.7);margin-bottom:32px;line-height:1.7;max-width:480px">Design t-shirts, hoodies, and apparel with AI-generated art. In-house DTF printing. No minimums. Ships in 48 hours.</p>
         
 
 
         <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <button onclick="goPDP('8000')" style="height:52px;padding:0 32px;background:#ff5722;color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;box-shadow:0 4px 20px rgba(255,87,34,.4)">✦ Start Designing Free</button>
+          <button onclick="goPDP('8000')" style="height:52px;padding:0 32px;background:#0071ce;color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;box-shadow:0 4px 20px rgba(0,113,206,.4)">✦ Start Designing Free</button>
           <button onclick="goShop('')" style="height:52px;padding:0 28px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:26px;font-size:16px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s">Browse Products</button>
         </div>
 
@@ -1710,7 +1710,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
 
         <!-- Floating sparkle badges -->
-        <div style="position:absolute;top:8px;left:52%;background:linear-gradient(135deg,#ff5722,#d84315);color:#fff;font-size:11px;font-weight:800;padding:6px 14px;border-radius:20px;box-shadow:0 4px 16px rgba(255,87,34,.5);animation:float2 4s ease-in-out infinite;z-index:6">✦ AI-Generated Art</div>
+        <div style="position:absolute;top:8px;left:52%;background:linear-gradient(135deg,#0071ce,#004a8f);color:#fff;font-size:11px;font-weight:800;padding:6px 14px;border-radius:20px;box-shadow:0 4px 16px rgba(0,113,206,.5);animation:float2 4s ease-in-out infinite;z-index:6">✦ AI-Generated Art</div>
         <div style="position:absolute;bottom:30px;left:46%;background:rgba(255,255,255,.12);backdrop-filter:blur(12px);color:#fff;font-size:11px;font-weight:700;padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.2);animation:float1 5s ease-in-out infinite .3s;z-index:6">Ships in 48hrs 🚀</div>
       </div>
     </div>
@@ -1735,7 +1735,7 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 
   <!-- VALUE PROP + CATEGORY GRID (competitor-matching) -->
-  <div style="background:#f5f0eb;padding:48px 32px">
+  <div style="background:#f5f7fa;padding:48px 32px">
     <div id="hp-value-section" style="max-width:1300px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center">
 
       <!-- Left: headline + CTAs + delivery -->
@@ -1744,8 +1744,8 @@ footer{background:#111;padding:56px 32px 28px}
         <p style="font-size:16px;color:#555;margin-bottom:28px;line-height:1.6">Personalize t-shirts, hoodies, polos, and more for your group or business — no minimums, ships in 48 hours.</p>
 
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px">
-          <button onclick="goShop('')" style="height:50px;padding:0 28px;background:#ff5722;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;box-shadow:0 4px 14px rgba(255,87,34,.3)" onmouseover="this.style.background='#e64a19'" onmouseout="this.style.background='#ff5722'">Shop Products</button>
-          <button onclick="openStudio(null)" style="height:50px;padding:0 28px;background:#fff;color:#ff5722;border:2px solid #ff5722;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s" onmouseover="this.style.background='#fff8f5'" onmouseout="this.style.background='#fff'">Start Designing</button>
+          <button onclick="goShop('')" style="height:50px;padding:0 28px;background:#0071ce;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;box-shadow:0 4px 14px rgba(0,113,206,.3)" onmouseover="this.style.background='#005baa'" onmouseout="this.style.background='#0071ce'">Shop Products</button>
+          <button onclick="openStudio(null)" style="height:50px;padding:0 28px;background:#fff;color:#0071ce;border:2px solid #0071ce;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s" onmouseover="this.style.background='#f0f7ff'" onmouseout="this.style.background='#fff'">Start Designing</button>
         </div>
 
         <!-- Delivery info -->
@@ -1760,7 +1760,7 @@ footer{background:#111;padding:56px 32px 28px}
           </div>
           <div style="padding-left:24px">
             <div style="font-size:13px;font-weight:800;color:#111">Need it Sooner?</div>
-            <div style="font-size:12px;color:#ff5722;font-weight:600;margin-top:2px;cursor:pointer">Call (800) HUNTO or Live Chat</div>
+            <div style="font-size:12px;color:#0071ce;font-weight:600;margin-top:2px;cursor:pointer">Call (800) HUNTO or Live Chat</div>
           </div>
         </div>
       </div>
@@ -1768,7 +1768,7 @@ footer{background:#111;padding:56px 32px 28px}
       <!-- Right: 2x2 category card grid -->
       <div id="hp-cat-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px">
         <div onclick="goShop('T-Shirts')" style="cursor:pointer;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e0e0e0;transition:all .22s;box-shadow:0 2px 10px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.06)'">
-          <div id="catimg-tshirt-wrap" style="height:200px;background:#f0ebe5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+          <div id="catimg-tshirt-wrap" style="height:200px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
             <img id="catimg-tshirt" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-tshirt-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
             <div class="cat-ydh"><span>✦ your art here</span></div>
@@ -1778,7 +1778,7 @@ footer{background:#111;padding:56px 32px 28px}
           </div>
         </div>
         <div onclick="goShop('T-Shirts - Long Sleeve')" style="cursor:pointer;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e0e0e0;transition:all .22s;box-shadow:0 2px 10px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.06)'">
-          <div id="catimg-longsleeve-wrap" style="height:200px;background:#f0ebe5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+          <div id="catimg-longsleeve-wrap" style="height:200px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
             <img id="catimg-longsleeve" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-longsleeve-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
             <div class="cat-ydh"><span>✦ your art here</span></div>
@@ -1788,7 +1788,7 @@ footer{background:#111;padding:56px 32px 28px}
           </div>
         </div>
         <div onclick="goShop('Fleece - Core - Hood')" style="cursor:pointer;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e0e0e0;transition:all .22s;box-shadow:0 2px 10px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.06)'">
-          <div id="catimg-hoodie-wrap" style="height:200px;background:#f0ebe5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+          <div id="catimg-hoodie-wrap" style="height:200px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
             <img id="catimg-hoodie" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-hoodie-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
             <div class="cat-ydh"><span>✦ your art here</span></div>
@@ -1798,7 +1798,7 @@ footer{background:#111;padding:56px 32px 28px}
           </div>
         </div>
         <div onclick="goShop('Outerwear')" style="cursor:pointer;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e0e0e0;transition:all .22s;box-shadow:0 2px 10px rgba(0,0,0,.06)" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.14)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.06)'">
-          <div id="catimg-jacket-wrap" style="height:200px;background:#f0ebe5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+          <div id="catimg-jacket-wrap" style="height:200px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
             <img id="catimg-jacket" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
             <div id="catimg-jacket-loading" style="position:absolute;font-size:44px;opacity:.15">👕</div>
             <div class="cat-ydh"><span>✦ your art here</span></div>
@@ -1814,31 +1814,31 @@ footer{background:#111;padding:56px 32px 28px}
   <!-- HOW IT WORKS -->
   <div style="max-width:1300px;margin:0 auto;padding:64px 32px">
     <div style="text-align:center;margin-bottom:48px">
-      <div style="font-size:12px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">The Process</div>
+      <div style="font-size:12px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">The Process</div>
       <h2 style="font-size:clamp(28px,3vw,40px);font-weight:700;color:#1a1a1a;letter-spacing:-1px;font-family:'Space Grotesk',sans-serif">Four steps. One shirt.</h2>
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
-      <div style="text-align:center;padding:32px 24px;background:#f5f0eb;border-radius:20px;border:1.5px solid #e8e8e8">
-        <div style="width:52px;height:52px;background:#ff5722;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">👕</div>
-        <div style="font-size:11px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 01</div>
+      <div style="text-align:center;padding:32px 24px;background:#f5f7fa;border-radius:20px;border:1.5px solid #e8e8e8">
+        <div style="width:52px;height:52px;background:#0071ce;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">👕</div>
+        <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 01</div>
         <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">Pick your garment</div>
         <p style="font-size:13px;color:#888;line-height:1.6">Choose from thousands of styles — tees, hoodies, polos, outerwear and more.</p>
       </div>
-      <div style="text-align:center;padding:32px 24px;background:#f5f0eb;border-radius:20px;border:1.5px solid #e8e8e8">
-        <div style="width:52px;height:52px;background:#ff5722;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">✦</div>
-        <div style="font-size:11px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 02</div>
+      <div style="text-align:center;padding:32px 24px;background:#f5f7fa;border-radius:20px;border:1.5px solid #e8e8e8">
+        <div style="width:52px;height:52px;background:#0071ce;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">✦</div>
+        <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 02</div>
         <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">Generate your design</div>
         <p style="font-size:13px;color:#888;line-height:1.6">Type any idea. Our AI creates print-ready artwork instantly. Or upload your own.</p>
       </div>
-      <div style="text-align:center;padding:32px 24px;background:#f5f0eb;border-radius:20px;border:1.5px solid #e8e8e8">
-        <div style="width:52px;height:52px;background:#ff5722;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">🖨️</div>
-        <div style="font-size:11px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 03</div>
+      <div style="text-align:center;padding:32px 24px;background:#f5f7fa;border-radius:20px;border:1.5px solid #e8e8e8">
+        <div style="width:52px;height:52px;background:#0071ce;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">🖨️</div>
+        <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 03</div>
         <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">We print it</div>
         <p style="font-size:13px;color:#888;line-height:1.6">In-house DTF printing delivers vibrant, long-lasting results on any garment.</p>
       </div>
-      <div style="text-align:center;padding:32px 24px;background:#f5f0eb;border-radius:20px;border:1.5px solid #e8e8e8">
-        <div style="width:52px;height:52px;background:#ff5722;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">📦</div>
-        <div style="font-size:11px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 04</div>
+      <div style="text-align:center;padding:32px 24px;background:#f5f7fa;border-radius:20px;border:1.5px solid #e8e8e8">
+        <div style="width:52px;height:52px;background:#0071ce;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">📦</div>
+        <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 04</div>
         <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">You wear it</div>
         <p style="font-size:13px;color:#888;line-height:1.6">Ships within 48 hours with full tracking. Free shipping on every order.</p>
       </div>
@@ -1849,7 +1849,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div style="background:#f8f8f8;padding:60px 32px">
     <div style="max-width:1300px;margin:0 auto">
       <div style="text-align:center;margin-bottom:40px">
-        <div style="font-size:12px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Real Orders. Real People.</div>
+        <div style="font-size:12px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Real Orders. Real People.</div>
         <h2 style="font-size:clamp(26px,3vw,40px);font-weight:700;color:#1a1a1a;letter-spacing:-.5px;margin-bottom:8px;font-family:'Space Grotesk',sans-serif">Over 1,000,000+ Satisfied Customers</h2>
         <p style="font-size:15px;color:#888">Get inspired by some of our customers showing off their custom apparel</p>
       </div>
@@ -1913,16 +1913,16 @@ footer{background:#111;padding:56px 32px 28px}
       </div>
 
       <div style="text-align:center;margin-top:32px">
-        <button onclick="openStudio(null)" style="height:48px;padding:0 36px;background:#ff5722;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(255,87,34,.3);transition:all .18s" onmouseover="this.style.background='#e64a19'" onmouseout="this.style.background='#ff5722'">✦ Create Your Design</button>
+        <button onclick="openStudio(null)" style="height:48px;padding:0 36px;background:#0071ce;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(0,113,206,.3);transition:all .18s" onmouseover="this.style.background='#005baa'" onmouseout="this.style.background='#0071ce'">✦ Create Your Design</button>
       </div>
     </div>
   </div>
 
   <!-- REVIEWS -->
-  <div style="background:#f5f0eb;padding:64px 32px">
+  <div style="background:#f5f7fa;padding:64px 32px">
     <div style="max-width:1300px;margin:0 auto">
       <div style="text-align:center;margin-bottom:40px">
-        <div style="font-size:12px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Real Orders</div>
+        <div style="font-size:12px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Real Orders</div>
         <h2 style="font-size:clamp(28px,3vw,40px);font-weight:700;color:#1a1a1a;letter-spacing:-1px;font-family:'Space Grotesk',sans-serif">People are talking.</h2>
         <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px">
           <span style="color:#f59e0b;font-size:20px">★★★★★</span>
@@ -2014,7 +2014,7 @@ footer{background:#111;padding:56px 32px 28px}
           <input id="shop-search" type="text" placeholder="Search products..."
             style="width:100%;padding:10px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
             oninput="shopSearch(this.value)"
-            onfocus="this.style.borderColor='#ff5722'" onblur="this.style.borderColor='#e8e8e8'">
+            onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e8e8e8'">
         </div>
 
         <!-- Brand filter -->
@@ -2028,16 +2028,16 @@ footer{background:#111;padding:56px 32px 28px}
           <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Price Range</div>
           <div style="display:flex;flex-direction:column;gap:6px">
             <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;cursor:pointer">
-              <input type="radio" name="shop-price" value="" checked onchange="shopFilterPrice('')" style="accent-color:#ff5722"> All prices
+              <input type="radio" name="shop-price" value="" checked onchange="shopFilterPrice('')" style="accent-color:#0071ce"> All prices
             </label>
             <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;cursor:pointer">
-              <input type="radio" name="shop-price" value="under30" onchange="shopFilterPrice('under30')" style="accent-color:#ff5722"> Under $30
+              <input type="radio" name="shop-price" value="under30" onchange="shopFilterPrice('under30')" style="accent-color:#0071ce"> Under $30
             </label>
             <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;cursor:pointer">
-              <input type="radio" name="shop-price" value="30to50" onchange="shopFilterPrice('30to50')" style="accent-color:#ff5722"> $30 – $50
+              <input type="radio" name="shop-price" value="30to50" onchange="shopFilterPrice('30to50')" style="accent-color:#0071ce"> $30 – $50
             </label>
             <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;cursor:pointer">
-              <input type="radio" name="shop-price" value="over50" onchange="shopFilterPrice('over50')" style="accent-color:#ff5722"> Over $50
+              <input type="radio" name="shop-price" value="over50" onchange="shopFilterPrice('over50')" style="accent-color:#0071ce"> Over $50
             </label>
           </div>
         </div>
@@ -2097,14 +2097,14 @@ footer{background:#111;padding:56px 32px 28px}
 
     <!-- Main image -->
     <div style="position:sticky;top:124px">
-      <div style="background:#f5f0eb;border-radius:20px;overflow:hidden;aspect-ratio:1;position:relative;display:flex;align-items:center;justify-content:center">
+      <div style="background:#f5f7fa;border-radius:20px;overflow:hidden;aspect-ratio:1;position:relative;display:flex;align-items:center;justify-content:center">
         <img id="pdp-img" src="" alt="Product" style="width:100%;height:100%;object-fit:contain;display:block">
         <div class="pdp-main-tint" id="pdp-tint"></div>
         <div id="pdp-design-ph" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
           <div style="text-align:center;opacity:.15;font-size:clamp(28px,4vw,52px);font-weight:900;letter-spacing:-.02em;line-height:1.1;color:#000">YOUR<br>DESIGN<br>HERE</div>
         </div>
         <!-- Nav arrows -->
-        <button onclick="pdView('front')" id="pdv-f" style="position:absolute;bottom:16px;left:16px;padding:6px 14px;border:1.5px solid #e8e8e8;border-radius:20px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:#ff5722;transition:all .15s">FRONT</button>
+        <button onclick="pdView('front')" id="pdv-f" style="position:absolute;bottom:16px;left:16px;padding:6px 14px;border:1.5px solid #e8e8e8;border-radius:20px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:#0071ce;transition:all .15s">FRONT</button>
         <button onclick="pdView('back')" id="pdv-b" style="position:absolute;bottom:16px;left:88px;padding:6px 14px;border:1.5px solid #e8e8e8;border-radius:20px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:#555;transition:all .15s">BACK</button>
       </div>
     </div>
@@ -2146,7 +2146,7 @@ footer{background:#111;padding:56px 32px 28px}
       <!-- Explore more -->
       <div id="pdp-explore" style="text-align:center;margin-bottom:20px">
         <span style="font-size:13px;color:#aaa;font-weight:500">Looking for something different? </span>
-        <button onclick="goShop('')" style="background:none;border:none;font-size:13px;color:#ff5722;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:2px">Browse 3,000+ products →</button>
+        <button onclick="goShop('')" style="background:none;border:none;font-size:13px;color:#0071ce;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:2px">Browse 3,000+ products →</button>
       </div>
 
       <!-- Shipping cards -->
@@ -2171,14 +2171,14 @@ footer{background:#111;padding:56px 32px 28px}
       </div>
 
       <!-- Quantity pricing table -->
-      <div style="margin-top:20px;background:#f5f0eb;border-radius:14px;padding:16px;display:none" id="pdp-qty-table">
+      <div style="margin-top:20px;background:#f5f7fa;border-radius:14px;padding:16px;display:none" id="pdp-qty-table">
         <div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Volume Pricing</div>
         <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center">
           <div><div style="font-size:11px;color:#aaa">1+</div><div id="pdp-price-1" style="font-size:14px;font-weight:800;color:#111"></div></div>
           <div><div style="font-size:11px;color:#aaa">6+</div><div id="pdp-price-6" style="font-size:14px;font-weight:800;color:#111"></div></div>
           <div><div style="font-size:11px;color:#aaa">12+</div><div id="pdp-price-12" style="font-size:14px;font-weight:800;color:#111"></div></div>
           <div><div style="font-size:11px;color:#aaa">24+</div><div id="pdp-price-24" style="font-size:14px;font-weight:800;color:#111"></div></div>
-          <div><div style="font-size:11px;color:#aaa">50+</div><div id="pdp-price-50" style="font-size:14px;font-weight:800;color:#ff5722"></div></div>
+          <div><div style="font-size:11px;color:#aaa">50+</div><div id="pdp-price-50" style="font-size:14px;font-weight:800;color:#0071ce"></div></div>
         </div>
       </div>
     </div>
@@ -2198,7 +2198,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div>
         <h2 style="font-size:20px;font-weight:800;color:#111;margin-bottom:14px">Product Details</h2>
         <div id="pdp-specs"></div>
-        <div id="pdp-brand-section" style="background:#fdf4ff;border-radius:14px;padding:20px;margin-top:16px">
+        <div id="pdp-brand-section" style="background:#f0f7ff;border-radius:14px;padding:20px;margin-top:16px">
           <div id="pdp-brand-logo" style="margin-bottom:10px"></div>
           <div id="pdp-brand-name" style="font-size:15px;font-weight:800;color:#111;margin-bottom:6px"></div>
           <div id="pdp-brand-desc" style="font-size:13px;color:#666;line-height:1.7"></div>
@@ -2219,7 +2219,7 @@ footer{background:#111;padding:56px 32px 28px}
     <!-- Header -->
     <div style="padding:20px 24px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
       <div>
-        <div style="font-size:11px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Add Products</div>
+        <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Add Products</div>
         <input id="product-modal-search" type="text" placeholder="Search for t-shirts, hoodies, more..."
           style="width:400px;padding:10px 16px;border:1.5px solid #e8e8e8;border-radius:20px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none"
           oninput="productModalSearch(this.value)">
@@ -2349,7 +2349,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div id="sp-products">
         <div class="s-panel-hdr">
           <div>
-            <div style="font-size:10px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Products</div>
+            <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Products</div>
             <div class="s-panel-title">Manage Your Products</div>
             <div class="s-panel-sub">Select product and manage colors</div>
           </div>
@@ -2359,8 +2359,8 @@ footer{background:#111;padding:56px 32px 28px}
           <div id="s-garments"></div>
 
           <!-- Add Products button -->
-          <button onclick="openProductModal()" style="width:100%;margin-top:12px;padding:14px;border:2px dashed #d8b4fe;border-radius:12px;background:#fdf4ff;color:#ff5722;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s"
-            onmouseover="this.style.background='#e8f3ff'" onmouseout="this.style.background='#fdf4ff'">
+          <button onclick="openProductModal()" style="width:100%;margin-top:12px;padding:14px;border:2px dashed #a8c8e8;border-radius:12px;background:#f0f7ff;color:#0071ce;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s"
+            onmouseover="this.style.background='#e8f3ff'" onmouseout="this.style.background='#f0f7ff'">
             <span style="font-size:18px">+</span> Add Products
           </button>
 
@@ -2368,8 +2368,8 @@ footer{background:#111;padding:56px 32px 28px}
           <div style="margin-top:20px">
             <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Customization Method</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-              <div style="padding:12px;border:2px solid #ff5722;border-radius:10px;background:#fff8f5;text-align:center;cursor:default">
-                <div style="font-size:14px;font-weight:700;color:#ff5722">Printing</div>
+              <div style="padding:12px;border:2px solid #0071ce;border-radius:10px;background:#f0f7ff;text-align:center;cursor:default">
+                <div style="font-size:14px;font-weight:700;color:#0071ce">Printing</div>
                 <div style="font-size:11px;color:#888;margin-top:2px">No Minimum</div>
               </div>
               <div style="padding:12px;border:2px solid #e8e8e8;border-radius:10px;text-align:center;cursor:pointer;color:#aaa"
@@ -2387,7 +2387,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div id="sp-text" style="display:none">
         <div class="s-panel-hdr">
           <div>
-            <div style="font-size:10px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Text Editor</div>
+            <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Text Editor</div>
             <div class="s-panel-title">Edit Your Text</div>
           </div>
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
@@ -2396,7 +2396,7 @@ footer{background:#111;padding:56px 32px 28px}
 
           <!-- Textarea -->
           <textarea id="txt-input" placeholder="Type your text here..."
-            style="width:100%;padding:12px 14px;border:2px solid #ff5722;border-radius:12px;
+            style="width:100%;padding:12px 14px;border:2px solid #0071ce;border-radius:12px;
             font-size:15px;outline:none;font-family:'DM Sans',sans-serif;color:#111;
             resize:none;height:90px;line-height:1.5;margin-bottom:14px;box-sizing:border-box"
             oninput="txtUpdate()"></textarea>
@@ -2405,7 +2405,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div style="display:flex;gap:6px;margin-bottom:18px;justify-content:space-between">
             <!-- Center -->
             <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtCenterOnShirt()">
-              <div style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s" onmouseover="this.style.borderColor='#ff5722'" onmouseout="this.style.borderColor='#e8e8e8'">⊕</div>
+              <div style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s" onmouseover="this.style.borderColor='#0071ce'" onmouseout="this.style.borderColor='#e8e8e8'">⊕</div>
               <span style="font-size:9px;font-weight:700;color:#999">Center</span>
             </div>
             <!-- Bold -->
@@ -2420,7 +2420,7 @@ footer{background:#111;padding:56px 32px 28px}
             </div>
             <!-- Flip -->
             <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtFlipSelected()">
-              <div style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s" onmouseover="this.style.borderColor='#ff5722'" onmouseout="this.style.borderColor='#e8e8e8'">⇌</div>
+              <div style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s" onmouseover="this.style.borderColor='#0071ce'" onmouseout="this.style.borderColor='#e8e8e8'">⇌</div>
               <span style="font-size:9px;font-weight:700;color:#999">Flip</span>
             </div>
             <!-- CAPS -->
@@ -2499,7 +2499,7 @@ footer{background:#111;padding:56px 32px 28px}
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
               <span style="font-size:12px;font-weight:600;color:#888;width:44px">Width</span>
               <input type="range" id="txt-stroke" min="0" max="6" value="0" step="0.5"
-                style="flex:1;accent-color:#ff5722" oninput="txtUpdate();txtUpdateOutlineLabel()">
+                style="flex:1;accent-color:#0071ce" oninput="txtUpdate();txtUpdateOutlineLabel()">
               <span style="font-size:12px;font-weight:700;color:#888;width:24px;text-align:right" id="txt-stroke-val">0</span>
             </div>
             <select id="txt-stroke-color" onchange="txtUpdate();txtUpdateOutlineLabel()"
@@ -2507,7 +2507,7 @@ footer{background:#111;padding:56px 32px 28px}
               font-size:12px;outline:none;background:#fff;cursor:pointer;color:#111;font-family:'DM Sans',sans-serif">
               <option value="#ffffff">White outline</option>
               <option value="#000000">Black outline</option>
-              <option value="#ff5722">Blue outline</option>
+              <option value="#0071ce">Blue outline</option>
               <option value="#f05a28">Orange outline</option>
             </select>
           </div>
@@ -2516,7 +2516,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div style="display:flex;align-items:center;padding:11px 0;border-top:1px solid #f0f0f0;gap:12px">
             <span style="font-size:13px;font-weight:600;color:#333;width:56px">Size</span>
             <input type="range" id="txt-size" min="12" max="120" value="36" step="2"
-              style="flex:1;accent-color:#ff5722" oninput="txtUpdate();document.getElementById('txt-size-val').textContent=this.value">
+              style="flex:1;accent-color:#0071ce" oninput="txtUpdate();document.getElementById('txt-size-val').textContent=this.value">
             <input type="number" id="txt-size-val" value="36" min="12" max="120"
               style="width:46px;padding:4px 6px;border:1.5px solid #e8e8e8;border-radius:7px;font-size:12px;font-weight:700;color:#333;text-align:center;font-family:'DM Sans',sans-serif;outline:none"
               oninput="document.getElementById('txt-size').value=this.value;txtUpdate()">
@@ -2526,7 +2526,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div style="display:flex;align-items:center;padding:11px 0;border-top:1px solid #f0f0f0;gap:12px">
             <span style="font-size:13px;font-weight:600;color:#333;width:56px">Rotate</span>
             <input type="range" id="txt-rotate" min="-180" max="180" value="0"
-              style="flex:1;accent-color:#ff5722" oninput="txtApplyRotate();document.getElementById('txt-rotate-val').textContent=this.value">
+              style="flex:1;accent-color:#0071ce" oninput="txtApplyRotate();document.getElementById('txt-rotate-val').textContent=this.value">
             <input type="number" id="txt-rotate-val" value="0" min="-180" max="180"
               style="width:46px;padding:4px 6px;border:1.5px solid #e8e8e8;border-radius:7px;font-size:12px;font-weight:700;color:#333;text-align:center;font-family:'DM Sans',sans-serif;outline:none"
               oninput="document.getElementById('txt-rotate').value=this.value;txtApplyRotate()">
@@ -2536,7 +2536,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div style="display:flex;align-items:center;padding:11px 0;border-top:1px solid #f0f0f0;gap:12px">
             <span style="font-size:13px;font-weight:600;color:#333;width:56px">Spacing</span>
             <input type="range" id="txt-spacing" min="-5" max="30" value="0"
-              style="flex:1;accent-color:#ff5722" oninput="txtApplySpacing();document.getElementById('txt-spacing-val').textContent=this.value">
+              style="flex:1;accent-color:#0071ce" oninput="txtApplySpacing();document.getElementById('txt-spacing-val').textContent=this.value">
             <input type="number" id="txt-spacing-val" value="0"
               style="width:46px;padding:4px 6px;border:1.5px solid #e8e8e8;border-radius:7px;font-size:12px;font-weight:700;color:#333;text-align:center;font-family:'DM Sans',sans-serif;outline:none"
               oninput="document.getElementById('txt-spacing').value=this.value;txtApplySpacing()">
@@ -2544,9 +2544,9 @@ footer{background:#111;padding:56px 32px 28px}
 
           <!-- Place button -->
           <button onclick="txtPlace()"
-            style="width:100%;height:46px;background:#ff5722;border:none;border-radius:12px;
+            style="width:100%;height:46px;background:#0071ce;border:none;border-radius:12px;
             color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:16px;
-            transition:background .15s;font-family:'DM Sans',sans-serif;box-shadow:0 3px 12px rgba(255,87,34,.3)">
+            transition:background .15s;font-family:'DM Sans',sans-serif;box-shadow:0 3px 12px rgba(0,113,206,.3)">
             Place Text on Shirt →
           </button>
 
@@ -2558,7 +2558,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div id="sp-ai" style="display:none">
         <div class="s-panel-hdr">
           <div>
-            <div style="font-size:10px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Art Powered by AI</div>
+            <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Art Powered by AI</div>
             <div class="s-panel-title" id="ai-panel-title">Add Art</div>
           </div>
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
@@ -2584,7 +2584,7 @@ footer{background:#111;padding:56px 32px 28px}
 
             <!-- Results grid -->
             <div id="ai-results" style="display:none;margin-top:16px">
-              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#333;margin-bottom:10px">AI Images &nbsp;<span style="background:#ff5722;color:#fff;font-size:9px;padding:2px 6px;border-radius:20px;font-weight:700">AI</span></div>
+              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#333;margin-bottom:10px">AI Images &nbsp;<span style="background:#0071ce;color:#fff;font-size:9px;padding:2px 6px;border-radius:20px;font-weight:700">AI</span></div>
               <div id="ai-results-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
             </div>
 
@@ -2599,9 +2599,9 @@ footer{background:#111;padding:56px 32px 28px}
           <div id="ai-screen-2" style="display:none;padding:24px 16px;text-align:center">
             <div style="font-size:36px;margin-bottom:12px">🎨</div>
             <div style="font-size:15px;font-weight:800;color:#111;margin-bottom:6px">Processing your design</div>
-            <div id="ai-process-status" style="font-size:13px;color:#ff5722;font-weight:600;margin-bottom:16px">Loading artwork...</div>
+            <div id="ai-process-status" style="font-size:13px;color:#0071ce;font-weight:600;margin-bottom:16px">Loading artwork...</div>
             <div style="background:#f0f0f0;border-radius:20px;height:8px;overflow:hidden;margin-bottom:8px">
-              <div id="ai-progress-bar" style="height:100%;background:linear-gradient(90deg,#ff5722,#d84315);border-radius:20px;width:0%;transition:width .4s ease"></div>
+              <div id="ai-progress-bar" style="height:100%;background:linear-gradient(90deg,#0071ce,#004a8f);border-radius:20px;width:0%;transition:width .4s ease"></div>
             </div>
             <div id="ai-progress-pct" style="font-size:12px;color:#aaa;font-weight:600">0%</div>
           </div>
@@ -2612,10 +2612,10 @@ footer{background:#111;padding:56px 32px 28px}
               <div style="font-size:13px;font-weight:800;color:#111;margin-bottom:12px">Filters</div>
               <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px">
                 <div id="ai-filter-normal" onclick="aiSetFilter('normal')" style="cursor:pointer;text-align:center">
-                  <div id="ai-thumb-normal" style="border-radius:8px;overflow:hidden;border:2px solid #ff5722;background:#f5f5f5;aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin-bottom:4px">
+                  <div id="ai-thumb-normal" style="border-radius:8px;overflow:hidden;border:2px solid #0071ce;background:#f5f5f5;aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin-bottom:4px">
                     <img id="ai-thumb-normal-img" src="" style="width:100%;height:100%;object-fit:contain">
                   </div>
-                  <div style="font-size:11px;font-weight:700;color:#ff5722">Normal</div>
+                  <div style="font-size:11px;font-weight:700;color:#0071ce">Normal</div>
                 </div>
                 <div id="ai-filter-single" onclick="aiSetFilter('single')" style="cursor:pointer;text-align:center">
                   <div style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;background:#f5f5f5;aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin-bottom:4px">
@@ -2639,21 +2639,21 @@ footer{background:#111;padding:56px 32px 28px}
                 <div style="font-size:13px;font-weight:600;color:#333">Remove Background</div>
                 <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer">
                   <input type="checkbox" id="ai-rmbg-toggle" checked onchange="aiToggleRemoveBg()" style="opacity:0;width:0;height:0">
-                  <span style="position:absolute;inset:0;background:#ff5722;border-radius:12px;transition:.2s" id="ai-rmbg-track"></span>
+                  <span style="position:absolute;inset:0;background:#0071ce;border-radius:12px;transition:.2s" id="ai-rmbg-track"></span>
                   <span style="position:absolute;left:2px;top:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s;transform:translateX(20px)" id="ai-rmbg-knob"></span>
                 </label>
               </div>
               <!-- Size -->
               <div style="padding:8px 0">
                 <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#888;margin-bottom:6px"><span>SIZE</span><span id="ai-size-val">100%</span></div>
-                <input type="range" id="ai-design-size" min="30" max="200" value="100" step="1" style="width:100%;accent-color:#ff5722" oninput="aiApplyTransform()">
+                <input type="range" id="ai-design-size" min="30" max="200" value="100" step="1" style="width:100%;accent-color:#0071ce" oninput="aiApplyTransform()">
               </div>
               <!-- Rotate -->
               <div style="padding:8px 0">
                 <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#888;margin-bottom:6px"><span>ROTATE</span><span id="ai-rotate-val">0°</span></div>
-                <input type="range" id="ai-design-rotate" min="-180" max="180" value="0" step="1" style="width:100%;accent-color:#ff5722" oninput="aiApplyTransform()">
+                <input type="range" id="ai-design-rotate" min="-180" max="180" value="0" step="1" style="width:100%;accent-color:#0071ce" oninput="aiApplyTransform()">
               </div>
-              <button onclick="aiResetTransform()" style="font-size:12px;font-weight:700;color:#ff5722;background:none;border:none;cursor:pointer;padding:4px 0;font-family:'DM Sans',sans-serif">Reset to Defaults</button>
+              <button onclick="aiResetTransform()" style="font-size:12px;font-weight:700;color:#0071ce;background:none;border:none;cursor:pointer;padding:4px 0;font-family:'DM Sans',sans-serif">Reset to Defaults</button>
             </div>
 
             <!-- Bottom toolbar -->
@@ -2667,16 +2667,16 @@ footer{background:#111;padding:56px 32px 28px}
               <button onclick="clearCurrentDesign()" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#dc2626;font-family:'DM Sans',sans-serif;padding:6px 8px;border-radius:8px">
                 <span style="font-size:18px">🗑</span>Remove
               </button>
-              <button onclick="aiGoToScreen(1)" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#ff5722;font-family:'DM Sans',sans-serif;padding:6px 8px;border-radius:8px">
+              <button onclick="aiGoToScreen(1)" style="display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:600;color:#0071ce;font-family:'DM Sans',sans-serif;padding:6px 8px;border-radius:8px">
                 <span style="font-size:18px">✦</span>New Art
               </button>
             </div>
 
             <!-- Keith upsell -->
-            <div style="margin:0 16px 16px;padding:12px;background:#fdf4ff;border-radius:10px;border:1px solid #e9d5ff">
-              <div style="font-size:12px;font-weight:700;color:#ff5722;margin-bottom:4px">✏ Keith's Designer Edit — +$20</div>
+            <div style="margin:0 16px 16px;padding:12px;background:#f0f7ff;border-radius:10px;border:1px solid #e9d5ff">
+              <div style="font-size:12px;font-weight:700;color:#0071ce;margin-bottom:4px">✏ Keith's Designer Edit — +$20</div>
               <div style="font-size:12px;color:#888;line-height:1.5;margin-bottom:8px">Our in-house designer optimizes your art for perfect DTF printing.</div>
-              <button id="keith-ai-btn" onclick="toggleKeith()" style="width:100%;padding:8px;border:1.5px solid #ff5722;border-radius:8px;background:#fff;color:#ff5722;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">+ Add Keith's Edit</button>
+              <button id="keith-ai-btn" onclick="toggleKeith()" style="width:100%;padding:8px;border:1.5px solid #0071ce;border-radius:8px;background:#fff;color:#0071ce;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">+ Add Keith's Edit</button>
             </div>
           </div>
 
@@ -2687,7 +2687,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div id="sp-edit-artwork" style="display:none">
         <div class="s-panel-hdr" style="border-bottom:1px solid #f0f0f0">
           <div>
-            <div style="font-size:9px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Upload Art</div>
+            <div style="font-size:9px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Upload Art</div>
             <div class="s-panel-title" style="font-size:16px">Edit Your Artwork</div>
             <div class="s-panel-sub">Filters, background removal, size &amp; more</div>
           </div>
@@ -2699,10 +2699,10 @@ footer{background:#111;padding:56px 32px 28px}
           <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Filters</div>
           <div style="display:flex;gap:8px;margin-bottom:18px">
             <div id="ea-filter-normal" onclick="eaSetFilter('normal')" style="cursor:pointer;text-align:center;flex:1">
-              <div id="ea-filter-normal-box" style="border-radius:8px;overflow:hidden;border:2.5px solid #ff5722;aspect-ratio:1;background:#f0f0f0">
+              <div id="ea-filter-normal-box" style="border-radius:8px;overflow:hidden;border:2.5px solid #0071ce;aspect-ratio:1;background:#f0f0f0">
                 <img id="ea-thumb-normal" style="width:100%;height:100%;object-fit:cover;display:block">
               </div>
-              <div id="ea-filter-normal-lbl" style="font-size:10px;font-weight:800;color:#ff5722;margin-top:5px">Normal</div>
+              <div id="ea-filter-normal-lbl" style="font-size:10px;font-weight:800;color:#0071ce;margin-top:5px">Normal</div>
             </div>
             <div id="ea-filter-single" onclick="eaSetFilter('single')" style="cursor:pointer;text-align:center;flex:1">
               <div id="ea-filter-single-box" style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;aspect-ratio:1;background:#f0f0f0">
@@ -2726,7 +2726,7 @@ footer{background:#111;padding:56px 32px 28px}
               <div>
                 <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#111">
                   Remove Background
-                  <span style="font-size:9px;font-weight:800;background:#ff5722;color:#fff;padding:2px 5px;border-radius:4px;letter-spacing:.03em">AI</span>
+                  <span style="font-size:9px;font-weight:800;background:#0071ce;color:#fff;padding:2px 5px;border-radius:4px;letter-spacing:.03em">AI</span>
                 </div>
                 <div id="ea-rmbg-sub" style="font-size:11px;color:#aaa;margin-top:2px">Erase background, keep design</div>
               </div>
@@ -2741,24 +2741,24 @@ footer{background:#111;padding:56px 32px 28px}
             <div style="margin-bottom:16px">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
                 <div style="font-size:13px;font-weight:700;color:#111">Size</div>
-                <div id="ea-size-val" style="font-size:13px;font-weight:800;color:#ff5722;min-width:40px;text-align:right">100%</div>
+                <div id="ea-size-val" style="font-size:13px;font-weight:800;color:#0071ce;min-width:40px;text-align:right">100%</div>
               </div>
               <input type="range" id="ea-size" min="20" max="200" value="100" step="1"
-                style="width:100%;accent-color:#ff5722;height:4px" oninput="eaApplyTransform()">
+                style="width:100%;accent-color:#0071ce;height:4px" oninput="eaApplyTransform()">
             </div>
 
             <!-- Rotate -->
             <div style="margin-bottom:18px">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
                 <div style="font-size:13px;font-weight:700;color:#111">Rotate</div>
-                <div id="ea-rotate-val" style="font-size:13px;font-weight:800;color:#ff5722;min-width:40px;text-align:right">0°</div>
+                <div id="ea-rotate-val" style="font-size:13px;font-weight:800;color:#0071ce;min-width:40px;text-align:right">0°</div>
               </div>
               <input type="range" id="ea-rotate" min="-180" max="180" value="0" step="1"
-                style="width:100%;accent-color:#ff5722;height:4px" oninput="eaApplyTransform()">
+                style="width:100%;accent-color:#0071ce;height:4px" oninput="eaApplyTransform()">
             </div>
 
             <!-- Reset -->
-            <button onclick="eaReset()" style="background:none;border:none;font-size:12px;font-weight:700;color:#ff5722;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;margin-bottom:18px">Reset to Defaults</button>
+            <button onclick="eaReset()" style="background:none;border:none;font-size:12px;font-weight:700;color:#0071ce;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;margin-bottom:18px">Reset to Defaults</button>
           </div>
 
           <!-- Bottom toolbar -->
@@ -2798,7 +2798,7 @@ footer{background:#111;padding:56px 32px 28px}
 
           <!-- Drop zone -->
           <div class="upload-zone" onclick="document.getElementById('s-file').click()" id="upload-zone"
-            ondragover="event.preventDefault();this.style.borderColor='#ff5722';this.style.background='#fff8f5'"
+            ondragover="event.preventDefault();this.style.borderColor='#0071ce';this.style.background='#f0f7ff'"
             ondragleave="this.style.borderColor='';this.style.background=''"
             ondrop="event.preventDefault();this.style.borderColor='';this.style.background='';handleUploadDrop(event)">
             <div class="upload-zone-icon">↑</div>
@@ -2860,11 +2860,11 @@ footer{background:#111;padding:56px 32px 28px}
           </div>
 
           <!-- Apply button -->
-          <button id="upload-apply-btn" onclick="uploadApplyToShirt()" style="display:none;width:100%;margin-top:14px;padding:13px;background:#ff5722;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif">
+          <button id="upload-apply-btn" onclick="uploadApplyToShirt()" style="display:none;width:100%;margin-top:14px;padding:13px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif">
             ✓ Place on Shirt
           </button>
 
-          <div style="margin-top:12px;padding:10px 12px;background:#fdf4ff;border-radius:10px;border:1px solid #e9d5ff">
+          <div style="margin-top:12px;padding:10px 12px;background:#f0f7ff;border-radius:10px;border:1px solid #e9d5ff">
             <div style="font-size:12px;color:#666;line-height:1.6">
               💡 <strong>Pro tip:</strong> Upload a PNG with a transparent background for the cleanest result on any shirt color.
             </div>
@@ -2907,7 +2907,7 @@ footer{background:#111;padding:56px 32px 28px}
           </div>
           <div class="s-label" style="margin-top:20px">Design Size</div>
           <input type="range" min="100" max="320" value="283" step="2"
-            style="width:100%;accent-color:#ff5722;margin-top:4px"
+            style="width:100%;accent-color:#0071ce;margin-top:4px"
             oninput="sResizeDesign(this.value)">
           <div style="display:flex;justify-content:space-between;font-size:10px;color:#bbb;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">
             <span>Small</span><span>Large</span>
@@ -2932,10 +2932,10 @@ footer{background:#111;padding:56px 32px 28px}
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center">
               <span style="font-size:13px;font-weight:700;color:#333">Total Price</span>
-              <span id="qty-price" style="font-size:18px;font-weight:900;color:#ff5722">$0.00</span>
+              <span id="qty-price" style="font-size:18px;font-weight:900;color:#0071ce">$0.00</span>
             </div>
           </div>
-          <button onclick="sClosePanel()" style="width:100%;margin-top:16px;padding:12px;background:#ff5722;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+          <button onclick="sClosePanel()" style="width:100%;margin-top:16px;padding:12px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
             Save Quantities ✓
           </button>
         </div>
@@ -2945,7 +2945,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div id="sp-names" style="display:none">
         <div class="s-panel-hdr">
           <div>
-            <div style="font-size:10px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Names &amp; Numbers</div>
+            <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Names &amp; Numbers</div>
             <div class="s-panel-title" id="nn-panel-title">Add Names &amp; Numbers</div>
           </div>
           <button class="s-panel-x" onclick="nnPanelClose()">×</button>
@@ -2963,10 +2963,10 @@ footer{background:#111;padding:56px 32px 28px}
               </div>
             </div>
             <!-- Pricing -->
-            <div style="background:#fff8f5;border-radius:10px;padding:10px 14px;font-size:12px;color:#ff5722;font-weight:600;margin-bottom:16px;text-align:center">
+            <div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;font-size:12px;color:#0071ce;font-weight:600;margin-bottom:16px;text-align:center">
               Names = <strong>$4.00</strong> &nbsp;·&nbsp; Numbers = <strong>$3.00</strong> &nbsp;·&nbsp; Both = <strong>$6.00</strong> per shirt
             </div>
-            <button onclick="nnConfirmStep()" style="width:100%;padding:15px;background:#ff5722;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(255,87,34,.35)">
+            <button onclick="nnConfirmStep()" style="width:100%;padding:15px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(0,113,206,.35)">
               Add Names &amp; Numbers →
             </button>
             <button onclick="nnPanelClose()" style="width:100%;margin-top:10px;padding:11px;background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;font-weight:700;color:#888;cursor:pointer;font-family:'DM Sans',sans-serif">
@@ -2981,13 +2981,13 @@ footer{background:#111;padding:56px 32px 28px}
             <div style="font-size:12px;font-weight:700;color:#aaa;white-space:nowrap;padding-top:2px">Step 1</div>
             <div style="display:flex;flex-wrap:wrap;gap:8px 16px">
               <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#333;cursor:pointer">
-                <input type="checkbox" id="nn-names" checked onchange="nnUpdatePreview()" style="accent-color:#ff5722;width:15px;height:15px"> Add Names
+                <input type="checkbox" id="nn-names" checked onchange="nnUpdatePreview()" style="accent-color:#0071ce;width:15px;height:15px"> Add Names
               </label>
               <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#333;cursor:pointer">
-                <input type="checkbox" id="nn-numbers" checked onchange="nnUpdatePreview()" style="accent-color:#ff5722;width:15px;height:15px"> Add Numbers
+                <input type="checkbox" id="nn-numbers" checked onchange="nnUpdatePreview()" style="accent-color:#0071ce;width:15px;height:15px"> Add Numbers
               </label>
               <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#333;cursor:pointer">
-                <input type="checkbox" id="nn-subtitle" onchange="nnUpdatePreview()" style="accent-color:#ff5722;width:15px;height:15px"> Add Subtitles
+                <input type="checkbox" id="nn-subtitle" onchange="nnUpdatePreview()" style="accent-color:#0071ce;width:15px;height:15px"> Add Subtitles
               </label>
             </div>
           </div>
@@ -3038,7 +3038,7 @@ footer{background:#111;padding:56px 32px 28px}
           </div>
 
           <!-- CTA Button -->
-          <button onclick="nnOpenRoster()" style="width:100%;padding:15px;background:#ff5722;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(255,87,34,.35);letter-spacing:.01em">
+          <button onclick="nnOpenRoster()" style="width:100%;padding:15px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(0,113,206,.35);letter-spacing:.01em">
             Enter Names/Numbers →
           </button>
 
@@ -3063,7 +3063,7 @@ footer{background:#111;padding:56px 32px 28px}
         <div style="background:#fff;border-radius:20px;width:100%;max-width:340px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25);margin:16px">
           <div style="padding:18px 20px 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
             <div>
-              <div style="font-size:10px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Change Color</div>
+              <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Change Color</div>
               <div style="font-size:13px;font-weight:600;color:#333">Color: <span id="color-picker-name">—</span></div>
             </div>
             <button onclick="closeColorPicker()" style="width:32px;height:32px;border-radius:50%;background:#f5f5f5;border:none;font-size:18px;color:#aaa;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>
@@ -3081,11 +3081,11 @@ footer{background:#111;padding:56px 32px 28px}
 
             <!-- Modal header -->
             <div style="padding:20px 24px 16px;border-bottom:1px solid #f0f0f0">
-              <div style="font-size:10px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Names &amp; Numbers</div>
+              <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Names &amp; Numbers</div>
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <div style="font-size:20px;font-weight:900;color:#111;letter-spacing:-.5px">Edit Names &amp; Numbers List</div>
                 <div style="display:flex;gap:12px;align-items:center">
-                  <button onclick="nnSaveRoster()" style="font-size:13px;font-weight:700;color:#ff5722;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif">Save &amp; Close</button>
+                  <button onclick="nnSaveRoster()" style="font-size:13px;font-weight:700;color:#0071ce;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif">Save &amp; Close</button>
                   <span style="color:#ddd">|</span>
                   <button onclick="nnCloseRoster()" style="font-size:13px;font-weight:500;color:#aaa;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif">Exit without Saving</button>
                 </div>
@@ -3101,7 +3101,7 @@ footer{background:#111;padding:56px 32px 28px}
               <!-- Rows -->
               <div id="nn-table-body" style="display:flex;flex-direction:column;gap:6px;max-height:420px;overflow-y:auto;padding-right:4px"></div>
 
-              <button onclick="nnAddRow()" style="margin-top:12px;background:none;border:none;color:#ff5722;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;padding:4px 0">+ Add Another</button>
+              <button onclick="nnAddRow()" style="margin-top:12px;background:none;border:none;color:#0071ce;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;padding:4px 0">+ Add Another</button>
 
               <!-- Totals -->
               <div id="nn-totals" style="margin-top:16px;background:#f5f5f5;border-radius:10px;padding:12px 16px">
@@ -3112,7 +3112,7 @@ footer{background:#111;padding:56px 32px 28px}
 
             <!-- Modal footer -->
             <div style="padding:16px 24px;border-top:1px solid #f0f0f0;display:flex;flex-direction:column;gap:8px;align-items:center">
-              <button onclick="nnSaveRoster()" style="width:100%;padding:14px;background:#ff5722;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Save &amp; Close</button>
+              <button onclick="nnSaveRoster()" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Save &amp; Close</button>
               <button onclick="nnCloseRoster()" style="background:none;border:none;color:#aaa;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">or Exit without Saving</button>
             </div>
 
@@ -3126,10 +3126,10 @@ footer{background:#111;padding:56px 32px 28px}
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
         </div>
         <div class="s-panel-body">
-          <div style="text-align:center;padding:24px 12px;background:#fdf4ff;border-radius:14px;border:1.5px solid #e9d5ff;margin-bottom:14px">
+          <div style="text-align:center;padding:24px 12px;background:#f0f7ff;border-radius:14px;border:1.5px solid #e9d5ff;margin-bottom:14px">
             <div style="font-size:40px;margin-bottom:10px">✏</div>
             <div style="font-size:19px;font-weight:800;color:#111;margin-bottom:6px">Keith's Designer Edit</div>
-            <div style="font-size:22px;font-weight:900;color:#ff5722;margin-bottom:10px">+$20</div>
+            <div style="font-size:22px;font-weight:900;color:#0071ce;margin-bottom:10px">+$20</div>
             <div style="font-size:13px;color:#888;line-height:1.65;margin-bottom:16px">Our in-house designer reviews your artwork, fixes resolution, optimizes colors for DTF printing, and perfects placement.</div>
             <button class="keith-toggle" id="keith-main-btn" onclick="toggleKeith()">+ Add Keith's Edit<div class="keith-sub">Perfect for complex designs and uploads</div></button>
           </div>
@@ -3145,7 +3145,7 @@ footer{background:#111;padding:56px 32px 28px}
         <!-- Header -->
         <div style="padding:18px 20px 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between">
           <div>
-            <div style="font-size:10px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px">Review Your Order</div>
+            <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px">Review Your Order</div>
             <div style="font-size:18px;font-weight:900;color:#111">← Your Products &amp; Pricing</div>
           </div>
           <button onclick="closeReviewPanel()" style="background:none;border:none;font-size:22px;color:#bbb;cursor:pointer;padding:0">×</button>
@@ -3159,11 +3159,11 @@ footer{background:#111;padding:56px 32px 28px}
             <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
               <div id="rsp-price-each" style="font-size:24px;font-weight:900;color:#111">$0.00 each</div>
             </div>
-            <div id="rsp-total-line" style="font-size:13px;color:#ff5722;font-weight:700;margin-bottom:12px"></div>
+            <div id="rsp-total-line" style="font-size:13px;color:#0071ce;font-weight:700;margin-bottom:12px"></div>
             <!-- Stats row -->
             <div id="rsp-stats" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
             <!-- Bulk discount hint -->
-            <div id="rsp-bulk" style="font-size:11px;color:#555;background:#f5f0eb;border-radius:8px;padding:8px 12px;font-weight:600"></div>
+            <div id="rsp-bulk" style="font-size:11px;color:#555;background:#f5f7fa;border-radius:8px;padding:8px 12px;font-weight:600"></div>
           </div>
 
           <!-- Product summary list -->
@@ -3176,7 +3176,7 @@ footer{background:#111;padding:56px 32px 28px}
               <div style="font-size:11px;color:#888;margin-top:2px">Ships within 24hrs · +$15</div>
             </div>
             <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-              <input type="checkbox" id="order-rush" style="accent-color:#ff5722;width:16px;height:16px">
+              <input type="checkbox" id="order-rush" style="accent-color:#0071ce;width:16px;height:16px">
               <span style="font-size:13px;font-weight:600;color:#333">Add Rush</span>
             </label>
           </div>
@@ -3210,13 +3210,13 @@ footer{background:#111;padding:56px 32px 28px}
           <div style="font-size:13px;color:#888">Save your order, track shipping, and reorder easily</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
-          <input id="login-email" type="email" placeholder="Email address" style="width:100%;padding:13px 16px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#ff5722'" onblur="this.style.borderColor='#e8e8e8'">
-          <input id="login-pass" type="password" placeholder="Password" style="width:100%;padding:13px 16px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#ff5722'" onblur="this.style.borderColor='#e8e8e8'">
+          <input id="login-email" type="email" placeholder="Email address" style="width:100%;padding:13px 16px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e8e8e8'">
+          <input id="login-pass" type="password" placeholder="Password" style="width:100%;padding:13px 16px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e8e8e8'">
         </div>
-        <button onclick="doLogin()" style="width:100%;padding:14px;background:#ff5722;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px">Sign In</button>
+        <button onclick="doLogin()" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px">Sign In</button>
         <button onclick="doGuestCheckout()" style="width:100%;padding:14px;background:#fff;color:#333;border:1.5px solid #e8e8e8;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:16px">Continue as Guest</button>
         <div style="text-align:center;font-size:13px;color:#888">
-          Don't have an account? <span onclick="doGuestCheckout()" style="color:#ff5722;font-weight:700;cursor:pointer">Create one at checkout</span>
+          Don't have an account? <span onclick="doGuestCheckout()" style="color:#0071ce;font-weight:700;cursor:pointer">Create one at checkout</span>
         </div>
         <button onclick="document.getElementById('login-modal').style.display='none'" style="position:absolute;display:none">×</button>
       </div>
@@ -3229,7 +3229,7 @@ footer{background:#111;padding:56px 32px 28px}
         <!-- Header -->
         <div style="padding:20px 22px 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:flex-start;justify-content:space-between">
           <div>
-            <div style="font-size:10px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px">Quantity &amp; Sizes</div>
+            <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px">Quantity &amp; Sizes</div>
             <div style="font-size:21px;font-weight:900;color:#111;letter-spacing:-.5px;margin-bottom:4px">How Many Do You Need?</div>
             <div style="font-size:12px;color:#aaa">Enter quantities to calculate the price.</div>
           </div>
@@ -3238,8 +3238,8 @@ footer{background:#111;padding:56px 32px 28px}
         <!-- Product size grids -->
         <div id="step2-size-grid" style="flex:1;overflow-y:auto"></div>
         <!-- Jersey -->
-        <div id="step2-jersey-section" style="display:none;margin:0 16px 8px;background:#fff8f5;border-radius:10px;padding:12px 14px">
-          <div style="font-size:11px;font-weight:700;color:#ff5722;margin-bottom:4px">🏆 Names &amp; Numbers</div>
+        <div id="step2-jersey-section" style="display:none;margin:0 16px 8px;background:#f0f7ff;border-radius:10px;padding:12px 14px">
+          <div style="font-size:11px;font-weight:700;color:#0071ce;margin-bottom:4px">🏆 Names &amp; Numbers</div>
           <div id="step2-jersey-summary" style="font-size:11px;color:#555;line-height:1.6"></div>
         </div>
         <!-- Footer -->
@@ -3247,7 +3247,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div id="step2-summary" style="margin-bottom:8px;font-size:12px;color:#888"></div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
             <div style="font-size:13px;font-weight:600;color:#555">Estimated Total</div>
-            <div id="step2-grand-total" style="font-size:22px;font-weight:900;color:#ff5722">$0.00</div>
+            <div id="step2-grand-total" style="font-size:22px;font-weight:900;color:#0071ce">$0.00</div>
           </div>
           <button onclick="goStep3()" style="width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.04em">
             CALCULATE PRICING →
@@ -3407,7 +3407,7 @@ footer{background:#111;padding:56px 32px 28px}
     <div class="s-bottom-info">
       <strong id="s-bot-prod">Gildan 8000 DryBlend Tee</strong> &nbsp;·&nbsp;
       <span id="s-bot-color">White</span> &nbsp;·&nbsp;
-      <span style="color:#ff5722;font-weight:700" id="s-price-each2">$28.00 ea</span>
+      <span style="color:#0071ce;font-weight:700" id="s-price-each2">$28.00 ea</span>
       &nbsp;·&nbsp; No minimum &nbsp;·&nbsp; Ships in 48hrs
     </div>
     <button class="s-bot-btn" onclick="goHome()">
@@ -3704,7 +3704,7 @@ function buildHome(){
     ).join("")+(p.colors.length>14?`<span style="font-size:10px;color:#bbb;font-weight:500;align-self:center">+${p.colors.length-14}</span>`:"");
 
     const sizePills = p.sizes.map(s=>`<div class="pcard-sz">${s}</div>`).join("");
-    const bgCol = isPrem?"#fff8f5":"#fdf4ff";
+    const bgCol = isPrem?"#f0f7ff":"#f0f7ff";
 
     const card = document.createElement("div");
     card.className="pcard";
@@ -3768,31 +3768,31 @@ function buildPDP(){
     if(imgEl){ imgEl.src=pdpState.view==="back"?backImg:frontImg; imgEl.style.opacity="1"; imgEl.style.mixBlendMode="normal"; }
     if(tintEl) tintEl.style.background="transparent";
     const container=imgEl?.parentElement;
-    if(container) container.style.background="#f5f0eb";
+    if(container) container.style.background="#f5f7fa";
   } else {
     // Hardcoded no photo — multiply blend on image, color on container
     if(imgEl){ imgEl.src=pdpState.view==="back"?IMG_B:IMG_F; imgEl.style.opacity="1"; imgEl.style.mixBlendMode=ch==="#ffffff"||ch==="white"?"normal":"multiply"; }
     if(tintEl) tintEl.style.background="transparent";
     const container=imgEl?.parentElement;
-    if(container) container.style.background="#f5f0eb";
+    if(container) container.style.background="#f5f7fa";
   }
 
   // Thumbnail rail
   const rail = document.getElementById("pdp-thumb-rail");
   if(rail){
     rail.innerHTML = `
-      <div onclick="pdView('front')" style="width:72px;height:72px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid ${pdpState.view!=='back'?'#ff5722':'#e8e8e8'};background:#f5f0eb;display:flex;align-items:center;justify-content:center">
+      <div onclick="pdView('front')" style="width:72px;height:72px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid ${pdpState.view!=='back'?'#0071ce':'#e8e8e8'};background:#f5f7fa;display:flex;align-items:center;justify-content:center">
         <img src="${frontImg}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display=\'none\'">
       </div>
-      <div onclick="pdView('back')" style="width:72px;height:72px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid ${pdpState.view==='back'?'#ff5722':'#e8e8e8'};background:#f5f0eb;display:flex;align-items:center;justify-content:center">
+      <div onclick="pdView('back')" style="width:72px;height:72px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid ${pdpState.view==='back'?'#0071ce':'#e8e8e8'};background:#f5f7fa;display:flex;align-items:center;justify-content:center">
         <img src="${backImg}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display=\'none\'">
       </div>`;
   }
 
   // Front/back button states
   const fBtn=document.getElementById("pdv-f"),bBtn=document.getElementById("pdv-b");
-  if(fBtn){fBtn.style.color=pdpState.view!=="back"?"#ff5722":"#555";fBtn.style.borderColor=pdpState.view!=="back"?"#ff5722":"#e8e8e8";}
-  if(bBtn){bBtn.style.color=pdpState.view==="back"?"#ff5722":"#555";bBtn.style.borderColor=pdpState.view==="back"?"#ff5722":"#e8e8e8";}
+  if(fBtn){fBtn.style.color=pdpState.view!=="back"?"#0071ce":"#555";fBtn.style.borderColor=pdpState.view!=="back"?"#0071ce":"#e8e8e8";}
+  if(bBtn){bBtn.style.color=pdpState.view==="back"?"#0071ce":"#555";bBtn.style.borderColor=pdpState.view==="back"?"#0071ce":"#e8e8e8";}
 
   // Title & subtitle
   const title = p.fullTitle || p.name || p.title || "Custom Apparel";
@@ -3861,7 +3861,7 @@ function buildPDPDetails(){
   if(sizesEl){
     const sizes = p.sizes || [];
     sizesEl.innerHTML = sizes.length
-      ? `<div><strong>Adult:</strong> ${sizes.join(" - ")} <span style="color:#ff5722;cursor:pointer;font-weight:600" onclick="sPanel('qty',document.getElementById('sib-qty'));openPDPStudio()">Sizing Details</span></div>`
+      ? `<div><strong>Adult:</strong> ${sizes.join(" - ")} <span style="color:#0071ce;cursor:pointer;font-weight:600" onclick="sPanel('qty',document.getElementById('sib-qty'));openPDPStudio()">Sizing Details</span></div>`
       : "";
   }
 
@@ -3906,7 +3906,7 @@ function buildPDPDetails(){
     catEl.innerHTML = [`All ${p.brand}`, ...cats].map(c=>
       `<button onclick="goShop('${c==='All '+p.brand?'':c}');${c==='All '+p.brand?`shopState.brand='${p.brand}';shopFetch();shopRenderBrands()`:''}"
         style="padding:8px 18px;border:1.5px solid #e8e8e8;border-radius:20px;background:#fff;font-size:13px;font-weight:600;color:#555;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s"
-        onmouseover="this.style.borderColor='#ff5722';this.style.color='#ff5722'"
+        onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'"
         onmouseout="this.style.borderColor='#e8e8e8';this.style.color='#555'">${c}</button>`
     ).join("");
   }
@@ -3967,14 +3967,14 @@ function pdPickColor(name){
     if(img){ img.src=pdpState.view==="back"?backImg:frontImg; img.style.opacity="1"; img.style.mixBlendMode="normal"; }
     if(tint) tint.style.background="transparent";
     const container=img?.parentElement;
-    if(container) container.style.background="#f5f0eb";
+    if(container) container.style.background="#f5f7fa";
   } else {
     // Hardcoded — multiply blend, color behind
     const baseImg=pdpState.view==="back"?IMG_B:IMG_F;
     if(img){ img.src=baseImg; img.style.opacity="1"; img.style.mixBlendMode=ch==="#ffffff"||ch==="white"?"normal":"multiply"; }
     if(tint) tint.style.background="transparent";
     const container=img?.parentElement;
-    if(container) container.style.background="#f5f0eb";
+    if(container) container.style.background="#f5f7fa";
   }
 
   // Update thumbnails
@@ -3997,13 +3997,13 @@ function pdView(v){
   const rail=document.getElementById("pdp-thumb-rail");
   if(rail){
     const thumbs=rail.querySelectorAll("div");
-    if(thumbs[0]) thumbs[0].style.borderColor = v!=="back"?"#ff5722":"#e8e8e8";
-    if(thumbs[1]) thumbs[1].style.borderColor = v==="back"?"#ff5722":"#e8e8e8";
+    if(thumbs[0]) thumbs[0].style.borderColor = v!=="back"?"#0071ce":"#e8e8e8";
+    if(thumbs[1]) thumbs[1].style.borderColor = v==="back"?"#0071ce":"#e8e8e8";
   }
   // Update front/back button styles
   const fBtn=document.getElementById("pdv-f"),bBtn=document.getElementById("pdv-b");
-  if(fBtn){fBtn.style.color=v!=="back"?"#ff5722":"#555";fBtn.style.borderColor=v!=="back"?"#ff5722":"#e8e8e8";}
-  if(bBtn){bBtn.style.color=v==="back"?"#ff5722":"#555";bBtn.style.borderColor=v==="back"?"#ff5722":"#e8e8e8";}
+  if(fBtn){fBtn.style.color=v!=="back"?"#0071ce":"#555";fBtn.style.borderColor=v!=="back"?"#0071ce":"#e8e8e8";}
+  if(bBtn){bBtn.style.color=v==="back"?"#0071ce":"#555";bBtn.style.borderColor=v==="back"?"#0071ce":"#e8e8e8";}
 }
 
 // ════════════════════════════════
@@ -4131,11 +4131,11 @@ function buildSGarments(){
       const isActive=idx===sActiveIdx;
       const shortName=cn.length>9?cn.slice(0,9)+'…':cn;
       return '<div style="text-align:center;position:relative">' +
-        '<div onclick="sSetActive('+idx+')" title="'+cn+'" style="width:64px;height:64px;border-radius:10px;overflow:hidden;border:2.5px solid '+(isActive?'#ff5722':'#e8e8e8')+';background:#f5f5f5;cursor:pointer;transition:border-color .15s">' +
+        '<div onclick="sSetActive('+idx+')" title="'+cn+'" style="width:64px;height:64px;border-radius:10px;overflow:hidden;border:2.5px solid '+(isActive?'#0071ce':'#e8e8e8')+';background:#f5f5f5;cursor:pointer;transition:border-color .15s">' +
           '<img src="'+img+'" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display=\'none\'">' +
         '</div>' +
         '<div style="font-size:10px;color:#888;margin-top:3px;width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+shortName+'</div>' +
-        '<button onclick="openColorPicker('+idx+')" style="margin-top:2px;font-size:10px;font-weight:700;color:#ff5722;background:none;border:1px solid #d8b4fe;border-radius:10px;padding:2px 8px;cursor:pointer;font-family:DM Sans,sans-serif;display:flex;align-items:center;gap:3px;margin-left:auto;margin-right:auto">' +
+        '<button onclick="openColorPicker('+idx+')" style="margin-top:2px;font-size:10px;font-weight:700;color:#0071ce;background:none;border:1px solid #a8c8e8;border-radius:10px;padding:2px 8px;cursor:pointer;font-family:DM Sans,sans-serif;display:flex;align-items:center;gap:3px;margin-left:auto;margin-right:auto">' +
           '<span style="width:8px;height:8px;border-radius:50%;background:'+ch+';display:inline-block;border:1px solid rgba(0,0,0,.1)"></span> Change' +
         '</button>' +
         (sProducts.length>1?'<button onclick="event.stopPropagation();sRemoveProduct('+idx+')" style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:#fff;border:1.5px solid #fca5a5;color:#dc2626;font-size:10px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>':'') +
@@ -4145,13 +4145,13 @@ function buildSGarments(){
     html += '<div style="border:1.5px solid #e8e8e8;border-radius:14px;overflow:hidden;margin-bottom:12px;background:#fff">' +
       '<div style="padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f0f0;background:#f9f9f9">' +
         '<div style="font-size:12px;font-weight:800;color:#111;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:165px">'+(p?.brand||'Gildan')+' '+(p?.name||'')+'</div>' +
-        '<button onclick="openProductModal()" style="font-size:11px;font-weight:700;color:#ff5722;background:none;border:1.5px solid #d8b4fe;border-radius:20px;padding:3px 10px;cursor:pointer;font-family:DM Sans,sans-serif;white-space:nowrap;flex-shrink:0">+ Add Product</button>' +
+        '<button onclick="openProductModal()" style="font-size:11px;font-weight:700;color:#0071ce;background:none;border:1.5px solid #a8c8e8;border-radius:20px;padding:3px 10px;cursor:pointer;font-family:DM Sans,sans-serif;white-space:nowrap;flex-shrink:0">+ Add Product</button>' +
       '</div>' +
       '<div style="padding:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start">' +
         colorThumbs +
         '<div style="text-align:center">' +
-          '<div onclick="sAddColor('+entries[0].idx+')" style="width:64px;height:64px;border-radius:10px;border:2px dashed #d8b4fe;background:#fdf4ff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:background .15s" onmouseover="this.style.background=\'#fbe9e2\'" onmouseout="this.style.background=\'#fdf4ff\'">' +
-            '<span style="font-size:24px;color:#ff5722;line-height:1">+</span>' +
+          '<div onclick="sAddColor('+entries[0].idx+')" style="width:64px;height:64px;border-radius:10px;border:2px dashed #a8c8e8;background:#f0f7ff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:background .15s" onmouseover="this.style.background=\'#e0efff\'" onmouseout="this.style.background=\'#f0f7ff\'">' +
+            '<span style="font-size:24px;color:#0071ce;line-height:1">+</span>' +
           '</div>' +
           '<div style="font-size:10px;color:#aaa;margin-top:3px">Add Color</div>' +
         '</div>' +
@@ -4186,7 +4186,7 @@ function openColorPicker(idx){
       const sel = cn === curName;
       const dot = document.createElement('div');
       dot.title = cn;
-      dot.style.cssText = 'width:28px;height:28px;border-radius:6px;background:'+ch+';border:2.5px solid '+(sel?'#ff5722':'rgba(0,0,0,.06)')+';cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15);transition:border-color .12s';
+      dot.style.cssText = 'width:28px;height:28px;border-radius:6px;background:'+ch+';border:2.5px solid '+(sel?'#0071ce':'rgba(0,0,0,.06)')+';cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15);transition:border-color .12s';
       dot.onmouseover = function(){ if(nameEl) nameEl.textContent = cn; };
       dot.onmouseout  = function(){ if(nameEl) nameEl.textContent = document.getElementById('color-picker-name').textContent; };
       dot.onclick     = function(){ pickColor(cn); };
@@ -4260,7 +4260,7 @@ function closeProductModal(){
 function renderModalCats(){
   const wrap=document.getElementById("product-modal-cats"); if(!wrap) return;
   wrap.innerHTML=MODAL_CATS.map(c=>`
-    <button onclick="modalSetCat('${c.value}')" style="display:block;width:100%;text-align:left;padding:9px 16px;border:none;background:${modalState.category===c.value?'#fff8f5':'transparent'};color:${modalState.category===c.value?'#ff5722':'#444'};font-size:13px;font-weight:${modalState.category===c.value?700:500};cursor:pointer;font-family:'DM Sans',sans-serif;border-left:3px solid ${modalState.category===c.value?'#ff5722':'transparent'}">${c.label}</button>
+    <button onclick="modalSetCat('${c.value}')" style="display:block;width:100%;text-align:left;padding:9px 16px;border:none;background:${modalState.category===c.value?'#f0f7ff':'transparent'};color:${modalState.category===c.value?'#0071ce':'#444'};font-size:13px;font-weight:${modalState.category===c.value?700:500};cursor:pointer;font-family:'DM Sans',sans-serif;border-left:3px solid ${modalState.category===c.value?'#0071ce':'transparent'}">${c.label}</button>
   `).join("");
 }
 async function loadModalProducts(){
@@ -4286,15 +4286,15 @@ function renderModalGrid(){
     const img=(p.colors&&p.colors[0]?.front)||p.image||"";
     const price=p.base_retail?`$${parseFloat(p.base_retail).toFixed(2)}`:"";
     const dots=(p.colors||[]).slice(0,5).map(c=>`<div style="width:12px;height:12px;border-radius:2px;background:${c.hex||'#888'};border:1px solid rgba(0,0,0,.08)"></div>`).join("");
-    return `<div onclick="modalSelectProduct(${p.style_id})" style="border:1.5px solid #e8e8e8;border-radius:12px;overflow:hidden;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='#ff5722'" onmouseout="this.style.borderColor='#e8e8e8'">
-      <div style="aspect-ratio:1;background:#f5f0eb;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px">
+    return `<div onclick="modalSelectProduct(${p.style_id})" style="border:1.5px solid #e8e8e8;border-radius:12px;overflow:hidden;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='#0071ce'" onmouseout="this.style.borderColor='#e8e8e8'">
+      <div style="aspect-ratio:1;background:#f5f7fa;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px">
         <img src="${img}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display=\'none\'">
       </div>
       <div style="padding:10px">
         <div style="font-size:10px;color:#aaa;font-weight:600;margin-bottom:2px">${p.brand||""}</div>
         <div style="font-size:12px;font-weight:700;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title||""}</div>
         <div style="display:flex;gap:3px;margin:6px 0;flex-wrap:wrap">${dots}</div>
-        <div style="font-size:12px;font-weight:700;color:#ff5722">${price}</div>
+        <div style="font-size:12px;font-weight:700;color:#0071ce">${price}</div>
       </div>
     </div>`;
   }).join("");
@@ -4530,7 +4530,7 @@ function aiShowResults(urls){
 
   const urlArr = Array.isArray(urls) ? urls : [urls];
   grid.innerHTML = urlArr.map(url=>`
-    <div onclick="aiSelectImage('${url}')" style="cursor:pointer;border-radius:10px;overflow:hidden;border:2px solid #e8e8e8;aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='#ff5722'" onmouseout="this.style.borderColor='#e8e8e8'">
+    <div onclick="aiSelectImage('${url}')" style="cursor:pointer;border-radius:10px;overflow:hidden;border:2px solid #e8e8e8;aspect-ratio:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='#0071ce'" onmouseout="this.style.borderColor='#e8e8e8'">
       <img src="${url}" style="width:100%;height:100%;object-fit:contain">
     </div>
   `).join('');
@@ -4562,7 +4562,7 @@ async function aiSearchClipart(query){
 
       const div = document.createElement('div');
       div.style.cssText = 'cursor:pointer;border-radius:8px;overflow:hidden;border:1.5px solid #e8e8e8;aspect-ratio:1;background:#f9f9f9;display:flex;align-items:center;justify-content:center;transition:border-color .15s';
-      div.onmouseover = function(){ this.style.borderColor='#ff5722'; };
+      div.onmouseover = function(){ this.style.borderColor='#0071ce'; };
       div.onmouseout  = function(){ this.style.borderColor='#e8e8e8'; };
       div.onclick = function(){ aiSelectClipart(url); };
 
@@ -4589,7 +4589,7 @@ function aiRenderHistory(){
   const el = document.getElementById('ai-prev-prompts');
   if(!el) return;
   el.innerHTML = aiPromptHistory.length ?
-    aiPromptHistory.map(p=>`<span onclick="setP('${p.replace(/'/g,"\\'")}');this.parentNode.querySelectorAll('span').forEach(s=>s.style.background='#f5f5f5');this.style.background='#fbe9e2'" style="font-size:11px;font-weight:600;color:#ff5722;background:#f5f5f5;padding:3px 8px;border-radius:20px;cursor:pointer;white-space:nowrap;border:1px solid #e8e8e8">${p.length>18?p.slice(0,18)+'…':p}</span>`).join('') : '';
+    aiPromptHistory.map(p=>`<span onclick="setP('${p.replace(/'/g,"\\'")}');this.parentNode.querySelectorAll('span').forEach(s=>s.style.background='#f5f5f5');this.style.background='#e0efff'" style="font-size:11px;font-weight:600;color:#0071ce;background:#f5f5f5;padding:3px 8px;border-radius:20px;cursor:pointer;white-space:nowrap;border:1px solid #e8e8e8">${p.length>18?p.slice(0,18)+'…':p}</span>`).join('') : '';
 }
 
 function aiSelectClipart(url){
@@ -4674,9 +4674,9 @@ function aiSetFilter(f){
     const wrap = document.getElementById('ai-filter-'+id);
     if(!wrap) return;
     const thumb = wrap.querySelector('div');
-    if(thumb) thumb.style.borderColor = id===f ? '#ff5722' : '#e8e8e8';
+    if(thumb) thumb.style.borderColor = id===f ? '#0071ce' : '#e8e8e8';
     const label = wrap.querySelector('div+div') || wrap.lastElementChild;
-    if(label) label.style.color = id===f ? '#ff5722' : '#888';
+    if(label) label.style.color = id===f ? '#0071ce' : '#888';
   });
 
   const filters = {normal:'none', single:'grayscale(1) sepia(0.3) contrast(1.4)', bw:'grayscale(1) contrast(1.8)'};
@@ -4691,7 +4691,7 @@ function aiToggleRemoveBg(){
   const knob  = document.getElementById('ai-rmbg-knob');
   if(!tog) return;
   const on = tog.checked;
-  if(track) track.style.background = on ? '#ff5722' : '#ccc';
+  if(track) track.style.background = on ? '#0071ce' : '#ccc';
   if(knob)  knob.style.transform   = on ? 'translateX(20px)' : 'translateX(0)';
 
   if(on && aiCurrentUrl){
@@ -4925,7 +4925,7 @@ function renderArtFromInstructions(art, prompt){
   C.width=500; C.height=500;
   const ctx = C.getContext("2d");
 
-  const bg="#0a0a0a", mc=art.mainColor||"#ff5722",
+  const bg="#0a0a0a", mc=art.mainColor||"#0071ce",
         ac=art.accentColor||"#ffffff", tc=art.textColor||"#ffffff",
         glow=art.bgGlow||"#001133";
 
@@ -5252,7 +5252,7 @@ function uploadSyncToggles(){
     const knob  = document.getElementById('upload-'+id+'-knob');
     if(!cb||!track||!knob) return;
     const on = cb.checked;
-    track.style.background = on ? '#ff5722' : '#ccc';
+    track.style.background = on ? '#0071ce' : '#ccc';
     knob.style.transform   = on ? 'translateX(18px)' : 'translateX(0)';
   });
 }
@@ -5388,7 +5388,7 @@ function selectLayer(id){
   selectedLayerId = id;
   const dz = document.getElementById(id);
   if(!dz) return;
-  dz.style.outline = "2px dashed rgba(255,87,34,.7)";
+  dz.style.outline = "2px dashed rgba(0,113,206,.7)";
   showLayerToolbar(id);
 }
 
@@ -5453,10 +5453,10 @@ function buildCanvasOverlay(id){
   overlay.innerHTML = `
     <div style="background:rgba(255,255,255,.97);border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.18);border:1px solid #e8e8e8;padding:6px 14px;display:flex;align-items:center;gap:8px;white-space:nowrap">
       <span style="font-size:12px;font-weight:700;color:#333">Remove</span>
-      <span style="font-size:9px;font-weight:800;background:#ff5722;color:#fff;padding:1px 5px;border-radius:4px">AI</span>
+      <span style="font-size:9px;font-weight:800;background:#0071ce;color:#fff;padding:1px 5px;border-radius:4px">AI</span>
       <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;flex-shrink:0">
         <input type="checkbox" id="co-rmbg" ${rmbgApplied?'checked':''} style="opacity:0;width:0;height:0" onchange="coToggleRmbg('${id}')">
-        <span id="co-rmbg-track" style="position:absolute;inset:0;border-radius:10px;background:${rmbgApplied?'#ff5722':'#ccc'};transition:background .2s"></span>
+        <span id="co-rmbg-track" style="position:absolute;inset:0;border-radius:10px;background:${rmbgApplied?'#0071ce':'#ccc'};transition:background .2s"></span>
         <span id="co-rmbg-knob" style="position:absolute;top:2px;left:${rmbgApplied?'16':'2'}px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:left .2s"></span>
       </label>
     </div>
@@ -5492,7 +5492,7 @@ function coToggleRmbg(id){
   const knob  = document.getElementById('co-rmbg-knob');
   if(!tog) return;
   const on = tog.checked;
-  if(track) track.style.background = on ? '#ff5722' : '#ccc';
+  if(track) track.style.background = on ? '#0071ce' : '#ccc';
   if(knob)  knob.style.left = on ? '16px' : '2px';
 
   // Also sync the panel toggle
@@ -5541,7 +5541,7 @@ function eaOpenForLayer(id){
   const track = document.getElementById('ea-rmbg-track');
   const knob  = document.getElementById('ea-rmbg-knob');
   if(tog) tog.checked = !!dz.dataset.rmbgApplied;
-  if(track) track.style.background = dz.dataset.rmbgApplied ? '#ff5722' : '#ccc';
+  if(track) track.style.background = dz.dataset.rmbgApplied ? '#0071ce' : '#ccc';
   if(knob)  knob.style.transform   = dz.dataset.rmbgApplied ? 'translateX(18px)' : 'translateX(0)';
 
   // Update filter selection highlight
@@ -5586,9 +5586,9 @@ function eaSetFilter(f, skipHighlight){
       const box = document.getElementById('ea-filter-'+key+'-box');
       const lbl = document.getElementById('ea-filter-'+key+'-lbl');
       const on = key===f;
-      if(box) box.style.borderColor = on ? '#ff5722' : '#e8e8e8';
+      if(box) box.style.borderColor = on ? '#0071ce' : '#e8e8e8';
       if(box) box.style.borderWidth  = on ? '2.5px' : '2px';
-      if(lbl){ lbl.style.color = on ? '#ff5722' : '#999'; lbl.style.fontWeight = on ? '800':'600'; }
+      if(lbl){ lbl.style.color = on ? '#0071ce' : '#999'; lbl.style.fontWeight = on ? '800':'600'; }
     });
   }
 }
@@ -5626,8 +5626,8 @@ function showLayerStack(){
     const thumb = img?.src || '';
     const isText = el.dataset.type === 'text';
     const isActive = el.id === window.eaCurrentLayerId;
-    html += '<div onclick="selectLayer(\''+el.id+'\')" style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;background:'+(isActive?'#fff8f5':'none')+';margin-bottom:4px" onmouseover="this.style.background=\'#f5f5f5\'" onmouseout="this.style.background=\''+(isActive?'#fff8f5':'none')+'\'">' +
-      '<div style="width:36px;height:36px;border-radius:6px;overflow:hidden;background:#f0f0f0;flex-shrink:0;border:1.5px solid '+(isActive?'#ff5722':'#e8e8e8')+'">' +
+    html += '<div onclick="selectLayer(\''+el.id+'\')" style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;background:'+(isActive?'#f0f7ff':'none')+';margin-bottom:4px" onmouseover="this.style.background=\'#f5f5f5\'" onmouseout="this.style.background=\''+(isActive?'#f0f7ff':'none')+'\'">' +
+      '<div style="width:36px;height:36px;border-radius:6px;overflow:hidden;background:#f0f0f0;flex-shrink:0;border:1.5px solid '+(isActive?'#0071ce':'#e8e8e8')+'">' +
         (isText ? '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:16px">T</div>' :
           '<img src="'+thumb+'" style="width:100%;height:100%;object-fit:cover">') +
       '</div>' +
@@ -5734,7 +5734,7 @@ function eaToggleRmbg(){
   const knob  = document.getElementById('ea-rmbg-knob');
   if(!tog) return;
   const on = tog.checked;
-  if(track) track.style.background = on ? '#ff5722' : '#ddd';
+  if(track) track.style.background = on ? '#0071ce' : '#ddd';
   if(knob)  knob.style.transform   = on ? 'translateX(20px)' : 'translateX(0)';
   const sub = document.getElementById('ea-rmbg-sub');
 
@@ -5773,7 +5773,7 @@ function quickRotate(id){
   // Create rotate handle above the element
   const handle = document.createElement("div");
   handle.id = "rot-handle-"+id;
-  handle.style.cssText = "position:absolute;top:-28px;left:50%;transform:translateX(-50%);width:22px;height:22px;background:#ff5722;border-radius:50%;cursor:grab;z-index:9999;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(255,87,34,.5);font-size:12px;color:#fff;user-select:none;";
+  handle.style.cssText = "position:absolute;top:-28px;left:50%;transform:translateX(-50%);width:22px;height:22px;background:#0071ce;border-radius:50%;cursor:grab;z-index:9999;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,113,206,.5);font-size:12px;color:#fff;user-select:none;";
   handle.textContent = "↺";
   handle.title = "Drag to rotate";
   el.appendChild(handle);
@@ -5826,7 +5826,7 @@ function quickSize(id){
     <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;">Size</div>
     <div style="display:flex;align-items:center;gap:8px;">
       <input id="size-slider" type="range" min="60" max="600" value="${currentW}"
-        style="flex:1;accent-color:#ff5722;"
+        style="flex:1;accent-color:#0071ce;"
         oninput="doQuickSize('${id}', this.value)">
       <span id="size-slider-val" style="font-size:12px;font-weight:700;color:#333;min-width:36px;">${currentW}px</span>
     </div>
@@ -5972,7 +5972,7 @@ function makeLayerDraggable(dz){
     const pa = document.getElementById("print-area-" + dz.dataset.side);
     if(pa){
       const outside = newLeft<pa.offsetLeft||newTop<pa.offsetTop||newLeft+dz.offsetWidth>pa.offsetLeft+pa.offsetWidth||newTop+dz.offsetHeight>pa.offsetTop+pa.offsetHeight;
-      pa.style.borderColor = outside ? "rgba(255,80,80,.8)" : "rgba(255,87,34,.4)";
+      pa.style.borderColor = outside ? "rgba(255,80,80,.8)" : "rgba(0,113,206,.4)";
       showBoundingWarning(outside);
     }
   }
@@ -5992,7 +5992,7 @@ function makeLayerDraggable(dz){
 function makeLayerResizable(dz, id){
   // Add a visible resize handle in bottom-right corner
   const handle = document.createElement("div");
-  handle.style.cssText = "position:absolute;bottom:-6px;right:-6px;width:14px;height:14px;background:#ff5722;border-radius:3px;cursor:se-resize;z-index:10;display:none;";
+  handle.style.cssText = "position:absolute;bottom:-6px;right:-6px;width:14px;height:14px;background:#0071ce;border-radius:3px;cursor:se-resize;z-index:10;display:none;";
   handle.id = "rzh-"+id;
   dz.appendChild(handle);
 
@@ -6057,8 +6057,8 @@ function toggleKeith(){
     } else {
       b.textContent=sState.keith?"✓ Keith's Edit Added":"+ Add Keith's Edit";
       b.style.background=sState.keith?"#22c55e":"#fff";
-      b.style.color=sState.keith?"#fff":"#ff5722";
-      b.style.borderColor=sState.keith?"#22c55e":"#ff5722";
+      b.style.color=sState.keith?"#fff":"#0071ce";
+      b.style.borderColor=sState.keith?"#22c55e":"#0071ce";
     }
   });
   sUpdateAll();
@@ -6230,7 +6230,7 @@ function buildQtyGrid(){
       <div style="display:flex;align-items:center;gap:10px">
         <button onclick="qtyAdj('${s}',-1)" style="width:32px;height:32px;border:1.5px solid #e8e8e8;border-radius:8px;background:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#555">−</button>
         <span id="qty-${s}" style="font-size:16px;font-weight:800;color:#111;min-width:28px;text-align:center">${qtyState[s]||0}</span>
-        <button onclick="qtyAdj('${s}',1)" style="width:32px;height:32px;border:1.5px solid #ff5722;border-radius:8px;background:#fff8f5;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#ff5722">+</button>
+        <button onclick="qtyAdj('${s}',1)" style="width:32px;height:32px;border:1.5px solid #0071ce;border-radius:8px;background:#f0f7ff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#0071ce">+</button>
       </div>
       <span style="font-size:12px;color:#aaa;width:48px;text-align:right">$${price.toFixed(2)}</span>
     </div>`).join("");
@@ -6483,7 +6483,7 @@ function nnAddRow(name='', subtitle='', number='', size='M'){
   const inp = (placeholder, val, type='text', extra='') =>
     `<input placeholder="${placeholder}" value="${val}" type="${type}" ${extra}
       style="padding:8px 10px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;color:#111;outline:none;width:100%;box-sizing:border-box"
-      onfocus="this.style.borderColor='#ff5722'" onblur="this.style.borderColor='#e8e8e8';nnUpdateTotals()">`;
+      onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e8e8e8';nnUpdateTotals()">`;
 
   row.innerHTML = `
     <select style="padding:8px 6px;border:1.5px solid #e8e8e8;border-radius:8px;font-size:12px;font-weight:700;font-family:'DM Sans',sans-serif;color:#333;background:#fff;width:100%">
@@ -6780,7 +6780,7 @@ async function shopLoadCatalog() {
     shopState.brands=(brandData.brands||[]).map(b=>b.name).filter(Boolean);
   } catch(err) {
     console.error("Shop load error:",err);
-    document.getElementById("shop-loading").innerHTML='<div style="color:#dc2626;font-size:14px;font-weight:600">⚠ Could not load catalog. <button onclick="shopLoadCatalog()" style="padding:8px 16px;background:#ff5722;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;margin-left:8px">Retry</button></div>';
+    document.getElementById("shop-loading").innerHTML='<div style="color:#dc2626;font-size:14px;font-weight:600">⚠ Could not load catalog. <button onclick="shopLoadCatalog()" style="padding:8px 16px;background:#0071ce;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;margin-left:8px">Retry</button></div>';
     shopState.loading=false; return;
   }
   shopState.loading=false;
@@ -6947,7 +6947,7 @@ function shopRenderBrands(){
     ...POPULAR.filter(b=>shopState.brands.includes(b)),
     ...shopState.brands.filter(b=>!POPULAR.includes(b)).sort()
   ];
-  wrap.innerHTML=`<div style="font-size:10px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;margin-top:-4px">Popular</div>`+
+  wrap.innerHTML=`<div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;margin-top:-4px">Popular</div>`+
   sorted.slice(0,POPULAR.length).map(b=>brandCheckbox(b)).join("")+
   `<div style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin:10px 0 6px">All Brands</div>`+
   sorted.slice(POPULAR.length).map(b=>brandCheckbox(b)).join("");
@@ -6955,7 +6955,7 @@ function shopRenderBrands(){
 
 function brandCheckbox(b){
   return `<label class="shop-brand-check">
-    <input type="checkbox" ${shopState.brand===b?"checked":""} onchange="shopSetBrand('${b.replace(/'/g,"\\'")}',this.checked)" style="accent-color:#ff5722">
+    <input type="checkbox" ${shopState.brand===b?"checked":""} onchange="shopSetBrand('${b.replace(/'/g,"\\'")}',this.checked)" style="accent-color:#0071ce">
     <span>${b}</span>
   </label>`;
 }
@@ -7067,12 +7067,12 @@ function typeAnim(){
 // ════════════════════════════════
 const TXT_COLORS = [
   "#ffffff","#111111","#333333","#555555","#888888","#aaaaaa","#dddddd",
-  "#ff5722","#2563eb","#1e40af",
+  "#0071ce","#2563eb","#1e40af",
   "#f05a28","#dc2626","#b91c1c",
   "#16a34a","#15803d","#166534",
   "#f59e0b","#d97706","#92400e",
-  "#9333ea","#ff5722","#e64a19",
-  "#d84315","#db2777","#be185d",
+  "#9333ea","#0071ce","#005baa",
+  "#004a8f","#db2777","#be185d",
 ];
 
 const txtState = {
@@ -7088,7 +7088,7 @@ function buildTxtColorSwatches(){
   wrap.innerHTML = TXT_COLORS.map(c=>`
     <div onclick="txtSetColor('${c}')"
       style="width:24px;height:24px;background:${c};border-radius:6px;cursor:pointer;
-      border:2px solid ${c===txtState.color?"#ff5722":"transparent"};
+      border:2px solid ${c===txtState.color?"#0071ce":"transparent"};
       ${c==="#ffffff"?"outline:1px solid #ddd":""}
       transition:transform .12s;flex-shrink:0"
       onmouseover="this.style.transform='scale(1.15)'"
@@ -7109,9 +7109,9 @@ function txtToggle(prop){
   txtState[prop]=!txtState[prop];
   const btn=document.getElementById("txt-"+prop+"-btn");
   if(btn){
-    btn.style.background=txtState[prop]?"#ff5722":"#fff";
+    btn.style.background=txtState[prop]?"#0071ce":"#fff";
     btn.style.color=txtState[prop]?"#fff":"#555";
-    btn.style.borderColor=txtState[prop]?"#ff5722":"#e8e8e8";
+    btn.style.borderColor=txtState[prop]?"#0071ce":"#e8e8e8";
   }
   const sel=document.querySelector(".txt-layer.selected");
   if(sel) applyTxtStyle(sel);
@@ -7123,8 +7123,8 @@ function txtAlign(a){
   ["left","center","right"].forEach(x=>{
     const b=document.getElementById("txt-align-"+x);
     if(!b)return;
-    b.style.background=x===a?"#fff8f5":"#fff";
-    b.style.borderColor=x===a?"#ff5722":"#e8e8e8";
+    b.style.background=x===a?"#f0f7ff":"#fff";
+    b.style.borderColor=x===a?"#0071ce":"#e8e8e8";
   });
   const sel=document.querySelector(".txt-layer.selected");
   if(sel){sel.style.textAlign=a;sel.dataset.align=a;}
@@ -7232,7 +7232,7 @@ function showTextToolbar(id){
     btn.style.cssText="border:none;background:transparent;padding:8px 12px;cursor:pointer;font-size:12px;font-weight:600;color:#333;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:DM Sans,sans-serif;"+(i>0?"border-left:1px solid #f0f0f0":"");
     btn.innerHTML='<span style="font-size:15px">'+b.icon+'</span><span style="font-size:9px;color:#888">'+b.label+'</span>';
     btn.onclick=(e)=>{ e.stopPropagation(); b.fn(); };
-    btn.onmouseover=()=>btn.style.background="#fdf4ff";
+    btn.onmouseover=()=>btn.style.background="#f0f7ff";
     btn.onmouseout=()=>btn.style.background="transparent";
     tb.appendChild(btn);
   });
@@ -7308,7 +7308,7 @@ function txtSetColor(c){
   const name    = document.getElementById('txt-color-name');
   if(preview) preview.style.background = c;
   if(name){
-    const map = {'#ffffff':'White','#111111':'Black','#333333':'Dark Gray','#ff5722':'Blue','#dc2626':'Red','#16a34a':'Green','#f59e0b':'Gold','#9333ea':'Purple','#d84315':'Pink','#f05a28':'Orange'};
+    const map = {'#ffffff':'White','#111111':'Black','#333333':'Dark Gray','#0071ce':'Blue','#dc2626':'Red','#16a34a':'Green','#f59e0b':'Gold','#9333ea':'Purple','#004a8f':'Pink','#f05a28':'Orange'};
     name.textContent = map[c] || c;
   }
 }
@@ -7352,7 +7352,7 @@ function txtDragMove(e){
     const paR = paL + pa.offsetWidth, paB = paT + pa.offsetHeight;
     const elW = dragTxt.offsetWidth, elH = dragTxt.offsetHeight;
     const outside = x < paL || y < paT || x + elW > paR || y + elH > paB;
-    pa.style.borderColor = outside ? "rgba(255,80,80,.8)" : "rgba(255,87,34,.4)";
+    pa.style.borderColor = outside ? "rgba(255,80,80,.8)" : "rgba(0,113,206,.4)";
     showBoundingWarning(outside);
   }
 }
@@ -7404,7 +7404,7 @@ function txtDragMoveTouch(e){
   if(pa){
     const paL=pa.offsetLeft,paT=pa.offsetTop,paR=paL+pa.offsetWidth,paB=paT+pa.offsetHeight;
     const outside = x<paL||y<paT||x+dragTxt.offsetWidth>paR||y+dragTxt.offsetHeight>paB;
-    pa.style.borderColor = outside?"rgba(255,80,80,.8)":"rgba(255,87,34,.4)";
+    pa.style.borderColor = outside?"rgba(255,80,80,.8)":"rgba(0,113,206,.4)";
     showBoundingWarning(outside);
   }
 }
@@ -7657,7 +7657,7 @@ function generateArtSVG(prompt){
     nature:  {bg:"#0a1a0a", a:"#44cc44", b:"#88ffaa", c:"#ffffff", d:"#22aa44"},
     fire:    {bg:"#0a0500", a:"#ff6600", b:"#ffcc00", c:"#ff3300", d:"#ffffff"},
     wave:    {bg:"#001a33", a:"#0088ff", b:"#00ccff", c:"#ffffff", d:"#0044aa"},
-    abstract:{bg:"#0a0a14", a:"#ff5722", b:"#ffffff", c:"#ff6600", d:"#aaccff"},
+    abstract:{bg:"#0a0a14", a:"#0071ce", b:"#ffffff", c:"#ff6600", d:"#aaccff"},
   };
   const T = themes[theme] || themes.abstract;
 
@@ -7973,7 +7973,7 @@ function renderDesignsGrid(){
   empty.style.display='none';
   grid.innerHTML = designs.map(d=>`
     <div class="design-card" onclick="loadDesign(${d.id})">
-      <div class="design-card-img" style="background:#f5f0eb">
+      <div class="design-card-img" style="background:#f5f7fa">
         ${d.frontImg
           ? `<img src="${d.frontImg}" style="width:100%;height:100%;object-fit:contain;padding:8px" onerror="this.style.display=\'none\'">`
           : `<div style="font-size:48px">${d.product?.id?.includes('500')||d.product?.id==='18500'?'🧥':'👕'}</div>`}
@@ -8194,7 +8194,7 @@ function buildStep2(){
     html += '<div style="font-size:13px;font-weight:800;color:#111">'+styleId+' '+brand+' '+pname+'</div>';
     html += '<div style="font-size:12px;color:#888;margin-top:2px">'+cn+'</div>';
     html += '</div>';
-    html += '<div id="step2-count-'+idx+'" style="font-size:12px;font-weight:700;color:'+(itemCount?'#ff5722':'#aaa')+';white-space:nowrap">'+itemCount+' Item'+(itemCount!==1?'s':'')+'</div>';
+    html += '<div id="step2-count-'+idx+'" style="font-size:12px;font-weight:700;color:'+(itemCount?'#0071ce':'#aaa')+';white-space:nowrap">'+itemCount+' Item'+(itemCount!==1?'s':'')+'</div>';
     html += '</div>';
 
     // Collapsible size section
@@ -8208,7 +8208,7 @@ function buildStep2(){
       h += '<input type="number" min="0" max="999" value="'+(qty||0)+'" ';
       h += 'data-pidx="'+pidx+'" data-sz="'+sz+'" ';
       h += 'oninput="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
-      h += 'style="width:38px;height:38px;padding:0;border:'+(active?'2px solid #ff5722':'1px solid #ddd')+';border-radius:6px;font-size:13px;font-weight:700;text-align:center;font-family:DM Sans,sans-serif;color:#111;background:'+(active?'#fff8f5':'#fff')+';outline:none;-moz-appearance:textfield">';
+      h += 'style="width:38px;height:38px;padding:0;border:'+(active?'2px solid #0071ce':'1px solid #ddd')+';border-radius:6px;font-size:13px;font-weight:700;text-align:center;font-family:DM Sans,sans-serif;color:#111;background:'+(active?'#f0f7ff':'#fff')+';outline:none;-moz-appearance:textfield">';
       if(up) h += '<div style="font-size:8px;color:#aaa;margin-top:2px">+$'+up+'</div>';
       h += '</div>';
       return h;
@@ -8330,7 +8330,7 @@ function buildStep2(){
     document.getElementById('step2-jersey-summary').innerHTML =
       nnRoster.length + ' shirt'+(nnRoster.length!==1?'s':'')+' with personalization<br>'+
       nnRoster.slice(0,5).map(function(r){ return '<span style="display:inline-block;background:#fff;border-radius:6px;padding:2px 10px;margin:2px;font-size:12px;font-weight:600">'+(r.name||'')+( r.number?' #'+r.number:'')+' ('+(r.size||'M')+')</span>'; }).join('')+
-      (nnRoster.length>5?'<span style="font-size:12px;color:#ff5722"> +'+( nnRoster.length-5)+' more</span>':'')+
+      (nnRoster.length>5?'<span style="font-size:12px;color:#0071ce"> +'+( nnRoster.length-5)+' more</span>':'')+
       '<br><strong>Personalization: $'+(nnRoster.length*jerseyPrice).toFixed(2)+'</strong>';
   } else {
     jerseySection.style.display='none';
@@ -8356,13 +8356,13 @@ function step2SetQty(pidx, sz, qty){
   const ps = orderState.productSizes[pidx]||{};
   const total = Object.values(ps).reduce(function(a,b){return a+(b||0);},0);
   const countEl = document.getElementById('step2-count-'+pidx);
-  if(countEl){ countEl.textContent = total+' Item'+(total!==1?'s':''); countEl.style.color=total?'#ff5722':'#aaa'; }
+  if(countEl){ countEl.textContent = total+' Item'+(total!==1?'s':''); countEl.style.color=total?'#0071ce':'#aaa'; }
   // Highlight the input
   const inputs = document.querySelectorAll('[data-pidx="'+pidx+'"][data-sz="'+sz+'"]');
   inputs.forEach(function(inp){
-    inp.style.borderColor = qty>0?'#ff5722':'#e0e0e0';
+    inp.style.borderColor = qty>0?'#0071ce':'#e0e0e0';
     inp.style.borderWidth = qty>0?'2px':'1.5px';
-    inp.style.background  = qty>0?'#fff8f5':'#fff';
+    inp.style.background  = qty>0?'#f0f7ff':'#fff';
   });
   step2UpdateTotals();
 }
@@ -8380,15 +8380,15 @@ function step2Adj(size, delta){
   // Update tile highlight
   const tile = document.getElementById('step2-tile-'+size);
   if(tile){
-    tile.style.borderColor = qty ? '#ff5722' : '#e8e8e8';
-    tile.style.background = qty ? '#fff8f5' : '#fff';
+    tile.style.borderColor = qty ? '#0071ce' : '#e8e8e8';
+    tile.style.background = qty ? '#f0f7ff' : '#fff';
     // Update badge
     let badge = tile.querySelector('.qty-badge');
     if(qty){
       if(!badge){
         badge = document.createElement('div');
         badge.className='qty-badge';
-        badge.style.cssText='position:absolute;top:-8px;right:-8px;width:24px;height:24px;background:#ff5722;color:#fff;border-radius:50%;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center';
+        badge.style.cssText='position:absolute;top:-8px;right:-8px;width:24px;height:24px;background:#0071ce;color:#fff;border-radius:50%;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center';
         tile.appendChild(badge);
       }
       badge.textContent = qty;
@@ -8428,7 +8428,7 @@ function step2UpdateTotals(){
     const r0 = nnRoster[0]||{};
     const hasN = r0.name!==undefined, hasNum = r0.number!==undefined;
     jerseyTotal = nnRoster.length * (hasN && hasNum ? 6 : hasN ? 4 : 3);
-    lines.push(`<div style="display:flex;justify-content:space-between;color:#ff5722"><span>Names &amp; Numbers (${nnRoster.length} shirts)</span><span>$${jerseyTotal.toFixed(2)}</span></div>`);
+    lines.push(`<div style="display:flex;justify-content:space-between;color:#0071ce"><span>Names &amp; Numbers (${nnRoster.length} shirts)</span><span>$${jerseyTotal.toFixed(2)}</span></div>`);
   }
 
   const grand = garmentTotal + jerseyTotal;
@@ -8459,7 +8459,7 @@ function updateStudioLivePrice(totalUnits, garmentTotal){
   if(!totalUnits){
     priceEach.textContent = '$'+basePrice.toFixed(2)+' ea';
     if(priceEach2) priceEach2.textContent = '$'+basePrice.toFixed(2)+' ea';
-    priceSub.innerHTML = '0 items · <span style="color:#ff5722">add qty →</span>';
+    priceSub.innerHTML = '0 items · <span style="color:#0071ce">add qty →</span>';
     return;
   }
 
@@ -8478,7 +8478,7 @@ function updateStudioLivePrice(totalUnits, garmentTotal){
   const nextTier = totalUnits<6?{n:6,p:3} : totalUnits<12?{n:12,p:7} : totalUnits<24?{n:24,p:10} : null;
   if(nextTier){
     const need = nextTier.n - totalUnits;
-    priceSub.innerHTML = totalUnits+' items · <span style="color:#ff5722">add '+need+' more → '+nextTier.p+'% off</span>';
+    priceSub.innerHTML = totalUnits+' items · <span style="color:#0071ce">add '+need+' more → '+nextTier.p+'% off</span>';
   } else {
     priceSub.innerHTML = '<span style="color:#16a34a;font-weight:700">'+totalUnits+' items · max discount ✓</span>';
   }
@@ -8503,7 +8503,7 @@ function showSaveDesignPrompt(onContinue){
       <div style="font-size:13px;color:#888;margin-bottom:20px;line-height:1.5">Enter your email to save your design and get your order confirmation. We'll never spam you.</div>
       <input id="save-design-email" type="email" placeholder="your@email.com"
         style="width:100%;padding:13px 16px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box;margin-bottom:10px"
-        onfocus="this.style.borderColor='#ff5722'" onblur="this.style.borderColor='#e8e8e8'">
+        onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e8e8e8'">
       <button onclick="saveDesignAndContinue(this)" style="width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px">
         Save &amp; Checkout →
       </button>
@@ -8613,7 +8613,7 @@ function buildStep3(){
     if(nextTiers.length){
       bulkEl.innerHTML = '<strong>Buy More &amp; Save:</strong> '+nextTiers.map(function(t){
         const p2 = (grandTotal/totalUnits||0)*(1-t.pct/100);
-        return t.min+' items for <strong style="color:#ff5722">$'+p2.toFixed(2)+' ea.</strong>';
+        return t.min+' items for <strong style="color:#0071ce">$'+p2.toFixed(2)+' ea.</strong>';
       }).join(' &nbsp;|&nbsp; ');
       bulkEl.style.display='block';
     } else { bulkEl.style.display='none'; }
@@ -8641,7 +8641,7 @@ function buildStep3(){
       html += '<div style="font-size:13px;font-weight:800;color:#111;margin-bottom:2px">'+(p.brand||'Gildan')+' '+(p.name||'')+'</div>';
       html += '<div style="font-size:12px;color:#888;margin-bottom:6px;display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:'+ch+';display:inline-block;border:1px solid rgba(0,0,0,.1)"></span>'+cn+' &nbsp;·&nbsp; '+itemCount+' item'+(itemCount!==1?'s':'')+'</div>';
       html += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px">'+sizeBreakdown+'</div>';
-      html += '<span onclick="goStep2()" style="font-size:11px;color:#ff5722;font-weight:700;cursor:pointer;text-decoration:underline">Edit sizes</span>';
+      html += '<span onclick="goStep2()" style="font-size:11px;color:#0071ce;font-weight:700;cursor:pointer;text-decoration:underline">Edit sizes</span>';
       html += '</div>';
       html += '<div style="font-size:13px;font-weight:800;color:#111;white-space:nowrap">$'+priceEach.toFixed(2)+' ea.</div>';
       html += '</div>';
@@ -8666,7 +8666,7 @@ async function renderMockupSide(side, canvasId){
   const size = 500;
   canvas.width = size; canvas.height = size;
   const ctx = canvas.getContext('2d');
-  ctx.fillStyle='#f5f0eb'; ctx.fillRect(0,0,size,size);
+  ctx.fillStyle='#f5f7fa'; ctx.fillRect(0,0,size,size);
 
   // Draw shirt image
   const c = sState.color;
@@ -8846,7 +8846,7 @@ window.addEventListener('load', updateDeliveryDates);
     <div style="position:absolute;top:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);border-radius:20px;padding:7px 18px;font-size:12px;font-weight:600;white-space:nowrap">
       <span onclick="goStep1()" style="color:#888;cursor:pointer">1 Design</span>
       <span style="color:#ccc">›</span>
-      <span style="color:#ff5722;font-weight:800">2 Quantity &amp; Sizes</span>
+      <span style="color:#0071ce;font-weight:800">2 Quantity &amp; Sizes</span>
       <span style="color:#ccc">›</span>
       <span style="color:#aaa">3 Review</span>
     </div>
@@ -8859,7 +8859,7 @@ window.addEventListener('load', updateDeliveryDates);
 
     <!-- Header -->
     <div style="padding:22px 24px 16px;border-bottom:1px solid #f0f0f0">
-      <div style="font-size:10px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px">Quantity &amp; Sizes</div>
+      <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px">Quantity &amp; Sizes</div>
       <div style="font-size:22px;font-weight:900;color:#111;letter-spacing:-.5px;margin-bottom:6px">How Many Do You Need?</div>
       <div style="font-size:12px;color:#aaa;line-height:1.5">Enter quantities to calculate the price.</div>
     </div>
@@ -8868,8 +8868,8 @@ window.addEventListener('load', updateDeliveryDates);
     <div id="step2-size-grid" style="flex:1;overflow-y:auto"></div>
 
     <!-- Jersey -->
-    <div id="step2-jersey-section" style="display:none;margin:0 16px 8px;background:#fff8f5;border-radius:10px;padding:12px 14px">
-      <div style="font-size:11px;font-weight:700;color:#ff5722;margin-bottom:4px">🏆 Names &amp; Numbers</div>
+    <div id="step2-jersey-section" style="display:none;margin:0 16px 8px;background:#f0f7ff;border-radius:10px;padding:12px 14px">
+      <div style="font-size:11px;font-weight:700;color:#0071ce;margin-bottom:4px">🏆 Names &amp; Numbers</div>
       <div id="step2-jersey-summary" style="font-size:11px;color:#555;line-height:1.6"></div>
     </div>
 
@@ -8878,7 +8878,7 @@ window.addEventListener('load', updateDeliveryDates);
       <div id="step2-summary" style="margin-bottom:10px;font-size:12px;color:#888"></div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
         <div style="font-size:13px;font-weight:600;color:#555">Estimated Total</div>
-        <div id="step2-grand-total" style="font-size:22px;font-weight:900;color:#ff5722">$0.00</div>
+        <div id="step2-grand-total" style="font-size:22px;font-weight:900;color:#0071ce">$0.00</div>
       </div>
       <button onclick="goStep3()" style="width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.06em">
         CALCULATE PRICING →
@@ -8917,13 +8917,13 @@ window.addEventListener('load', updateDeliveryDates);
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
         <div>
           <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;text-align:center">Front</div>
-          <div style="background:#f5f0eb;border-radius:14px;overflow:hidden;border:1px solid #e8e8e8;position:relative">
+          <div style="background:#f5f7fa;border-radius:14px;overflow:hidden;border:1px solid #e8e8e8;position:relative">
             <canvas id="mockup-front" style="width:100%;display:block"></canvas>
           </div>
         </div>
         <div>
           <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;text-align:center">Back</div>
-          <div style="background:#f5f0eb;border-radius:14px;overflow:hidden;border:1px solid #e8e8e8;position:relative">
+          <div style="background:#f5f7fa;border-radius:14px;overflow:hidden;border:1px solid #e8e8e8;position:relative">
             <canvas id="mockup-back" style="width:100%;display:block"></canvas>
           </div>
         </div>
@@ -8940,12 +8940,12 @@ window.addEventListener('load', updateDeliveryDates);
     <!-- Right: Order form -->
     <div>
       <!-- Order summary -->
-      <div style="background:#f5f0eb;border-radius:16px;padding:20px;margin-bottom:20px">
+      <div style="background:#f5f7fa;border-radius:16px;padding:20px;margin-bottom:20px">
         <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:12px">Order Summary</div>
         <div id="step3-summary" style="font-size:13px;color:#555;line-height:2"></div>
         <div style="border-top:1px solid #e8e8e8;margin-top:12px;padding-top:12px;display:flex;justify-content:space-between">
           <div style="font-size:14px;font-weight:700;color:#111">Total</div>
-          <div id="step3-grand" style="font-size:20px;font-weight:900;color:#ff5722"></div>
+          <div id="step3-grand" style="font-size:20px;font-weight:900;color:#0071ce"></div>
         </div>
       </div>
 
@@ -8953,11 +8953,11 @@ window.addEventListener('load', updateDeliveryDates);
       <div style="margin-bottom:20px">
         <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:12px">Your Information</div>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <input id="order-name" placeholder="Full Name *" style="width:100%;padding:12px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#ff5722'" onblur="this.style.borderColor='#e8e8e8'">
-          <input id="order-email" type="email" placeholder="Email Address *" style="width:100%;padding:12px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#ff5722'" onblur="this.style.borderColor='#e8e8e8'">
-          <input id="order-phone" type="tel" placeholder="Phone Number" style="width:100%;padding:12px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#ff5722'" onblur="this.style.borderColor='#e8e8e8'">
-          <input id="order-org" placeholder="Team / Organization Name" style="width:100%;padding:12px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#ff5722'" onblur="this.style.borderColor='#e8e8e8'">
-          <textarea id="order-notes" placeholder="Special instructions, rush request, etc." rows="3" style="width:100%;padding:12px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;resize:none;box-sizing:border-box" onfocus="this.style.borderColor='#ff5722'" onblur="this.style.borderColor='#e8e8e8'"></textarea>
+          <input id="order-name" placeholder="Full Name *" style="width:100%;padding:12px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e8e8e8'">
+          <input id="order-email" type="email" placeholder="Email Address *" style="width:100%;padding:12px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e8e8e8'">
+          <input id="order-phone" type="tel" placeholder="Phone Number" style="width:100%;padding:12px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e8e8e8'">
+          <input id="order-org" placeholder="Team / Organization Name" style="width:100%;padding:12px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e8e8e8'">
+          <textarea id="order-notes" placeholder="Special instructions, rush request, etc." rows="3" style="width:100%;padding:12px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;resize:none;box-sizing:border-box" onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e8e8e8'"></textarea>
         </div>
       </div>
 
@@ -8968,13 +8968,13 @@ window.addEventListener('load', updateDeliveryDates);
           <div style="font-size:11px;color:#888;margin-top:2px">Ships within 24hrs +$15</div>
         </div>
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-          <input type="checkbox" id="order-rush" style="accent-color:#ff5722;width:16px;height:16px">
+          <input type="checkbox" id="order-rush" style="accent-color:#0071ce;width:16px;height:16px">
           <span style="font-size:13px;font-weight:600;color:#333">Add Rush</span>
         </label>
       </div>
 
       <!-- Submit -->
-      <button id="place-order-btn" onclick="placeOrder()" style="width:100%;height:56px;background:#ff5722;color:#fff;border:none;border-radius:16px;font-size:17px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 16px rgba(255,87,34,.3);transition:all .2s">
+      <button id="place-order-btn" onclick="placeOrder()" style="width:100%;height:56px;background:#0071ce;color:#fff;border:none;border-radius:16px;font-size:17px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 16px rgba(0,113,206,.3);transition:all .2s">
         Place Order →
       </button>
       <div style="font-size:11px;color:#aaa;text-align:center;margin-top:10px">We'll confirm your order by email within 1 hour</div>
@@ -8984,7 +8984,7 @@ window.addEventListener('load', updateDeliveryDates);
         <div style="font-size:52px;margin-bottom:16px">🎉</div>
         <div style="font-size:22px;font-weight:900;color:#111;margin-bottom:8px">Order Submitted!</div>
         <div style="font-size:14px;color:#888;margin-bottom:20px">We've received your design and will confirm by email shortly. Our team reviews every order before printing.</div>
-        <button onclick="goHome()" style="padding:14px 32px;background:#ff5722;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Back to Home</button>
+        <button onclick="goHome()" style="padding:14px 32px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Back to Home</button>
       </div>
 
     </div>
@@ -8996,7 +8996,7 @@ window.addEventListener('load', updateDeliveryDates);
   <div class="designs-box">
     <div class="designs-header">
       <div>
-        <div style="font-size:11px;font-weight:700;color:#ff5722;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">My Designs</div>
+        <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">My Designs</div>
         <div style="font-size:22px;font-weight:900;color:#111;letter-spacing:-.5px">Saved Shirt Designs</div>
       </div>
       <button onclick="closeDesigns()" style="background:none;border:none;font-size:26px;color:#aaa;cursor:pointer;line-height:1">×</button>
