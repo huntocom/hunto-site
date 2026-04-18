@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v22.3 -->
+<!-- v22.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1708,7 +1708,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v22.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v22.4</span>
   </div>
 
 </nav>
@@ -1735,16 +1735,13 @@ footer{background:#111;padding:56px 32px 28px}
 <div id="page-home" class="page active">
 
   <!-- HERO -->
-  <section class="hp-hero" style="position:relative;background:linear-gradient(135deg,#0a1628 0%,#0d2240 40%,#0a1830 70%,#060e1a 100%);overflow:hidden;min-height:520px;display:flex;align-items:center">
-    <!-- Background effects -->
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 50%,rgba(0,113,206,.18) 0%,transparent 70%);pointer-events:none"></div>
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 20% 30%,rgba(236,72,153,.1) 0%,transparent 60%);pointer-events:none"></div>
-    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;mask-image:radial-gradient(ellipse at center,black 40%,transparent 80%)"></div>
-    <!-- Background pattern -->
-    <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(0,113,206,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(0,113,206,.1) 0%,transparent 40%);pointer-events:none"></div>
+  <section class="hp-hero" style="position:relative;background:#0a1628;overflow:hidden;min-height:520px;display:flex;align-items:center">
+    <!-- Banner background image -->
+    <div style="position:absolute;inset:0;background:url('banner.png') center/cover no-repeat;pointer-events:none"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,22,40,.85) 0%,rgba(10,22,40,.4) 50%,transparent 100%);pointer-events:none"></div>
     
     
-    <div class="hp-hero-grid" style="max-width:1300px;margin:0 auto;padding:80px 32px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;width:100%">
+    <div class="hp-hero-grid" style="max-width:1300px;margin:0 auto;padding:80px 32px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;width:100%;position:relative;z-index:1">
       <div class="hp-hero-text" style="display:flex;flex-direction:column;align-items:flex-start;text-align:left">
         <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,113,206,.15);border:1px solid rgba(0,113,206,.3);border-radius:24px;padding:8px 20px;margin-bottom:28px">
           <span style="color:#60a5fa;font-size:15px;font-weight:600;letter-spacing:.02em">No minimums · Free shipping · Ships in 48hrs</span>
@@ -1769,8 +1766,8 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
 
-      <!-- Hero right - floating product cards -->
-      <div class="hp-hero-cards" style="position:relative;height:480px;width:100%">
+      <!-- Hero right - empty, banner image provides the visual -->
+      <div class="hp-hero-cards" style="display:none;position:relative;height:480px;width:100%">
         <style>
           @keyframes float1{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(-4deg)}}
           @keyframes float2{0%,100%{transform:translateY(0) rotate(3deg)}50%{transform:translateY(-16px) rotate(3deg)}}
@@ -2562,7 +2559,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v22.3</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v22.4</span>
   </div>
 
   <div class="studio-body">
