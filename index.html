@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v20.4 -->
+<!-- v20.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -438,7 +438,7 @@ footer{background:#111;padding:56px 32px 28px}
 /* ══════════════════════════════════════════
    STUDIO PAGE
 ══════════════════════════════════════════ */
-.studio-page{display:flex;flex-direction:column;height:calc(100vh - 110px);overflow:hidden}
+.studio-page{display:flex;flex-direction:column;height:calc(100vh - 110px);height:calc(100dvh - 110px);overflow:hidden;max-height:calc(100vh - 110px);max-height:calc(100dvh - 110px)}
 
 /* Studio top bar — product tray style */
 .studio-topbar{
@@ -488,7 +488,7 @@ footer{background:#111;padding:56px 32px 28px}
 .stbtn.blue:hover{background:#005baa}
 
 /* Studio body */
-.studio-body{flex:1;display:flex;overflow:hidden}
+.studio-body{flex:1;display:flex;overflow:hidden;min-height:0}
 
 /* Left icon sidebar — dark charcoal like CustomInk */
 .s-iconbar{
@@ -674,14 +674,14 @@ footer{background:#111;padding:56px 32px 28px}
 
 /* Canvas — neutral gray like CustomInk */
 .s-canvas{
-  flex:1;background:#d9d9d9;
+  flex:1;min-height:0;background:#d9d9d9;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   position:relative;overflow:hidden;
 }
 .s-shirt-stage{position:relative;z-index:1;isolation:isolate;}
 .s-shirt-img{
-  width:680px;height:auto;object-fit:contain;
+  width:680px;max-width:100%;height:auto;max-height:100%;object-fit:contain;
   filter:none;
   transition:opacity .2s;display:block;
 }
@@ -1684,7 +1684,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.5</span>
   </div>
 
 </nav>
@@ -2389,7 +2389,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.4</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.5</span>
   </div>
 
   <div class="studio-body">
@@ -3745,6 +3745,9 @@ function showPage(id){
   if(hdr)  hdr.style.display  = (isStudio && isMobile) ? "none" : "";
   if(msb)  msb.style.display  = (isStudio && isMobile) ? "none" : "";
   if(mNav) mNav.style.display = (isStudio && isMobile) ? "none" : "";
+  // Hide "Start Designing" button in header when in studio (all sizes)
+  var designBtn = document.querySelector('.hdr-design-btn');
+  if(designBtn) designBtn.style.display = isStudio ? 'none' : '';
 }
 function goHome(){showPage("home")}
 async function goPDP(id){
