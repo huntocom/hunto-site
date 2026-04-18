@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v18.7 -->
+<!-- v18.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1618,7 +1618,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v18.7</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v18.8</span>
   </div>
 
 </nav>
@@ -2302,7 +2302,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v18.7</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v18.8</span>
   </div>
 
   <div class="studio-body">
@@ -5436,6 +5436,9 @@ function addImageLayer(side, id, src){
     wrap.appendChild(dz);
     makeLayerDraggable(dz); makeLayerResizable(dz, id); makeLayerRotatable(dz, id);
     dz.addEventListener("click", function(e){ e.stopPropagation(); selectLayer(id); });
+    dz.addEventListener("touchend", function(e){ if(!e.target.closest('[onclick]')&&!e.target.closest('[id^="rh-"]')&&!e.target.closest('[id^="rzh-"]')){ e.stopPropagation(); selectLayer(id); } }, {passive:true});
+    // Pinch-to-resize
+    addPinchResize(dz, id);
     historySnapshot();
     setTimeout(function(){ selectLayer(id); }, 100);
   }
@@ -5455,8 +5458,15 @@ function selectLayer(id){
   selectedLayerId = id;
   const dz = document.getElementById(id);
   if(!dz) return;
-  dz.style.outline = "2px dashed rgba(0,113,206,.7)";
-  showLayerToolbar(id);
+  dz.style.outline = "2px solid rgba(0,113,206,.6)";
+  // On mobile: show overlay toolbar only (no panel). On desktop: open edit panel too.
+  if(window.innerWidth <= 768){
+    buildCanvasOverlay(id);
+    var rzh = document.getElementById("rzh-"+id);
+    if(rzh) rzh.style.display = "block";
+  } else {
+    showLayerToolbar(id);
+  }
 }
 
 function deselectAllLayers(){
@@ -5502,14 +5512,16 @@ function buildCanvasOverlay(id){
     const rect = dz.getBoundingClientRect();
     const isMobile = window.innerWidth <= 768;
     if(isMobile){
-      // On mobile: position ABOVE the element so it's not hidden by iconbar
-      overlay.style.top  = Math.max(60, rect.top - 8) + 'px';
+      // On mobile: fixed at bottom above the iconbar
+      overlay.style.bottom = '72px';
       overlay.style.left = '50%';
-      overlay.style.transform = 'translate(-50%, -100%)';
+      overlay.style.transform = 'translateX(-50%)';
+      overlay.style.top = 'auto';
     } else {
       overlay.style.top  = (rect.bottom + 8) + 'px';
       overlay.style.left = (rect.left + rect.width/2) + 'px';
       overlay.style.transform = 'translateX(-50%)';
+      overlay.style.bottom = 'auto';
     }
   }
 
@@ -6092,6 +6104,37 @@ function makeLayerRotatable(dz, id){
   dz.dataset.rotation = "0";
 }
 
+// Pinch-to-resize for mobile (like ROT's Hammer.js pinch)
+function addPinchResize(dz, id){
+  var startW, startH, startDist;
+  function getDist(t1,t2){
+    var dx=t1.clientX-t2.clientX, dy=t1.clientY-t2.clientY;
+    return Math.sqrt(dx*dx+dy*dy);
+  }
+  dz.addEventListener('touchstart', function(e){
+    if(e.touches.length===2){
+      e.preventDefault();
+      startW = dz.offsetWidth;
+      startH = dz.offsetHeight;
+      startDist = getDist(e.touches[0], e.touches[1]);
+    }
+  }, {passive:false});
+  dz.addEventListener('touchmove', function(e){
+    if(e.touches.length===2 && startDist){
+      e.preventDefault();
+      var dist = getDist(e.touches[0], e.touches[1]);
+      var scale = dist / startDist;
+      var newW = Math.max(30, Math.round(startW * scale));
+      var newH = Math.max(30, Math.round(startH * scale));
+      dz.style.width = newW + 'px';
+      dz.style.height = newH + 'px';
+    }
+  }, {passive:false});
+  dz.addEventListener('touchend', function(e){
+    if(e.touches.length < 2){ startDist = 0; historySnapshot(); }
+  });
+}
+
 function updateToolbarPosition(id){
   const tb = document.getElementById("layer-toolbar");
   const dz = document.getElementById(id);
@@ -6101,7 +6144,7 @@ function updateToolbarPosition(id){
   tb.style.left = (dzRect.left + dzRect.width/2) + "px";
 }
 
-document.addEventListener("click", function(){
+function deselectEverything(){
   deselectAllLayers();
   document.querySelectorAll(".txt-layer").forEach(el=>{
     el.classList.remove("selected");
@@ -6111,7 +6154,10 @@ document.addEventListener("click", function(){
   hideLayerToolbar();
   const sp = document.getElementById("size-popup");
   if(sp) sp.remove();
-});
+  const co = document.getElementById("canvas-overlay");
+  if(co){ clearInterval(co._posTimer); co.remove(); }
+}
+document.addEventListener("click", deselectEverything);
 
 function renderDesignZone(side){ /* handled by addImageLayer */ }
 
