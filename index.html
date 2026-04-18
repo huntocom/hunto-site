@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v16.3 -->
+<!-- v16.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1095,22 +1095,14 @@ footer{background:#111;padding:56px 32px 28px}
   .s-ibtn.on .s-ibtn-icon svg{stroke:#fff !important}
 
   /* ── Bottom action bar ── */
-  .s-bottombar{
-    padding:8px 12px; gap:8px; flex-shrink:0; order:4;
-    background:#fff; border-top:1px solid #e8e8e8; z-index:90;
-  }
-  .s-bottom-info{display:none}
-  .s-bot-btn{height:38px; padding:0 14px; font-size:12px; font-weight:700}
-  .s-bot-btn.next{
-    height:46px; padding:0 24px; font-size:15px;
-    flex:1; border-radius:23px; font-weight:800;
-  }
+  /* Hide bottom action bar — Save+Next are in the topbar on mobile */
+  .s-bottombar{display:none !important}
 
   /* ── Panel slides up as sheet ── */
   .s-panel{
     position:absolute; bottom:0; left:0; right:0;
     width:100%; border-right:none; border-top:1px solid #e8e8e8;
-    max-height:60vh; overflow-y:auto; z-index:80;
+    max-height:60vh; overflow-y:auto; z-index:200;
     background:#fff; border-radius:18px 18px 0 0;
     box-shadow:0 -6px 28px rgba(0,0,0,.15);
     -webkit-overflow-scrolling:touch;
@@ -1296,8 +1288,11 @@ footer{background:#111;padding:56px 32px 28px}
 .mob-save-btn:hover{background:#f5f5f5}
 .mob-next-btn{height:36px;padding:0 16px;background:#7c3aed;color:#fff;border:none;border-radius:18px;font-size:13px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap}
 /* Mobile ROTATE button — hidden on desktop */
-.mobile-rotate-btn{display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:10;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,.92);border:1.5px solid #e0e0e0;border-radius:12px;padding:10px 8px;cursor:pointer;font-family:Inter,sans-serif;font-size:9px;font-weight:800;color:#333;letter-spacing:.04em;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.mobile-rotate-btn{display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:10;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,.95);border:1.5px solid #e0e0e0;border-radius:12px;padding:10px 8px;cursor:pointer;font-family:Inter,sans-serif;font-size:9px;font-weight:800;color:#333;letter-spacing:.04em;box-shadow:0 2px 12px rgba(0,0,0,.12)}
 .mobile-rotate-btn:active{background:#f0f0f0}
+/* SHARE button — bottom right of canvas, hidden on desktop */
+.mobile-share-btn{display:none;position:absolute;right:10px;bottom:16px;z-index:10;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,.95);border:1.5px solid #e0e0e0;border-radius:12px;padding:10px 8px;cursor:pointer;font-family:Inter,sans-serif;font-size:9px;font-weight:800;color:#333;letter-spacing:.04em;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+.mobile-share-btn:active{background:#f0f0f0}
 
 /* ── Mobile-only elements ── */
 .pdp-fixed-cta{display:none;position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:#fff;border-top:1px solid #e8e8e8;z-index:200;box-shadow:0 -4px 16px rgba(0,0,0,.1)}
@@ -1571,7 +1566,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v16.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v16.4</span>
   </div>
 
 </nav>
@@ -2252,7 +2247,7 @@ footer{background:#111;padding:56px 32px 28px}
         </svg>
         <span>Save</span>
       </button>
-      <button class="mob-next-btn" onclick="goStep2()">Next $</button>
+      <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
   </div>
 
@@ -3286,6 +3281,16 @@ footer{background:#111;padding:56px 32px 28px}
           </button>
         </div>
       </div>
+
+      <!-- SHARE button — bottom right like RushOrderTees -->
+      <button class="mobile-share-btn" onclick="navigator.share ? navigator.share({title:'My Hunto Design',url:window.location.href}) : (alert('Copy this link: ' + window.location.href))" title="Share">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        <span>SHARE</span>
+      </button>
+
       <div class="s-canvas-label" id="s-canvas-label">Front — Gildan 8000 · White · M</div>
       <button onclick="clearCurrentDesign()" style="
         position:absolute;bottom:14px;right:14px;
