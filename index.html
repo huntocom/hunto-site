@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v16.6 -->
+<!-- v16.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1052,9 +1052,10 @@ footer{background:#111;padding:56px 32px 28px}
     overflow:hidden; position:relative;
   }
 
-  /* ── Canvas fills ALL remaining space ── */
+  /* ── Canvas fills ALL remaining space — order:1 keeps it ABOVE iconbar ── */
   .s-canvas{
     flex:1; min-height:0;
+    order:1;
     position:relative;
     background:#eee;
     display:flex; align-items:center; justify-content:center;
@@ -1097,9 +1098,10 @@ footer{background:#111;padding:56px 32px 28px}
   .s-thumbs{display:none !important}
   .s-bottombar{display:none !important}
 
-  /* ── Iconbar — scrollable bottom tabs ── */
+  /* ── Iconbar — scrollable BOTTOM tabs — order:2 keeps it BELOW canvas ── */
   .s-iconbar{
     width:100%; height:62px; flex-shrink:0;
+    order:2;
     display:flex; flex-direction:row; align-items:center;
     border-right:none; border-top:1.5px solid #e8e8e8;
     overflow-x:auto; padding:0 8px; gap:4px;
