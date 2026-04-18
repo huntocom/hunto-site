@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v18.6 -->
+<!-- v18.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -732,6 +732,18 @@ footer{background:#111;padding:56px 32px 28px}
 }
 .float-pill:hover{border-color:#0071ce;color:#0071ce;background:#fff;box-shadow:0 2px 8px rgba(0,113,206,.15)}
 .float-pill-icon{font-size:18px}
+
+/* Print area guide zones — shown during drag */
+.print-guides{pointer-events:none}
+.guide-zone{pointer-events:none;box-sizing:border-box}
+.guide-zone.visible{border-color:rgba(0,113,206,.35) !important}
+.guide-zone.visible .guide-label{color:rgba(0,113,206,.6) !important}
+.guide-zone.guide-youth.visible{border-color:rgba(150,150,150,.3) !important}
+.guide-zone.guide-youth.visible .guide-label{color:rgba(150,150,150,.5) !important}
+.guide-zone.guide-crest.visible{border-color:rgba(0,180,100,.35) !important}
+.guide-zone.guide-crest.visible .guide-label{color:rgba(0,180,100,.6) !important}
+.guide-zone.outside{border-color:rgba(255,80,80,.7) !important}
+.guide-zone.outside .guide-label{color:rgba(255,80,80,.8) !important}
 
 /* Canvas bottom label */
 .s-canvas-label{
@@ -1606,7 +1618,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v18.6</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v18.7</span>
   </div>
 
 </nav>
@@ -2290,7 +2302,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v18.6</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v18.7</span>
   </div>
 
   <div class="studio-body">
@@ -3307,9 +3319,33 @@ footer{background:#111;padding:56px 32px 28px}
         <div id="s-shirt-wrap" style="position:relative;display:inline-block;background:#fff;border-radius:8px;overflow:hidden;">
           <div id="s-shirt-color-bg" style="display:none;"></div>
           <img class="s-shirt-img" id="s-shirt" src="" alt="Garment" style="position:relative;z-index:1;mix-blend-mode:normal;filter:none;">
-          <!-- Fixed print area boxes - stationary, only show border when design bleeds outside -->
-          <div id="print-area-front" style="width:280px;height:320px;top:185px;left:50%;transform:translateX(-50%);position:absolute;z-index:2;pointer-events:none;border:2px dashed transparent;transition:border-color .2s;"></div>
-          <div id="print-area-back" style="width:280px;height:320px;top:185px;left:50%;transform:translateX(-50%);position:absolute;z-index:2;pointer-events:none;border:2px dashed transparent;display:none;"></div>
+          <!-- Print area guidelines — multiple zones like RushOrderTees -->
+          <!-- FRONT guidelines -->
+          <div id="print-area-front" class="print-guides" style="position:absolute;inset:0;z-index:2;pointer-events:none;">
+            <!-- Adult full front -->
+            <div class="guide-zone guide-adult" id="guide-f-adult" style="width:41%;height:38%;top:28%;left:50%;transform:translateX(-50%);position:absolute;border:1px dashed transparent;transition:border-color .2s;">
+              <span class="guide-label" style="position:absolute;top:-16px;left:0;font-size:9px;font-weight:600;color:transparent;transition:color .2s;white-space:nowrap">Adult</span>
+            </div>
+            <!-- Youth full front -->
+            <div class="guide-zone guide-youth" id="guide-f-youth" style="width:34%;height:32%;top:30%;left:50%;transform:translateX(-50%);position:absolute;border:1px dashed transparent;transition:border-color .2s;">
+              <span class="guide-label" style="position:absolute;top:-16px;right:0;font-size:9px;font-weight:600;color:transparent;transition:color .2s;white-space:nowrap">Youth</span>
+            </div>
+            <!-- Left chest / crest -->
+            <div class="guide-zone guide-crest" id="guide-f-crest" style="width:14%;height:14%;top:29%;left:29%;position:absolute;border:1px dashed transparent;transition:border-color .2s;">
+              <span class="guide-label" style="position:absolute;bottom:-16px;left:0;font-size:9px;font-weight:600;color:transparent;transition:color .2s;white-space:nowrap">Left Chest</span>
+            </div>
+          </div>
+          <!-- BACK guidelines -->
+          <div id="print-area-back" class="print-guides" style="position:absolute;inset:0;z-index:2;pointer-events:none;display:none;">
+            <!-- Adult full back -->
+            <div class="guide-zone guide-adult" id="guide-b-adult" style="width:41%;height:42%;top:26%;left:50%;transform:translateX(-50%);position:absolute;border:1px dashed transparent;transition:border-color .2s;">
+              <span class="guide-label" style="position:absolute;top:-16px;left:0;font-size:9px;font-weight:600;color:transparent;transition:color .2s;white-space:nowrap">Adult</span>
+            </div>
+            <!-- Youth full back -->
+            <div class="guide-zone guide-youth" id="guide-b-youth" style="width:34%;height:34%;top:28%;left:50%;transform:translateX(-50%);position:absolute;border:1px dashed transparent;transition:border-color .2s;">
+              <span class="guide-label" style="position:absolute;top:-16px;right:0;font-size:9px;font-weight:600;color:transparent;transition:color .2s;white-space:nowrap">Youth</span>
+            </div>
+          </div>
           <!-- Draggable design elements -->
           <div id="s-dzone-front" style="position:absolute;z-index:3;display:none;cursor:move;"></div>
           <div id="s-dzone-back" style="position:absolute;z-index:3;display:none;cursor:move;"></div>
@@ -5971,6 +6007,29 @@ function copyLayerToBack(id){
   sNtf("Design copied to " + otherSide + "!");
 }
 
+// Show/hide print area guide zones during drag
+function showDragGuides(el){
+  var side = (el.dataset.side||sView)==='back'?'back':'front';
+  var pa = document.getElementById('print-area-'+side);
+  if(!pa) return;
+  var elRect = el.getBoundingClientRect();
+  pa.querySelectorAll('.guide-zone').forEach(function(gz){
+    gz.classList.add('visible');
+    var gzRect = gz.getBoundingClientRect();
+    var outside = elRect.left<gzRect.left||elRect.top<gzRect.top||elRect.right>gzRect.right||elRect.bottom>gzRect.bottom;
+    if(gz.classList.contains('guide-adult')){
+      gz.classList.toggle('outside', outside);
+      showBoundingWarning(outside);
+    }
+  });
+}
+function hideDragGuides(){
+  document.querySelectorAll('.guide-zone').forEach(function(gz){
+    gz.classList.remove('visible','outside');
+  });
+  showBoundingWarning(false);
+}
+
 function makeLayerDraggable(dz){
   let startX, startY, startLeft, startTop;
   function onDown(e){
@@ -5998,21 +6057,14 @@ function makeLayerDraggable(dz){
     dz.style.left = newLeft + "px";
     dz.style.top = newTop + "px";
     updateToolbarPosition(dz.id);
-    const pa = document.getElementById("print-area-" + dz.dataset.side);
-    if(pa){
-      const outside = newLeft<pa.offsetLeft||newTop<pa.offsetTop||newLeft+dz.offsetWidth>pa.offsetLeft+pa.offsetWidth||newTop+dz.offsetHeight>pa.offsetTop+pa.offsetHeight;
-      pa.style.borderColor = outside ? "rgba(255,80,80,.8)" : "rgba(0,113,206,.4)";
-      showBoundingWarning(outside);
-    }
+    showDragGuides(dz);
   }
   function onUp(){
     document.removeEventListener("mousemove", onMove);
     document.removeEventListener("mouseup", onUp);
     document.removeEventListener("touchmove", onMove);
     document.removeEventListener("touchend", onUp);
-    const pa = document.getElementById("print-area-" + dz.dataset.side);
-    if(pa) pa.style.borderColor = "transparent";
-    showBoundingWarning(false);
+    hideDragGuides();
   }
   dz.addEventListener("mousedown", onDown);
   dz.addEventListener("touchstart", onDown, {passive:false});
@@ -7370,28 +7422,14 @@ function txtDragMove(e){
   let y = e.clientY - wrapRect.top - dragOffY;
   dragTxt.style.left = x + "px";
   dragTxt.style.top = y + "px";
-
-  // Check against print area
-  const side = sView === "back" ? "back" : "front";
-  const pa = document.getElementById("print-area-" + side);
-  if(pa){
-    const paL = pa.offsetLeft, paT = pa.offsetTop;
-    const paR = paL + pa.offsetWidth, paB = paT + pa.offsetHeight;
-    const elW = dragTxt.offsetWidth, elH = dragTxt.offsetHeight;
-    const outside = x < paL || y < paT || x + elW > paR || y + elH > paB;
-    pa.style.borderColor = outside ? "rgba(255,80,80,.8)" : "rgba(0,113,206,.4)";
-    showBoundingWarning(outside);
-  }
+  showDragGuides(dragTxt);
 }
 
 function txtDragEnd(){
   dragTxt=null;
   document.removeEventListener("mousemove",txtDragMove);
   document.removeEventListener("mouseup",txtDragEnd);
-  const side = sView === "back" ? "back" : "front";
-  const pa = document.getElementById("print-area-" + side);
-  if(pa) pa.style.borderColor = "transparent";
-  showBoundingWarning(false);
+  hideDragGuides();
 }
 
 // Touch drag
@@ -7424,22 +7462,14 @@ function txtDragMoveTouch(e){
   const y=touch.clientY-wr.top-dragOffY;
   dragTxt.style.left=x+"px";
   dragTxt.style.top=y+"px";
-
-  // Check print area
-  const side = sView === "back" ? "back" : "front";
-  const pa = document.getElementById("print-area-" + side);
-  if(pa){
-    const paL=pa.offsetLeft,paT=pa.offsetTop,paR=paL+pa.offsetWidth,paB=paT+pa.offsetHeight;
-    const outside = x<paL||y<paT||x+dragTxt.offsetWidth>paR||y+dragTxt.offsetHeight>paB;
-    pa.style.borderColor = outside?"rgba(255,80,80,.8)":"rgba(0,113,206,.4)";
-    showBoundingWarning(outside);
-  }
+  showDragGuides(dragTxt);
 }
 
 function txtDragEndTouch(){
   dragTxt=null;
   document.removeEventListener("touchmove",txtDragMoveTouch);
   document.removeEventListener("touchend",txtDragEndTouch);
+  hideDragGuides();
 }
 
 // Deselect when clicking canvas bg
