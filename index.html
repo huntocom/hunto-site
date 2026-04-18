@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v19.2 -->
+<!-- v19.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1632,7 +1632,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v19.3</span>
   </div>
 
 </nav>
@@ -2316,7 +2316,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.2</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v19.3</span>
   </div>
 
   <div class="studio-body">
@@ -4782,7 +4782,7 @@ function aiToggleRemoveBg(){
     removeBackground(aiCurrentUrl, (cleanUrl)=>{
       // Update the placed layer's image src
       const el = document.getElementById(aiCurrentLayerId);
-      if(el){ const img = el.querySelector('img'); if(img) img.src = cleanUrl; }
+      if(el){ const img = el.querySelector('img'); if(img){ img.src = cleanUrl; img.style.mixBlendMode='normal'; img.style.filter='drop-shadow(0 1px 3px rgba(0,0,0,.15))'; } }
       // Update thumbnails
       ['normal','single','bw'].forEach(f=>{ const t=document.getElementById('ai-thumb-'+f+'-img'); if(t) t.src=cleanUrl; });
       sNtf('✓ Background removed!');
@@ -4790,7 +4790,7 @@ function aiToggleRemoveBg(){
   } else {
     // Restore original
     const el = document.getElementById(aiCurrentLayerId);
-    if(el && aiCurrentUrl){ const img = el.querySelector('img'); if(img) img.src = aiCurrentUrl; }
+    if(el && aiCurrentUrl){ const img = el.querySelector('img'); if(img){ img.src = aiCurrentUrl; img.style.mixBlendMode=''; img.style.filter=''; } }
     ['normal','single','bw'].forEach(f=>{ const t=document.getElementById('ai-thumb-'+f+'-img'); if(t) t.src=aiCurrentUrl; });
   }
 }
@@ -5821,17 +5821,25 @@ function eaToggleRmbg(){
 
   if(on){
     if(sub) sub.textContent = 'Processing...';
-    const img2 = el.querySelector('img'); if(img2) img2.style.opacity='0.4';
+    const img2 = el.querySelector('img'); if(img2) img2.style.opacity='0.5';
+    // Safety: restore opacity if server takes too long
+    var rmbgTimeout = setTimeout(function(){ if(img2 && img2.style.opacity==='0.5'){ img2.style.opacity='1'; if(sub) sub.textContent='Timed out — try again'; } }, 35000);
     removeBackground(eaOriginalSrc[id], function(cleanUrl){
+      clearTimeout(rmbgTimeout);
       const img3 = el.querySelector('img');
-      if(img3){ img3.src=cleanUrl; img3.style.opacity='1'; }
+      if(img3){
+        img3.src=cleanUrl;
+        img3.style.opacity='1';
+        img3.style.mixBlendMode='normal';
+        img3.style.filter='drop-shadow(0 1px 3px rgba(0,0,0,.15))';
+      }
       el.dataset.rmbgApplied='true';
       ['normal','single','bw'].forEach(function(f){ const t=document.getElementById('ea-thumb-'+f); if(t) t.src=cleanUrl; });
       if(sub) sub.textContent='Background removed ✓';
     });
   } else {
     if(eaOriginalSrc[id]){
-      const img4=el.querySelector('img'); if(img4){ img4.src=eaOriginalSrc[id]; img4.style.opacity='1'; }
+      const img4=el.querySelector('img'); if(img4){ img4.src=eaOriginalSrc[id]; img4.style.opacity='1'; img4.style.mixBlendMode=''; img4.style.filter=''; }
       ['normal','single','bw'].forEach(function(f){ const t=document.getElementById('ea-thumb-'+f); if(t) t.src=eaOriginalSrc[id]; });
     }
     el.dataset.rmbgApplied='';
