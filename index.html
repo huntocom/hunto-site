@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v21.1 -->
+<!-- v21.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -22,7 +22,7 @@ body{
 }
 .page{display:none}
 .page.active{display:block}
-#page-studio.active{display:flex;flex-direction:column;overflow:hidden;height:100vh;height:100dvh}
+#page-studio.active{display:block}
 button{font-family:'DM Sans',sans-serif;cursor:pointer}
 input,textarea,select{font-family:'DM Sans',sans-serif}
 
@@ -440,7 +440,7 @@ footer{background:#111;padding:56px 32px 28px}
 /* ══════════════════════════════════════════
    STUDIO PAGE
 ══════════════════════════════════════════ */
-.studio-page{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+.studio-page{display:flex;flex-direction:column;height:calc(100vh - 110px);height:calc(100dvh - 110px);overflow:hidden}
 
 /* Studio top bar — product tray style */
 .studio-topbar{
@@ -1704,7 +1704,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v21.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v21.2</span>
   </div>
 
 </nav>
@@ -2545,7 +2545,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v21.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v21.2</span>
   </div>
 
   <div class="studio-body">
@@ -2823,14 +2823,14 @@ footer{background:#111;padding:56px 32px 28px}
             <div style="margin-bottom:16px">
               <div style="font-size:12px;font-weight:700;color:#939393;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Start from a template</div>
               <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px" id="ai-templates">
-                <button onclick="setP('bold sports team logo with flames and a shield')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🏀<br>Sports</button>
-                <button onclick="setP('professional corporate logo, clean minimal design')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">💼<br>Business</button>
-                <button onclick="setP('fun party event celebration design with confetti')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎉<br>Events</button>
-                <button onclick="setP('cool music band rock and roll graphic design')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎵<br>Music</button>
-                <button onclick="setP('majestic animal illustration, detailed and colorful')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🦁<br>Animals</button>
-                <button onclick="setP('abstract geometric art, modern colorful shapes')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎨<br>Abstract</button>
-                <button onclick="setP('vintage retro distressed badge with banner ribbon')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">📜<br>Vintage</button>
-                <button onclick="setP('funny humorous cartoon meme style illustration')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">😂<br>Funny</button>
+                <button onclick="setTemplate('bold sports team logo with flames and a shield')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🏀<br>Sports</button>
+                <button onclick="setTemplate('professional corporate logo, clean minimal design')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">💼<br>Business</button>
+                <button onclick="setTemplate('fun party event celebration design with confetti')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎉<br>Events</button>
+                <button onclick="setTemplate('cool music band rock and roll graphic design')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎵<br>Music</button>
+                <button onclick="setTemplate('majestic animal illustration, detailed and colorful')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🦁<br>Animals</button>
+                <button onclick="setTemplate('abstract geometric art, modern colorful shapes')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">🎨<br>Abstract</button>
+                <button onclick="setTemplate('vintage retro distressed badge with banner ribbon')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">📜<br>Vintage</button>
+                <button onclick="setTemplate('funny humorous cartoon meme style illustration')" style="padding:10px 4px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;text-align:center;font-family:'DM Sans',sans-serif;transition:all .12s" onmouseover="this.style.borderColor='#0071ce';this.style.color='#0071ce'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#555'">😂<br>Funny</button>
               </div>
             </div>
             <p style="font-size:14px;color:#888;line-height:1.5;margin-bottom:12px">Or describe your own design — AI generates it instantly.</p>
@@ -3926,9 +3926,14 @@ function showPage(id){
   // Hide "Start Designing" button in header when in studio (all sizes)
   var designBtn = document.querySelector('.hdr-design-btn');
   if(designBtn) designBtn.style.display = isStudio ? 'none' : '';
-  // Lock body scroll when in studio — no page scrolling at all
-  document.body.style.overflow = isStudio ? 'hidden' : '';
-  document.documentElement.style.overflow = isStudio ? 'hidden' : '';
+  // Lock body scroll when in studio on mobile only
+  if(isMobile){
+    document.body.style.overflow = isStudio ? 'hidden' : '';
+    document.documentElement.style.overflow = isStudio ? 'hidden' : '';
+  } else {
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+  }
 }
 function goHome(){showPage("home")}
 async function goPDP(id){
@@ -4838,7 +4843,8 @@ function sResizeDesign(v){
   });
 }
 
-function setP(t){const el=document.getElementById("ai-prompt");if(el)el.value=t;}
+function setP(t,autoGen){const el=document.getElementById("ai-prompt");if(el)el.value=t;if(autoGen)setTimeout(aiGen,100);}
+function setTemplate(t){setP(t,true);}
 
 let aiCurrentUrl = null;
 let aiCurrentFilter = 'normal';
