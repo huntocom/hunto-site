@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v20.1 -->
+<!-- v20.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1659,7 +1659,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v20.2</span>
   </div>
 
 </nav>
@@ -2342,7 +2342,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v20.2</span>
   </div>
 
   <div class="studio-body">
@@ -4118,6 +4118,8 @@ function initStudio(){
   shirtEl.src = ssPhoto || styleImg || getShirtPhotoUrl(sState.product.id, sState.color?.n||"", "front");
   shirtEl.onerror = ()=>{ shirtEl.src = styleImg || IMG_F; };
   sUpdateAll();
+  // Check for saved draft on studio open
+  setTimeout(checkForSavedDraft, 500);
 }
 
 // Helper: returns true if any design (image or text) exists on any side
@@ -8788,66 +8790,192 @@ function updateStudioLivePrice(totalUnits, garmentTotal){
 // ── Fix 3: Save Design Prompt (abandoned design recovery) ──
 let saveDesignEmailCaptured = false;
 
+// ════════════════════════════════════
+// SAVE DESIGN — Email-based guest save (like ROT/CustomInk)
+// ════════════════════════════════════
+
 function showSaveDesignPrompt(onContinue){
-  // If already captured email, skip prompt
-  if(saveDesignEmailCaptured || localStorage.getItem('hunto_email')){
-    onContinue();
+  // If already captured email, just save silently
+  var existingEmail = localStorage.getItem('hunto_email');
+  if(saveDesignEmailCaptured || existingEmail){
+    saveDesignToServer(existingEmail || '').then(function(){ if(onContinue) onContinue(); });
     return;
   }
 
-  const modal = document.createElement('div');
-  modal.style.cssText = 'position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px';
-  modal.innerHTML = `
-    <div style="background:#fff;border-radius:20px;max-width:380px;width:100%;padding:32px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.25)">
-      <div style="font-size:32px;margin-bottom:12px">💾</div>
-      <div style="font-size:22px;font-weight:900;color:#111;letter-spacing:-.5px;margin-bottom:8px">Save your design</div>
-      <div style="font-size:13px;color:#888;margin-bottom:20px;line-height:1.5">Enter your email to save your design and get your order confirmation. We'll never spam you.</div>
-      <input id="save-design-email" type="email" placeholder="your@email.com"
-        style="width:100%;padding:13px 16px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box;margin-bottom:10px"
-        onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e8e8e8'">
-      <button onclick="saveDesignAndContinue(this)" style="width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px">
-        Save &amp; Checkout →
-      </button>
-      <button onclick="this.closest('div[style*=fixed]').remove();(${onContinue.toString()})()" style="width:100%;padding:12px;background:none;border:none;font-size:13px;color:#aaa;cursor:pointer;font-family:'DM Sans',sans-serif">
-        Skip — continue without saving
-      </button>
-    </div>`;
+  var modal = document.createElement('div');
+  modal.id = 'save-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px';
+  modal.onclick = function(e){ if(e.target === modal){ modal.remove(); if(onContinue) onContinue(); } };
+  modal.innerHTML = ''
+    + '<div style="background:#fff;border-radius:16px;max-width:380px;width:100%;padding:28px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.25)">'
+    + '<div style="font-size:20px;font-weight:800;color:#222;margin-bottom:6px">Save Your Design</div>'
+    + '<div style="font-size:13px;color:#888;margin-bottom:20px;line-height:1.5">Enter your email and we\'ll save your design. Come back anytime to finish.</div>'
+    + '<input id="save-design-email" type="email" placeholder="your@email.com" '
+    + 'style="width:100%;padding:14px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:DM Sans,sans-serif;outline:none;box-sizing:border-box;margin-bottom:12px" '
+    + 'onfocus="this.style.borderColor=\'#0071ce\'" onblur="this.style.borderColor=\'#e0e0e0\'">'
+    + '<button id="save-design-btn" onclick="handleSaveDesign()" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;margin-bottom:8px">'
+    + 'Save Design'
+    + '</button>'
+    + '<button onclick="this.closest(\'#save-modal\').remove()" style="width:100%;padding:10px;background:none;border:none;font-size:13px;color:#939393;cursor:pointer;font-family:DM Sans,sans-serif">'
+    + 'Not now'
+    + '</button>'
+    + '</div>';
   document.body.appendChild(modal);
-
-  // Store callback for the save button
-  modal._onContinue = onContinue;
+  setTimeout(function(){ var inp = document.getElementById('save-design-email'); if(inp) inp.focus(); }, 100);
   window._saveDesignContinue = onContinue;
 }
 
-function saveDesignAndContinue(btn){
-  const email = document.getElementById('save-design-email')?.value?.trim();
+function handleSaveDesign(){
+  var email = (document.getElementById('save-design-email')||{}).value||'';
+  email = email.trim();
   if(!email || !email.includes('@')){ sNtf('Please enter a valid email'); return; }
 
-  // Store email locally
+  var btn = document.getElementById('save-design-btn');
+  if(btn){ btn.disabled = true; btn.textContent = 'Saving...'; }
+
   localStorage.setItem('hunto_email', email);
   saveDesignEmailCaptured = true;
 
-  // Save design to server for abandoned recovery
+  saveDesignToServer(email).then(function(result){
+    var modal = document.getElementById('save-modal');
+    if(modal) modal.remove();
+    if(result && result.id){
+      sNtf('Design saved! Check your email for the link.');
+    } else {
+      sNtf('Design saved locally!');
+    }
+    if(window._saveDesignContinue) window._saveDesignContinue();
+  });
+}
+
+function getDesignSnapshot(){
+  // Capture current design state
+  var wrap = document.getElementById('s-shirt-wrap');
+  var layers = [];
+  if(wrap){
+    wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
+      var obj = { id:el.id, type:el.dataset.type, side:el.dataset.side, html:el.outerHTML,
+        left:el.style.left, top:el.style.top, width:el.style.width, height:el.style.height };
+      if(el.dataset.type === 'text') obj.text = el.textContent;
+      if(el.dataset.type === 'image'){ var img = el.querySelector('img'); if(img) obj.src = img.src; }
+      layers.push(obj);
+    });
+  }
+  return {
+    product: { id:sState.product?.id, name:sState.product?.name, styleId:sState.product?.styleId },
+    color: { n:sState.color?.n, h:sState.color?.h, front:sState.color?.front, back:sState.color?.back },
+    layers: layers,
+    sLayers: sLayers,
+    view: sView,
+    timestamp: Date.now()
+  };
+}
+
+async function saveDesignToServer(email){
+  var snapshot = getDesignSnapshot();
+  snapshot.email = email;
+
+  // Save to localStorage as backup
+  localStorage.setItem('hunto_draft', JSON.stringify(snapshot));
+
+  // Save to server
   try {
-    const designData = {
-      email,
-      product: sState.product?.name || '',
-      color: sState.color?.n || '',
-      units: orderState.totalUnits || 0,
-      total: orderState.grand || 0,
-      timestamp: Date.now(),
-    };
-    fetch('https://hunto-server-production.up.railway.app/save-design', {
+    var res = await fetch('https://hunto-server-production.up.railway.app/save-design', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(designData)
-    }).catch(function(){});
-  } catch(e){}
+      body: JSON.stringify(snapshot)
+    });
+    if(res.ok){
+      var data = await res.json();
+      if(data.id) localStorage.setItem('hunto_design_id', data.id);
+      return data;
+    }
+  } catch(e){ console.warn('Save to server failed:', e.message); }
+  return {};
+}
 
-  // Close modal and continue
-  btn.closest('div[style*="position:fixed"]').remove();
-  sNtf('✓ Design saved! Redirecting to checkout...');
-  setTimeout(function(){ window.location.href='https://hunto-5642.myshopify.com/checkout'; }, 600);
+// Auto-save to localStorage on page close
+window.addEventListener('beforeunload', function(){
+  if(sState.hasDesign){
+    var snapshot = getDesignSnapshot();
+    snapshot.email = localStorage.getItem('hunto_email') || '';
+    localStorage.setItem('hunto_draft', JSON.stringify(snapshot));
+  }
+});
+
+// Check for saved draft on studio open
+function checkForSavedDraft(){
+  var draft = localStorage.getItem('hunto_draft');
+  if(!draft) return;
+  try {
+    var data = JSON.parse(draft);
+    // Only show if draft is less than 7 days old
+    if(Date.now() - data.timestamp > 7*24*60*60*1000){ localStorage.removeItem('hunto_draft'); return; }
+    if(!data.layers || data.layers.length === 0) return;
+
+    var modal = document.createElement('div');
+    modal.id = 'resume-modal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px';
+    modal.innerHTML = ''
+      + '<div style="background:#fff;border-radius:16px;max-width:380px;width:100%;padding:28px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.25)">'
+      + '<div style="font-size:20px;font-weight:800;color:#222;margin-bottom:6px">Welcome Back!</div>'
+      + '<div style="font-size:13px;color:#888;margin-bottom:6px;line-height:1.5">You have an unsaved design'+(data.product?.name?' on a <strong>'+data.product.name+'</strong>':'')+'.</div>'
+      + '<div style="font-size:12px;color:#bbb;margin-bottom:20px">'+data.layers.length+' design element'+(data.layers.length>1?'s':'')+'</div>'
+      + '<button onclick="restoreDraft();this.closest(\'#resume-modal\').remove()" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;margin-bottom:8px">'
+      + 'Continue Designing'
+      + '</button>'
+      + '<button onclick="localStorage.removeItem(\'hunto_draft\');this.closest(\'#resume-modal\').remove()" style="width:100%;padding:10px;background:none;border:none;font-size:13px;color:#939393;cursor:pointer;font-family:DM Sans,sans-serif">'
+      + 'Start Fresh'
+      + '</button>'
+      + '</div>';
+    document.body.appendChild(modal);
+  } catch(e){ localStorage.removeItem('hunto_draft'); }
+}
+
+function restoreDraft(){
+  var draft = localStorage.getItem('hunto_draft');
+  if(!draft) return;
+  try {
+    var data = JSON.parse(draft);
+    var wrap = document.getElementById('s-shirt-wrap');
+    if(!wrap) return;
+
+    // Restore layers
+    data.layers.forEach(function(l){
+      var tmp = document.createElement('div');
+      tmp.innerHTML = l.html;
+      var el = tmp.firstElementChild;
+      if(!el) return;
+      // Remove old corner handles that were saved in HTML
+      el.querySelectorAll('.corner-handle').forEach(function(h){ h.remove(); });
+      wrap.appendChild(el);
+      if(l.type === 'image'){
+        makeLayerDraggable(el); makeLayerResizable(el, l.id);
+        el.addEventListener('click', function(e){ e.stopPropagation(); selectLayer(l.id); });
+        el.addEventListener('touchend', function(e){ if(!e.target.closest('.corner-handle')){ e.stopPropagation(); selectLayer(l.id); } }, {passive:true});
+        addPinchResize(el, l.id);
+        // Re-add to sLayers
+        if(!sLayers[l.side]) sLayers[l.side] = [];
+        sLayers[l.side].push({id:l.id, src:l.src, type:'image'});
+      } else {
+        el.addEventListener('mousedown', txtDragStart);
+        el.addEventListener('touchstart', txtDragStartTouch, {passive:false});
+        addPinchResizeText(el);
+        el.addEventListener('click', function(e){
+          e.stopPropagation();
+          deselectAllLayers();
+          document.querySelectorAll('.txt-layer').forEach(function(x){ x.classList.remove('selected'); });
+          el.classList.add('selected');
+          showTextToolbar(l.id);
+        });
+      }
+    });
+
+    sState.hasDesign = true;
+    updateFloatPills();
+    historySnapshot();
+    sNtf('Design restored!');
+  } catch(e){ console.warn('Restore draft failed:', e); }
 }
 
 // Auto-trigger save prompt when user starts to leave (mouse leaves window)
