@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v18.1 -->
+<!-- v18.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1147,7 +1147,7 @@ footer{background:#111;padding:56px 32px 28px}
     position:fixed !important;
     bottom:64px !important;
     left:0 !important; right:0 !important; width:100% !important;
-    max-height:55vh !important; overflow-y:auto;
+    max-height:45vh !important; overflow-y:auto;
     z-index:9999 !important;
     background:#fff; border-radius:12px 12px 0 0;
     border-top:none;
@@ -1193,7 +1193,7 @@ footer{background:#111;padding:56px 32px 28px}
   .shop-card-img{width:100px;height:100px}
   #hp-cat-grid{grid-template-columns:repeat(2,1fr) !important}
   .hero-btn-primary,.hero-btn-secondary{height:48px;font-size:15px}
-  .s-panel{max-height:50vh}
+  .s-panel{max-height:42vh}
   .s-ibtn{min-width:58px}
   .s-ibtn-icon svg{width:22px !important; height:22px !important}
   .s-ibtn-label{font-size:10px !important}
@@ -1327,8 +1327,9 @@ footer{background:#111;padding:56px 32px 28px}
 .mob-save-btn:hover{background:#f5f5f5}
 .mob-next-btn{height:36px;padding:0 16px;background:#0071ce;color:#fff;border:none;border-radius:18px;font-size:13px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
 /* Mobile ROTATE button — hidden on desktop */
-.mobile-rotate-btn{display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:10;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,.95);border:1.5px solid #e0e0e0;border-radius:12px;padding:10px 8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:800;color:#333;letter-spacing:.04em;box-shadow:0 2px 12px rgba(0,0,0,.12)}
-.mobile-rotate-btn:active{background:#f0f0f0}
+.mobile-rotate-btn{display:none;position:absolute;right:10px;top:12px;z-index:10;flex-direction:column;align-items:center;gap:2px;background:rgba(255,255,255,.95);border:none;border-radius:10px;padding:8px 10px 6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0;font-weight:700;color:#333;letter-spacing:0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.mobile-rotate-btn:active{background:#e8e8e8;transform:scale(1.05)}
+.mobile-rotate-btn .rotate-label{display:block;font-size:10px;font-weight:700;color:#333;margin-top:2px;text-transform:capitalize}
 /* SHARE button — bottom right of canvas, hidden on desktop */
 .mobile-share-btn{display:none;position:absolute;right:10px;bottom:16px;z-index:10;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,.95);border:1.5px solid #e0e0e0;border-radius:12px;padding:10px 8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:800;color:#333;letter-spacing:.04em;box-shadow:0 2px 12px rgba(0,0,0,.12)}
 .mobile-share-btn:active{background:#f0f0f0}
@@ -1605,7 +1606,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v18.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v18.2</span>
   </div>
 
 </nav>
@@ -3289,13 +3290,16 @@ footer{background:#111;padding:56px 32px 28px}
         </button>
       </div>
 
-      <!-- Mobile ROTATE button — right edge of canvas -->
-      <button class="mobile-rotate-btn" id="mobile-rotate-btn" onclick="sSetView(sView==='front'?'back':'front')" title="Rotate">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
-          <path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+      <!-- Mobile ROTATE button — shirt icon with rotate arrows (ROT style) -->
+      <button class="mobile-rotate-btn" id="mobile-rotate-btn" onclick="sSetView(sView==='front'?'back':'front');document.getElementById('rotate-label').textContent=(sView==='front'?'Front':'Back')" title="Flip shirt">
+        <svg width="44" height="44" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 14L12 18L15 22L18 20V40H38V20L41 22L44 18L38 14C38 14 35 18 28 18C21 18 18 14 18 14Z" stroke="#333" stroke-width="2.2" fill="none" stroke-linejoin="round"/>
+          <path d="M10 28a18 18 0 0 1 5-10" stroke="#0071ce" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <path d="M12 16l3 5-5 1" stroke="#0071ce" stroke-width="2" fill="#0071ce" stroke-linejoin="round"/>
+          <path d="M46 28a18 18 0 0 1-5 10" stroke="#0071ce" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <path d="M44 40l-3-5 5-1" stroke="#0071ce" stroke-width="2" fill="#0071ce" stroke-linejoin="round"/>
         </svg>
-        <span>ROTATE</span>
+        <span class="rotate-label" id="rotate-label">Front</span>
       </button>
 
       <div class="s-shirt-stage">
@@ -5357,8 +5361,12 @@ function applyDesign(src){
   sState.hasDesign = true;
   const fp = document.getElementById("s-floats");
   if(fp) fp.classList.add("hidden");
-  // Auto-open edit panel
-  setTimeout(function(){ eaOpenForLayer(id); }, 100);
+  // Auto-open edit panel on desktop; close panel on mobile so user sees the design
+  if(window.innerWidth <= 768){
+    setTimeout(function(){ sClosePanel(); }, 100);
+  } else {
+    setTimeout(function(){ eaOpenForLayer(id); }, 100);
+  }
 }
 
 function addImageLayer(side, id, src){
@@ -7217,6 +7225,8 @@ function txtPlace(){
   historySnapshot();
   showTextToolbar(id);
   sNtf("Text placed! Drag to reposition.");
+  // On mobile, close panel so user can see the placed text
+  if(window.innerWidth <= 768) sClosePanel();
 }
 
 function showTextToolbar(id){
