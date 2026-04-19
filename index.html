@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v27.2 -->
+<!-- v27.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1748,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.3</span>
   </div>
 
 </nav>
@@ -2657,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.2</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.3</span>
   </div>
 
   <div class="studio-body">
@@ -9100,6 +9100,114 @@ function goBack(){
   showPage('studio');
 }
 
+// Capture the full studio mockup (shirt + all designs) as a screenshot
+async function captureStudioMockup(){
+  var wrap = document.getElementById('s-shirt-wrap');
+  if(!wrap) return {front:'', back:''};
+
+  var results = {front:'', back:''};
+
+  // Capture current view
+  var currentView = sView;
+
+  // Capture front
+  try {
+    if(currentView !== 'front') sSetView('front');
+    await new Promise(function(r){ setTimeout(r, 200); }); // wait for render
+
+    // Use the proxy to load shirt image CORS-free, then composite
+    var shirtImg = document.getElementById('s-shirt');
+    var c = document.createElement('canvas');
+    var wrapW = wrap.offsetWidth || 680;
+    var wrapH = wrap.offsetHeight || 800;
+    c.width = wrapW * 2; c.height = wrapH * 2; // 2x for quality
+    var ctx = c.getContext('2d');
+    ctx.scale(2, 2);
+
+    // Draw white background
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, wrapW, wrapH);
+
+    // Try to draw shirt via proxy
+    try {
+      var proxyUrl = SERVER + '/proxy-image?url=' + encodeURIComponent(shirtImg.src);
+      var pImg = new Image();
+      pImg.crossOrigin = 'anonymous';
+      await new Promise(function(resolve, reject){
+        pImg.onload = resolve; pImg.onerror = reject; pImg.src = proxyUrl;
+      });
+      var sW = shirtImg.offsetWidth, sH = shirtImg.offsetHeight;
+      var sL = shirtImg.offsetLeft, sT = shirtImg.offsetTop;
+      ctx.drawImage(pImg, sL, sT, sW, sH);
+    } catch(e){ /* shirt proxy failed, continue with designs only */ }
+
+    // Draw all front design layers
+    wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
+      if(el.style.display === 'none') return;
+      if((el.dataset.side||'front') !== 'front') return;
+      if(el.dataset.type === 'image'){
+        var img = el.querySelector('img');
+        if(img && img.complete) try { ctx.drawImage(img, el.offsetLeft, el.offsetTop, el.offsetWidth, el.offsetHeight); } catch(e){}
+      } else if(el.dataset.type === 'text'){
+        var fs = parseFloat(el.style.fontSize||'36') * 2;
+        ctx.font = (el.style.fontWeight||'700')+' '+fs+'px '+(el.style.fontFamily||'Arial').replace(/'/g,'');
+        ctx.fillStyle = el.style.color||'#000';
+        ctx.textAlign = 'center';
+        ctx.fillText(el.textContent, (el.offsetLeft+el.offsetWidth/2)*2, (el.offsetTop+el.offsetHeight*0.7)*2);
+      }
+    });
+
+    results.front = c.toDataURL('image/png');
+  } catch(e){ console.warn('Front capture failed:', e); }
+
+  // Capture back
+  try {
+    sSetView('back');
+    await new Promise(function(r){ setTimeout(r, 200); });
+
+    var shirtImg2 = document.getElementById('s-shirt');
+    var c2 = document.createElement('canvas');
+    c2.width = wrapW * 2; c2.height = wrapH * 2;
+    var ctx2 = c2.getContext('2d');
+    ctx2.scale(2, 2);
+    ctx2.fillStyle = '#fff';
+    ctx2.fillRect(0, 0, wrapW, wrapH);
+
+    try {
+      var proxyUrl2 = SERVER + '/proxy-image?url=' + encodeURIComponent(shirtImg2.src);
+      var pImg2 = new Image();
+      pImg2.crossOrigin = 'anonymous';
+      await new Promise(function(resolve, reject){
+        pImg2.onload = resolve; pImg2.onerror = reject; pImg2.src = proxyUrl2;
+      });
+      ctx2.drawImage(pImg2, shirtImg2.offsetLeft, shirtImg2.offsetTop, shirtImg2.offsetWidth, shirtImg2.offsetHeight);
+    } catch(e){}
+
+    wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
+      if(el.style.display === 'none') return;
+      if((el.dataset.side||'front') !== 'back') return;
+      if(el.dataset.type === 'image'){
+        var img = el.querySelector('img');
+        if(img && img.complete) try { ctx2.drawImage(img, el.offsetLeft, el.offsetTop, el.offsetWidth, el.offsetHeight); } catch(e){}
+      } else if(el.dataset.type === 'text'){
+        var fs2 = parseFloat(el.style.fontSize||'36') * 2;
+        ctx2.font = (el.style.fontWeight||'700')+' '+fs2+'px '+(el.style.fontFamily||'Arial').replace(/'/g,'');
+        ctx2.fillStyle = el.style.color||'#000';
+        ctx2.textAlign = 'center';
+        ctx2.fillText(el.textContent, (el.offsetLeft+el.offsetWidth/2)*2, (el.offsetTop+el.offsetHeight*0.7)*2);
+      }
+    });
+
+    var hasBackLayers = wrap.querySelectorAll('[data-type="image"][data-side="back"],[data-type="text"][data-side="back"]').length > 0;
+    if(hasBackLayers) results.back = c2.toDataURL('image/png');
+  } catch(e){ console.warn('Back capture failed:', e); }
+
+  // Restore original view
+  sSetView(currentView);
+
+  return results;
+}
+
 // Capture design layers at print resolution (5100px = 17" at 300 DPI)
 async function captureDesignHighRes(){
   var wrap = document.getElementById('s-shirt-wrap');
@@ -9246,10 +9354,12 @@ async function submitCheckoutOrder(){
   var rushShip = document.querySelector('[name=co2-ship]:checked');
   var isRush = rushShip && rushShip.value === 'rush';
 
-  // Capture high-res artwork for printing
-  sNtf('Capturing your design at print quality...');
+  // Capture mockup (shirt + design) and print-ready art
+  sNtf('Capturing your design...');
   var artworkBase64 = '';
-  try { artworkBase64 = await captureDesignHighRes(); } catch(e){ console.warn('High-res capture failed:', e); }
+  var mockups = {front:'', back:''};
+  try { artworkBase64 = await captureDesignHighRes(); } catch(e){ console.warn('Print capture failed:', e); }
+  try { mockups = await captureStudioMockup(); } catch(e){ console.warn('Mockup capture failed:', e); }
 
   // Collect all design layer info
   var designLayers = [];
@@ -9316,6 +9426,8 @@ async function submitCheckoutOrder(){
         rush: order.rush,
         designLayers: order.designLayers,
         artworkBase64: order.artworkBase64,
+        mockupFront: mockups.front,
+        mockupBack: mockups.back,
         designId: order.designId
       },
       screenshot: order.artworkBase64 || ''
