@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v24.0 -->
+<!-- v24.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1709,7 +1709,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.1</span>
   </div>
 
 </nav>
@@ -2616,7 +2616,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.1</span>
   </div>
 
   <div class="studio-body">
@@ -9421,6 +9421,82 @@ var fbPinchDist = 0, fbPinchScale = 1;
 var tryOnGarmentSrc = '';
 var tryOnResultUrl = '';
 
+// Build a composite image of the shirt with the design on it
+async function buildGarmentWithDesign(){
+  var wrap = document.getElementById('s-shirt-wrap');
+  var shirtImg = document.getElementById('s-shirt');
+  if(!wrap || !shirtImg) return null;
+
+  // First, proxy the shirt image through our server to avoid CORS
+  // Or use a solid color background with the design
+  var c = document.createElement('canvas');
+  c.width = 800; c.height = 1000;
+  var ctx = c.getContext('2d');
+
+  // Try to load the shirt image via a proxy to avoid CORS
+  try {
+    var proxyUrl = SERVER + '/proxy-image?url=' + encodeURIComponent(shirtImg.src);
+    var proxyImg = new Image();
+    proxyImg.crossOrigin = 'anonymous';
+    await new Promise(function(resolve, reject){
+      proxyImg.onload = resolve;
+      proxyImg.onerror = reject;
+      proxyImg.src = proxyUrl;
+    });
+    // Draw proxied shirt image
+    var scale = Math.min(c.width / proxyImg.width, c.height / proxyImg.height);
+    var sw = proxyImg.width * scale, sh = proxyImg.height * scale;
+    ctx.drawImage(proxyImg, (c.width - sw)/2, (c.height - sh)/2, sw, sh);
+  } catch(e){
+    // Fallback: draw a plain white t-shirt shape
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, c.width, c.height);
+    // Draw basic t-shirt shape
+    ctx.fillStyle = sState.color?.h || '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(200, 100); ctx.lineTo(100, 200); ctx.lineTo(150, 250);
+    ctx.lineTo(150, 800); ctx.lineTo(650, 800); ctx.lineTo(650, 250);
+    ctx.lineTo(700, 200); ctx.lineTo(600, 100);
+    ctx.quadraticCurveTo(400, 180, 200, 100);
+    ctx.fill();
+  }
+
+  // Draw design layers on top
+  var hasDesign = false;
+  var wrapW = wrap.offsetWidth || 680;
+  var wrapH = wrap.offsetHeight || 800;
+
+  wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
+    if(el.style.display === 'none') return;
+    if((el.dataset.side||'front') !== sView) return;
+
+    var relL = (parseFloat(el.style.left)||0) / wrapW;
+    var relT = (parseFloat(el.style.top)||0) / wrapH;
+    var relW = el.offsetWidth / wrapW;
+    var relH = el.offsetHeight / wrapH;
+
+    if(el.dataset.type === 'image'){
+      var img = el.querySelector('img');
+      if(img && img.complete && img.src){
+        try {
+          ctx.drawImage(img, relL * c.width, relT * c.height, relW * c.width, relH * c.height);
+          hasDesign = true;
+        } catch(e){}
+      }
+    } else if(el.dataset.type === 'text'){
+      var fontSize = Math.round(parseFloat(el.style.fontSize||'36') * (c.width / wrapW));
+      ctx.font = (el.style.fontWeight||'700') + ' ' + fontSize + 'px ' + (el.style.fontFamily||'DM Sans,sans-serif');
+      ctx.fillStyle = el.style.color || '#000';
+      ctx.textAlign = 'center';
+      ctx.fillText(el.textContent, (relL + relW/2) * c.width, (relT + relH*0.8) * c.height);
+      hasDesign = true;
+    }
+  });
+
+  if(!hasDesign) return shirtImg.src; // just send the plain shirt
+  return c.toDataURL('image/png');
+}
+
 function openFallbackTryOn(data){
   tryOnGarmentSrc = data ? data.shirt : '';
   document.getElementById('tryon-fallback').style.display = 'block';
@@ -9446,12 +9522,8 @@ async function tryOnFileSelected(e){
     reader.readAsDataURL(file);
   });
 
-  // Get garment image — use the shirt photo from studio
-  var garmentSrc = tryOnGarmentSrc;
-  if(!garmentSrc){
-    var shirtEl = document.getElementById('s-shirt');
-    garmentSrc = shirtEl ? shirtEl.src : '';
-  }
+  // Build garment image — shirt + design composited together
+  var garmentSrc = await buildGarmentWithDesign();
   if(!garmentSrc){ sNtf('No garment image found'); return; }
 
   // Show processing
