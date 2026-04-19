@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v27.3 -->
+<!-- v27.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1748,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.4</span>
   </div>
 
 </nav>
@@ -2657,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.3</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.4</span>
   </div>
 
   <div class="studio-body">
@@ -9098,6 +9098,42 @@ function buildCheckoutSummary(){
 function goBack(){
   // Go back to studio
   showPage('studio');
+}
+
+// TEST: capture and display mockup without placing order
+// Run from browser console: testCaptureExport()
+async function testCaptureExport(){
+  sNtf('Capturing...');
+  var mockups = await captureStudioMockup();
+  var art = await captureDesignHighRes();
+
+  var modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.9);overflow:auto;padding:20px';
+  var html = '<div style="max-width:900px;margin:0 auto;color:#fff">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h2 style="margin:0">Capture Test Results</h2><button onclick="this.closest(\'div[style*=fixed]\').remove()" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer">×</button></div>';
+
+  if(mockups.front){
+    html += '<h3>Front Mockup (shirt + design)</h3>';
+    html += '<img src="'+mockups.front+'" style="max-width:100%;border:1px solid #333;border-radius:8px;background:#fff">';
+    html += '<br><a href="'+mockups.front+'" download="front-mockup.png" style="color:#0071ce;font-size:14px">Download Front Mockup</a>';
+  } else { html += '<p style="color:red">Front mockup: EMPTY</p>'; }
+
+  if(mockups.back){
+    html += '<h3 style="margin-top:20px">Back Mockup (shirt + design)</h3>';
+    html += '<img src="'+mockups.back+'" style="max-width:100%;border:1px solid #333;border-radius:8px;background:#fff">';
+    html += '<br><a href="'+mockups.back+'" download="back-mockup.png" style="color:#0071ce;font-size:14px">Download Back Mockup</a>';
+  } else { html += '<p style="color:#888">No back design</p>'; }
+
+  if(art){
+    html += '<h3 style="margin-top:20px">Print-Ready Artwork (transparent, 300 DPI)</h3>';
+    html += '<img src="'+art+'" style="max-width:100%;border:1px solid #333;border-radius:8px;background:#222">';
+    html += '<br><a href="'+art+'" download="print-artwork-300dpi.png" style="color:#0071ce;font-size:14px">Download Print File</a>';
+  } else { html += '<p style="color:red">Print artwork: EMPTY</p>'; }
+
+  html += '</div>';
+  modal.innerHTML = html;
+  document.body.appendChild(modal);
+  sNtf('Capture complete — check results');
 }
 
 // Capture the full studio mockup (shirt + all designs) as a screenshot
