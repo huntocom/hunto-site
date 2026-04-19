@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v27.7 -->
+<!-- v27.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1748,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.7</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.8</span>
   </div>
 
 </nav>
@@ -2657,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.7</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.8</span>
   </div>
 
   <div class="studio-body">
@@ -5388,7 +5388,13 @@ async function aiGen(){
       const ct = r.headers.get("content-type")||"";
       if(ct.includes("image")){
         const blob = await r.blob();
-        urls.push(URL.createObjectURL(blob));
+        // Convert to data URL (not blob URL) so canvas capture works later
+        const dataUrl = await new Promise(function(resolve){
+          var reader = new FileReader();
+          reader.onload = function(){ resolve(reader.result); };
+          reader.readAsDataURL(blob);
+        });
+        urls.push(dataUrl);
       } else {
         const data = await r.json();
         if(data.url) urls.push(data.url);
