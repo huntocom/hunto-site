@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v24.9 -->
+<!-- v25.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1709,7 +1709,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.9</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v25.0</span>
   </div>
 
 </nav>
@@ -2507,15 +2507,15 @@ footer{background:#111;padding:56px 32px 28px}
     <div style="font-size:12px;opacity:.35;margin-top:6px">Works best with graphic/image designs. Text-only designs may vary.</div>
   </div>
   <!-- Processing overlay -->
-  <div id="tryon-processing" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:10005">
-    <div style="color:#fff;text-align:center">
-      <div style="font-size:40px;margin-bottom:16px;animation:spin 1.5s linear infinite">👕</div>
-      <div style="font-size:20px;font-weight:700;margin-bottom:8px">Creating your try-on...</div>
-      <div style="font-size:14px;opacity:.6;margin-bottom:16px">Generating highest quality preview — about 15-20 seconds</div>
-      <div style="font-size:12px;opacity:.4;max-width:300px;margin:0 auto;line-height:1.5">This is an AI-generated preview and not an exact representation of your final product. Colors, placement, and fit may differ. Think of it as a fun way to get an idea — your actual print will match your design exactly.</div>
-      <div style="margin-top:20px;width:200px;height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden;margin-left:auto;margin-right:auto">
+  <div id="tryon-processing" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.7);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:10005">
+    <div style="color:#fff;text-align:center;max-width:320px">
+      <div style="font-size:40px;margin-bottom:12px;animation:spin 2s linear infinite">👕</div>
+      <div style="font-size:20px;font-weight:700;margin-bottom:6px">Creating your try-on...</div>
+      <div id="tryon-loading-msg" style="font-size:14px;opacity:.7;margin-bottom:14px;min-height:20px">Analyzing your photo...</div>
+      <div style="margin-bottom:16px;width:100%;height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden">
         <div id="tryon-progress" style="height:100%;background:#0071ce;border-radius:3px;width:0%;transition:width .5s"></div>
       </div>
+      <div style="font-size:12px;opacity:.35;line-height:1.5">This is an AI-generated preview — not an exact representation. Colors and placement may vary. Your actual print will match your design exactly.</div>
     </div>
   </div>
 </div>
@@ -2618,7 +2618,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.9</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v25.0</span>
   </div>
 
   <div class="studio-body">
@@ -9574,11 +9574,34 @@ async function tryOnFileSelected(e){
   var garmentSrc = await buildGarmentWithDesign();
   if(!garmentSrc){ sNtf('No garment image found'); return; }
 
+  // Show the person's photo behind the processing overlay
+  var resultImg = document.getElementById('tryon-result-img');
+  resultImg.src = personBase64;
+  resultImg.style.display = 'block';
+  resultImg.style.opacity = '0.4';
+
   // Show processing
   document.getElementById('tryon-hint').style.display = 'none';
   document.getElementById('tryon-upload-btn').style.display = 'none';
   document.getElementById('tryon-processing').style.display = 'flex';
   var progressBar = document.getElementById('tryon-progress');
+  var loadingMsg = document.getElementById('tryon-loading-msg');
+
+  // Rotating loading messages
+  var messages = [
+    'Analyzing your photo...',
+    'Detecting body position...',
+    'Preparing your garment...',
+    'Applying your design...',
+    'Adjusting fit and shadows...',
+    'Rendering final preview...',
+    'Almost there...'
+  ];
+  var msgIdx = 0;
+  var msgTimer = setInterval(function(){
+    msgIdx++;
+    if(loadingMsg && msgIdx < messages.length) loadingMsg.textContent = messages[msgIdx];
+  }, 2500);
 
   // Animate progress bar
   var pct = 0;
@@ -9599,6 +9622,7 @@ async function tryOnFileSelected(e){
     });
 
     clearInterval(progressTimer);
+    clearInterval(msgTimer);
     if(progressBar) progressBar.style.width = '100%';
 
     if(!res.ok){
@@ -9611,10 +9635,9 @@ async function tryOnFileSelected(e){
 
     if(!tryOnResultUrl) throw new Error('No result image');
 
-    // Show result
-    var resultImg = document.getElementById('tryon-result-img');
+    // Show result — swap the preview photo with the AI result
     resultImg.src = tryOnResultUrl;
-    resultImg.style.display = 'block';
+    resultImg.style.opacity = '1';
 
     document.getElementById('tryon-processing').style.display = 'none';
     document.getElementById('tryon-share-btn2').style.display = 'inline-block';
@@ -9628,9 +9651,11 @@ async function tryOnFileSelected(e){
 
   } catch(err){
     clearInterval(progressTimer);
+    clearInterval(msgTimer);
     document.getElementById('tryon-processing').style.display = 'none';
     document.getElementById('tryon-hint').style.display = 'block';
     document.getElementById('tryon-upload-btn').style.display = 'inline-block';
+    if(resultImg){ resultImg.style.display = 'none'; resultImg.style.opacity = '1'; }
     sNtf('Try-on failed: ' + (err.message||'Unknown error'));
   }
 }
