@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v24.8 -->
+<!-- v24.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1709,7 +1709,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.8</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.9</span>
   </div>
 
 </nav>
@@ -2503,7 +2503,7 @@ footer{background:#111;padding:56px 32px 28px}
     <div style="font-size:48px;margin-bottom:16px">👕</div>
     <div style="font-size:22px;font-weight:700;margin-bottom:8px">Virtual Try-On</div>
     <div style="font-size:15px;opacity:.6;line-height:1.5">Upload a photo of yourself and our AI will show you wearing your custom shirt</div>
-    <div style="font-size:13px;opacity:.4;margin-top:12px">Powered by AI · Takes ~10 seconds</div>
+    <div style="font-size:13px;opacity:.4;margin-top:12px">Powered by AI · Takes ~15-20 seconds</div>
     <div style="font-size:12px;opacity:.35;margin-top:6px">Works best with graphic/image designs. Text-only designs may vary.</div>
   </div>
   <!-- Processing overlay -->
@@ -2511,7 +2511,7 @@ footer{background:#111;padding:56px 32px 28px}
     <div style="color:#fff;text-align:center">
       <div style="font-size:40px;margin-bottom:16px;animation:spin 1.5s linear infinite">👕</div>
       <div style="font-size:20px;font-weight:700;margin-bottom:8px">Creating your try-on...</div>
-      <div style="font-size:14px;opacity:.6;margin-bottom:16px">AI is placing the shirt on you — about 10 seconds</div>
+      <div style="font-size:14px;opacity:.6;margin-bottom:16px">Generating highest quality preview — about 15-20 seconds</div>
       <div style="font-size:12px;opacity:.4;max-width:300px;margin:0 auto;line-height:1.5">This is an AI-generated preview and not an exact representation of your final product. Colors, placement, and fit may differ. Think of it as a fun way to get an idea — your actual print will match your design exactly.</div>
       <div style="margin-top:20px;width:200px;height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden;margin-left:auto;margin-right:auto">
         <div id="tryon-progress" style="height:100%;background:#0071ce;border-radius:3px;width:0%;transition:width .5s"></div>
@@ -2618,7 +2618,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.8</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.9</span>
   </div>
 
   <div class="studio-body">
@@ -9583,9 +9583,9 @@ async function tryOnFileSelected(e){
   // Animate progress bar
   var pct = 0;
   var progressTimer = setInterval(function(){
-    pct = Math.min(pct + (pct < 60 ? 8 : 3), 90);
+    pct = Math.min(pct + (pct < 40 ? 4 : pct < 70 ? 2 : 1), 90);
     if(progressBar) progressBar.style.width = pct + '%';
-  }, 500);
+  }, 800);
 
   try {
     var res = await fetch(SERVER + '/tryon', {
