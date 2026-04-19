@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v27.1 -->
+<!-- v27.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1748,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.2</span>
   </div>
 
 </nav>
@@ -2657,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.2</span>
   </div>
 
   <div class="studio-body">
@@ -9297,15 +9297,35 @@ async function submitCheckoutOrder(){
     timestamp:Date.now()
   };
 
-  // Save order to server
+  // Save order to server — format matches endpoint expectations
   var orderId = '';
   try {
-    var res = await fetch(SERVER+'/save-design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)});
+    var payload = {
+      email: order.email,
+      designData: {
+        name: order.name,
+        phone: order.phone,
+        address: order.address,
+        product: order.product,
+        productId: order.productId,
+        color: order.color,
+        colorHex: order.colorHex,
+        sizeBreakdown: order.sizeBreakdown,
+        totalQty: order.totalQty,
+        total: order.total,
+        rush: order.rush,
+        designLayers: order.designLayers,
+        artworkBase64: order.artworkBase64,
+        designId: order.designId
+      },
+      screenshot: order.artworkBase64 || ''
+    };
+    var res = await fetch(SERVER+'/save-design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if(res.ok){
       var data = await res.json();
-      orderId = data.id || '';
+      orderId = data.orderId || data.id || '';
     }
-  } catch(e){}
+  } catch(e){ console.warn('Save order failed:', e); }
 
   order.orderId = orderId;
 
