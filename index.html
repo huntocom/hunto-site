@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v27.9 -->
+<!-- v28.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1748,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.9</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v28.0</span>
   </div>
 
 </nav>
@@ -2657,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.9</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v28.0</span>
   </div>
 
   <div class="studio-body">
@@ -9429,11 +9429,34 @@ async function submitCheckoutOrder(){
           layer.fontWeight = el.style.fontWeight;
           layer.color = el.style.color;
         }
+        var elRect = el.getBoundingClientRect();
         layer.left = el.style.left;
         layer.top = el.style.top;
-        var elRect = el.getBoundingClientRect();
         layer.width = elRect.width || el.offsetWidth || parseInt(el.style.width) || 300;
         layer.height = elRect.height || el.offsetHeight || parseInt(el.style.height) || 300;
+
+        // Convert text layers to images so server doesn't need to render fonts
+        if(el.dataset.type === 'text'){
+          try {
+            var tc = document.createElement('canvas');
+            var tw = Math.max(layer.width * 3, 600);
+            var th = Math.max(layer.height * 3, 300);
+            tc.width = tw; tc.height = th;
+            var tctx = tc.getContext('2d');
+            var fs = parseFloat(el.style.fontSize || '36') * 3;
+            var ff = (el.style.fontFamily || 'Arial,sans-serif').replace(/'/g, '');
+            tctx.font = (el.style.fontWeight||'700') + ' ' + fs + 'px ' + ff;
+            tctx.fillStyle = el.style.color || '#000';
+            tctx.textAlign = 'left';
+            tctx.textBaseline = 'top';
+            tctx.fillText(el.textContent, 0, 0);
+            layer.src = tc.toDataURL('image/png');
+            layer.type = 'image'; // convert to image type so server treats it as image
+            layer.originalType = 'text';
+            delete layer.text;
+          } catch(e){ console.warn('Text to image failed:', e); }
+        }
+
         designLayers.push(layer);
       });
     }
