@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v25.3 -->
+<!-- v25.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1707,7 +1707,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v25.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v25.4</span>
   </div>
 
 </nav>
@@ -2616,7 +2616,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v25.3</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v25.4</span>
   </div>
 
   <div class="studio-body">
@@ -8868,41 +8868,54 @@ async function goToShopifyCheckout(){
 async function doShopifyCheckout(){
   sNtf('Creating your order...');
 
-  // Build size breakdown string
-  var sizes = orderState?.productSizes || {};
-  var sizeBreakdown = [];
-  var totalQty = 0;
-  for(var pidx in sizes){
-    var ps = sizes[pidx];
-    for(var sz in ps){
-      if(ps[sz] > 0){
-        sizeBreakdown.push(sz + ':' + ps[sz]);
-        totalQty += ps[sz];
+  try {
+    // Build size breakdown string — defensive, no optional chaining
+    var sizes = (orderState && orderState.productSizes) ? orderState.productSizes : {};
+    var sizeBreakdown = [];
+    var totalQty = 0;
+    for(var pidx in sizes){
+      if(!sizes.hasOwnProperty(pidx)) continue;
+      var ps = sizes[pidx];
+      for(var sz in ps){
+        if(!ps.hasOwnProperty(sz)) continue;
+        if(ps[sz] > 0){
+          sizeBreakdown.push(sz + ':' + ps[sz]);
+          totalQty += ps[sz];
+        }
       }
     }
-  }
-  if(totalQty === 0) totalQty = 1;
+    if(totalQty === 0) totalQty = 1;
 
-  // Get design URL (save screenshot if possible)
-  var designUrl = '';
-  var designId = localStorage.getItem('hunto_design_id') || '';
-  if(designId) designUrl = 'https://hunto-server-production.up.railway.app/design/' + designId;
+    // Get design URL
+    var designUrl = '';
+    var designId = '';
+    try { designId = localStorage.getItem('hunto_design_id') || ''; } catch(e){}
+    if(designId) designUrl = 'https://hunto-server-production.up.railway.app/design/' + designId;
 
-  // Build line items
-  var lines = [{
-    merchandiseId: SHOPIFY_VARIANT_DEFAULT,
-    quantity: totalQty,
-    attributes: [
-      { key: 'Color', value: sState.color?.n || 'White' },
-      { key: 'Size Breakdown', value: sizeBreakdown.join(', ') || 'Not specified' },
-      { key: 'Product', value: sState.product?.name || 'Custom Apparel' },
-      { key: '_design_id', value: designId },
-      { key: '_design_url', value: designUrl },
-      { key: '_color_hex', value: sState.color?.h || '#ffffff' }
-    ]
-  }];
+    // Get product/color info safely
+    var colorName = 'White';
+    var productName = 'Custom Apparel';
+    var colorHex = '#ffffff';
+    try {
+      if(sState && sState.color && sState.color.n) colorName = sState.color.n;
+      if(sState && sState.product && sState.product.name) productName = sState.product.name;
+      if(sState && sState.color && sState.color.h) colorHex = sState.color.h;
+    } catch(e){}
 
-  try {
+    // Build line items
+    var lines = [{
+      merchandiseId: SHOPIFY_VARIANT_DEFAULT,
+      quantity: totalQty,
+      attributes: [
+        { key: 'Color', value: colorName },
+        { key: 'Size Breakdown', value: sizeBreakdown.join(', ') || 'Not specified' },
+        { key: 'Product', value: productName },
+        { key: '_design_id', value: designId },
+        { key: '_design_url', value: designUrl },
+        { key: '_color_hex', value: colorHex }
+      ]
+    }];
+
     var resp = await fetch(SHOPIFY_API_URL, {
       method: 'POST',
       headers: {
@@ -8916,26 +8929,31 @@ async function doShopifyCheckout(){
     });
 
     var data = await resp.json();
-    var cart = data?.data?.cartCreate?.cart;
-    var errors = data?.data?.cartCreate?.userErrors;
 
-    if(errors && errors.length > 0){
-      sNtf('Error: ' + errors[0].message);
+    // Check for errors
+    if(data && data.data && data.data.cartCreate && data.data.cartCreate.userErrors && data.data.cartCreate.userErrors.length > 0){
+      sNtf('Error: ' + data.data.cartCreate.userErrors[0].message);
       return;
     }
 
-    if(cart && cart.checkoutUrl){
+    // Get checkout URL
+    var checkoutUrl = '';
+    if(data && data.data && data.data.cartCreate && data.data.cartCreate.cart){
+      checkoutUrl = data.data.cartCreate.cart.checkoutUrl;
+    }
+
+    if(checkoutUrl){
       sNtf('Redirecting to secure checkout...');
-      setTimeout(function(){ window.location.href = cart.checkoutUrl; }, 500);
+      setTimeout(function(){ window.location.href = checkoutUrl; }, 400);
     } else {
-      throw new Error('No checkout URL returned');
+      console.error('Shopify response:', JSON.stringify(data));
+      sNtf('Could not create checkout. Please try again.');
     }
 
   } catch(err){
     console.error('Shopify checkout error:', err);
-    sNtf('Checkout error — trying direct link...');
-    // Fallback: direct URL
-    setTimeout(function(){ window.location.href = 'https://'+SHOPIFY_DOMAIN+'/checkout'; }, 500);
+    sNtf('Connection error — redirecting...');
+    setTimeout(function(){ window.location.href = 'https://hunto-5642.myshopify.com/checkout'; }, 500);
   }
 }
 
