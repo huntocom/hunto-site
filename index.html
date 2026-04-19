@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v23.3 -->
+<!-- v23.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1707,7 +1707,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v23.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v23.4</span>
   </div>
 
 </nav>
@@ -2499,8 +2499,8 @@ footer{background:#111;padding:56px 32px 28px}
   <!-- Hint -->
   <div id="fallback-hint" style="position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);color:#fff;text-align:center;pointer-events:none;max-width:300px">
     <div style="font-size:48px;margin-bottom:16px">📸</div>
-    <div style="font-size:20px;font-weight:700;margin-bottom:8px">Try It On</div>
-    <div style="font-size:15px;opacity:.6">Upload a photo of yourself and see your design on you</div>
+    <div style="font-size:20px;font-weight:700;margin-bottom:8px">See It On You</div>
+    <div style="font-size:15px;opacity:.6">Upload a photo of yourself — we'll place your custom shirt on you</div>
   </div>
 </div>
 
@@ -2602,7 +2602,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v23.3</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v23.4</span>
   </div>
 
   <div class="studio-body">
@@ -9207,23 +9207,49 @@ var tryOnDesignImg = null;
 var tryOnCapturedBlob = null;
 
 function getTryOnDesignSrc(){
-  // Get the first image layer's src from the current design
+  // Capture the ENTIRE shirt wrap (shirt + all designs) as a single image
   var wrap = document.getElementById('s-shirt-wrap');
   if(!wrap) return null;
-  var img = wrap.querySelector('[data-type="image"] img');
-  if(img && img.src) return img.src;
-  // Try text layer — render to canvas
-  var txt = wrap.querySelector('[data-type="text"]');
-  if(txt){
-    var c = document.createElement('canvas'); c.width=400; c.height=300;
-    var ctx = c.getContext('2d');
-    ctx.font = (txt.style.fontSize||'36px')+' '+(txt.style.fontFamily||'DM Sans');
-    ctx.fillStyle = txt.style.color||'#000';
-    ctx.textAlign = 'center';
-    ctx.fillText(txt.textContent, 200, 180);
-    return c.toDataURL();
+
+  // Use html2canvas-style approach: render the shirt wrap to a canvas
+  var rect = wrap.getBoundingClientRect();
+  var c = document.createElement('canvas');
+  c.width = rect.width * 2; c.height = rect.height * 2; // 2x for quality
+  var ctx = c.getContext('2d');
+  ctx.scale(2, 2);
+
+  // Draw the shirt image first
+  var shirtImg = document.getElementById('s-shirt');
+  if(shirtImg && shirtImg.complete && shirtImg.naturalWidth > 0){
+    var sw = shirtImg.offsetWidth, sh = shirtImg.offsetHeight;
+    var sl = shirtImg.offsetLeft, st = shirtImg.offsetTop;
+    ctx.drawImage(shirtImg, sl, st, sw, sh);
   }
-  return null;
+
+  // Draw all design layers on top
+  var hasDesign = false;
+  wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
+    if(el.style.display === 'none') return;
+    var side = el.dataset.side || 'front';
+    if(side !== sView) return; // only current view
+
+    if(el.dataset.type === 'image'){
+      var img = el.querySelector('img');
+      if(img && img.complete && img.naturalWidth > 0){
+        ctx.drawImage(img, el.offsetLeft, el.offsetTop, el.offsetWidth, el.offsetHeight);
+        hasDesign = true;
+      }
+    } else if(el.dataset.type === 'text'){
+      ctx.font = (el.style.fontWeight||'700')+' '+(el.style.fontSize||'36px')+' '+(el.style.fontFamily||'DM Sans');
+      ctx.fillStyle = el.style.color || '#000';
+      ctx.textAlign = el.style.textAlign || 'center';
+      ctx.fillText(el.textContent, el.offsetLeft + el.offsetWidth/2, el.offsetTop + el.offsetHeight*0.8);
+      hasDesign = true;
+    }
+  });
+
+  if(!hasDesign) return null;
+  return c.toDataURL('image/png');
 }
 
 async function openTryOn(){
@@ -9250,6 +9276,7 @@ async function openTryOn(){
 
     tryOnDesignImg = new Image();
     tryOnDesignImg.crossOrigin = 'anonymous';
+    tryOnDesignImg.onload = function(){ console.log('Try-on mockup loaded:', tryOnDesignImg.width+'x'+tryOnDesignImg.height); };
     tryOnDesignImg.src = designSrc;
 
     var camPromise = navigator.mediaDevices.getUserMedia({
@@ -9411,16 +9438,18 @@ function tryOnFileSelected(e){
     photoEl.src = ev.target.result;
     photoEl.style.display = 'block';
 
-    // Show the design overlay
+    // Show the shirt mockup overlay (shirt + design composite)
     var designEl = document.getElementById('fallback-design-overlay');
     designEl.src = fbDesignSrc;
     designEl.style.display = 'block';
-    designEl.style.width = '25%';
-    designEl.style.top = '30%';
+    designEl.style.width = '45%';
+    designEl.style.maxWidth = '300px';
+    designEl.style.top = '35%';
     designEl.style.left = '50%';
-    designEl.style.transform = 'translateX(-50%)';
+    designEl.style.transform = 'translate(-50%,-50%)';
     designEl.style.pointerEvents = 'auto';
     designEl.style.cursor = 'move';
+    designEl.style.opacity = '0.9';
 
     // Make design draggable
     makeFallbackDraggable(designEl);
