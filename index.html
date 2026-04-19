@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v25.2 -->
+<!-- v25.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1511,24 +1511,22 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 
   <div class="hdr-actions">
-    <div class="hdr-action" onclick="alert('Live chat coming soon!')">
+    <div class="hdr-action" onclick="if(window.Tawk_API)Tawk_API.toggle();else sNtf('Chat loading...')">
       <span class="hdr-action-icon">💬</span>
       <span>Live Chat</span>
-      <span class="hdr-action-sub">Chat 24/7</span>
     </div>
-    <div class="hdr-action" onclick="alert('Call us: coming soon!')">
+    <div class="hdr-action" onclick="window.location.href='tel:+18001234567'">
       <span class="hdr-action-icon">📞</span>
       <span>(800) HUNTO</span>
-      <span class="hdr-action-sub">Talk with an expert</span>
     </div>
     <div class="hdr-action" onclick="openDesigns()">
       <span class="hdr-action-icon">👤</span>
       <span>My Account</span>
     </div>
-    <div class="hdr-action" onclick="alert('Cart coming soon!')">
+    <div class="hdr-action cart-action" onclick="openCartDrawer()">
       <span class="hdr-action-icon">🛒</span>
       <span>Cart</span>
-      <span class="hdr-action-sub">0 items</span>
+      <span class="hdr-action-sub" id="hdr-cart-count">0 items</span>
     </div>
     <button class="hdr-design-btn" onclick="openStudio(null)">Start Designing →</button>
   </div>
@@ -1709,7 +1707,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v25.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v25.3</span>
   </div>
 
 </nav>
@@ -2618,7 +2616,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v25.2</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v25.3</span>
   </div>
 
   <div class="studio-body">
@@ -3510,8 +3508,8 @@ footer{background:#111;padding:56px 32px 28px}
 
         <!-- Footer CTA -->
         <div style="border-top:1px solid #f0f0f0;padding:16px 20px">
-          <button onclick="proceedToCheckout()" style="width:100%;padding:16px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.04em;margin-bottom:10px">
-            ADD TO CART →
+          <button onclick="doShopifyCheckout()" style="width:100%;padding:16px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.04em;margin-bottom:10px">
+            CHECKOUT →
           </button>
           <!-- Payment logos -->
           <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
@@ -3520,8 +3518,8 @@ footer{background:#111;padding:56px 32px 28px}
             <span style="font-size:11px;font-weight:800;color:#000;background:#f5f5f5;padding:3px 8px;border-radius:4px">Klarna</span>
             <span style="font-size:11px;font-weight:800;color:#000;background:#f5f5f5;padding:3px 8px;border-radius:4px">Affirm</span>
           </div>
-          <button onclick="proceedToCheckout()" style="width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
-            Buy with Apple Pay
+          <button onclick="doShopifyCheckout()" style="width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+             Pay with Apple Pay
           </button>
           <!-- Trust signals -->
           <div style="margin-top:14px;padding:12px;background:#f8faf8;border-radius:8px;border:1px solid #e0e8e0">
@@ -8860,15 +8858,11 @@ var SHOPIFY_VARIANT_DEFAULT = 'gid://shopify/ProductVariant/48549519720665';
 
 async function goToShopifyCheckout(){
   closeCartDrawer();
-
-  // Save design first
+  // Save design in background if email exists
   var email = localStorage.getItem('hunto_email') || '';
-  if(!email){
-    showSaveDesignPrompt(function(){ doShopifyCheckout(); });
-  } else {
-    saveDesignToServer(email);
-    doShopifyCheckout();
-  }
+  if(email) saveDesignToServer(email).catch(function(){});
+  // Go straight to Shopify checkout
+  doShopifyCheckout();
 }
 
 async function doShopifyCheckout(){
