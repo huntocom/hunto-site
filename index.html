@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v28.1 -->
+<!-- v28.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1748,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v28.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v28.2</span>
   </div>
 
 </nav>
@@ -2657,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v28.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v28.2</span>
   </div>
 
   <div class="studio-body">
@@ -5397,7 +5397,17 @@ async function aiGen(){
         urls.push(dataUrl);
       } else {
         const data = await r.json();
-        if(data.url) urls.push(data.url);
+        if(data.url){
+          // Fetch the URL and convert to data URL for canvas compatibility
+          try {
+            var imgResp = await fetch(SERVER + '/proxy-image?url=' + encodeURIComponent(data.url));
+            var imgBlob = await imgResp.blob();
+            var imgDataUrl = await new Promise(function(resolve){
+              var rdr = new FileReader(); rdr.onload = function(){ resolve(rdr.result); }; rdr.readAsDataURL(imgBlob);
+            });
+            urls.push(imgDataUrl);
+          } catch(e){ urls.push(data.url); } // fallback to raw URL
+        }
       }
     }
 
@@ -9384,7 +9394,8 @@ async function submitCheckoutOrder(){
     var imgs = wrap.querySelectorAll('[data-type="image"] img');
     for(var ii = 0; ii < imgs.length; ii++){
       var imgEl = imgs[ii];
-      if(imgEl.src && (imgEl.src.startsWith('blob:') || (imgEl.src.startsWith('http') && !imgEl.src.startsWith(window.location.origin)))){
+      var needsConvert = imgEl.src.startsWith('blob:') || (imgEl.src.startsWith('http') && !imgEl.src.startsWith(window.location.origin)) || imgEl.src.startsWith('data:application/') || imgEl.naturalWidth === 0;
+      if(imgEl.src && needsConvert){
         try {
           var tempC = document.createElement('canvas');
           tempC.width = imgEl.naturalWidth || 500;
