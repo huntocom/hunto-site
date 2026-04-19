@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v24.3 -->
+<!-- v24.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1709,7 +1709,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.3</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.4</span>
   </div>
 
 </nav>
@@ -2504,6 +2504,7 @@ footer{background:#111;padding:56px 32px 28px}
     <div style="font-size:22px;font-weight:700;margin-bottom:8px">Virtual Try-On</div>
     <div style="font-size:15px;opacity:.6;line-height:1.5">Upload a photo of yourself and our AI will show you wearing your custom shirt</div>
     <div style="font-size:13px;opacity:.4;margin-top:12px">Powered by AI · Takes ~10 seconds</div>
+    <div style="font-size:12px;opacity:.35;margin-top:6px">Works best with graphic/image designs. Text-only designs may vary.</div>
   </div>
   <!-- Processing overlay -->
   <div id="tryon-processing" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:10005">
@@ -2616,7 +2617,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.3</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.4</span>
   </div>
 
   <div class="studio-body">
@@ -9525,7 +9526,15 @@ function openFallbackTryOn(data){
   document.getElementById('tryon-upload-btn').style.display = 'inline-block';
   tryOnResultUrl = '';
 }
-function closeFallbackTryOn(){ document.getElementById('tryon-fallback').style.display = 'none'; }
+function closeFallbackTryOn(){
+  document.getElementById('tryon-fallback').style.display = 'none';
+  // Reset all state so it can be opened again
+  tryOnResultUrl = '';
+  var resultImg = document.getElementById('tryon-result-img');
+  if(resultImg){ resultImg.style.display = 'none'; resultImg.src = ''; }
+  var prompt = document.getElementById('gallery-prompt');
+  if(prompt) prompt.remove();
+}
 
 async function tryOnFileSelected(e){
   var file = (e.target.files||[])[0]; if(!file) return;
