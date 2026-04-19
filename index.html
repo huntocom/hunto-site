@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v25.4 -->
+<!-- v26.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1707,7 +1707,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v25.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v26.0</span>
   </div>
 
 </nav>
@@ -2616,7 +2616,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v25.4</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v26.0</span>
   </div>
 
   <div class="studio-body">
@@ -3507,36 +3507,69 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
 
         <!-- Footer CTA -->
-        <div style="border-top:1px solid #f0f0f0;padding:16px 20px">
-          <button onclick="doShopifyCheckout()" style="width:100%;padding:16px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.04em;margin-bottom:10px">
-            CHECKOUT →
-          </button>
-          <!-- Payment logos -->
-          <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
-            <span style="font-size:11px;color:#aaa;font-weight:600">or pay with</span>
-            <span style="font-size:11px;font-weight:800;color:#000;background:#f5f5f5;padding:3px 8px;border-radius:4px">Afterpay</span>
-            <span style="font-size:11px;font-weight:800;color:#000;background:#f5f5f5;padding:3px 8px;border-radius:4px">Klarna</span>
-            <span style="font-size:11px;font-weight:800;color:#000;background:#f5f5f5;padding:3px 8px;border-radius:4px">Affirm</span>
+        <!-- Checkout Form — embedded, no redirect -->
+        <div style="border-top:1px solid #f0f0f0;padding:16px 20px" id="checkout-form-area">
+          <!-- Contact -->
+          <div style="margin-bottom:12px">
+            <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Email</label>
+            <input id="co-email" type="email" placeholder="your@email.com" autocomplete="email" inputmode="email"
+              style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
           </div>
-          <button onclick="doShopifyCheckout()" style="width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
-             Pay with Apple Pay
-          </button>
-          <!-- Trust signals -->
-          <div style="margin-top:14px;padding:12px;background:#f8faf8;border-radius:8px;border:1px solid #e0e8e0">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span style="font-size:12px;font-weight:700;color:#16a34a">Secure Checkout</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-              <span style="font-size:10px;font-weight:700;color:#555;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">VISA</span>
-              <span style="font-size:10px;font-weight:700;color:#555;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">MC</span>
-              <span style="font-size:10px;font-weight:700;color:#555;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">AMEX</span>
-              <span style="font-size:10px;font-weight:700;color:#555;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">PayPal</span>
-              <span style="font-size:10px;font-weight:700;color:#555;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">Shop Pay</span>
-            </div>
-            <div style="font-size:11px;color:#888;margin-top:6px">100% Satisfaction Guarantee · Free returns</div>
-            <div style="font-size:11px;color:#16a34a;font-weight:600;margin-top:4px" id="checkout-delivery-date"></div>
+          <!-- Shipping -->
+          <div style="margin-bottom:12px">
+            <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Full Name</label>
+            <input id="co-name" type="text" placeholder="First and last name" autocomplete="name"
+              style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
           </div>
+          <div style="margin-bottom:12px">
+            <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Shipping Address</label>
+            <input id="co-address" type="text" placeholder="Street address" autocomplete="street-address"
+              style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box;margin-bottom:8px"
+              onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <input id="co-city" type="text" placeholder="City" autocomplete="address-level2"
+                style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+                onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
+              <input id="co-state" type="text" placeholder="State" autocomplete="address-level1"
+                style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+                onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
+              <input id="co-zip" type="text" placeholder="ZIP" autocomplete="postal-code" inputmode="numeric"
+                style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+                onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
+            </div>
+          </div>
+          <div style="margin-bottom:12px">
+            <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Phone</label>
+            <input id="co-phone" type="tel" placeholder="(555) 555-5555" autocomplete="tel" inputmode="tel"
+              style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
+          </div>
+          <!-- Payment — placeholder for Square -->
+          <div style="margin-bottom:14px">
+            <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Payment</label>
+            <div id="sq-card-element" style="width:100%;padding:14px;border:2px solid #e0e0e0;border-radius:8px;min-height:44px;background:#f8f8f8;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:14px;font-family:'DM Sans',sans-serif;box-sizing:border-box">
+              Card fields will appear here when payment is connected
+            </div>
+          </div>
+          <!-- Submit -->
+          <button onclick="submitOrder()" id="co-submit-btn" style="width:100%;padding:16px;background:#0071ce;color:#fff;border:none;border-radius:10px;font-size:17px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.02em;margin-bottom:10px;box-shadow:0 4px 14px rgba(0,113,206,.3)">
+            PLACE ORDER →
+          </button>
+          <!-- Trust -->
+          <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span style="font-size:13px;font-weight:700;color:#16a34a">Secure & Encrypted</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+            <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:3px 6px;border-radius:3px;border:1px solid #e0e0e0">VISA</span>
+            <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:3px 6px;border-radius:3px;border:1px solid #e0e0e0">MC</span>
+            <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:3px 6px;border-radius:3px;border:1px solid #e0e0e0">AMEX</span>
+            <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:3px 6px;border-radius:3px;border:1px solid #e0e0e0">Apple Pay</span>
+          </div>
+          <div style="text-align:center;font-size:12px;color:#888">100% Satisfaction Guarantee · Free Shipping</div>
+          <div style="text-align:center;font-size:12px;color:#16a34a;font-weight:600;margin-top:4px" id="checkout-delivery-date"></div>
         </div>
       </div>
     </div>
@@ -8863,6 +8896,102 @@ async function goToShopifyCheckout(){
   if(email) saveDesignToServer(email).catch(function(){});
   // Go straight to Shopify checkout
   doShopifyCheckout();
+}
+
+async function submitOrder(){
+  // Validate form
+  var email = (document.getElementById('co-email')||{}).value||'';
+  var name = (document.getElementById('co-name')||{}).value||'';
+  var address = (document.getElementById('co-address')||{}).value||'';
+  var city = (document.getElementById('co-city')||{}).value||'';
+  var state = (document.getElementById('co-state')||{}).value||'';
+  var zip = (document.getElementById('co-zip')||{}).value||'';
+  var phone = (document.getElementById('co-phone')||{}).value||'';
+
+  if(!email.trim() || !email.includes('@')){ sNtf('Please enter a valid email'); return; }
+  if(!name.trim()){ sNtf('Please enter your name'); return; }
+  if(!address.trim()){ sNtf('Please enter your shipping address'); return; }
+  if(!city.trim() || !state.trim() || !zip.trim()){ sNtf('Please complete your address'); return; }
+
+  var btn = document.getElementById('co-submit-btn');
+  if(btn){ btn.disabled = true; btn.textContent = 'Processing...'; }
+
+  // Save email
+  localStorage.setItem('hunto_email', email.trim());
+
+  // Build order data
+  var sizes = (orderState && orderState.productSizes) ? orderState.productSizes : {};
+  var sizeBreakdown = [];
+  var totalQty = 0;
+  for(var pidx in sizes){
+    if(!sizes.hasOwnProperty(pidx)) continue;
+    var ps = sizes[pidx];
+    for(var sz in ps){
+      if(!ps.hasOwnProperty(sz)) continue;
+      if(ps[sz] > 0){ sizeBreakdown.push(sz+':'+ps[sz]); totalQty += ps[sz]; }
+    }
+  }
+  if(totalQty === 0) totalQty = 1;
+
+  var designId = '';
+  try { designId = localStorage.getItem('hunto_design_id') || ''; } catch(e){}
+
+  var order = {
+    email: email.trim(),
+    name: name.trim(),
+    phone: phone.trim(),
+    address: { street: address.trim(), city: city.trim(), state: state.trim(), zip: zip.trim() },
+    product: (sState && sState.product) ? sState.product.name : 'Custom Apparel',
+    color: (sState && sState.color) ? sState.color.n : 'White',
+    colorHex: (sState && sState.color) ? sState.color.h : '#ffffff',
+    sizeBreakdown: sizeBreakdown.join(', '),
+    totalQty: totalQty,
+    total: (orderState && orderState.grand) ? orderState.grand : totalQty * 28,
+    designId: designId,
+    rush: orderState ? orderState.rushOrder : false,
+    timestamp: Date.now()
+  };
+
+  // Save order to server
+  try {
+    await fetch(SERVER + '/save-design', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(order)
+    });
+  } catch(e){}
+
+  // TODO: Process payment via Square here
+  // For now, show order confirmation
+  closeReviewPanel();
+  showOrderConfirmation(order);
+
+  if(btn){ btn.disabled = false; btn.textContent = 'PLACE ORDER →'; }
+}
+
+function showOrderConfirmation(order){
+  var modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px';
+  modal.innerHTML = ''
+    + '<div style="background:#fff;border-radius:16px;max-width:440px;width:100%;padding:32px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.25);max-height:90vh;overflow-y:auto">'
+    + '<div style="font-size:48px;margin-bottom:12px">✅</div>'
+    + '<div style="font-size:22px;font-weight:800;color:#222;margin-bottom:6px">Order Received!</div>'
+    + '<div style="font-size:15px;color:#888;margin-bottom:20px;line-height:1.5">Thank you, '+order.name.split(' ')[0]+'. We\'ve received your order and will start printing soon.</div>'
+    + '<div style="background:#f5f7fa;border-radius:10px;padding:16px;text-align:left;margin-bottom:16px">'
+    + '<div style="font-size:14px;font-weight:700;color:#222;margin-bottom:8px">Order Summary</div>'
+    + '<div style="font-size:14px;color:#555;line-height:1.8">'
+    + '<div>'+order.product+' — '+order.color+'</div>'
+    + '<div>'+order.totalQty+' items · '+order.sizeBreakdown+'</div>'
+    + '<div style="font-weight:700;color:#222;font-size:16px;margin-top:4px">Total: $'+order.total.toFixed(2)+'</div>'
+    + '</div></div>'
+    + '<div style="background:#f0fdf4;border-radius:10px;padding:12px;text-align:left;margin-bottom:16px">'
+    + '<div style="font-size:13px;color:#16a34a;font-weight:600">📧 Confirmation sent to '+order.email+'</div>'
+    + '<div style="font-size:13px;color:#16a34a;font-weight:600;margin-top:4px">🚚 Estimated delivery: '+getDeliveryDate(order.rush?3:5)+'</div>'
+    + '</div>'
+    + '<div style="font-size:13px;color:#888;margin-bottom:16px">Payment will be collected when we confirm your design. A team member will reach out shortly.</div>'
+    + '<button onclick="this.closest(\'div[style*=fixed]\').remove();goHome()" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif">Continue Shopping</button>'
+    + '</div>';
+  document.body.appendChild(modal);
 }
 
 async function doShopifyCheckout(){
