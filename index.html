@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v23.2 -->
+<!-- v23.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1707,7 +1707,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v23.2</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v23.3</span>
   </div>
 
 </nav>
@@ -2481,16 +2481,27 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 </div>
 
-<!-- ── Try-On Fallback (photo upload) ── -->
-<div id="tryon-fallback" style="display:none;position:fixed;inset:0;z-index:10002;background:#000">
-  <button onclick="closeFallbackTryOn()" style="position:absolute;top:16px;right:16px;z-index:10004;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:24px;cursor:pointer">×</button>
-  <canvas id="fallback-canvas" style="width:100%;height:100%;touch-action:none"></canvas>
-  <div style="position:absolute;bottom:40px;left:0;right:0;display:flex;justify-content:center;gap:12px;z-index:10003">
-    <input type="file" id="tryon-file" accept="image/*" style="display:none" onchange="tryOnFileSelected(event)">
-    <button onclick="document.getElementById('tryon-file').click()" style="height:52px;padding:0 28px;background:#fff;color:#000;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Upload Photo</button>
-    <button id="fallback-share-btn" onclick="fallbackShare()" style="display:none;height:52px;padding:0 28px;background:#E1306C;color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Save & Share</button>
+<!-- ── Try-On Fallback (photo upload — desktop + camera fallback) ── -->
+<div id="tryon-fallback" style="display:none;position:fixed;inset:0;z-index:10002;background:#111;overflow:hidden">
+  <button onclick="closeFallbackTryOn()" style="position:absolute;top:16px;right:16px;z-index:10004;background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:24px;cursor:pointer">×</button>
+  <!-- Photo display area -->
+  <div id="fallback-photo-area" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden">
+    <img id="fallback-photo-img" style="display:none;max-width:100%;max-height:100%;object-fit:contain">
+    <img id="fallback-design-overlay" style="display:none;position:absolute;pointer-events:none;opacity:.82;cursor:move">
   </div>
-  <div id="fallback-hint" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;text-align:center;font-size:18px;font-weight:600;pointer-events:none">Upload a photo, then drag your design into position</div>
+  <!-- Controls -->
+  <div style="position:absolute;bottom:32px;left:0;right:0;display:flex;justify-content:center;gap:12px;z-index:10003;flex-wrap:wrap;padding:0 16px">
+    <input type="file" id="tryon-file" accept="image/*" style="display:none" onchange="tryOnFileSelected(event)">
+    <button id="fallback-upload-btn2" onclick="document.getElementById('tryon-file').click()" style="height:52px;padding:0 28px;background:#fff;color:#000;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">📷 Upload a Photo of You</button>
+    <button id="fallback-share-btn" onclick="fallbackShare()" style="display:none;height:52px;padding:0 28px;background:#E1306C;color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Share</button>
+    <button id="fallback-save-btn" onclick="fallbackDownload()" style="display:none;height:52px;padding:0 28px;background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Save Image</button>
+  </div>
+  <!-- Hint -->
+  <div id="fallback-hint" style="position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);color:#fff;text-align:center;pointer-events:none;max-width:300px">
+    <div style="font-size:48px;margin-bottom:16px">📸</div>
+    <div style="font-size:20px;font-weight:700;margin-bottom:8px">Try It On</div>
+    <div style="font-size:15px;opacity:.6">Upload a photo of yourself and see your design on you</div>
+  </div>
 </div>
 
 <!-- ── Preview Modal — Front & Back ── -->
@@ -2591,7 +2602,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v23.2</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v23.3</span>
   </div>
 
   <div class="studio-body">
@@ -9219,9 +9230,15 @@ async function openTryOn(){
   var designSrc = getTryOnDesignSrc();
   if(!designSrc){ sNtf('Add a design first, then try it on!'); return; }
 
-  // Try camera + pose detection first, fall back to photo upload
+  var isMobile = window.innerWidth <= 768;
+
+  // On mobile: try camera + AR. On desktop: go straight to photo upload.
+  if(!isMobile){
+    openFallbackTryOn(designSrc);
+    return;
+  }
+
   try {
-    // Check if camera is available
     if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('No camera');
 
     var container = document.getElementById('tryon-container');
@@ -9231,16 +9248,14 @@ async function openTryOn(){
     document.getElementById('tryon-share-btn').style.display = 'none';
     tryOnCapturedBlob = null;
 
-    // Load design image
     tryOnDesignImg = new Image();
     tryOnDesignImg.crossOrigin = 'anonymous';
     tryOnDesignImg.src = designSrc;
 
-    // Start camera with timeout
     var camPromise = navigator.mediaDevices.getUserMedia({
       video:{ facingMode:'user', width:{ideal:720}, height:{ideal:1280} }, audio:false
     });
-    var timeoutPromise = new Promise(function(_,reject){ setTimeout(function(){ reject(new Error('Camera timeout')); }, 10000); });
+    var timeoutPromise = new Promise(function(_,reject){ setTimeout(function(){ reject(new Error('timeout')); }, 8000); });
     tryOnStream = await Promise.race([camPromise, timeoutPromise]);
 
     var video = document.getElementById('tryon-video');
@@ -9251,7 +9266,6 @@ async function openTryOn(){
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
-    // Init MediaPipe if needed
     if(!tryOnPoseLandmarker){
       loading.querySelector('div > div:first-child').textContent = 'Loading pose detection...';
       var mod = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/wasm/vision_bundle.mjs');
@@ -9266,12 +9280,10 @@ async function openTryOn(){
     tryOnRenderLoop(video, canvas);
 
   } catch(err){
-    console.warn('AR try-on failed, using photo fallback:', err.message);
-    // Clean up camera attempt
+    console.warn('AR try-on failed:', err.message);
     if(tryOnStream){ tryOnStream.getTracks().forEach(function(t){ t.stop(); }); tryOnStream = null; }
     var cont = document.getElementById('tryon-container');
     if(cont) cont.style.display = 'none';
-    // Open fallback
     openFallbackTryOn(designSrc);
     sNtf('Camera not available — upload a photo instead');
   }
@@ -9376,112 +9388,148 @@ var fbPos = {x:0, y:0, scale:1};
 var fbDragging = false, fbDragOff = {x:0,y:0};
 var fbPinchDist = 0, fbPinchScale = 1;
 
+var fbDesignSrc = '';
+
 function openFallbackTryOn(designSrc){
-  var container = document.getElementById('tryon-fallback');
-  container.style.display = 'block';
+  fbDesignSrc = designSrc;
+  document.getElementById('tryon-fallback').style.display = 'block';
   document.getElementById('fallback-hint').style.display = 'block';
   document.getElementById('fallback-share-btn').style.display = 'none';
-  fbPhotoImg = null;
-  // Load design image
-  fbDesignImg = new Image();
-  fbDesignImg.crossOrigin = 'anonymous';
-  fbDesignImg.onload = function(){ console.log('Fallback design loaded:', fbDesignImg.width+'x'+fbDesignImg.height); };
-  fbDesignImg.onerror = function(){ console.warn('Failed to load design image'); };
-  fbDesignImg.src = designSrc;
-  // Size canvas to viewport immediately so it's not 0x0
-  var canvas = document.getElementById('fallback-canvas');
-  var rect = container.getBoundingClientRect();
-  canvas.width = rect.width * window.devicePixelRatio;
-  canvas.height = rect.height * window.devicePixelRatio;
-  canvas.style.width = rect.width + 'px';
-  canvas.style.height = rect.height + 'px';
+  document.getElementById('fallback-save-btn').style.display = 'none';
+  document.getElementById('fallback-upload-btn2').style.display = 'inline-block';
+  document.getElementById('fallback-photo-img').style.display = 'none';
+  document.getElementById('fallback-design-overlay').style.display = 'none';
 }
-function closeFallbackTryOn(){ document.getElementById('tryon-fallback').style.display = 'none'; fbPhotoImg = null; }
+function closeFallbackTryOn(){ document.getElementById('tryon-fallback').style.display = 'none'; }
 
 function tryOnFileSelected(e){
   var file = (e.target.files||[])[0]; if(!file) return;
   var reader = new FileReader();
   reader.onload = function(ev){
-    fbPhotoImg = new Image();
-    fbPhotoImg.onload = function(){
-      var container = document.getElementById('tryon-fallback');
-      var canvas = document.getElementById('fallback-canvas');
-      // Size canvas to fit the image while filling viewport
-      var cRect = container.getBoundingClientRect();
-      var imgRatio = fbPhotoImg.width / fbPhotoImg.height;
-      var viewRatio = cRect.width / cRect.height;
-      if(imgRatio > viewRatio){
-        canvas.width = fbPhotoImg.width;
-        canvas.height = fbPhotoImg.width / viewRatio;
-      } else {
-        canvas.height = fbPhotoImg.height;
-        canvas.width = fbPhotoImg.height * viewRatio;
-      }
-      // Center design on canvas
-      fbPos.x = canvas.width / 2;
-      fbPos.y = canvas.height * 0.38;
-      fbPos.scale = Math.min(canvas.width, canvas.height) * 0.3 / Math.max(fbDesignImg.width || 200, 1);
-      document.getElementById('fallback-hint').style.display = 'none';
-      document.getElementById('fallback-share-btn').style.display = 'inline-block';
-      renderFallbackTryOn();
-    };
-    fbPhotoImg.src = ev.target.result;
+    // Show the photo
+    var photoEl = document.getElementById('fallback-photo-img');
+    photoEl.src = ev.target.result;
+    photoEl.style.display = 'block';
+
+    // Show the design overlay
+    var designEl = document.getElementById('fallback-design-overlay');
+    designEl.src = fbDesignSrc;
+    designEl.style.display = 'block';
+    designEl.style.width = '25%';
+    designEl.style.top = '30%';
+    designEl.style.left = '50%';
+    designEl.style.transform = 'translateX(-50%)';
+    designEl.style.pointerEvents = 'auto';
+    designEl.style.cursor = 'move';
+
+    // Make design draggable
+    makeFallbackDraggable(designEl);
+
+    // Hide hint, show share buttons
+    document.getElementById('fallback-hint').style.display = 'none';
+    document.getElementById('fallback-share-btn').style.display = 'inline-block';
+    document.getElementById('fallback-save-btn').style.display = 'inline-block';
+    document.getElementById('fallback-upload-btn2').textContent = '📷 Change Photo';
   };
   reader.readAsDataURL(file);
-  e.target.value = ''; // allow re-upload of same file
+  e.target.value = '';
 }
 
-function renderFallbackTryOn(){
-  var canvas = document.getElementById('fallback-canvas');
-  if(!canvas) return;
-  var ctx = canvas.getContext('2d');
-  // Clear
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#111';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  // Draw photo centered/cover
-  if(fbPhotoImg && fbPhotoImg.complete){
-    var cw = canvas.width, ch = canvas.height;
-    var iw = fbPhotoImg.width, ih = fbPhotoImg.height;
-    var scale = Math.max(cw/iw, ch/ih);
-    var sw = iw*scale, sh = ih*scale;
-    ctx.drawImage(fbPhotoImg, (cw-sw)/2, (ch-sh)/2, sw, sh);
+function makeFallbackDraggable(el){
+  var startX, startY, origLeft, origTop;
+  function down(e){
+    e.preventDefault();
+    var pt = e.touches ? e.touches[0] : e;
+    var rect = el.getBoundingClientRect();
+    startX = pt.clientX; startY = pt.clientY;
+    origLeft = rect.left; origTop = rect.top;
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', up);
+    document.addEventListener('touchmove', move, {passive:false});
+    document.addEventListener('touchend', up);
   }
-  // Draw design overlay
-  if(fbDesignImg && fbDesignImg.complete && fbDesignImg.width > 0){
-    var w = fbDesignImg.width * fbPos.scale;
-    var h = fbDesignImg.height * fbPos.scale;
+  function move(e){
+    e.preventDefault();
+    var pt = e.touches ? e.touches[0] : e;
+    var dx = pt.clientX - startX, dy = pt.clientY - startY;
+    var parent = el.parentElement.getBoundingClientRect();
+    el.style.left = ((origLeft - parent.left + dx + el.offsetWidth/2) / parent.width * 100) + '%';
+    el.style.top = ((origTop - parent.top + dy + el.offsetHeight/2) / parent.height * 100) + '%';
+    el.style.transform = 'translate(-50%,-50%)';
+  }
+  function up(){ document.removeEventListener('mousemove',move); document.removeEventListener('mouseup',up); document.removeEventListener('touchmove',move); document.removeEventListener('touchend',up); }
+  el.addEventListener('mousedown', down);
+  el.addEventListener('touchstart', down, {passive:false});
+
+  // Scroll wheel to resize
+  el.addEventListener('wheel', function(e){
+    e.preventDefault();
+    var w = parseFloat(el.style.width) || 25;
+    w += e.deltaY > 0 ? -2 : 2;
+    w = Math.max(5, Math.min(80, w));
+    el.style.width = w + '%';
+  }, {passive:false});
+}
+
+// (fallback drag handled by makeFallbackDraggable in openFallbackTryOn)
+
+async function fallbackComposite(){
+  var photoEl = document.getElementById('fallback-photo-img');
+  var designEl = document.getElementById('fallback-design-overlay');
+  if(!photoEl || !photoEl.src) return null;
+
+  var cap = document.createElement('canvas');
+  cap.width = 1080; cap.height = 1920;
+  var ctx = cap.getContext('2d');
+
+  // Draw photo cover-fit
+  var img = new Image(); img.src = photoEl.src;
+  await new Promise(function(r){ if(img.complete) r(); else img.onload = r; });
+  var scale = Math.max(cap.width/img.width, cap.height/img.height);
+  var sw = img.width*scale, sh = img.height*scale;
+  ctx.drawImage(img, (cap.width-sw)/2, (cap.height-sh)/2, sw, sh);
+
+  // Draw design at relative position
+  if(designEl && designEl.src){
+    var dImg = new Image(); dImg.src = designEl.src;
+    await new Promise(function(r){ if(dImg.complete) r(); else dImg.onload = r; });
+    var parent = document.getElementById('fallback-photo-area').getBoundingClientRect();
+    var dRect = designEl.getBoundingClientRect();
+    var relX = (dRect.left + dRect.width/2 - parent.left) / parent.width;
+    var relY = (dRect.top + dRect.height/2 - parent.top) / parent.height;
+    var relW = dRect.width / parent.width;
+    var dw = cap.width * relW;
+    var dh = dw * (dImg.height / dImg.width);
     ctx.globalAlpha = 0.82;
-    ctx.drawImage(fbDesignImg, fbPos.x - w/2, fbPos.y - h/2, w, h);
+    ctx.drawImage(dImg, cap.width*relX - dw/2, cap.height*relY - dh/2, dw, dh);
     ctx.globalAlpha = 1;
   }
+
+  // Watermark
+  ctx.fillStyle = 'rgba(255,255,255,.7)';
+  ctx.font = '600 28px DM Sans, system-ui';
+  ctx.textAlign = 'center';
+  ctx.fillText('Made on hunto.com', cap.width/2, cap.height - 60);
+
+  return await new Promise(function(r){ cap.toBlob(r, 'image/png'); });
 }
 
-// Drag + pinch on fallback canvas — init after DOM ready
-document.addEventListener('DOMContentLoaded', function(){
-  var c = document.getElementById('fallback-canvas'); if(!c) return;
-  c.addEventListener('pointerdown', function(e){ if(!fbPhotoImg) return; fbDragging = true; fbDragOff.x = e.clientX; fbDragOff.y = e.clientY; c.setPointerCapture(e.pointerId); });
-  c.addEventListener('pointermove', function(e){ if(!fbDragging||!fbPhotoImg) return; var sx = c.width/c.getBoundingClientRect().width; fbPos.x += (e.clientX - fbDragOff.x)*sx; fbPos.y += (e.clientY - fbDragOff.y)*sx; fbDragOff.x = e.clientX; fbDragOff.y = e.clientY; renderFallbackTryOn(); });
-  c.addEventListener('pointerup', function(){ fbDragging = false; });
-  c.addEventListener('touchmove', function(e){ if(e.touches.length===2 && fbPhotoImg){ e.preventDefault(); var d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY); if(!fbPinchDist){ fbPinchDist = d; fbPinchScale = fbPos.scale; } else { fbPos.scale = fbPinchScale*(d/fbPinchDist); renderFallbackTryOn(); } } }, {passive:false});
-  c.addEventListener('touchend', function(){ fbPinchDist = 0; });
-});
-
 async function fallbackShare(){
-  var canvas = document.getElementById('fallback-canvas');
-  var ctx = canvas.getContext('2d');
-  ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.font = '600 24px DM Sans, system-ui'; ctx.textAlign = 'center';
-  ctx.fillText('Made on hunto.com', canvas.width/2, canvas.height - 40);
-  var blob = await new Promise(function(r){ canvas.toBlob(r, 'image/png'); });
-  renderFallbackTryOn(); // re-render without watermark
+  var blob = await fallbackComposite();
+  if(!blob){ sNtf('Upload a photo first'); return; }
   var file = new File([blob], 'my-hunto-design.png', {type:'image/png'});
   if(navigator.canShare && navigator.canShare({files:[file]})){
     try { await navigator.share({ title:'My Custom Tee', text:'Check out this tee I designed on hunto.com!', files:[file] }); } catch(e){}
-  } else {
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a'); a.href = url; a.download = 'my-hunto-design.png'; a.click();
-    URL.revokeObjectURL(url); sNtf('Image saved!');
-  }
+  } else { fallbackDownload(); }
+}
+
+async function fallbackDownload(){
+  var blob = await fallbackComposite();
+  if(!blob){ sNtf('Upload a photo first'); return; }
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href = url; a.download = 'my-hunto-design.png'; a.click();
+  URL.revokeObjectURL(url);
+  sNtf('Image saved!');
 }
 
 // ════════════════════════════════════
