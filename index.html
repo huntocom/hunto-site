@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v26.0 -->
+<!-- v27.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -774,6 +774,47 @@ footer{background:#111;padding:56px 32px 28px}
 }
 
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* Checkout page */
+.co-page{max-width:1100px;margin:0 auto;padding:32px 24px 80px;min-height:80vh}
+.co-grid{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start}
+.co-form{display:flex;flex-direction:column;gap:0}
+.co-section{margin-bottom:24px}
+.co-section-title{font-size:16px;font-weight:700;color:#222;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #0071ce;display:inline-block}
+.co-label{font-size:13px;font-weight:600;color:#555;display:block;margin-bottom:5px}
+.co-input{width:100%;padding:13px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box;transition:border-color .15s}
+.co-input:focus{border-color:#0071ce}
+.co-input::placeholder{color:#bbb}
+.co-row{display:grid;gap:12px;margin-bottom:12px}
+.co-row-2{grid-template-columns:1fr 1fr}
+.co-row-3{grid-template-columns:1fr 1fr 1fr}
+.co-row-1{grid-template-columns:1fr}
+.co-sidebar{position:sticky;top:80px}
+.co-summary{background:#f8f9fb;border-radius:12px;border:1.5px solid #e8e8e8;overflow:hidden}
+.co-summary-hdr{padding:16px 20px;background:#fff;border-bottom:1px solid #f0f0f0;font-size:16px;font-weight:700;color:#222}
+.co-summary-body{padding:16px 20px}
+.co-summary-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid #f0f0f0}
+.co-summary-item:last-child{border-bottom:none}
+.co-summary-img{width:70px;height:70px;background:#f0f2f5;border-radius:8px;object-fit:contain;flex-shrink:0}
+.co-summary-line{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;color:#555}
+.co-summary-total{display:flex;justify-content:space-between;padding:12px 0;font-size:18px;font-weight:800;color:#222;border-top:2px solid #e0e0e0;margin-top:8px}
+.co-submit{width:100%;padding:16px;background:#0071ce;color:#fff;border:none;border-radius:10px;font-size:17px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:16px;box-shadow:0 4px 14px rgba(0,113,206,.3);transition:background .15s}
+.co-submit:hover{background:#005baa}
+.co-submit:disabled{opacity:.5;cursor:not-allowed}
+.co-trust{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:13px;font-weight:600;color:#16a34a}
+.co-badges{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+.co-badge{font-size:11px;font-weight:700;color:#555;background:#f5f5f5;padding:3px 8px;border-radius:4px;border:1px solid #e0e0e0}
+.co-delivery{background:#f0fdf4;border-radius:8px;padding:12px 16px;margin-top:16px}
+.co-delivery-title{font-size:14px;font-weight:700;color:#16a34a;margin-bottom:4px}
+.co-delivery-date{font-size:13px;color:#555}
+.co-back{background:none;border:none;color:#0071ce;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;margin-bottom:20px;display:flex;align-items:center;gap:6px}
+.co-back:hover{text-decoration:underline}
+@media(max-width:768px){
+  .co-grid{grid-template-columns:1fr;gap:20px}
+  .co-sidebar{position:static}
+  .co-page{padding:20px 16px 60px}
+  .co-row-3{grid-template-columns:1fr 1fr}
+}
 
 /* Cart drawer — slide-out from right */
 .cart-drawer{position:fixed;inset:0;z-index:10001;display:flex;align-items:stretch;justify-content:flex-end}
@@ -1707,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v26.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.0</span>
   </div>
 
 </nav>
@@ -2616,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v26.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.0</span>
   </div>
 
   <div class="studio-body">
@@ -3506,70 +3547,16 @@ footer{background:#111;padding:56px 32px 28px}
 
         </div>
 
-        <!-- Footer CTA -->
-        <!-- Checkout Form — embedded, no redirect -->
-        <div style="border-top:1px solid #f0f0f0;padding:16px 20px" id="checkout-form-area">
-          <!-- Contact -->
-          <div style="margin-bottom:12px">
-            <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Email</label>
-            <input id="co-email" type="email" placeholder="your@email.com" autocomplete="email" inputmode="email"
-              style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
-          </div>
-          <!-- Shipping -->
-          <div style="margin-bottom:12px">
-            <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Full Name</label>
-            <input id="co-name" type="text" placeholder="First and last name" autocomplete="name"
-              style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
-          </div>
-          <div style="margin-bottom:12px">
-            <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Shipping Address</label>
-            <input id="co-address" type="text" placeholder="Street address" autocomplete="street-address"
-              style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box;margin-bottom:8px"
-              onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-              <input id="co-city" type="text" placeholder="City" autocomplete="address-level2"
-                style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
-                onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
-              <input id="co-state" type="text" placeholder="State" autocomplete="address-level1"
-                style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
-                onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
-              <input id="co-zip" type="text" placeholder="ZIP" autocomplete="postal-code" inputmode="numeric"
-                style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
-                onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
-            </div>
-          </div>
-          <div style="margin-bottom:12px">
-            <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Phone</label>
-            <input id="co-phone" type="tel" placeholder="(555) 555-5555" autocomplete="tel" inputmode="tel"
-              style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
-          </div>
-          <!-- Payment — placeholder for Square -->
-          <div style="margin-bottom:14px">
-            <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Payment</label>
-            <div id="sq-card-element" style="width:100%;padding:14px;border:2px solid #e0e0e0;border-radius:8px;min-height:44px;background:#f8f8f8;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:14px;font-family:'DM Sans',sans-serif;box-sizing:border-box">
-              Card fields will appear here when payment is connected
-            </div>
-          </div>
-          <!-- Submit -->
-          <button onclick="submitOrder()" id="co-submit-btn" style="width:100%;padding:16px;background:#0071ce;color:#fff;border:none;border-radius:10px;font-size:17px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.02em;margin-bottom:10px;box-shadow:0 4px 14px rgba(0,113,206,.3)">
-            PLACE ORDER →
+        <!-- Footer CTA — goes to full checkout page -->
+        <div style="border-top:1px solid #f0f0f0;padding:16px 20px">
+          <button onclick="goToCheckoutPage()" style="width:100%;padding:16px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:17px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.02em;margin-bottom:10px;box-shadow:0 4px 14px rgba(0,113,206,.3)">
+            CHECKOUT →
           </button>
-          <!-- Trust -->
-          <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px">
+          <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <span style="font-size:13px;font-weight:700;color:#16a34a">Secure & Encrypted</span>
+            <span style="font-size:13px;font-weight:700;color:#16a34a">Secure Checkout</span>
           </div>
-          <div style="display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
-            <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:3px 6px;border-radius:3px;border:1px solid #e0e0e0">VISA</span>
-            <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:3px 6px;border-radius:3px;border:1px solid #e0e0e0">MC</span>
-            <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:3px 6px;border-radius:3px;border:1px solid #e0e0e0">AMEX</span>
-            <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:3px 6px;border-radius:3px;border:1px solid #e0e0e0">Apple Pay</span>
-          </div>
-          <div style="text-align:center;font-size:12px;color:#888">100% Satisfaction Guarantee · Free Shipping</div>
-          <div style="text-align:center;font-size:12px;color:#16a34a;font-weight:600;margin-top:4px" id="checkout-delivery-date"></div>
+          <div style="text-align:center;font-size:12px;color:#888">Free Shipping · 100% Satisfaction Guarantee</div>
         </div>
       </div>
     </div>
@@ -3835,6 +3822,141 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 
 </div>
+</div>
+
+<!-- ████ CHECKOUT PAGE ████ -->
+<div id="page-checkout" class="page">
+  <div class="co-page">
+    <button class="co-back" onclick="goBack()">← Back to Review</button>
+    <div style="font-size:24px;font-weight:800;color:#222;margin-bottom:24px">Checkout</div>
+
+    <div class="co-grid">
+      <!-- Left: Form -->
+      <div class="co-form">
+
+        <!-- Contact -->
+        <div class="co-section">
+          <div class="co-section-title">Contact</div>
+          <div class="co-row co-row-2">
+            <div>
+              <label class="co-label">Email</label>
+              <input class="co-input" id="co2-email" type="email" placeholder="your@email.com" autocomplete="email" inputmode="email">
+            </div>
+            <div>
+              <label class="co-label">Phone</label>
+              <input class="co-input" id="co2-phone" type="tel" placeholder="(555) 555-5555" autocomplete="tel" inputmode="tel">
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping -->
+        <div class="co-section">
+          <div class="co-section-title">Shipping</div>
+          <div class="co-row co-row-2">
+            <div>
+              <label class="co-label">First Name</label>
+              <input class="co-input" id="co2-fname" type="text" placeholder="First name" autocomplete="given-name">
+            </div>
+            <div>
+              <label class="co-label">Last Name</label>
+              <input class="co-input" id="co2-lname" type="text" placeholder="Last name" autocomplete="family-name">
+            </div>
+          </div>
+          <div class="co-row co-row-1">
+            <div>
+              <label class="co-label">Address</label>
+              <input class="co-input" id="co2-address" type="text" placeholder="Street address" autocomplete="street-address">
+            </div>
+          </div>
+          <div class="co-row co-row-1">
+            <div>
+              <input class="co-input" id="co2-address2" type="text" placeholder="Apt, suite, unit (optional)" autocomplete="address-line2">
+            </div>
+          </div>
+          <div class="co-row co-row-3">
+            <div>
+              <label class="co-label">City</label>
+              <input class="co-input" id="co2-city" type="text" placeholder="City" autocomplete="address-level2">
+            </div>
+            <div>
+              <label class="co-label">State</label>
+              <select class="co-input" id="co2-state" autocomplete="address-level1" style="appearance:auto">
+                <option value="">State</option>
+                <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option><option>DC</option>
+              </select>
+            </div>
+            <div>
+              <label class="co-label">ZIP</label>
+              <input class="co-input" id="co2-zip" type="text" placeholder="ZIP" autocomplete="postal-code" inputmode="numeric">
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping Method -->
+        <div class="co-section">
+          <div class="co-section-title">Shipping Method</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:2px solid #0071ce;border-radius:10px;cursor:pointer;background:#f0f7ff">
+              <input type="radio" name="co2-ship" value="standard" checked style="accent-color:#0071ce;width:18px;height:18px">
+              <div style="flex:1">
+                <div style="font-size:15px;font-weight:700;color:#222">Free Standard Shipping</div>
+                <div style="font-size:13px;color:#888" id="co2-ship-standard-date"></div>
+              </div>
+              <div style="font-size:15px;font-weight:700;color:#16a34a">FREE</div>
+            </label>
+            <label style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:2px solid #e0e0e0;border-radius:10px;cursor:pointer" onclick="this.querySelector('input').checked=true;document.querySelectorAll('[name=co2-ship]').forEach(r=>{r.closest('label').style.borderColor=r.checked?'#0071ce':'#e0e0e0';r.closest('label').style.background=r.checked?'#f0f7ff':'#fff'})">
+              <input type="radio" name="co2-ship" value="rush" style="accent-color:#0071ce;width:18px;height:18px" onchange="document.querySelectorAll('[name=co2-ship]').forEach(r=>{r.closest('label').style.borderColor=r.checked?'#0071ce':'#e0e0e0';r.closest('label').style.background=r.checked?'#f0f7ff':'#fff'})">
+              <div style="flex:1">
+                <div style="font-size:15px;font-weight:700;color:#222">Rush Delivery</div>
+                <div style="font-size:13px;color:#888" id="co2-ship-rush-date"></div>
+              </div>
+              <div style="font-size:15px;font-weight:700;color:#222">$15.00</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="co-section">
+          <div class="co-section-title">Payment</div>
+          <div id="co2-card-element" style="padding:16px;border:2px solid #e0e0e0;border-radius:10px;min-height:50px;background:#f8f8f8;display:flex;align-items:center;justify-content:center;color:#999;font-size:14px">
+            Square payment fields will load here
+          </div>
+          <div style="font-size:12px;color:#888;margin-top:6px">Payment processing by Square — coming soon. Orders are reviewed before charging.</div>
+        </div>
+
+        <!-- Place Order (mobile — duplicated for mobile since summary is below) -->
+        <button class="co-submit" onclick="submitCheckoutOrder()" id="co2-submit" style="display:none">PLACE ORDER →</button>
+      </div>
+
+      <!-- Right: Order Summary (sticky) -->
+      <div class="co-sidebar">
+        <div class="co-summary">
+          <div class="co-summary-hdr">Order Summary</div>
+          <div class="co-summary-body" id="co2-summary-body">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Place Order Button -->
+        <button class="co-submit" onclick="submitCheckoutOrder()" id="co2-submit-btn">PLACE ORDER →</button>
+        <div class="co-trust">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Secure & Encrypted Checkout
+        </div>
+        <div class="co-badges">
+          <span class="co-badge">VISA</span>
+          <span class="co-badge">MC</span>
+          <span class="co-badge">AMEX</span>
+          <span class="co-badge">Apple Pay</span>
+        </div>
+        <div class="co-delivery">
+          <div class="co-delivery-title">🚚 Estimated Delivery</div>
+          <div class="co-delivery-date" id="co2-delivery-date"></div>
+        </div>
+        <div style="text-align:center;margin-top:12px;font-size:13px;color:#888">100% Satisfaction Guarantee · Free Returns</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -8878,8 +9000,7 @@ function closeReviewPanel(){
 }
 
 function proceedToCheckout(){
-  closeReviewPanel();
-  goToShopifyCheckout();
+  goToCheckoutPage();
 }
 // ════════════════════════════════════
 // SHOPIFY STOREFRONT API CHECKOUT
@@ -8896,6 +9017,155 @@ async function goToShopifyCheckout(){
   if(email) saveDesignToServer(email).catch(function(){});
   // Go straight to Shopify checkout
   doShopifyCheckout();
+}
+
+// ════════════════════════════════════
+// FULL-PAGE CHECKOUT
+// ════════════════════════════════════
+function goToCheckoutPage(){
+  closeReviewPanel();
+  showPage('checkout');
+  buildCheckoutSummary();
+  // Pre-fill email if we have it
+  var savedEmail = localStorage.getItem('hunto_email') || '';
+  if(savedEmail){ var el = document.getElementById('co2-email'); if(el) el.value = savedEmail; }
+  // Set delivery dates
+  var stdDate = document.getElementById('co2-ship-standard-date');
+  var rushDate = document.getElementById('co2-ship-rush-date');
+  var delivDate = document.getElementById('co2-delivery-date');
+  if(stdDate) stdDate.textContent = 'Arrives by ' + getDeliveryDate(7);
+  if(rushDate) rushDate.textContent = 'Arrives by ' + getDeliveryDate(3);
+  if(delivDate) delivDate.textContent = 'Standard: ' + getDeliveryDate(7) + ' · Rush: ' + getDeliveryDate(3);
+  // Show mobile submit on small screens
+  var mobileBtn = document.getElementById('co2-submit');
+  if(mobileBtn) mobileBtn.style.display = window.innerWidth <= 768 ? 'block' : 'none';
+  window.scrollTo(0,0);
+}
+
+function buildCheckoutSummary(){
+  var body = document.getElementById('co2-summary-body');
+  if(!body) return;
+
+  var sizes = (orderState && orderState.productSizes) ? orderState.productSizes : {};
+  var totalQty = 0;
+  var sizeStr = [];
+  for(var pidx in sizes){
+    if(!sizes.hasOwnProperty(pidx)) continue;
+    var ps = sizes[pidx];
+    for(var sz in ps){
+      if(!ps.hasOwnProperty(sz)) continue;
+      if(ps[sz] > 0){ sizeStr.push(sz+': '+ps[sz]); totalQty += ps[sz]; }
+    }
+  }
+  if(totalQty === 0) totalQty = 1;
+
+  var colorName = 'White';
+  var productName = 'Custom Apparel';
+  var shirtSrc = '';
+  var grandTotal = totalQty * 28;
+  try {
+    if(sState && sState.color && sState.color.n) colorName = sState.color.n;
+    if(sState && sState.product && sState.product.name) productName = sState.product.name;
+    if(sState && sState.color && sState.color.front) shirtSrc = sState.color.front;
+    if(!shirtSrc && sState && sState.product && sState.product.image) shirtSrc = sState.product.image;
+    if(orderState && orderState.grand) grandTotal = orderState.grand;
+  } catch(e){}
+
+  var perUnit = (grandTotal / totalQty).toFixed(2);
+
+  var html = '';
+  // Product item
+  html += '<div class="co-summary-item">';
+  if(shirtSrc) html += '<img class="co-summary-img" src="'+shirtSrc+'" onerror="this.style.display=\'none\'">';
+  html += '<div style="flex:1;min-width:0">';
+  html += '<div style="font-size:15px;font-weight:700;color:#222">'+productName+'</div>';
+  html += '<div style="font-size:13px;color:#888;margin-top:2px">'+colorName+' · '+totalQty+' items</div>';
+  html += '<div style="font-size:12px;color:#888;margin-top:2px">'+sizeStr.join(', ')+'</div>';
+  html += '<div style="font-size:14px;font-weight:700;color:#222;margin-top:4px">$'+perUnit+' each</div>';
+  html += '</div></div>';
+
+  // Line items
+  html += '<div style="padding-top:8px">';
+  html += '<div class="co-summary-line"><span>Subtotal ('+totalQty+' items)</span><span style="font-weight:700">$'+grandTotal.toFixed(2)+'</span></div>';
+  html += '<div class="co-summary-line"><span>Shipping</span><span style="color:#16a34a;font-weight:600">FREE</span></div>';
+  html += '<div class="co-summary-line"><span>Tax</span><span>Calculated at confirmation</span></div>';
+  html += '<div class="co-summary-total"><span>Total</span><span>$'+grandTotal.toFixed(2)+'</span></div>';
+  html += '</div>';
+
+  body.innerHTML = html;
+}
+
+function goBack(){
+  // Go back to studio
+  showPage('studio');
+}
+
+async function submitCheckoutOrder(){
+  var email = (document.getElementById('co2-email')||{}).value||'';
+  var phone = (document.getElementById('co2-phone')||{}).value||'';
+  var fname = (document.getElementById('co2-fname')||{}).value||'';
+  var lname = (document.getElementById('co2-lname')||{}).value||'';
+  var address = (document.getElementById('co2-address')||{}).value||'';
+  var city = (document.getElementById('co2-city')||{}).value||'';
+  var state = (document.getElementById('co2-state')||{}).value||'';
+  var zip = (document.getElementById('co2-zip')||{}).value||'';
+
+  if(!email.trim()||!email.includes('@')){ sNtf('Please enter a valid email'); return; }
+  if(!fname.trim()||!lname.trim()){ sNtf('Please enter your name'); return; }
+  if(!address.trim()){ sNtf('Please enter your address'); return; }
+  if(!city.trim()||!state||!zip.trim()){ sNtf('Please complete your address'); return; }
+
+  var btn = document.getElementById('co2-submit-btn');
+  var btn2 = document.getElementById('co2-submit');
+  if(btn){ btn.disabled=true; btn.textContent='Processing...'; }
+  if(btn2){ btn2.disabled=true; btn2.textContent='Processing...'; }
+
+  localStorage.setItem('hunto_email', email.trim());
+
+  // Build order
+  var sizes = (orderState && orderState.productSizes) ? orderState.productSizes : {};
+  var sizeBreakdown = [];
+  var totalQty = 0;
+  for(var pidx in sizes){
+    if(!sizes.hasOwnProperty(pidx)) continue;
+    var ps = sizes[pidx];
+    for(var sz in ps){
+      if(!ps.hasOwnProperty(sz)) continue;
+      if(ps[sz]>0){ sizeBreakdown.push(sz+':'+ps[sz]); totalQty+=ps[sz]; }
+    }
+  }
+  if(totalQty===0) totalQty=1;
+
+  var designId = '';
+  try { designId = localStorage.getItem('hunto_design_id')||''; } catch(e){}
+
+  var rushShip = document.querySelector('[name=co2-ship]:checked');
+  var isRush = rushShip && rushShip.value === 'rush';
+
+  var order = {
+    email:email.trim(), phone:phone.trim(),
+    name:fname.trim()+' '+lname.trim(),
+    address:{street:address.trim(),city:city.trim(),state:state,zip:zip.trim()},
+    product:(sState&&sState.product)?sState.product.name:'Custom Apparel',
+    color:(sState&&sState.color)?sState.color.n:'White',
+    colorHex:(sState&&sState.color)?sState.color.h:'#ffffff',
+    sizeBreakdown:sizeBreakdown.join(', '),
+    totalQty:totalQty,
+    total:(orderState&&orderState.grand)?orderState.grand:totalQty*28,
+    designId:designId, rush:isRush, timestamp:Date.now()
+  };
+
+  // Save to server
+  try {
+    await fetch(SERVER+'/save-design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)});
+  } catch(e){}
+
+  // Show confirmation
+  showPage('home');
+  showOrderConfirmation(order);
+
+  if(btn){ btn.disabled=false; btn.textContent='PLACE ORDER →'; }
+  if(btn2){ btn2.disabled=false; btn2.textContent='PLACE ORDER →'; }
 }
 
 async function submitOrder(){
