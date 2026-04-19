@@ -9204,26 +9204,32 @@ async function captureStudioMockup(){
 
     // Draw shirt image (should be data URL by now from pre-conversion)
     try {
-      var sW = shirtImg.offsetWidth, sH = shirtImg.offsetHeight;
-      var sL = shirtImg.offsetLeft, sT = shirtImg.offsetTop;
+      var shirtBR = shirtImg.getBoundingClientRect();
+      var wrapBR = wrap.getBoundingClientRect();
+      var sL = shirtBR.left - wrapBR.left;
+      var sT = shirtBR.top - wrapBR.top;
+      var sW = shirtBR.width;
+      var sH = shirtBR.height;
       ctx.drawImage(shirtImg, sL, sT, sW, sH);
     } catch(e){ console.warn('Shirt draw failed:', e.message); }
 
     // Draw all front design layers using getBoundingClientRect for accurate positioning
+    // NOTE: ctx.scale(2,2) already doubles coordinates — do NOT multiply by 2 again
     var wrapRect = wrap.getBoundingClientRect();
+    var shirtRect = shirtImg.getBoundingClientRect();
     wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
       if(el.style.display === 'none') return;
       if((el.dataset.side||'front') !== 'front') return;
       var elR = el.getBoundingClientRect();
-      var rL = (elR.left - wrapRect.left) * 2;
-      var rT = (elR.top - wrapRect.top) * 2;
-      var rW = elR.width * 2;
-      var rH = elR.height * 2;
+      var rL = elR.left - wrapRect.left;
+      var rT = elR.top - wrapRect.top;
+      var rW = elR.width;
+      var rH = elR.height;
       if(el.dataset.type === 'image'){
         var img = el.querySelector('img');
-        if(img && img.complete) try { ctx.drawImage(img, rL, rT, rW, rH); } catch(e){}
+        if(img && img.complete && img.naturalWidth > 0) try { ctx.drawImage(img, rL, rT, rW, rH); } catch(e){ console.warn('Layer draw fail:', e.message); }
       } else if(el.dataset.type === 'text'){
-        var fs = parseFloat(el.style.fontSize||'36') * 2;
+        var fs = parseFloat(el.style.fontSize||'36');
         ctx.font = (el.style.fontWeight||'700')+' '+fs+'px '+(el.style.fontFamily||'Arial').replace(/'/g,'');
         ctx.fillStyle = el.style.color||'#000';
         ctx.textAlign = 'left'; ctx.textBaseline = 'top';
@@ -9248,7 +9254,9 @@ async function captureStudioMockup(){
     ctx2.fillRect(0, 0, wrapW, wrapH);
 
     try {
-      ctx2.drawImage(shirtImg2, shirtImg2.offsetLeft, shirtImg2.offsetTop, shirtImg2.offsetWidth, shirtImg2.offsetHeight);
+      var shirtBR2 = shirtImg2.getBoundingClientRect();
+      var wrapBR2 = wrap.getBoundingClientRect();
+      ctx2.drawImage(shirtImg2, shirtBR2.left - wrapBR2.left, shirtBR2.top - wrapBR2.top, shirtBR2.width, shirtBR2.height);
     } catch(e){ console.warn('Back shirt draw failed:', e.message); }
 
     var wrapRect2 = wrap.getBoundingClientRect();
@@ -9256,15 +9264,15 @@ async function captureStudioMockup(){
       if(el.style.display === 'none') return;
       if((el.dataset.side||'front') !== 'back') return;
       var elR2 = el.getBoundingClientRect();
-      var rL2 = (elR2.left - wrapRect2.left) * 2;
-      var rT2 = (elR2.top - wrapRect2.top) * 2;
-      var rW2 = elR2.width * 2;
-      var rH2 = elR2.height * 2;
+      var rL2 = elR2.left - wrapRect2.left;
+      var rT2 = elR2.top - wrapRect2.top;
+      var rW2 = elR2.width;
+      var rH2 = elR2.height;
       if(el.dataset.type === 'image'){
         var img = el.querySelector('img');
-        if(img && img.complete) try { ctx2.drawImage(img, rL2, rT2, rW2, rH2); } catch(e){}
+        if(img && img.complete && img.naturalWidth > 0) try { ctx2.drawImage(img, rL2, rT2, rW2, rH2); } catch(e){}
       } else if(el.dataset.type === 'text'){
-        var fs2 = parseFloat(el.style.fontSize||'36') * 2;
+        var fs2 = parseFloat(el.style.fontSize||'36');
         ctx2.font = (el.style.fontWeight||'700')+' '+fs2+'px '+(el.style.fontFamily||'Arial').replace(/'/g,'');
         ctx2.fillStyle = el.style.color||'#000';
         ctx2.textAlign = 'left'; ctx2.textBaseline = 'top';
@@ -9430,8 +9438,22 @@ async function submitCheckoutOrder(){
       } catch(e){ console.warn('Shirt proxy failed:', e); }
     }
 
-    // Wait for all converted images to load
-    await new Promise(function(r){ setTimeout(r, 800); });
+    // Wait for all converted images to fully load
+    var allImgs = wrap.querySelectorAll('img');
+    var loadPromises = [];
+    for(var li = 0; li < allImgs.length; li++){
+      (function(im){
+        if(im.src && !im.complete){
+          loadPromises.push(new Promise(function(resolve){
+            im.onload = resolve;
+            im.onerror = resolve;
+            setTimeout(resolve, 3000); // max 3s wait per image
+          }));
+        }
+      })(allImgs[li]);
+    }
+    if(loadPromises.length > 0) await Promise.all(loadPromises);
+    await new Promise(function(r){ setTimeout(r, 300); }); // extra settle time
   }
 
   try { artworkBase64 = await captureDesignHighRes(); } catch(e){ console.warn('Print capture failed:', e); }
