@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v24.4 -->
+<!-- v24.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1709,7 +1709,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.5</span>
   </div>
 
 </nav>
@@ -2617,7 +2617,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.4</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.5</span>
   </div>
 
   <div class="studio-body">
@@ -9431,78 +9431,100 @@ async function buildGarmentWithDesign(){
   var shirtImg = document.getElementById('s-shirt');
   if(!wrap || !shirtImg) return null;
 
-  // First, proxy the shirt image through our server to avoid CORS
-  // Or use a solid color background with the design
+  // Load the real product photo via proxy (CORS-safe)
   var c = document.createElement('canvas');
-  c.width = 800; c.height = 1000;
-  var ctx = c.getContext('2d');
+  var proxyImg = new Image();
+  proxyImg.crossOrigin = 'anonymous';
 
-  // Try to load the shirt image via a proxy to avoid CORS
   try {
     var proxyUrl = SERVER + '/proxy-image?url=' + encodeURIComponent(shirtImg.src);
-    var proxyImg = new Image();
-    proxyImg.crossOrigin = 'anonymous';
     await new Promise(function(resolve, reject){
       proxyImg.onload = resolve;
       proxyImg.onerror = reject;
       proxyImg.src = proxyUrl;
     });
-    // Draw proxied shirt image
-    var scale = Math.min(c.width / proxyImg.width, c.height / proxyImg.height);
-    var sw = proxyImg.width * scale, sh = proxyImg.height * scale;
-    ctx.drawImage(proxyImg, (c.width - sw)/2, (c.height - sh)/2, sw, sh);
   } catch(e){
-    // Fallback: draw a plain white t-shirt shape
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, c.width, c.height);
-    // Draw basic t-shirt shape
-    ctx.fillStyle = sState.color?.h || '#ffffff';
-    ctx.beginPath();
-    ctx.moveTo(200, 100); ctx.lineTo(100, 200); ctx.lineTo(150, 250);
-    ctx.lineTo(150, 800); ctx.lineTo(650, 800); ctx.lineTo(650, 250);
-    ctx.lineTo(700, 200); ctx.lineTo(600, 100);
-    ctx.quadraticCurveTo(400, 180, 200, 100);
-    ctx.fill();
+    // If proxy fails, just return the shirt URL directly — FASHN can fetch it
+    return shirtImg.src;
   }
 
-  // Draw design layers on top
+  // Use the actual image dimensions for accuracy
+  c.width = proxyImg.naturalWidth;
+  c.height = proxyImg.naturalHeight;
+  var ctx = c.getContext('2d');
+
+  // Draw the real product photo
+  ctx.drawImage(proxyImg, 0, 0, c.width, c.height);
+
+  // Calculate the print area on the actual product photo
+  // Standard S&S product photos: chest area is roughly centered,
+  // ~40% width, starting ~28% from top, ~38% tall
+  var printX = c.width * 0.30;  // left edge of print area
+  var printY = c.height * 0.28; // top edge of print area
+  var printW = c.width * 0.40;  // width of print area
+  var printH = c.height * 0.35; // height of print area
+
+  // Draw ALL design layers into the print area
   var hasDesign = false;
   var wrapW = wrap.offsetWidth || 680;
   var wrapH = wrap.offsetHeight || 800;
 
+  // Find the bounding box of all designs to normalize positions
+  var designs = [];
   wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
     if(el.style.display === 'none') return;
     if((el.dataset.side||'front') !== sView) return;
+    designs.push(el);
+  });
 
-    var relL = (parseFloat(el.style.left)||0) / wrapW;
-    var relT = (parseFloat(el.style.top)||0) / wrapH;
-    var relW = el.offsetWidth / wrapW;
-    var relH = el.offsetHeight / wrapH;
+  designs.forEach(function(el){
+    // Map from wrap coordinates to print area coordinates
+    var elL = parseFloat(el.style.left) || 0;
+    var elT = parseFloat(el.style.top) || 0;
+    var elW = el.offsetWidth;
+    var elH = el.offsetHeight;
+
+    // Convert wrap position to relative (0-1)
+    var relL = elL / wrapW;
+    var relT = elT / wrapH;
+    var relW = elW / wrapW;
+    var relH = elH / wrapH;
+
+    // Map to print area on the product photo
+    var dx = printX + relL * printW * 1.5;
+    var dy = printY + relT * printH * 1.2;
+    var dw = relW * printW * 1.5;
+    var dh = relH * printH * 1.5;
 
     if(el.dataset.type === 'image'){
       var img = el.querySelector('img');
       if(img && img.complete && img.src){
         try {
-          ctx.drawImage(img, relL * c.width, relT * c.height, relW * c.width, relH * c.height);
+          // Use multiply blend for realistic printing look on light shirts
+          var colorHex = (sState.color?.h || '#ffffff').toLowerCase();
+          var isLight = colorHex === '#ffffff' || colorHex === '#fff' || colorHex.startsWith('#f') || colorHex.startsWith('#e');
+          if(isLight) ctx.globalCompositeOperation = 'multiply';
+          ctx.drawImage(img, dx, dy, dw, dh);
+          ctx.globalCompositeOperation = 'source-over';
           hasDesign = true;
         } catch(e){}
       }
     } else if(el.dataset.type === 'text'){
-      // Render text much larger and bolder so FASHN AI can see it
-      var fontSize = Math.max(28, Math.round(parseFloat(el.style.fontSize||'36') * (c.width / wrapW) * 1.2));
-      var fontFamily = el.style.fontFamily || 'Arial, sans-serif';
-      // Strip quotes from font family for canvas
-      fontFamily = fontFamily.replace(/'/g, '');
+      var fontSize = Math.max(32, Math.round(parseFloat(el.style.fontSize||'36') * (printW / wrapW) * 2.5));
+      var fontFamily = (el.style.fontFamily || 'Arial,sans-serif').replace(/'/g, '');
       ctx.font = (el.style.fontWeight||'700') + ' ' + fontSize + 'px ' + fontFamily;
       ctx.fillStyle = el.style.color || '#000';
-      ctx.textAlign = el.style.textAlign || 'center';
-      var tx = (relL + relW/2) * c.width;
-      var ty = (relT + relH*0.7) * c.height;
-      // Draw stroke/outline if present
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      var tx = dx + dw/2;
+      var ty = dy + dh/2;
+
+      // Draw stroke if present
       var stroke = el.style.webkitTextStroke || '';
       if(stroke && stroke !== '0px transparent'){
         ctx.strokeStyle = stroke.split(' ').pop() || '#fff';
-        ctx.lineWidth = parseInt(stroke) || 2;
+        ctx.lineWidth = Math.max(2, parseInt(stroke) * 2);
         ctx.strokeText(el.textContent, tx, ty);
       }
       ctx.fillText(el.textContent, tx, ty);
@@ -9510,7 +9532,7 @@ async function buildGarmentWithDesign(){
     }
   });
 
-  if(!hasDesign) return shirtImg.src; // just send the plain shirt
+  if(!hasDesign) return shirtImg.src;
   return c.toDataURL('image/png');
 }
 
