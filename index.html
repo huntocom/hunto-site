@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v27.4 -->
+<!-- v27.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1748,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.5</span>
   </div>
 
 </nav>
@@ -2657,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.4</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.5</span>
   </div>
 
   <div class="studio-body">
@@ -9177,19 +9177,25 @@ async function captureStudioMockup(){
       ctx.drawImage(pImg, sL, sT, sW, sH);
     } catch(e){ /* shirt proxy failed, continue with designs only */ }
 
-    // Draw all front design layers
+    // Draw all front design layers using getBoundingClientRect for accurate positioning
+    var wrapRect = wrap.getBoundingClientRect();
     wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
       if(el.style.display === 'none') return;
       if((el.dataset.side||'front') !== 'front') return;
+      var elR = el.getBoundingClientRect();
+      var rL = (elR.left - wrapRect.left) * 2;
+      var rT = (elR.top - wrapRect.top) * 2;
+      var rW = elR.width * 2;
+      var rH = elR.height * 2;
       if(el.dataset.type === 'image'){
         var img = el.querySelector('img');
-        if(img && img.complete) try { ctx.drawImage(img, el.offsetLeft, el.offsetTop, el.offsetWidth, el.offsetHeight); } catch(e){}
+        if(img && img.complete) try { ctx.drawImage(img, rL, rT, rW, rH); } catch(e){}
       } else if(el.dataset.type === 'text'){
         var fs = parseFloat(el.style.fontSize||'36') * 2;
         ctx.font = (el.style.fontWeight||'700')+' '+fs+'px '+(el.style.fontFamily||'Arial').replace(/'/g,'');
         ctx.fillStyle = el.style.color||'#000';
-        ctx.textAlign = 'center';
-        ctx.fillText(el.textContent, (el.offsetLeft+el.offsetWidth/2)*2, (el.offsetTop+el.offsetHeight*0.7)*2);
+        ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+        ctx.fillText(el.textContent, rL, rT);
       }
     });
 
@@ -9219,18 +9225,24 @@ async function captureStudioMockup(){
       ctx2.drawImage(pImg2, shirtImg2.offsetLeft, shirtImg2.offsetTop, shirtImg2.offsetWidth, shirtImg2.offsetHeight);
     } catch(e){}
 
+    var wrapRect2 = wrap.getBoundingClientRect();
     wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
       if(el.style.display === 'none') return;
       if((el.dataset.side||'front') !== 'back') return;
+      var elR2 = el.getBoundingClientRect();
+      var rL2 = (elR2.left - wrapRect2.left) * 2;
+      var rT2 = (elR2.top - wrapRect2.top) * 2;
+      var rW2 = elR2.width * 2;
+      var rH2 = elR2.height * 2;
       if(el.dataset.type === 'image'){
         var img = el.querySelector('img');
-        if(img && img.complete) try { ctx2.drawImage(img, el.offsetLeft, el.offsetTop, el.offsetWidth, el.offsetHeight); } catch(e){}
+        if(img && img.complete) try { ctx2.drawImage(img, rL2, rT2, rW2, rH2); } catch(e){}
       } else if(el.dataset.type === 'text'){
         var fs2 = parseFloat(el.style.fontSize||'36') * 2;
         ctx2.font = (el.style.fontWeight||'700')+' '+fs2+'px '+(el.style.fontFamily||'Arial').replace(/'/g,'');
         ctx2.fillStyle = el.style.color||'#000';
-        ctx2.textAlign = 'center';
-        ctx2.fillText(el.textContent, (el.offsetLeft+el.offsetWidth/2)*2, (el.offsetTop+el.offsetHeight*0.7)*2);
+        ctx2.textAlign = 'left'; ctx2.textBaseline = 'top';
+        ctx2.fillText(el.textContent, rL2, rT2);
       }
     });
 
@@ -9244,108 +9256,61 @@ async function captureStudioMockup(){
   return results;
 }
 
-// Capture design layers at print resolution (5100px = 17" at 300 DPI)
+// Capture print-ready artwork at 300 DPI (transparent background, just the art)
 async function captureDesignHighRes(){
   var wrap = document.getElementById('s-shirt-wrap');
   if(!wrap) return '';
 
-  var wrapW = wrap.offsetWidth || 680;
-  var wrapH = wrap.offsetHeight || 800;
+  // Get the bounding rect of the wrap to calculate positions
+  var wrapRect = wrap.getBoundingClientRect();
+  var wrapW = wrapRect.width;
+  var wrapH = wrapRect.height;
+  if(wrapW < 10 || wrapH < 10) return '';
 
-  // Target: 17 inches tall at 300 DPI = 5100px height
-  var targetH = 5100;
-  var scale = targetH / wrapH;
-  var targetW = Math.round(wrapW * scale);
-
+  // Scale to 5100px tall (17" at 300 DPI)
+  var scale = 5100 / wrapH;
   var c = document.createElement('canvas');
-  c.width = targetW;
-  c.height = targetH;
+  c.width = Math.round(wrapW * scale);
+  c.height = 5100;
   var ctx = c.getContext('2d');
-
-  // Transparent background — just the artwork, no shirt
   ctx.clearRect(0, 0, c.width, c.height);
 
   var hasArt = false;
-
-  // Draw all design layers at high resolution
   var layers = wrap.querySelectorAll('[data-type="image"],[data-type="text"]');
+
   for(var i = 0; i < layers.length; i++){
     var el = layers[i];
     if(el.style.display === 'none') continue;
 
-    var elL = parseFloat(el.style.left) || 0;
-    var elT = parseFloat(el.style.top) || 0;
-    var elW = el.offsetWidth;
-    var elH = el.offsetHeight;
+    // Get position relative to wrap using getBoundingClientRect
+    var elRect = el.getBoundingClientRect();
+    var relL = elRect.left - wrapRect.left;
+    var relT = elRect.top - wrapRect.top;
+    var relW = elRect.width;
+    var relH = elRect.height;
 
     if(el.dataset.type === 'image'){
       var img = el.querySelector('img');
       if(img && img.complete && img.src){
         try {
-          // Draw at scaled position
-          ctx.drawImage(img, elL * scale, elT * scale, elW * scale, elH * scale);
+          ctx.drawImage(img, relL * scale, relT * scale, relW * scale, relH * scale);
           hasArt = true;
-        } catch(e){}
+        } catch(e){ console.warn('Cannot draw image to canvas (CORS):', e.message); }
       }
     } else if(el.dataset.type === 'text'){
       var fontSize = Math.round(parseFloat(el.style.fontSize || '36') * scale);
       var ff = (el.style.fontFamily || 'Arial,sans-serif').replace(/'/g, '');
       ctx.font = (el.style.fontWeight||'700') + ' ' + fontSize + 'px ' + ff;
       ctx.fillStyle = el.style.color || '#000';
-      ctx.textAlign = el.style.textAlign || 'center';
+      ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
-
-      var tx = (elL + elW/2) * scale;
-      var ty = elT * scale;
-
-      // Draw stroke if present
-      var stroke = el.style.webkitTextStroke || '';
-      if(stroke && stroke !== '0px transparent'){
-        ctx.strokeStyle = stroke.split(' ').pop() || '#fff';
-        ctx.lineWidth = Math.max(2, parseInt(stroke) * scale);
-        ctx.strokeText(el.textContent, tx, ty);
-      }
-      ctx.fillText(el.textContent, tx, ty);
+      ctx.fillText(el.textContent, relL * scale, relT * scale);
       hasArt = true;
     }
   }
 
   if(!hasArt) return '';
-
-  // Trim transparent pixels to get just the artwork
-  var imageData = ctx.getImageData(0, 0, c.width, c.height);
-  var pixels = imageData.data;
-  var minX = c.width, minY = c.height, maxX = 0, maxY = 0;
-  for(var y = 0; y < c.height; y++){
-    for(var x = 0; x < c.width; x++){
-      var alpha = pixels[(y * c.width + x) * 4 + 3];
-      if(alpha > 10){
-        if(x < minX) minX = x;
-        if(y < minY) minY = y;
-        if(x > maxX) maxX = x;
-        if(y > maxY) maxY = y;
-      }
-    }
-  }
-
-  if(maxX <= minX || maxY <= minY) return c.toDataURL('image/png');
-
-  // Add small padding
-  var pad = 20;
-  minX = Math.max(0, minX - pad);
-  minY = Math.max(0, minY - pad);
-  maxX = Math.min(c.width, maxX + pad);
-  maxY = Math.min(c.height, maxY + pad);
-
-  // Crop to artwork bounds
-  var cropW = maxX - minX;
-  var cropH = maxY - minY;
-  var cropped = document.createElement('canvas');
-  cropped.width = cropW;
-  cropped.height = cropH;
-  cropped.getContext('2d').drawImage(c, minX, minY, cropW, cropH, 0, 0, cropW, cropH);
-
-  return cropped.toDataURL('image/png');
+  return c.toDataURL('image/png');
 }
 
 async function submitCheckoutOrder(){
