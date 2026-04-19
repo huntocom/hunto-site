@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v28.0 -->
+<!-- v28.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1748,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v28.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v28.1</span>
   </div>
 
 </nav>
@@ -2657,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v28.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v28.1</span>
   </div>
 
   <div class="studio-body">
@@ -9192,18 +9192,12 @@ async function captureStudioMockup(){
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, wrapW, wrapH);
 
-    // Try to draw shirt via proxy
+    // Draw shirt image (should be data URL by now from pre-conversion)
     try {
-      var proxyUrl = SERVER + '/proxy-image?url=' + encodeURIComponent(shirtImg.src);
-      var pImg = new Image();
-      pImg.crossOrigin = 'anonymous';
-      await new Promise(function(resolve, reject){
-        pImg.onload = resolve; pImg.onerror = reject; pImg.src = proxyUrl;
-      });
       var sW = shirtImg.offsetWidth, sH = shirtImg.offsetHeight;
       var sL = shirtImg.offsetLeft, sT = shirtImg.offsetTop;
-      ctx.drawImage(pImg, sL, sT, sW, sH);
-    } catch(e){ /* shirt proxy failed, continue with designs only */ }
+      ctx.drawImage(shirtImg, sL, sT, sW, sH);
+    } catch(e){ console.warn('Shirt draw failed:', e.message); }
 
     // Draw all front design layers using getBoundingClientRect for accurate positioning
     var wrapRect = wrap.getBoundingClientRect();
@@ -9244,14 +9238,8 @@ async function captureStudioMockup(){
     ctx2.fillRect(0, 0, wrapW, wrapH);
 
     try {
-      var proxyUrl2 = SERVER + '/proxy-image?url=' + encodeURIComponent(shirtImg2.src);
-      var pImg2 = new Image();
-      pImg2.crossOrigin = 'anonymous';
-      await new Promise(function(resolve, reject){
-        pImg2.onload = resolve; pImg2.onerror = reject; pImg2.src = proxyUrl2;
-      });
-      ctx2.drawImage(pImg2, shirtImg2.offsetLeft, shirtImg2.offsetTop, shirtImg2.offsetWidth, shirtImg2.offsetHeight);
-    } catch(e){}
+      ctx2.drawImage(shirtImg2, shirtImg2.offsetLeft, shirtImg2.offsetTop, shirtImg2.offsetWidth, shirtImg2.offsetHeight);
+    } catch(e){ console.warn('Back shirt draw failed:', e.message); }
 
     var wrapRect2 = wrap.getBoundingClientRect();
     wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
@@ -9384,29 +9372,55 @@ async function submitCheckoutOrder(){
   var rushShip = document.querySelector('[name=co2-ship]:checked');
   var isRush = rushShip && rushShip.value === 'rush';
 
-  // Capture design data — convert any blob URLs to data URLs first
+  // Capture design data
   sNtf('Preparing your design files...');
   var artworkBase64 = '';
   var mockups = {front:'', back:''};
 
-  // Convert blob URLs to data URLs so they survive being sent to the server
+  // Step 1: Convert ALL non-drawable images to data URLs
   var wrap = document.getElementById('s-shirt-wrap');
   if(wrap){
+    // Convert blob URLs on design layers
     var imgs = wrap.querySelectorAll('[data-type="image"] img');
     for(var ii = 0; ii < imgs.length; ii++){
       var imgEl = imgs[ii];
-      if(imgEl.src && imgEl.src.startsWith('blob:')){
+      if(imgEl.src && (imgEl.src.startsWith('blob:') || (imgEl.src.startsWith('http') && !imgEl.src.startsWith(window.location.origin)))){
         try {
           var tempC = document.createElement('canvas');
           tempC.width = imgEl.naturalWidth || 500;
           tempC.height = imgEl.naturalHeight || 500;
           tempC.getContext('2d').drawImage(imgEl, 0, 0);
           imgEl.src = tempC.toDataURL('image/png');
-        } catch(e){ console.warn('Blob convert failed:', e); }
+        } catch(e){
+          // If direct draw fails (CORS), try proxy
+          try {
+            var proxyResp = await fetch(SERVER + '/proxy-image?url=' + encodeURIComponent(imgEl.src));
+            var proxyBlob = await proxyResp.blob();
+            var proxyDataUrl = await new Promise(function(resolve){
+              var reader = new FileReader(); reader.onload = function(){ resolve(reader.result); }; reader.readAsDataURL(proxyBlob);
+            });
+            imgEl.src = proxyDataUrl;
+          } catch(e2){ console.warn('Proxy convert also failed:', e2); }
+        }
       }
     }
-    // Wait for converted images to load
-    await new Promise(function(r){ setTimeout(r, 500); });
+
+    // Convert the shirt image via proxy so mockup capture works
+    var shirtImg = document.getElementById('s-shirt');
+    if(shirtImg && shirtImg.src && shirtImg.src.startsWith('http') && !shirtImg.src.startsWith(window.location.origin)){
+      try {
+        var shirtResp = await fetch(SERVER + '/proxy-image?url=' + encodeURIComponent(shirtImg.src));
+        var shirtBlob = await shirtResp.blob();
+        var shirtDataUrl = await new Promise(function(resolve){
+          var reader = new FileReader(); reader.onload = function(){ resolve(reader.result); }; reader.readAsDataURL(shirtBlob);
+        });
+        shirtImg.crossOrigin = 'anonymous';
+        shirtImg.src = shirtDataUrl;
+      } catch(e){ console.warn('Shirt proxy failed:', e); }
+    }
+
+    // Wait for all converted images to load
+    await new Promise(function(r){ setTimeout(r, 800); });
   }
 
   try { artworkBase64 = await captureDesignHighRes(); } catch(e){ console.warn('Print capture failed:', e); }
