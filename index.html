@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v25.1 -->
+<!-- v25.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1709,7 +1709,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v25.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v25.2</span>
   </div>
 
 </nav>
@@ -2618,7 +2618,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v25.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v25.2</span>
   </div>
 
   <div class="studio-body">
@@ -8847,9 +8847,8 @@ function closeReviewPanel(){
 }
 
 function proceedToCheckout(){
-  // Open cart drawer first — show items, upsells, trust signals before Shopify handoff
   closeReviewPanel();
-  openCartDrawer();
+  goToShopifyCheckout();
 }
 // ════════════════════════════════════
 // SHOPIFY STOREFRONT API CHECKOUT
