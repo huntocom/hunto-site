@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v27.5 -->
+<!-- v27.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1748,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.5</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.6</span>
   </div>
 
 </nav>
@@ -2657,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.5</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.6</span>
   </div>
 
   <div class="studio-body">
@@ -9103,6 +9103,28 @@ function goBack(){
 // TEST: capture and display mockup without placing order
 // Run from browser console: testCaptureExport()
 async function testCaptureExport(){
+  sNtf('Converting images...');
+
+  // Convert blob URLs to data URLs first
+  var wrap = document.getElementById('s-shirt-wrap');
+  if(wrap){
+    var imgs = wrap.querySelectorAll('[data-type="image"] img');
+    for(var ii = 0; ii < imgs.length; ii++){
+      var imgEl = imgs[ii];
+      if(imgEl.src && imgEl.src.startsWith('blob:')){
+        try {
+          var tempC = document.createElement('canvas');
+          tempC.width = imgEl.naturalWidth || 500;
+          tempC.height = imgEl.naturalHeight || 500;
+          tempC.getContext('2d').drawImage(imgEl, 0, 0);
+          imgEl.src = tempC.toDataURL('image/png');
+          console.log('Converted blob to data URL, size:', imgEl.src.length);
+        } catch(e){ console.warn('Blob convert failed:', e); }
+      }
+      console.log('Image '+ii+' src type:', imgEl.src.substring(0,30));
+    }
+  }
+
   sNtf('Capturing...');
   var mockups = await captureStudioMockup();
   var art = await captureDesignHighRes();
@@ -9355,10 +9377,29 @@ async function submitCheckoutOrder(){
   var rushShip = document.querySelector('[name=co2-ship]:checked');
   var isRush = rushShip && rushShip.value === 'rush';
 
-  // Capture mockup (shirt + design) and print-ready art
-  sNtf('Capturing your design...');
+  // Capture design data — convert any blob URLs to data URLs first
+  sNtf('Preparing your design files...');
   var artworkBase64 = '';
   var mockups = {front:'', back:''};
+
+  // Convert blob URLs to data URLs so they survive being sent to the server
+  var wrap = document.getElementById('s-shirt-wrap');
+  if(wrap){
+    var imgs = wrap.querySelectorAll('[data-type="image"] img');
+    for(var ii = 0; ii < imgs.length; ii++){
+      var imgEl = imgs[ii];
+      if(imgEl.src && imgEl.src.startsWith('blob:')){
+        try {
+          var tempC = document.createElement('canvas');
+          tempC.width = imgEl.naturalWidth || 500;
+          tempC.height = imgEl.naturalHeight || 500;
+          tempC.getContext('2d').drawImage(imgEl, 0, 0);
+          imgEl.src = tempC.toDataURL('image/png');
+        } catch(e){ console.warn('Blob convert failed:', e); }
+      }
+    }
+  }
+
   try { artworkBase64 = await captureDesignHighRes(); } catch(e){ console.warn('Print capture failed:', e); }
   try { mockups = await captureStudioMockup(); } catch(e){ console.warn('Mockup capture failed:', e); }
 
