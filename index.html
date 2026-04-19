@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v23.4 -->
+<!-- v23.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1707,7 +1707,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v23.4</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v23.5</span>
   </div>
 
 </nav>
@@ -2487,7 +2487,11 @@ footer{background:#111;padding:56px 32px 28px}
   <!-- Photo display area -->
   <div id="fallback-photo-area" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden">
     <img id="fallback-photo-img" style="display:none;max-width:100%;max-height:100%;object-fit:contain">
-    <img id="fallback-design-overlay" style="display:none;position:absolute;pointer-events:none;opacity:.82;cursor:move">
+    <!-- Shirt + design composite overlay -->
+    <div id="fallback-mockup-wrap" style="display:none;position:absolute;pointer-events:auto;cursor:move">
+      <img id="fallback-shirt-overlay" style="width:100%;height:auto;display:block">
+      <img id="fallback-design-overlay" style="position:absolute;top:28%;left:22%;width:56%;height:auto;pointer-events:none;opacity:.85">
+    </div>
   </div>
   <!-- Controls -->
   <div style="position:absolute;bottom:32px;left:0;right:0;display:flex;justify-content:center;gap:12px;z-index:10003;flex-wrap:wrap;padding:0 16px">
@@ -2602,7 +2606,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v23.4</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v23.5</span>
   </div>
 
   <div class="studio-body">
@@ -9207,62 +9211,51 @@ var tryOnDesignImg = null;
 var tryOnCapturedBlob = null;
 
 function getTryOnDesignSrc(){
-  // Capture the ENTIRE shirt wrap (shirt + all designs) as a single image
+  // Returns an object with shirtSrc and designSrc separately
+  // to avoid cross-origin canvas tainting
   var wrap = document.getElementById('s-shirt-wrap');
   if(!wrap) return null;
 
-  // Use html2canvas-style approach: render the shirt wrap to a canvas
-  var rect = wrap.getBoundingClientRect();
-  var c = document.createElement('canvas');
-  c.width = rect.width * 2; c.height = rect.height * 2; // 2x for quality
-  var ctx = c.getContext('2d');
-  ctx.scale(2, 2);
-
-  // Draw the shirt image first
   var shirtImg = document.getElementById('s-shirt');
-  if(shirtImg && shirtImg.complete && shirtImg.naturalWidth > 0){
-    var sw = shirtImg.offsetWidth, sh = shirtImg.offsetHeight;
-    var sl = shirtImg.offsetLeft, st = shirtImg.offsetTop;
-    ctx.drawImage(shirtImg, sl, st, sw, sh);
-  }
+  var shirtSrc = shirtImg ? shirtImg.src : null;
 
-  // Draw all design layers on top
-  var hasDesign = false;
-  wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
-    if(el.style.display === 'none') return;
-    var side = el.dataset.side || 'front';
-    if(side !== sView) return; // only current view
-
+  // Get first visible design layer
+  var designSrc = null;
+  var layers = wrap.querySelectorAll('[data-type="image"],[data-type="text"]');
+  for(var i = 0; i < layers.length; i++){
+    var el = layers[i];
+    if(el.style.display === 'none') continue;
+    if((el.dataset.side||'front') !== sView) continue;
     if(el.dataset.type === 'image'){
       var img = el.querySelector('img');
-      if(img && img.complete && img.naturalWidth > 0){
-        ctx.drawImage(img, el.offsetLeft, el.offsetTop, el.offsetWidth, el.offsetHeight);
-        hasDesign = true;
-      }
+      if(img && img.src){ designSrc = img.src; break; }
     } else if(el.dataset.type === 'text'){
-      ctx.font = (el.style.fontWeight||'700')+' '+(el.style.fontSize||'36px')+' '+(el.style.fontFamily||'DM Sans');
-      ctx.fillStyle = el.style.color || '#000';
-      ctx.textAlign = el.style.textAlign || 'center';
-      ctx.fillText(el.textContent, el.offsetLeft + el.offsetWidth/2, el.offsetTop + el.offsetHeight*0.8);
-      hasDesign = true;
+      var c = document.createElement('canvas'); c.width=400; c.height=300;
+      var ctx = c.getContext('2d');
+      ctx.font = (el.style.fontWeight||'700')+' '+(el.style.fontSize||'36px')+' '+(el.style.fontFamily||'DM Sans,sans-serif');
+      ctx.fillStyle = el.style.color||'#000';
+      ctx.textAlign = 'center';
+      ctx.fillText(el.textContent, 200, 180);
+      designSrc = c.toDataURL(); break;
     }
-  });
+  }
 
-  if(!hasDesign) return null;
-  return c.toDataURL('image/png');
+  if(!designSrc && !shirtSrc) return null;
+  return { shirt: shirtSrc, design: designSrc };
 }
 
 async function openTryOn(){
-  var designSrc = getTryOnDesignSrc();
-  if(!designSrc){ sNtf('Add a design first, then try it on!'); return; }
+  var data = getTryOnDesignSrc();
+  if(!data || !data.design){ sNtf('Add a design first, then try it on!'); return; }
 
   var isMobile = window.innerWidth <= 768;
 
   // On mobile: try camera + AR. On desktop: go straight to photo upload.
   if(!isMobile){
-    openFallbackTryOn(designSrc);
+    openFallbackTryOn(data);
     return;
   }
+  var designSrc = data.design;
 
   try {
     if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('No camera');
@@ -9276,8 +9269,8 @@ async function openTryOn(){
 
     tryOnDesignImg = new Image();
     tryOnDesignImg.crossOrigin = 'anonymous';
-    tryOnDesignImg.onload = function(){ console.log('Try-on mockup loaded:', tryOnDesignImg.width+'x'+tryOnDesignImg.height); };
-    tryOnDesignImg.src = designSrc;
+    tryOnDesignImg.onload = function(){ console.log('Try-on design loaded:', tryOnDesignImg.width+'x'+tryOnDesignImg.height); };
+    tryOnDesignImg.src = designSrc || '';
 
     var camPromise = navigator.mediaDevices.getUserMedia({
       video:{ facingMode:'user', width:{ideal:720}, height:{ideal:1280} }, audio:false
@@ -9311,7 +9304,7 @@ async function openTryOn(){
     if(tryOnStream){ tryOnStream.getTracks().forEach(function(t){ t.stop(); }); tryOnStream = null; }
     var cont = document.getElementById('tryon-container');
     if(cont) cont.style.display = 'none';
-    openFallbackTryOn(designSrc);
+    openFallbackTryOn(data);
     sNtf('Camera not available — upload a photo instead');
   }
 }
@@ -9415,17 +9408,18 @@ var fbPos = {x:0, y:0, scale:1};
 var fbDragging = false, fbDragOff = {x:0,y:0};
 var fbPinchDist = 0, fbPinchScale = 1;
 
-var fbDesignSrc = '';
+var fbDesignData = null;
 
-function openFallbackTryOn(designSrc){
-  fbDesignSrc = designSrc;
+function openFallbackTryOn(data){
+  fbDesignData = data;
   document.getElementById('tryon-fallback').style.display = 'block';
   document.getElementById('fallback-hint').style.display = 'block';
   document.getElementById('fallback-share-btn').style.display = 'none';
   document.getElementById('fallback-save-btn').style.display = 'none';
   document.getElementById('fallback-upload-btn2').style.display = 'inline-block';
+  document.getElementById('fallback-upload-btn2').textContent = '📷 Upload a Photo of You';
   document.getElementById('fallback-photo-img').style.display = 'none';
-  document.getElementById('fallback-design-overlay').style.display = 'none';
+  document.getElementById('fallback-mockup-wrap').style.display = 'none';
 }
 function closeFallbackTryOn(){ document.getElementById('tryon-fallback').style.display = 'none'; }
 
@@ -9438,21 +9432,24 @@ function tryOnFileSelected(e){
     photoEl.src = ev.target.result;
     photoEl.style.display = 'block';
 
-    // Show the shirt mockup overlay (shirt + design composite)
+    // Show the shirt + design mockup overlay
+    var mockupWrap = document.getElementById('fallback-mockup-wrap');
+    var shirtEl = document.getElementById('fallback-shirt-overlay');
     var designEl = document.getElementById('fallback-design-overlay');
-    designEl.src = fbDesignSrc;
-    designEl.style.display = 'block';
-    designEl.style.width = '45%';
-    designEl.style.maxWidth = '300px';
-    designEl.style.top = '35%';
-    designEl.style.left = '50%';
-    designEl.style.transform = 'translate(-50%,-50%)';
-    designEl.style.pointerEvents = 'auto';
-    designEl.style.cursor = 'move';
-    designEl.style.opacity = '0.9';
 
-    // Make design draggable
-    makeFallbackDraggable(designEl);
+    if(fbDesignData && fbDesignData.shirt) shirtEl.src = fbDesignData.shirt;
+    if(fbDesignData && fbDesignData.design) designEl.src = fbDesignData.design;
+
+    mockupWrap.style.display = 'block';
+    mockupWrap.style.width = '45%';
+    mockupWrap.style.maxWidth = '320px';
+    mockupWrap.style.position = 'absolute';
+    mockupWrap.style.top = '35%';
+    mockupWrap.style.left = '50%';
+    mockupWrap.style.transform = 'translate(-50%,-50%)';
+
+    // Make the whole mockup draggable
+    makeFallbackDraggable(mockupWrap);
 
     // Hide hint, show share buttons
     document.getElementById('fallback-hint').style.display = 'none';
@@ -9518,20 +9515,42 @@ async function fallbackComposite(){
   var sw = img.width*scale, sh = img.height*scale;
   ctx.drawImage(img, (cap.width-sw)/2, (cap.height-sh)/2, sw, sh);
 
-  // Draw design at relative position
-  if(designEl && designEl.src){
-    var dImg = new Image(); dImg.src = designEl.src;
-    await new Promise(function(r){ if(dImg.complete) r(); else dImg.onload = r; });
+  // Draw shirt + design mockup at relative position
+  var mockupWrap = document.getElementById('fallback-mockup-wrap');
+  if(mockupWrap && mockupWrap.style.display !== 'none'){
     var parent = document.getElementById('fallback-photo-area').getBoundingClientRect();
-    var dRect = designEl.getBoundingClientRect();
-    var relX = (dRect.left + dRect.width/2 - parent.left) / parent.width;
-    var relY = (dRect.top + dRect.height/2 - parent.top) / parent.height;
-    var relW = dRect.width / parent.width;
-    var dw = cap.width * relW;
-    var dh = dw * (dImg.height / dImg.width);
-    ctx.globalAlpha = 0.82;
-    ctx.drawImage(dImg, cap.width*relX - dw/2, cap.height*relY - dh/2, dw, dh);
-    ctx.globalAlpha = 1;
+    var mRect = mockupWrap.getBoundingClientRect();
+    var relX = (mRect.left + mRect.width/2 - parent.left) / parent.width;
+    var relY = (mRect.top + mRect.height/2 - parent.top) / parent.height;
+    var relW = mRect.width / parent.width;
+
+    // Draw shirt
+    var shirtEl = document.getElementById('fallback-shirt-overlay');
+    if(shirtEl && shirtEl.src){
+      var sImg = new Image(); sImg.crossOrigin = 'anonymous'; sImg.src = shirtEl.src;
+      try { await new Promise(function(r){ if(sImg.complete) r(); else sImg.onload = r; });
+        var sw2 = cap.width * relW;
+        var sh2 = sw2 * (sImg.height / sImg.width);
+        ctx.drawImage(sImg, cap.width*relX - sw2/2, cap.height*relY - sh2/2, sw2, sh2);
+      } catch(e){}
+    }
+
+    // Draw design on top of shirt
+    var designEl = document.getElementById('fallback-design-overlay');
+    if(designEl && designEl.src){
+      var dImg = new Image(); dImg.crossOrigin = 'anonymous'; dImg.src = designEl.src;
+      try { await new Promise(function(r){ if(dImg.complete) r(); else dImg.onload = r; });
+        var dRect = designEl.getBoundingClientRect();
+        var dRelX = (dRect.left + dRect.width/2 - parent.left) / parent.width;
+        var dRelY = (dRect.top + dRect.height/2 - parent.top) / parent.height;
+        var dRelW = dRect.width / parent.width;
+        var dw = cap.width * dRelW;
+        var dh = dw * (dImg.height / dImg.width);
+        ctx.globalAlpha = 0.85;
+        ctx.drawImage(dImg, cap.width*dRelX - dw/2, cap.height*dRelY - dh/2, dw, dh);
+        ctx.globalAlpha = 1;
+      } catch(e){}
+    }
   }
 
   // Watermark
