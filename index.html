@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v27.6 -->
+<!-- v27.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1748,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.6</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.7</span>
   </div>
 
 </nav>
@@ -2657,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.6</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.7</span>
   </div>
 
   <div class="studio-body">
@@ -9283,7 +9283,6 @@ async function captureDesignHighRes(){
   var wrap = document.getElementById('s-shirt-wrap');
   if(!wrap) return '';
 
-  // Get the bounding rect of the wrap to calculate positions
   var wrapRect = wrap.getBoundingClientRect();
   var wrapW = wrapRect.width;
   var wrapH = wrapRect.height;
@@ -9295,7 +9294,6 @@ async function captureDesignHighRes(){
   c.width = Math.round(wrapW * scale);
   c.height = 5100;
   var ctx = c.getContext('2d');
-  ctx.clearRect(0, 0, c.width, c.height);
 
   var hasArt = false;
   var layers = wrap.querySelectorAll('[data-type="image"],[data-type="text"]');
@@ -9304,7 +9302,6 @@ async function captureDesignHighRes(){
     var el = layers[i];
     if(el.style.display === 'none') continue;
 
-    // Get position relative to wrap using getBoundingClientRect
     var elRect = el.getBoundingClientRect();
     var relL = elRect.left - wrapRect.left;
     var relT = elRect.top - wrapRect.top;
@@ -9313,11 +9310,15 @@ async function captureDesignHighRes(){
 
     if(el.dataset.type === 'image'){
       var img = el.querySelector('img');
-      if(img && img.complete && img.src){
+      if(img && img.src){
+        // Wait for image to be fully loaded (important after blob→dataURL conversion)
+        if(!img.complete){
+          await new Promise(function(resolve){ img.onload = resolve; img.onerror = resolve; setTimeout(resolve, 2000); });
+        }
         try {
           ctx.drawImage(img, relL * scale, relT * scale, relW * scale, relH * scale);
           hasArt = true;
-        } catch(e){ console.warn('Cannot draw image to canvas (CORS):', e.message); }
+        } catch(e){ console.warn('Draw failed:', e.message); }
       }
     } else if(el.dataset.type === 'text'){
       var fontSize = Math.round(parseFloat(el.style.fontSize || '36') * scale);
@@ -9398,6 +9399,8 @@ async function submitCheckoutOrder(){
         } catch(e){ console.warn('Blob convert failed:', e); }
       }
     }
+    // Wait for converted images to load
+    await new Promise(function(r){ setTimeout(r, 500); });
   }
 
   try { artworkBase64 = await captureDesignHighRes(); } catch(e){ console.warn('Print capture failed:', e); }
