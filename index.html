@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v24.7 -->
+<!-- v24.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1709,7 +1709,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.7</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.8</span>
   </div>
 
 </nav>
@@ -2512,7 +2512,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div style="font-size:40px;margin-bottom:16px;animation:spin 1.5s linear infinite">👕</div>
       <div style="font-size:20px;font-weight:700;margin-bottom:8px">Creating your try-on...</div>
       <div style="font-size:14px;opacity:.6;margin-bottom:16px">AI is placing the shirt on you — about 10 seconds</div>
-      <div style="font-size:12px;opacity:.35;max-width:280px;margin:0 auto;line-height:1.5">Note: AI-generated try-ons are approximations. Design placement may vary slightly from your actual print. Your exact design and placement are saved with your order.</div>
+      <div style="font-size:12px;opacity:.4;max-width:300px;margin:0 auto;line-height:1.5">This is an AI-generated preview and not an exact representation of your final product. Colors, placement, and fit may differ. Think of it as a fun way to get an idea — your actual print will match your design exactly.</div>
       <div style="margin-top:20px;width:200px;height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden;margin-left:auto;margin-right:auto">
         <div id="tryon-progress" style="height:100%;background:#0071ce;border-radius:3px;width:0%;transition:width .5s"></div>
       </div>
@@ -2618,7 +2618,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.7</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.8</span>
   </div>
 
   <div class="studio-body">
@@ -7639,11 +7639,22 @@ buildTxtColorSwatches();
 
 function txtSetColor(c){
   txtState.color=c;
-  document.getElementById("txt-color-custom").value = c.length===7?c:"#111111";
+  var customEl = document.getElementById("txt-color-custom");
+  if(customEl) customEl.value = c.length===7?c:"#111111";
   buildTxtColorSwatches();
   // update selected txt layer live
-  const sel = document.querySelector(".txt-layer.selected");
+  var sel = document.querySelector(".txt-layer.selected");
   if(sel) { sel.style.color=c; sel.dataset.color=c; }
+  // update preview swatch
+  var preview = document.getElementById('txt-color-preview');
+  var nameEl = document.getElementById('txt-color-name');
+  if(preview) preview.style.background = c;
+  if(nameEl){
+    var map = {'#ffffff':'White','#111111':'Black','#333333':'Dark Gray','#0071ce':'Blue','#dc2626':'Red','#16a34a':'Green','#f59e0b':'Gold','#9333ea':'Purple','#004a8f':'Navy','#f05a28':'Orange','#555555':'Gray','#888888':'Light Gray','#aaaaaa':'Silver','#dddddd':'Off White','#2563eb':'Royal','#1e40af':'Dark Blue','#b91c1c':'Dark Red','#15803d':'Dark Green','#166534':'Forest','#92400e':'Brown','#d97706':'Amber','#005baa':'Medium Blue','#db2777':'Hot Pink','#be185d':'Magenta'};
+    nameEl.textContent = map[c.toLowerCase()] || c;
+  }
+  // also update the textarea preview if typing
+  txtUpdate();
 }
 
 function txtToggle(prop){
@@ -8041,18 +8052,7 @@ function txtFlipSelected(){
   }
 }
 
-// Update color preview swatch when color changes
-const _origTxtSetColor = txtSetColor;
-function txtSetColor(c){
-  _origTxtSetColor(c);
-  const preview = document.getElementById('txt-color-preview');
-  const name    = document.getElementById('txt-color-name');
-  if(preview) preview.style.background = c;
-  if(name){
-    const map = {'#ffffff':'White','#111111':'Black','#333333':'Dark Gray','#0071ce':'Blue','#dc2626':'Red','#16a34a':'Green','#f59e0b':'Gold','#9333ea':'Purple','#004a8f':'Pink','#f05a28':'Orange'};
-    name.textContent = map[c] || c;
-  }
-}
+// (color preview update merged into txtSetColor above)
 
 
 
