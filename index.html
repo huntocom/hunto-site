@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v23.0 -->
+<!-- v23.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1707,7 +1707,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v23.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v23.1</span>
   </div>
 
 </nav>
@@ -2591,7 +2591,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v23.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v23.1</span>
   </div>
 
   <div class="studio-body">
@@ -9219,23 +9219,30 @@ async function openTryOn(){
   var designSrc = getTryOnDesignSrc();
   if(!designSrc){ sNtf('Add a design first, then try it on!'); return; }
 
-  var container = document.getElementById('tryon-container');
-  var loading = document.getElementById('tryon-loading');
-  container.style.display = 'block';
-  loading.style.display = 'flex';
-  document.getElementById('tryon-share-btn').style.display = 'none';
-  tryOnCapturedBlob = null;
-
-  // Load design image
-  tryOnDesignImg = new Image();
-  tryOnDesignImg.crossOrigin = 'anonymous';
-  tryOnDesignImg.src = designSrc;
-
+  // Try camera + pose detection first, fall back to photo upload
   try {
-    // Start camera
-    tryOnStream = await navigator.mediaDevices.getUserMedia({
-      video:{ facingMode:'user', width:{ideal:1080}, height:{ideal:1920} }, audio:false
+    // Check if camera is available
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('No camera');
+
+    var container = document.getElementById('tryon-container');
+    var loading = document.getElementById('tryon-loading');
+    container.style.display = 'block';
+    loading.style.display = 'flex';
+    document.getElementById('tryon-share-btn').style.display = 'none';
+    tryOnCapturedBlob = null;
+
+    // Load design image
+    tryOnDesignImg = new Image();
+    tryOnDesignImg.crossOrigin = 'anonymous';
+    tryOnDesignImg.src = designSrc;
+
+    // Start camera with timeout
+    var camPromise = navigator.mediaDevices.getUserMedia({
+      video:{ facingMode:'user', width:{ideal:720}, height:{ideal:1280} }, audio:false
     });
+    var timeoutPromise = new Promise(function(_,reject){ setTimeout(function(){ reject(new Error('Camera timeout')); }, 10000); });
+    tryOnStream = await Promise.race([camPromise, timeoutPromise]);
+
     var video = document.getElementById('tryon-video');
     video.srcObject = tryOnStream;
     await video.play();
@@ -9246,6 +9253,7 @@ async function openTryOn(){
 
     // Init MediaPipe if needed
     if(!tryOnPoseLandmarker){
+      loading.querySelector('div > div:first-child').textContent = 'Loading pose detection...';
       var mod = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/wasm/vision_bundle.mjs');
       var fileset = await mod.FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/wasm');
       tryOnPoseLandmarker = await mod.PoseLandmarker.createFromOptions(fileset, {
@@ -9258,10 +9266,14 @@ async function openTryOn(){
     tryOnRenderLoop(video, canvas);
 
   } catch(err){
-    console.warn('Try-on failed, using fallback:', err);
-    loading.style.display = 'none';
-    container.style.display = 'none';
+    console.warn('AR try-on failed, using photo fallback:', err.message);
+    // Clean up camera attempt
+    if(tryOnStream){ tryOnStream.getTracks().forEach(function(t){ t.stop(); }); tryOnStream = null; }
+    var cont = document.getElementById('tryon-container');
+    if(cont) cont.style.display = 'none';
+    // Open fallback
     openFallbackTryOn(designSrc);
+    sNtf('Camera not available — upload a photo instead');
   }
 }
 
@@ -9406,15 +9418,15 @@ function renderFallbackTryOn(){
   }
 }
 
-// Drag + pinch on fallback canvas
-(function(){
+// Drag + pinch on fallback canvas — init after DOM ready
+document.addEventListener('DOMContentLoaded', function(){
   var c = document.getElementById('fallback-canvas'); if(!c) return;
-  c.addEventListener('pointerdown', function(e){ if(!fbPhotoImg) return; fbDragging = true; var r = c.getBoundingClientRect(); fbDragOff.x = e.clientX; fbDragOff.y = e.clientY; c.setPointerCapture(e.pointerId); });
-  c.addEventListener('pointermove', function(e){ if(!fbDragging||!fbPhotoImg) return; var r = c.getBoundingClientRect(); var sx = c.width/r.width, sy = c.height/r.height; fbPos.x += (e.clientX - fbDragOff.x)*sx; fbPos.y += (e.clientY - fbDragOff.y)*sy; fbDragOff.x = e.clientX; fbDragOff.y = e.clientY; renderFallbackTryOn(); });
+  c.addEventListener('pointerdown', function(e){ if(!fbPhotoImg) return; fbDragging = true; fbDragOff.x = e.clientX; fbDragOff.y = e.clientY; c.setPointerCapture(e.pointerId); });
+  c.addEventListener('pointermove', function(e){ if(!fbDragging||!fbPhotoImg) return; var sx = c.width/c.getBoundingClientRect().width; fbPos.x += (e.clientX - fbDragOff.x)*sx; fbPos.y += (e.clientY - fbDragOff.y)*sx; fbDragOff.x = e.clientX; fbDragOff.y = e.clientY; renderFallbackTryOn(); });
   c.addEventListener('pointerup', function(){ fbDragging = false; });
   c.addEventListener('touchmove', function(e){ if(e.touches.length===2 && fbPhotoImg){ e.preventDefault(); var d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY); if(!fbPinchDist){ fbPinchDist = d; fbPinchScale = fbPos.scale; } else { fbPos.scale = fbPinchScale*(d/fbPinchDist); renderFallbackTryOn(); } } }, {passive:false});
   c.addEventListener('touchend', function(){ fbPinchDist = 0; });
-})();
+});
 
 async function fallbackShare(){
   var canvas = document.getElementById('fallback-canvas');
