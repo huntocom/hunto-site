@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v24.6 -->
+<!-- v24.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1709,7 +1709,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.6</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.7</span>
   </div>
 
 </nav>
@@ -2511,7 +2511,8 @@ footer{background:#111;padding:56px 32px 28px}
     <div style="color:#fff;text-align:center">
       <div style="font-size:40px;margin-bottom:16px;animation:spin 1.5s linear infinite">👕</div>
       <div style="font-size:20px;font-weight:700;margin-bottom:8px">Creating your try-on...</div>
-      <div style="font-size:14px;opacity:.6">AI is placing the shirt on you — about 10 seconds</div>
+      <div style="font-size:14px;opacity:.6;margin-bottom:16px">AI is placing the shirt on you — about 10 seconds</div>
+      <div style="font-size:12px;opacity:.35;max-width:280px;margin:0 auto;line-height:1.5">Note: AI-generated try-ons are approximations. Design placement may vary slightly from your actual print. Your exact design and placement are saved with your order.</div>
       <div style="margin-top:20px;width:200px;height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden;margin-left:auto;margin-right:auto">
         <div id="tryon-progress" style="height:100%;background:#0071ce;border-radius:3px;width:0%;transition:width .5s"></div>
       </div>
@@ -2617,7 +2618,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.6</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.7</span>
   </div>
 
   <div class="studio-body">
@@ -2801,8 +2802,8 @@ footer{background:#111;padding:56px 32px 28px}
               <span style="color:#bbb">›</span>
             </div>
           </div>
-          <div id="txt-color-wrap" style="display:none;margin-bottom:8px">
-            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px" id="txt-color-swatches"></div>
+          <div id="txt-color-wrap" style="display:block;margin-bottom:8px">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px" id="txt-color-swatches"></div>
             <div style="display:flex;align-items:center;gap:8px">
               <span style="font-size:11px;font-weight:600;color:#bbb">Custom:</span>
               <input type="color" id="txt-color-custom" value="#111111" oninput="txtSetColor(this.value)"
@@ -7626,11 +7627,11 @@ function buildTxtColorSwatches(){
   const wrap = document.getElementById("txt-color-swatches");
   if(!wrap) return;
   wrap.innerHTML = TXT_COLORS.map(c=>`
-    <div onclick="txtSetColor('${c}')"
-      style="width:24px;height:24px;background:${c};border-radius:6px;cursor:pointer;
-      border:2px solid ${c===txtState.color?"#0071ce":"transparent"};
+    <div onclick="txtSetColor('${c}')" ontouchend="event.preventDefault();txtSetColor('${c}')"
+      style="width:30px;height:30px;background:${c};border-radius:6px;cursor:pointer;
+      border:2.5px solid ${c===txtState.color?"#0071ce":"transparent"};
       ${c==="#ffffff"?"outline:1px solid #ddd":""}
-      transition:transform .12s;flex-shrink:0"
+      transition:transform .12s;flex-shrink:0;-webkit-tap-highlight-color:transparent"
       onmouseover="this.style.transform='scale(1.15)'"
       onmouseout="this.style.transform='scale(1)'"></div>`).join("");
 }
