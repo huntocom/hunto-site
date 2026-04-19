@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v27.0 -->
+<!-- v27.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1748,7 +1748,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.0</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v27.1</span>
   </div>
 
 </nav>
@@ -2657,7 +2657,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v27.1</span>
   </div>
 
   <div class="studio-body">
@@ -9100,6 +9100,110 @@ function goBack(){
   showPage('studio');
 }
 
+// Capture design layers at print resolution (5100px = 17" at 300 DPI)
+async function captureDesignHighRes(){
+  var wrap = document.getElementById('s-shirt-wrap');
+  if(!wrap) return '';
+
+  var wrapW = wrap.offsetWidth || 680;
+  var wrapH = wrap.offsetHeight || 800;
+
+  // Target: 17 inches tall at 300 DPI = 5100px height
+  var targetH = 5100;
+  var scale = targetH / wrapH;
+  var targetW = Math.round(wrapW * scale);
+
+  var c = document.createElement('canvas');
+  c.width = targetW;
+  c.height = targetH;
+  var ctx = c.getContext('2d');
+
+  // Transparent background — just the artwork, no shirt
+  ctx.clearRect(0, 0, c.width, c.height);
+
+  var hasArt = false;
+
+  // Draw all design layers at high resolution
+  var layers = wrap.querySelectorAll('[data-type="image"],[data-type="text"]');
+  for(var i = 0; i < layers.length; i++){
+    var el = layers[i];
+    if(el.style.display === 'none') continue;
+
+    var elL = parseFloat(el.style.left) || 0;
+    var elT = parseFloat(el.style.top) || 0;
+    var elW = el.offsetWidth;
+    var elH = el.offsetHeight;
+
+    if(el.dataset.type === 'image'){
+      var img = el.querySelector('img');
+      if(img && img.complete && img.src){
+        try {
+          // Draw at scaled position
+          ctx.drawImage(img, elL * scale, elT * scale, elW * scale, elH * scale);
+          hasArt = true;
+        } catch(e){}
+      }
+    } else if(el.dataset.type === 'text'){
+      var fontSize = Math.round(parseFloat(el.style.fontSize || '36') * scale);
+      var ff = (el.style.fontFamily || 'Arial,sans-serif').replace(/'/g, '');
+      ctx.font = (el.style.fontWeight||'700') + ' ' + fontSize + 'px ' + ff;
+      ctx.fillStyle = el.style.color || '#000';
+      ctx.textAlign = el.style.textAlign || 'center';
+      ctx.textBaseline = 'top';
+
+      var tx = (elL + elW/2) * scale;
+      var ty = elT * scale;
+
+      // Draw stroke if present
+      var stroke = el.style.webkitTextStroke || '';
+      if(stroke && stroke !== '0px transparent'){
+        ctx.strokeStyle = stroke.split(' ').pop() || '#fff';
+        ctx.lineWidth = Math.max(2, parseInt(stroke) * scale);
+        ctx.strokeText(el.textContent, tx, ty);
+      }
+      ctx.fillText(el.textContent, tx, ty);
+      hasArt = true;
+    }
+  }
+
+  if(!hasArt) return '';
+
+  // Trim transparent pixels to get just the artwork
+  var imageData = ctx.getImageData(0, 0, c.width, c.height);
+  var pixels = imageData.data;
+  var minX = c.width, minY = c.height, maxX = 0, maxY = 0;
+  for(var y = 0; y < c.height; y++){
+    for(var x = 0; x < c.width; x++){
+      var alpha = pixels[(y * c.width + x) * 4 + 3];
+      if(alpha > 10){
+        if(x < minX) minX = x;
+        if(y < minY) minY = y;
+        if(x > maxX) maxX = x;
+        if(y > maxY) maxY = y;
+      }
+    }
+  }
+
+  if(maxX <= minX || maxY <= minY) return c.toDataURL('image/png');
+
+  // Add small padding
+  var pad = 20;
+  minX = Math.max(0, minX - pad);
+  minY = Math.max(0, minY - pad);
+  maxX = Math.min(c.width, maxX + pad);
+  maxY = Math.min(c.height, maxY + pad);
+
+  // Crop to artwork bounds
+  var cropW = maxX - minX;
+  var cropH = maxY - minY;
+  var cropped = document.createElement('canvas');
+  cropped.width = cropW;
+  cropped.height = cropH;
+  cropped.getContext('2d').drawImage(c, minX, minY, cropW, cropH, 0, 0, cropW, cropH);
+
+  return cropped.toDataURL('image/png');
+}
+
 async function submitCheckoutOrder(){
   var email = (document.getElementById('co2-email')||{}).value||'';
   var phone = (document.getElementById('co2-phone')||{}).value||'';
@@ -9142,23 +9246,68 @@ async function submitCheckoutOrder(){
   var rushShip = document.querySelector('[name=co2-ship]:checked');
   var isRush = rushShip && rushShip.value === 'rush';
 
+  // Capture high-res artwork for printing
+  sNtf('Capturing your design at print quality...');
+  var artworkBase64 = '';
+  try { artworkBase64 = await captureDesignHighRes(); } catch(e){ console.warn('High-res capture failed:', e); }
+
+  // Collect all design layer info
+  var designLayers = [];
+  try {
+    var wrap = document.getElementById('s-shirt-wrap');
+    if(wrap){
+      wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
+        var layer = { type:el.dataset.type, side:el.dataset.side||'front' };
+        if(el.dataset.type === 'image'){
+          var img = el.querySelector('img');
+          if(img) layer.src = img.src;
+        } else {
+          layer.text = el.textContent;
+          layer.fontSize = el.style.fontSize;
+          layer.fontFamily = el.style.fontFamily;
+          layer.fontWeight = el.style.fontWeight;
+          layer.color = el.style.color;
+        }
+        layer.left = el.style.left;
+        layer.top = el.style.top;
+        layer.width = el.offsetWidth;
+        layer.height = el.offsetHeight;
+        designLayers.push(layer);
+      });
+    }
+  } catch(e){}
+
   var order = {
+    type: 'order',
     email:email.trim(), phone:phone.trim(),
     name:fname.trim()+' '+lname.trim(),
     address:{street:address.trim(),city:city.trim(),state:state,zip:zip.trim()},
     product:(sState&&sState.product)?sState.product.name:'Custom Apparel',
+    productId:(sState&&sState.product)?sState.product.id:'',
     color:(sState&&sState.color)?sState.color.n:'White',
     colorHex:(sState&&sState.color)?sState.color.h:'#ffffff',
     sizeBreakdown:sizeBreakdown.join(', '),
     totalQty:totalQty,
     total:(orderState&&orderState.grand)?orderState.grand:totalQty*28,
-    designId:designId, rush:isRush, timestamp:Date.now()
+    designId:designId,
+    designLayers:designLayers,
+    artworkBase64:artworkBase64,
+    rush:isRush,
+    status:'new',
+    timestamp:Date.now()
   };
 
-  // Save to server
+  // Save order to server
+  var orderId = '';
   try {
-    await fetch(SERVER+'/save-design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)});
+    var res = await fetch(SERVER+'/save-design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)});
+    if(res.ok){
+      var data = await res.json();
+      orderId = data.id || '';
+    }
   } catch(e){}
+
+  order.orderId = orderId;
 
   // Show confirmation
   showPage('home');
@@ -9258,7 +9407,8 @@ function showOrderConfirmation(order){
     + '<div style="font-size:13px;color:#16a34a;font-weight:600">📧 Confirmation sent to '+order.email+'</div>'
     + '<div style="font-size:13px;color:#16a34a;font-weight:600;margin-top:4px">🚚 Estimated delivery: '+getDeliveryDate(order.rush?3:5)+'</div>'
     + '</div>'
-    + '<div style="font-size:13px;color:#888;margin-bottom:16px">Payment will be collected when we confirm your design. A team member will reach out shortly.</div>'
+    + (order.orderId ? '<div style="background:#f5f7fa;border-radius:8px;padding:10px;text-align:center;margin-bottom:12px"><div style="font-size:12px;color:#888">Order ID</div><div style="font-size:16px;font-weight:800;color:#222;letter-spacing:1px">'+order.orderId.slice(0,8).toUpperCase()+'</div><a href="'+SERVER+'/order-status/'+order.orderId+'" target="_blank" style="font-size:13px;color:#0071ce;font-weight:600">Track Your Order →</a></div>' : '')
+    + '<div style="font-size:13px;color:#888;margin-bottom:16px">A team member will review your design and reach out to confirm. Payment is collected after design approval.</div>'
     + '<button onclick="this.closest(\'div[style*=fixed]\').remove();goHome()" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif">Continue Shopping</button>'
     + '</div>';
   document.body.appendChild(modal);
