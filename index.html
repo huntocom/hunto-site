@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v24.5 -->
+<!-- v24.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1709,7 +1709,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.5</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v24.6</span>
   </div>
 
 </nav>
@@ -2617,7 +2617,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.5</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v24.6</span>
   </div>
 
   <div class="studio-body">
@@ -9478,23 +9478,23 @@ async function buildGarmentWithDesign(){
   });
 
   designs.forEach(function(el){
-    // Map from wrap coordinates to print area coordinates
+    // Map from wrap coordinates to print area on the product photo
     var elL = parseFloat(el.style.left) || 0;
     var elT = parseFloat(el.style.top) || 0;
     var elW = el.offsetWidth;
     var elH = el.offsetHeight;
 
-    // Convert wrap position to relative (0-1)
-    var relL = elL / wrapW;
-    var relT = elT / wrapH;
-    var relW = elW / wrapW;
-    var relH = elH / wrapH;
+    // Element center in wrap, as ratio (0-1)
+    var centerX = (elL + elW/2) / wrapW;
+    var centerY = (elT + elH/2) / wrapH;
+    var ratioW = elW / wrapW;
+    var ratioH = elH / wrapH;
 
-    // Map to print area on the product photo
-    var dx = printX + relL * printW * 1.5;
-    var dy = printY + relT * printH * 1.2;
-    var dw = relW * printW * 1.5;
-    var dh = relH * printH * 1.5;
+    // Map to print area — same relative position
+    var dx = printX + centerX * printW - (ratioW * printW)/2;
+    var dy = printY + centerY * printH - (ratioH * printH)/2;
+    var dw = ratioW * printW;
+    var dh = ratioH * printH;
 
     if(el.dataset.type === 'image'){
       var img = el.querySelector('img');
