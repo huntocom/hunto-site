@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v22.9 -->
+<!-- v23.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1707,7 +1707,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v22.9</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v23.0</span>
   </div>
 
 </nav>
@@ -2462,6 +2462,37 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 </div>
 
+<!-- ── AR Try-On ── -->
+<div id="tryon-container" style="display:none;position:fixed;inset:0;z-index:10002;background:#000">
+  <button id="tryon-close" onclick="closeTryOn()" style="position:absolute;top:16px;right:16px;z-index:10004;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:24px;cursor:pointer">×</button>
+  <div style="position:relative;width:100%;height:100%">
+    <video id="tryon-video" playsinline autoplay muted style="width:100%;height:100%;object-fit:cover;transform:scaleX(-1)"></video>
+    <canvas id="tryon-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;transform:scaleX(-1)"></canvas>
+  </div>
+  <div style="position:absolute;bottom:40px;left:0;right:0;display:flex;justify-content:center;gap:12px;z-index:10003;padding:0 16px">
+    <button id="tryon-capture" onclick="tryOnCapture()" style="height:52px;padding:0 28px;background:#fff;color:#000;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.3)">📸 Capture</button>
+    <button id="tryon-share-btn" onclick="tryOnShare()" style="display:none;height:52px;padding:0 28px;background:#E1306C;color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.3)">Share</button>
+  </div>
+  <div id="tryon-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.85);z-index:10005">
+    <div style="color:#fff;text-align:center">
+      <div style="font-size:20px;font-weight:700;margin-bottom:8px">Loading Try-On...</div>
+      <div style="font-size:14px;opacity:.6">Setting up camera & pose detection</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Try-On Fallback (photo upload) ── -->
+<div id="tryon-fallback" style="display:none;position:fixed;inset:0;z-index:10002;background:#000">
+  <button onclick="closeFallbackTryOn()" style="position:absolute;top:16px;right:16px;z-index:10004;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:24px;cursor:pointer">×</button>
+  <canvas id="fallback-canvas" style="width:100%;height:100%;touch-action:none"></canvas>
+  <div style="position:absolute;bottom:40px;left:0;right:0;display:flex;justify-content:center;gap:12px;z-index:10003">
+    <input type="file" id="tryon-file" accept="image/*" style="display:none" onchange="tryOnFileSelected(event)">
+    <button onclick="document.getElementById('tryon-file').click()" style="height:52px;padding:0 28px;background:#fff;color:#000;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Upload Photo</button>
+    <button id="fallback-share-btn" onclick="fallbackShare()" style="display:none;height:52px;padding:0 28px;background:#E1306C;color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Save & Share</button>
+  </div>
+  <div id="fallback-hint" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;text-align:center;font-size:18px;font-weight:600;pointer-events:none">Upload a photo, then drag your design into position</div>
+</div>
+
 <!-- ── Preview Modal — Front & Back ── -->
 <div id="model-preview-modal" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:16px">
   <div style="max-width:700px;width:100%;text-align:center">
@@ -2560,7 +2591,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v22.9</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v23.0</span>
   </div>
 
   <div class="studio-body">
@@ -3737,6 +3768,10 @@ footer{background:#111;padding:56px 32px 28px}
     <button class="s-bot-btn" onclick="openModelPreview()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       Preview
+    </button>
+    <button class="s-bot-btn" onclick="openTryOn()" style="border-color:#E1306C;color:#E1306C">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      Try It On
     </button>
     <button class="s-bot-btn next" onclick="sNext()">Next Step &nbsp;&rarr;</button>
   </div>
@@ -9150,6 +9185,253 @@ function updateStudioLivePrice(totalUnits, garmentTotal){
 
 // ── Fix 3: Save Design Prompt (abandoned design recovery) ──
 let saveDesignEmailCaptured = false;
+
+// ════════════════════════════════════
+// AR TRY-ON
+// ════════════════════════════════════
+var tryOnPoseLandmarker = null;
+var tryOnStream = null;
+var tryOnAnimFrame = null;
+var tryOnDesignImg = null;
+var tryOnCapturedBlob = null;
+
+function getTryOnDesignSrc(){
+  // Get the first image layer's src from the current design
+  var wrap = document.getElementById('s-shirt-wrap');
+  if(!wrap) return null;
+  var img = wrap.querySelector('[data-type="image"] img');
+  if(img && img.src) return img.src;
+  // Try text layer — render to canvas
+  var txt = wrap.querySelector('[data-type="text"]');
+  if(txt){
+    var c = document.createElement('canvas'); c.width=400; c.height=300;
+    var ctx = c.getContext('2d');
+    ctx.font = (txt.style.fontSize||'36px')+' '+(txt.style.fontFamily||'DM Sans');
+    ctx.fillStyle = txt.style.color||'#000';
+    ctx.textAlign = 'center';
+    ctx.fillText(txt.textContent, 200, 180);
+    return c.toDataURL();
+  }
+  return null;
+}
+
+async function openTryOn(){
+  var designSrc = getTryOnDesignSrc();
+  if(!designSrc){ sNtf('Add a design first, then try it on!'); return; }
+
+  var container = document.getElementById('tryon-container');
+  var loading = document.getElementById('tryon-loading');
+  container.style.display = 'block';
+  loading.style.display = 'flex';
+  document.getElementById('tryon-share-btn').style.display = 'none';
+  tryOnCapturedBlob = null;
+
+  // Load design image
+  tryOnDesignImg = new Image();
+  tryOnDesignImg.crossOrigin = 'anonymous';
+  tryOnDesignImg.src = designSrc;
+
+  try {
+    // Start camera
+    tryOnStream = await navigator.mediaDevices.getUserMedia({
+      video:{ facingMode:'user', width:{ideal:1080}, height:{ideal:1920} }, audio:false
+    });
+    var video = document.getElementById('tryon-video');
+    video.srcObject = tryOnStream;
+    await video.play();
+
+    var canvas = document.getElementById('tryon-canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Init MediaPipe if needed
+    if(!tryOnPoseLandmarker){
+      var mod = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/wasm/vision_bundle.mjs');
+      var fileset = await mod.FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/wasm');
+      tryOnPoseLandmarker = await mod.PoseLandmarker.createFromOptions(fileset, {
+        baseOptions:{ modelAssetPath:'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task', delegate:'GPU' },
+        runningMode:'VIDEO', numPoses:1, minPoseDetectionConfidence:0.5, minTrackingConfidence:0.5
+      });
+    }
+
+    loading.style.display = 'none';
+    tryOnRenderLoop(video, canvas);
+
+  } catch(err){
+    console.warn('Try-on failed, using fallback:', err);
+    loading.style.display = 'none';
+    container.style.display = 'none';
+    openFallbackTryOn(designSrc);
+  }
+}
+
+function tryOnRenderLoop(video, canvas){
+  var ctx = canvas.getContext('2d');
+  var lastTime = -1;
+
+  function render(){
+    tryOnAnimFrame = requestAnimationFrame(render);
+    if(video.currentTime === lastTime) return;
+    lastTime = video.currentTime;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    var result = tryOnPoseLandmarker.detectForVideo(video, performance.now());
+    if(result.landmarks && result.landmarks.length > 0 && tryOnDesignImg && tryOnDesignImg.complete){
+      var lm = result.landmarks[0];
+      var ls = lm[11], rs = lm[12]; // left shoulder, right shoulder
+      if(ls.visibility > 0.4 && rs.visibility > 0.4){
+        var lsx = ls.x * canvas.width, lsy = ls.y * canvas.height;
+        var rsx = rs.x * canvas.width, rsy = rs.y * canvas.height;
+        var cx = (lsx+rsx)/2, cy = (lsy+rsy)/2;
+        var dist = Math.hypot(rsx-lsx, rsy-lsy);
+        var dW = dist * 1.4;
+        var dH = dW * (tryOnDesignImg.naturalHeight / tryOnDesignImg.naturalWidth);
+        var angle = Math.atan2(rsy-lsy, rsx-lsx);
+        var dy = dist * 0.3;
+
+        ctx.save();
+        ctx.translate(cx, cy + dy);
+        ctx.rotate(angle);
+        ctx.globalAlpha = 0.82;
+        ctx.drawImage(tryOnDesignImg, -dW/2, -dH*0.15, dW, dH);
+        ctx.restore();
+      }
+    }
+  }
+  render();
+}
+
+function closeTryOn(){
+  if(tryOnStream){ tryOnStream.getTracks().forEach(function(t){ t.stop(); }); tryOnStream = null; }
+  if(tryOnAnimFrame){ cancelAnimationFrame(tryOnAnimFrame); tryOnAnimFrame = null; }
+  document.getElementById('tryon-container').style.display = 'none';
+}
+
+async function tryOnCapture(){
+  var video = document.getElementById('tryon-video');
+  var overlay = document.getElementById('tryon-canvas');
+  var cap = document.createElement('canvas');
+  cap.width = 1080; cap.height = 1920;
+  var ctx = cap.getContext('2d');
+
+  // Draw mirrored video
+  ctx.save(); ctx.translate(cap.width, 0); ctx.scale(-1, 1);
+  var vw = video.videoWidth, vh = video.videoHeight;
+  var scale = Math.max(cap.width/vw, cap.height/vh);
+  var sw = vw*scale, sh = vh*scale, sx = (cap.width-sw)/2, sy = (cap.height-sh)/2;
+  ctx.drawImage(video, sx, sy, sw, sh);
+  ctx.restore();
+
+  // Draw mirrored overlay
+  ctx.save(); ctx.translate(cap.width, 0); ctx.scale(-1, 1);
+  ctx.drawImage(overlay, sx, sy, sw, sh);
+  ctx.restore();
+
+  // Watermark
+  ctx.fillStyle = 'rgba(255,255,255,.8)';
+  ctx.font = '600 28px DM Sans, system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Made on hunto.com', cap.width/2, cap.height - 60);
+
+  tryOnCapturedBlob = await new Promise(function(r){ cap.toBlob(r, 'image/png'); });
+  document.getElementById('tryon-share-btn').style.display = 'inline-block';
+
+  // Flash effect
+  var oc = document.getElementById('tryon-canvas');
+  var octx = oc.getContext('2d');
+  octx.fillStyle = 'rgba(255,255,255,.6)';
+  octx.fillRect(0, 0, oc.width, oc.height);
+  setTimeout(function(){ octx.clearRect(0, 0, oc.width, oc.height); }, 120);
+  sNtf('Captured! Tap Share to post it');
+}
+
+async function tryOnShare(){
+  if(!tryOnCapturedBlob) return;
+  var file = new File([tryOnCapturedBlob], 'my-hunto-design.png', {type:'image/png'});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    try { await navigator.share({ title:'My Custom Tee', text:'Check out this tee I designed on hunto.com!', files:[file] }); } catch(e){}
+  } else {
+    var url = URL.createObjectURL(tryOnCapturedBlob);
+    var a = document.createElement('a'); a.href = url; a.download = 'my-hunto-design.png'; a.click();
+    URL.revokeObjectURL(url);
+    sNtf('Image saved!');
+  }
+}
+
+// Fallback try-on (photo upload + drag)
+var fbDesignImg = null, fbPhotoImg = null;
+var fbPos = {x:0, y:0, scale:1};
+var fbDragging = false, fbDragOff = {x:0,y:0};
+var fbPinchDist = 0, fbPinchScale = 1;
+
+function openFallbackTryOn(designSrc){
+  document.getElementById('tryon-fallback').style.display = 'block';
+  document.getElementById('fallback-hint').style.display = 'block';
+  document.getElementById('fallback-share-btn').style.display = 'none';
+  fbDesignImg = new Image(); fbDesignImg.crossOrigin = 'anonymous'; fbDesignImg.src = designSrc;
+}
+function closeFallbackTryOn(){ document.getElementById('tryon-fallback').style.display = 'none'; fbPhotoImg = null; }
+
+function tryOnFileSelected(e){
+  var file = (e.target.files||[])[0]; if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    fbPhotoImg = new Image();
+    fbPhotoImg.onload = function(){
+      var canvas = document.getElementById('fallback-canvas');
+      canvas.width = Math.min(fbPhotoImg.width, 1080);
+      canvas.height = Math.min(fbPhotoImg.height, 1920);
+      fbPos.x = canvas.width/2; fbPos.y = canvas.height*0.4;
+      fbPos.scale = canvas.width*0.35 / (fbDesignImg.width||200);
+      document.getElementById('fallback-hint').style.display = 'none';
+      document.getElementById('fallback-share-btn').style.display = 'inline-block';
+      renderFallbackTryOn();
+    };
+    fbPhotoImg.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderFallbackTryOn(){
+  var canvas = document.getElementById('fallback-canvas');
+  var ctx = canvas.getContext('2d');
+  if(!fbPhotoImg) return;
+  ctx.drawImage(fbPhotoImg, 0, 0, canvas.width, canvas.height);
+  if(fbDesignImg && fbDesignImg.complete){
+    var w = fbDesignImg.width * fbPos.scale;
+    var h = fbDesignImg.height * fbPos.scale;
+    ctx.globalAlpha = 0.82;
+    ctx.drawImage(fbDesignImg, fbPos.x - w/2, fbPos.y - h/2, w, h);
+    ctx.globalAlpha = 1;
+  }
+}
+
+// Drag + pinch on fallback canvas
+(function(){
+  var c = document.getElementById('fallback-canvas'); if(!c) return;
+  c.addEventListener('pointerdown', function(e){ if(!fbPhotoImg) return; fbDragging = true; var r = c.getBoundingClientRect(); fbDragOff.x = e.clientX; fbDragOff.y = e.clientY; c.setPointerCapture(e.pointerId); });
+  c.addEventListener('pointermove', function(e){ if(!fbDragging||!fbPhotoImg) return; var r = c.getBoundingClientRect(); var sx = c.width/r.width, sy = c.height/r.height; fbPos.x += (e.clientX - fbDragOff.x)*sx; fbPos.y += (e.clientY - fbDragOff.y)*sy; fbDragOff.x = e.clientX; fbDragOff.y = e.clientY; renderFallbackTryOn(); });
+  c.addEventListener('pointerup', function(){ fbDragging = false; });
+  c.addEventListener('touchmove', function(e){ if(e.touches.length===2 && fbPhotoImg){ e.preventDefault(); var d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY); if(!fbPinchDist){ fbPinchDist = d; fbPinchScale = fbPos.scale; } else { fbPos.scale = fbPinchScale*(d/fbPinchDist); renderFallbackTryOn(); } } }, {passive:false});
+  c.addEventListener('touchend', function(){ fbPinchDist = 0; });
+})();
+
+async function fallbackShare(){
+  var canvas = document.getElementById('fallback-canvas');
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.font = '600 24px DM Sans, system-ui'; ctx.textAlign = 'center';
+  ctx.fillText('Made on hunto.com', canvas.width/2, canvas.height - 40);
+  var blob = await new Promise(function(r){ canvas.toBlob(r, 'image/png'); });
+  renderFallbackTryOn(); // re-render without watermark
+  var file = new File([blob], 'my-hunto-design.png', {type:'image/png'});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    try { await navigator.share({ title:'My Custom Tee', text:'Check out this tee I designed on hunto.com!', files:[file] }); } catch(e){}
+  } else {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a'); a.href = url; a.download = 'my-hunto-design.png'; a.click();
+    URL.revokeObjectURL(url); sNtf('Image saved!');
+  }
+}
 
 // ════════════════════════════════════
 // GROUP ORDERING
