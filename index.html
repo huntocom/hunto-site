@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v23.1 -->
+<!-- v23.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1707,7 +1707,7 @@ footer{background:#111;padding:56px 32px 28px}
   <div class="mega-nav-right">
     <span class="nav-stars-sm">★★★★★</span>
     <span style="font-size:11px;color:#888;font-weight:500">28,000+ reviews</span>
-    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v23.1</span>
+    <span style="font-size:10px;font-weight:700;color:#666;margin-left:8px">v23.2</span>
   </div>
 
 </nav>
@@ -2591,7 +2591,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v23.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v23.2</span>
   </div>
 
   <div class="studio-body">
@@ -9377,10 +9377,24 @@ var fbDragging = false, fbDragOff = {x:0,y:0};
 var fbPinchDist = 0, fbPinchScale = 1;
 
 function openFallbackTryOn(designSrc){
-  document.getElementById('tryon-fallback').style.display = 'block';
+  var container = document.getElementById('tryon-fallback');
+  container.style.display = 'block';
   document.getElementById('fallback-hint').style.display = 'block';
   document.getElementById('fallback-share-btn').style.display = 'none';
-  fbDesignImg = new Image(); fbDesignImg.crossOrigin = 'anonymous'; fbDesignImg.src = designSrc;
+  fbPhotoImg = null;
+  // Load design image
+  fbDesignImg = new Image();
+  fbDesignImg.crossOrigin = 'anonymous';
+  fbDesignImg.onload = function(){ console.log('Fallback design loaded:', fbDesignImg.width+'x'+fbDesignImg.height); };
+  fbDesignImg.onerror = function(){ console.warn('Failed to load design image'); };
+  fbDesignImg.src = designSrc;
+  // Size canvas to viewport immediately so it's not 0x0
+  var canvas = document.getElementById('fallback-canvas');
+  var rect = container.getBoundingClientRect();
+  canvas.width = rect.width * window.devicePixelRatio;
+  canvas.height = rect.height * window.devicePixelRatio;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
 }
 function closeFallbackTryOn(){ document.getElementById('tryon-fallback').style.display = 'none'; fbPhotoImg = null; }
 
@@ -9390,11 +9404,23 @@ function tryOnFileSelected(e){
   reader.onload = function(ev){
     fbPhotoImg = new Image();
     fbPhotoImg.onload = function(){
+      var container = document.getElementById('tryon-fallback');
       var canvas = document.getElementById('fallback-canvas');
-      canvas.width = Math.min(fbPhotoImg.width, 1080);
-      canvas.height = Math.min(fbPhotoImg.height, 1920);
-      fbPos.x = canvas.width/2; fbPos.y = canvas.height*0.4;
-      fbPos.scale = canvas.width*0.35 / (fbDesignImg.width||200);
+      // Size canvas to fit the image while filling viewport
+      var cRect = container.getBoundingClientRect();
+      var imgRatio = fbPhotoImg.width / fbPhotoImg.height;
+      var viewRatio = cRect.width / cRect.height;
+      if(imgRatio > viewRatio){
+        canvas.width = fbPhotoImg.width;
+        canvas.height = fbPhotoImg.width / viewRatio;
+      } else {
+        canvas.height = fbPhotoImg.height;
+        canvas.width = fbPhotoImg.height * viewRatio;
+      }
+      // Center design on canvas
+      fbPos.x = canvas.width / 2;
+      fbPos.y = canvas.height * 0.38;
+      fbPos.scale = Math.min(canvas.width, canvas.height) * 0.3 / Math.max(fbDesignImg.width || 200, 1);
       document.getElementById('fallback-hint').style.display = 'none';
       document.getElementById('fallback-share-btn').style.display = 'inline-block';
       renderFallbackTryOn();
@@ -9402,14 +9428,27 @@ function tryOnFileSelected(e){
     fbPhotoImg.src = ev.target.result;
   };
   reader.readAsDataURL(file);
+  e.target.value = ''; // allow re-upload of same file
 }
 
 function renderFallbackTryOn(){
   var canvas = document.getElementById('fallback-canvas');
+  if(!canvas) return;
   var ctx = canvas.getContext('2d');
-  if(!fbPhotoImg) return;
-  ctx.drawImage(fbPhotoImg, 0, 0, canvas.width, canvas.height);
-  if(fbDesignImg && fbDesignImg.complete){
+  // Clear
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#111';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // Draw photo centered/cover
+  if(fbPhotoImg && fbPhotoImg.complete){
+    var cw = canvas.width, ch = canvas.height;
+    var iw = fbPhotoImg.width, ih = fbPhotoImg.height;
+    var scale = Math.max(cw/iw, ch/ih);
+    var sw = iw*scale, sh = ih*scale;
+    ctx.drawImage(fbPhotoImg, (cw-sw)/2, (ch-sh)/2, sw, sh);
+  }
+  // Draw design overlay
+  if(fbDesignImg && fbDesignImg.complete && fbDesignImg.width > 0){
     var w = fbDesignImg.width * fbPos.scale;
     var h = fbDesignImg.height * fbPos.scale;
     ctx.globalAlpha = 0.82;
