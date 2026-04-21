@@ -4399,7 +4399,7 @@ function buildPDPDetails(){
 
   // Description
   const descEl = document.getElementById("pdp-description");
-  if(descEl) descEl.innerHTML = p.description || "";
+  if(descEl) descEl.textContent = (p.description || "").replace(/<[^>]*>/g, '');
 
   // Sizes
   const sizesEl = document.getElementById("pdp-sizes-list");
@@ -5806,6 +5806,8 @@ function handleUpload(e){
 }
 
 function processUploadedFile(f){
+  if(!f.type.startsWith('image/')){ sNtf('Please upload an image file (PNG, JPG, SVG)'); return; }
+  if(f.size > 15*1024*1024){ sNtf('File too large — max 15MB'); return; }
   const r = new FileReader();
   r.onload = function(ev){
     uploadRawBase64 = ev.target.result;
@@ -7359,7 +7361,8 @@ async function searchAutocomplete(val){
       const products = data.products || [];
 
       if(!products.length){
-        dropdown.innerHTML = `<div style="padding:16px;text-align:center;color:#aaa;font-size:13px">No results for "${val}"</div>`;
+        var safeVal = val.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        dropdown.innerHTML = `<div style="padding:16px;text-align:center;color:#aaa;font-size:13px">No results for "${safeVal}"</div>`;
         dropdown.classList.add("open");
         return;
       }
