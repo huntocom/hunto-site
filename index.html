@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v30.1 -->
+<!-- v30.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1553,7 +1553,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v30.1</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v30.2</span>
   </div>
 </div>
 
@@ -2192,7 +2192,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v30.1</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v30.2</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2694,7 +2694,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v30.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v30.2</span>
   </div>
 
   <div class="studio-body">
@@ -4354,6 +4354,7 @@ function showPage(id){
   document.getElementById("page-"+id).classList.add("active");
   window.scrollTo(0,0);
   history.replaceState(null, "", "#"+id);
+  try { localStorage.setItem('hunto_current_page', id); } catch(e){}
   // Hide main header + mobile search bar when in studio on mobile
   const isStudio = (id === "studio");
   const isMobile = window.innerWidth <= 768;
@@ -8689,14 +8690,18 @@ document.addEventListener("click",(e)=>{
 buildHome();
 typeAnim();
 
-// ── Hash router — restore page on refresh ──────────────────
+// ── Page router — restore page on refresh ──────────────────
 (function(){
-  const hash = window.location.hash.replace("#","");
-  if(hash === "shop")   { goShop(""); }
-  else if(hash === "studio") { restoreStudioSession(); }
-  else if(hash === "pdp") { goPDP("8000"); }
-  else if(hash === "about") { showAboutPage(); }
+  var hash = window.location.hash.replace("#","");
+  // If no hash, check localStorage for last page
+  if(!hash){ try { hash = localStorage.getItem('hunto_current_page') || ''; } catch(e){} }
+  console.log('[ROUTER] restoring page="'+hash+'"');
+  if(hash === "shop")          { goShop(""); }
+  else if(hash === "studio")   { restoreStudioSession(); }
+  else if(hash === "pdp")      { goPDP("8000"); }
+  else if(hash === "about")    { showAboutPage(); }
   else if(hash === "wishlist") { showWishlistPage(); }
+  else if(hash === "checkout") { showPage("checkout"); }
   else { showPage("home"); }
 })();
 
