@@ -8690,10 +8690,138 @@ typeAnim();
 (function(){
   const hash = window.location.hash.replace("#","");
   if(hash === "shop")   { goShop(""); }
-  else if(hash === "studio") { openStudio(null); }
+  else if(hash === "studio") { restoreStudioSession(); }
   else if(hash === "pdp") { goPDP("8000"); }
+  else if(hash === "about") { showAboutPage(); }
+  else if(hash === "wishlist") { showWishlistPage(); }
   else { showPage("home"); }
 })();
+
+// ═══════ STUDIO SESSION SAVE/RESTORE ═══════
+function saveStudioSession(){
+  try {
+    var wrap = document.getElementById('s-shirt-wrap');
+    if(!wrap) return;
+    var layers = [];
+    wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){
+      var layer = { id: el.id, type: el.dataset.type, side: el.dataset.side||'front',
+        left: el.style.left, top: el.style.top, width: el.style.width, height: el.style.height,
+        zIndex: el.style.zIndex, transform: el.style.transform };
+      if(el.dataset.type === 'image'){
+        var img = el.querySelector('img');
+        if(img) layer.src = img.src;
+      } else if(el.dataset.type === 'text'){
+        layer.text = el.textContent;
+        layer.fontSize = el.style.fontSize; layer.fontFamily = el.style.fontFamily;
+        layer.fontWeight = el.style.fontWeight; layer.color = el.style.color;
+        layer.textTransform = el.style.textTransform;
+      }
+      layers.push(layer);
+    });
+    var session = {
+      productId: sState.product ? sState.product.id : '',
+      productStyleId: sState.product ? sState.product.styleId : '',
+      colorName: sState.color ? (sState.color.n || sState.color.name) : '',
+      size: sState.sz || 'M',
+      view: sView || 'front',
+      layers: layers,
+      savedAt: Date.now()
+    };
+    localStorage.setItem('hunto_studio_session', JSON.stringify(session));
+  } catch(e){}
+}
+
+function restoreStudioSession(){
+  try {
+    var raw = localStorage.getItem('hunto_studio_session');
+    if(!raw){ openStudio(null); return; }
+    var session = JSON.parse(raw);
+    // Expire after 24 hours
+    if(Date.now() - session.savedAt > 86400000){ localStorage.removeItem('hunto_studio_session'); openStudio(null); return; }
+    // Find the product
+    var product = null;
+    if(session.productStyleId){
+      product = PRODUCTS.find(function(p){ return p.styleId == session.productStyleId; });
+    }
+    if(!product && session.productId){
+      product = PRODUCTS.find(function(p){ return p.id === session.productId; });
+    }
+    if(!product){ openStudio(null); return; }
+    sState.product = product;
+    // Find the color
+    if(session.colorName && product.colors){
+      var color = product.colors.find(function(c){ return (c.n||c.name) === session.colorName; });
+      if(color) sState.color = color;
+      else sState.color = product.colors[0];
+    }
+    sState.sz = session.size || 'M';
+    sView = session.view || 'front';
+    showPage('studio');
+    initStudio();
+    // Restore layers after studio is initialized
+    setTimeout(function(){
+      if(!session.layers || !session.layers.length) return;
+      session.layers.forEach(function(layer){
+        if(layer.type === 'image' && layer.src){
+          // Skip non-data URLs that might be expired blobs
+          if(layer.src.startsWith('blob:')) return;
+          layerCounter++;
+          var id = layer.id || ('layer-' + layerCounter);
+          var side = layer.side || 'front';
+          sLayers[side].push({id:id, src:layer.src, type:'image'});
+          addImageLayer(side, id, layer.src);
+          // Restore position
+          var el = document.getElementById(id);
+          if(el){
+            if(layer.left) el.style.left = layer.left;
+            if(layer.top) el.style.top = layer.top;
+            if(layer.width) el.style.width = layer.width;
+            if(layer.height) el.style.height = layer.height;
+            if(layer.transform) el.style.transform = layer.transform;
+            if(side !== sView) el.style.display = 'none';
+          }
+        } else if(layer.type === 'text' && layer.text){
+          layerCounter++;
+          var id = layer.id || ('layer-' + layerCounter);
+          var side = layer.side || 'front';
+          sLayers[side].push({id:id, type:'text', text:layer.text});
+          var wrap = document.getElementById('s-shirt-wrap');
+          if(wrap){
+            var dz = document.createElement('div');
+            dz.id = id; dz.dataset.side = side; dz.dataset.type = 'text';
+            dz.style.cssText = 'position:absolute;z-index:'+(3+layerCounter)+';cursor:move;padding:4px 8px;white-space:nowrap;';
+            if(layer.left) dz.style.left = layer.left;
+            if(layer.top) dz.style.top = layer.top;
+            if(layer.fontSize) dz.style.fontSize = layer.fontSize;
+            if(layer.fontFamily) dz.style.fontFamily = layer.fontFamily;
+            if(layer.fontWeight) dz.style.fontWeight = layer.fontWeight;
+            if(layer.color) dz.style.color = layer.color;
+            if(layer.textTransform) dz.style.textTransform = layer.textTransform;
+            if(layer.transform) dz.style.transform = layer.transform;
+            dz.textContent = layer.text;
+            wrap.appendChild(dz);
+            makeLayerDraggable(dz); makeLayerResizable(dz, id); makeLayerRotatable(dz, id);
+            dz.addEventListener('click', function(e){ e.stopPropagation(); selectLayer(id); });
+            if(side !== sView) dz.style.display = 'none';
+          }
+        }
+      });
+      sState.hasDesign = true;
+      updateFloatPills();
+      sNtf('Design restored from your last session');
+    }, 500);
+  } catch(e){ console.warn('Session restore failed:', e); openStudio(null); }
+}
+
+// Auto-save studio every 3 seconds when in studio
+setInterval(function(){
+  if(document.getElementById('page-studio') && document.getElementById('page-studio').classList.contains('active')){
+    saveStudioSession();
+  }
+}, 3000);
+
+// Clear saved session when order is placed
+function clearStudioSession(){ localStorage.removeItem('hunto_studio_session'); }
 
 
 // ════════════════════════════════
@@ -10022,7 +10150,8 @@ async function submitOrder(){
   closeReviewPanel();
   showOrderConfirmation(order);
 
-  // Mark abandoned cart as recovered
+  // Mark abandoned cart as recovered and clear saved studio session
+  clearStudioSession();
   if(email) fetch(SERVER+'/cart/recovered',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email})}).catch(function(){});
 
   if(btn){ btn.disabled = false; btn.textContent = 'PLACE ORDER →'; }
