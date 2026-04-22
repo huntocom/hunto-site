@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v30.3 -->
+<!-- v30.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1411,6 +1411,22 @@ footer{background:#111;padding:56px 32px 28px}
 </head>
 <body>
 <script>
+// Early page restore — runs before any other JS can fail
+try {
+  var _h = window.location.hash.replace('#','') || '';
+  if(!_h) try { _h = localStorage.getItem('hunto_current_page') || ''; } catch(e){}
+  if(_h && _h !== 'home') {
+    document.addEventListener('DOMContentLoaded', function(){
+      var target = document.getElementById('page-' + _h);
+      if(target) {
+        document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+        target.classList.add('active');
+      }
+    });
+  }
+} catch(e){}
+</script>
+<script>
 (function(){
   var PASS = 'Fart';
   var KEY  = 'hunto_unlocked';
@@ -1551,7 +1567,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v30.3</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v30.4</span>
   </div>
 </div>
 
@@ -1791,7 +1807,7 @@ footer{background:#111;padding:56px 32px 28px}
 
 
 <!-- ████ HOME PAGE ████ -->
-<div id="page-home" class="page">
+<div id="page-home" class="page active">
 
   <!-- HERO -->
   <section class="hp-hero" style="position:relative;background:#0a1628;overflow:hidden;min-height:520px;display:flex;align-items:center">
@@ -2190,7 +2206,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v30.3</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v30.4</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2692,7 +2708,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v30.3</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v30.4</span>
   </div>
 
   <div class="studio-body">
