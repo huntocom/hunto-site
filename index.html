@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v31.0 -->
+<!-- v31.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1551,7 +1551,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v31.0</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v31.1</span>
   </div>
 </div>
 
@@ -1570,17 +1570,13 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 
   <div class="hdr-actions">
-    <div class="hdr-action" onclick="if(window.Tawk_API)Tawk_API.toggle();else sNtf('Chat loading...')">
-      <span class="hdr-action-icon">💬</span>
-      <span>Live Chat</span>
-    </div>
-    <div class="hdr-action" onclick="window.location.href='tel:+18001234567'">
-      <span class="hdr-action-icon">📞</span>
-      <span>(800) HUNTO</span>
-    </div>
     <div class="hdr-action" onclick="openDesigns()">
-      <span class="hdr-action-icon">👤</span>
-      <span>My Account</span>
+      <span class="hdr-action-icon">&#9829;</span>
+      <span>Saved</span>
+    </div>
+    <div class="hdr-action" onclick="showAboutPage()">
+      <span class="hdr-action-icon">&#9733;</span>
+      <span>Help</span>
     </div>
     <div class="hdr-action cart-action" onclick="openCartDrawer()">
       <span class="hdr-action-icon">🛒</span>
@@ -1953,7 +1949,7 @@ footer{background:#111;padding:56px 32px 28px}
           </div>
           <div style="padding-left:24px">
             <div style="font-size:15px;font-weight:800;color:#111">Need it Sooner?</div>
-            <div style="font-size:14px;color:#0071ce;font-weight:600;margin-top:2px;cursor:pointer">Call (800) HUNTO or Live Chat</div>
+            <div style="font-size:14px;color:#0071ce;font-weight:600;margin-top:2px;cursor:pointer" onclick="document.getElementById('hunto-chat-bubble').click()">Chat with us for rush options</div>
           </div>
         </div>
       </div>
@@ -2190,7 +2186,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v31.0</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v31.1</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2692,7 +2688,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v31.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v31.1</span>
   </div>
 
   <div class="studio-body">
@@ -4374,6 +4370,9 @@ function showPage(id){
   // Lock body scroll when in studio
   document.body.style.overflow = isStudio ? 'hidden' : '';
   document.documentElement.style.overflow = isStudio ? 'hidden' : '';
+  // Hide chat bubble in studio so it doesn't cover Next Step button
+  var chatBubble = document.getElementById('hunto-chat-bubble');
+  if(chatBubble) chatBubble.style.display = isStudio ? 'none' : '';
 }
 function goHome(){showPage("home")}
 async function goPDP(id){
@@ -9333,37 +9332,52 @@ function setSavedDesigns(designs){
 }
 
 function saveCurrentDesign(){
-  const name = prompt('Name this design:', sState.product?.name || 'My Design');
-  if(!name) return;
+  var wrap = document.getElementById('s-shirt-wrap');
+  var hasLayers = wrap && wrap.querySelectorAll("[data-type='image'],[data-type='text']").length > 0;
+  if(!hasLayers){ sNtf('Add a design first — use AI Art, upload, or text'); return; }
 
-  const wrap = document.getElementById('s-shirt-wrap');
-  const layers = wrap ? Array.from(wrap.querySelectorAll("[data-type='image'],[data-type='text']")).map(el=>({
-    type: el.dataset.type, side: el.dataset.side, html: el.outerHTML
-  })) : [];
+  var defaultName = (sState.product?.name || 'My Design') + ' — ' + (sState.color?.n||sState.color?.name||'');
+  var name = defaultName;
 
-  // Capture the front shirt image for the saved design card
-  const frontImg = sState.color?.front || sState.color?.n && sProducts[sActiveIdx]?.color?.front
-    || document.getElementById('sth-f-img')?.src
-    || sState.product?.image || '';
+  var layers = Array.from(wrap.querySelectorAll("[data-type='image'],[data-type='text']")).map(function(el){
+    return { type: el.dataset.type, side: el.dataset.side, html: el.outerHTML };
+  });
 
-  const design = {
+  var frontImg = sState.color?.front || document.getElementById('sth-f-img')?.src || sState.product?.image || '';
+
+  var design = {
     id: Date.now(),
-    name,
+    name: name,
     savedAt: new Date().toLocaleDateString(),
-    product: { id: sState.product?.id, name: sState.product?.name, brand: sState.product?.brand||'Gildan' },
-    color: { n: sState.color?.n||sState.color?.name, h: sState.color?.h||sState.color?.hex },
-    frontImg,
-    layers,
-    jerseyMode,
-    qtyState,
-    nnRoster,
+    product: sState.product ? { id:sState.product.id, name:sState.product.name, brand:sState.product.brand||'Gildan',
+      styleId:sState.product.styleId, colors:sState.product.colors, sizes:sState.product.sizes, image:sState.product.image } : {},
+    color: sState.color ? { n:sState.color.n||sState.color.name, name:sState.color.name||sState.color.n,
+      h:sState.color.h||sState.color.hex, hex:sState.color.hex||sState.color.h, front:sState.color.front, back:sState.color.back } : {},
+    frontImg: frontImg,
+    layers: layers,
   };
 
-  const designs = getSavedDesigns();
+  var designs = getSavedDesigns();
   designs.unshift(design);
-  if(designs.length > 20) designs.pop(); // keep last 20
+  if(designs.length > 20) designs.pop();
   setSavedDesigns(designs);
-  sNtf('✓ Design saved — "' + name + '"');
+
+  sNtf('Design saved! Find it in your Saved Designs anytime.');
+
+  // Show a one-time tip about saved designs
+  var tipShown = localStorage.getItem('hunto_save_tip_shown');
+  if(!tipShown){
+    localStorage.setItem('hunto_save_tip_shown', '1');
+    setTimeout(function(){
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:fixed;bottom:80px;right:20px;z-index:9500;background:#fff;border-radius:14px;padding:16px 20px;box-shadow:0 8px 30px rgba(0,0,0,.2);max-width:300px;font-family:DM Sans,sans-serif;animation:fadeIn .3s';
+      tip.innerHTML = '<div style="font-size:15px;font-weight:700;color:#111;margin-bottom:6px">Design saved!</div>'
+        + '<div style="font-size:14px;color:#666;line-height:1.5;margin-bottom:12px">Your designs are saved on this device. Come back anytime to continue editing or order.</div>'
+        + '<button onclick="this.parentElement.remove()" style="padding:8px 16px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">Got it</button>';
+      document.body.appendChild(tip);
+      setTimeout(function(){ if(tip.parentElement) tip.remove(); }, 10000);
+    }, 500);
+  }
 }
 
 function openDesigns(){
