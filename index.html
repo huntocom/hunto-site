@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v30.8 -->
+<!-- v30.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1551,7 +1551,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v30.8</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v30.9</span>
   </div>
 </div>
 
@@ -2190,7 +2190,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v30.8</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v30.9</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2692,7 +2692,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v30.8</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v30.9</span>
   </div>
 
   <div class="studio-body">
@@ -8759,6 +8759,10 @@ function restoreStudioSession(){
     // Restore layers after studio is initialized
     setTimeout(function(){
       if(!session.layers || !session.layers.length) return;
+      // Clear any existing layers first to prevent duplicates
+      var wrap = document.getElementById('s-shirt-wrap');
+      if(wrap) wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){ el.remove(); });
+      sLayers.front = []; sLayers.back = [];
       session.layers.forEach(function(layer){
         if(layer.type === 'image' && layer.src){
           // Skip non-data URLs that might be expired blobs
