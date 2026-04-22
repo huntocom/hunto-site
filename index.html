@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v30.7 -->
+<!-- v30.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1551,7 +1551,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v30.7</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v30.8</span>
   </div>
 </div>
 
@@ -2190,7 +2190,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v30.7</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v30.8</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2692,7 +2692,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v30.7</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v30.8</span>
   </div>
 
   <div class="studio-body">
@@ -7996,10 +7996,7 @@ function shopDesignNow(styleId){
 
 // ═══════ ABOUT PAGE ═══════
 function showAboutPage(){
-  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-  var pg = document.getElementById('page-about');
-  if(pg) pg.classList.add('active');
-  window.scrollTo(0,0);
+  showPage('about');
   closeMobileMenu();
 }
 
@@ -8100,11 +8097,7 @@ function updateWishlistBadge(){
 }
 
 function showWishlistPage(){
-  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-  var pg = document.getElementById('page-wishlist');
-  if(!pg) return;
-  pg.classList.add('active');
-  window.scrollTo(0,0);
+  showPage('wishlist');
   renderWishlist();
 }
 
@@ -8747,12 +8740,12 @@ function saveStudioSession(){
 function restoreStudioSession(){
   try {
     var raw = localStorage.getItem('hunto_studio_session');
-    if(!raw){ openStudio(null); return; }
+    if(!raw){ openStudio('8000'); return; }
     var session = JSON.parse(raw);
     // Expire after 24 hours
-    if(Date.now() - session.savedAt > 86400000){ localStorage.removeItem('hunto_studio_session'); openStudio(null); return; }
+    if(Date.now() - session.savedAt > 86400000){ localStorage.removeItem('hunto_studio_session'); openStudio('8000'); return; }
     // Use the saved product directly — no lookup needed
-    if(!session.product){ openStudio(null); return; }
+    if(!session.product){ openStudio('8000'); return; }
     sState.product = session.product;
     sState.color = session.color || (session.product.colors && session.product.colors[0]) || sState.color;
     sState.sz = session.size || 'M';
