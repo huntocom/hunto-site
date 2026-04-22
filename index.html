@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v30.9 -->
+<!-- v31.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1551,7 +1551,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v30.9</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v31.0</span>
   </div>
 </div>
 
@@ -2190,7 +2190,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v30.9</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v31.0</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2692,7 +2692,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v30.9</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v31.0</span>
   </div>
 
   <div class="studio-body">
@@ -7656,6 +7656,7 @@ function goShopGender(gender, subcat){
   const genderLabels = {ladies:"Women's Apparel", mens:"Men's Apparel", youth:"Kids' & Youth Apparel", toddler:"Toddler & Infant"};
   if(titleEl) titleEl.textContent = genderLabels[gender] || "Shop All Products";
   shopLoadCatalog(); shopRenderBrands();
+  saveShopState();
 }
 
 async function goShop(category) {
@@ -7691,6 +7692,28 @@ async function goShop(category) {
 
   await shopLoadCatalog();
   shopRenderBrands();
+  saveShopState();
+}
+
+function saveShopState(){
+  try { localStorage.setItem('hunto_shop_state', JSON.stringify({
+    category:shopState.category, gender:shopState.gender, brand:shopState.brand,
+    search:shopState.search, price:shopState.price, sort:shopState.sort
+  })); } catch(e){}
+}
+
+function restoreShopState(){
+  try {
+    var raw = localStorage.getItem('hunto_shop_state');
+    if(!raw) return;
+    var s = JSON.parse(raw);
+    shopState.category = s.category || '';
+    shopState.gender = s.gender || '';
+    shopState.brand = s.brand || '';
+    shopState.search = s.search || '';
+    shopState.price = s.price || '';
+    shopState.sort = s.sort || 'default';
+  } catch(e){}
 }
 
 async function shopLoadCatalog() {
@@ -8690,7 +8713,7 @@ typeAnim();
   try {
     var hash = window.location.hash.replace("#","");
     if(!hash){ try { hash = localStorage.getItem('hunto_current_page') || ''; } catch(e){} }
-    if(hash === "shop")          { goShop(""); }
+    if(hash === "shop")          { restoreShopState(); showPage("shop"); shopLoadCatalog().then(function(){ shopRenderBrands(); }); }
     else if(hash === "studio")   { restoreStudioSession(); }
     else if(hash === "pdp")      { goPDP("8000"); }
     else if(hash === "about")    { showAboutPage(); }
