@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v30.4 -->
+<!-- v30.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1411,22 +1411,6 @@ footer{background:#111;padding:56px 32px 28px}
 </head>
 <body>
 <script>
-// Early page restore — runs before any other JS can fail
-try {
-  var _h = window.location.hash.replace('#','') || '';
-  if(!_h) try { _h = localStorage.getItem('hunto_current_page') || ''; } catch(e){}
-  if(_h && _h !== 'home') {
-    document.addEventListener('DOMContentLoaded', function(){
-      var target = document.getElementById('page-' + _h);
-      if(target) {
-        document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-        target.classList.add('active');
-      }
-    });
-  }
-} catch(e){}
-</script>
-<script>
 (function(){
   var PASS = 'Fart';
   var KEY  = 'hunto_unlocked';
@@ -1567,7 +1551,7 @@ try {
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v30.4</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v30.5</span>
   </div>
 </div>
 
@@ -2206,7 +2190,7 @@ try {
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v30.4</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v30.5</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2708,7 +2692,7 @@ try {
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v30.4</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v30.5</span>
   </div>
 
   <div class="studio-body">
@@ -8707,19 +8691,31 @@ buildHome();
 typeAnim();
 
 // ── Page router — restore page on refresh ──────────────────
+// Runs immediately for home, deferred for pages needing data
 (function(){
-  var hash = window.location.hash.replace("#","");
-  // If no hash, check localStorage for last page
-  if(!hash){ try { hash = localStorage.getItem('hunto_current_page') || ''; } catch(e){} }
-  console.log('[ROUTER] restoring page="'+hash+'"');
-  if(hash === "shop")          { goShop(""); }
-  else if(hash === "studio")   { restoreStudioSession(); }
-  else if(hash === "pdp")      { goPDP("8000"); }
-  else if(hash === "about")    { showAboutPage(); }
-  else if(hash === "wishlist") { showWishlistPage(); }
-  else if(hash === "checkout") { showPage("checkout"); }
-  else { showPage("home"); }
+  try {
+    var hash = window.location.hash.replace("#","");
+    if(!hash){ try { hash = localStorage.getItem('hunto_current_page') || ''; } catch(e){} }
+    if(!hash || hash === 'home') { showPage("home"); return; }
+    // For pages that need async data, defer to after DOM is ready
+    window._huntoRestorePage = hash;
+  } catch(e){ showPage("home"); }
 })();
+
+// Deferred restore — runs after DOM is fully ready, handles async pages
+window.addEventListener('load', function(){
+  try {
+    var hash = window._huntoRestorePage;
+    if(!hash) return;
+    if(hash === "shop")          { goShop(""); }
+    else if(hash === "studio")   { restoreStudioSession(); }
+    else if(hash === "pdp")      { goPDP("8000"); }
+    else if(hash === "about")    { showAboutPage(); }
+    else if(hash === "wishlist") { showWishlistPage(); }
+    else if(hash === "checkout") { showPage("checkout"); }
+    else { showPage("home"); }
+  } catch(e){ console.warn('[ROUTER] restore failed:', e); showPage("home"); }
+});
 
 // ═══════ STUDIO SESSION SAVE/RESTORE ═══════
 function saveStudioSession(){
