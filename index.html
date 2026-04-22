@@ -2156,6 +2156,14 @@ footer{background:#111;padding:56px 32px 28px}
         <div>
           <div class="footer-logo">hunto</div>
           <p class="footer-tagline">Real Gildan blanks, AI-generated designs, premium in-house printing. No minimums. Ships in 48 hours.</p>
+          <div style="margin-top:16px">
+            <div style="font-size:13px;color:#aaa;line-height:1.8">
+              <strong style="color:#ccc">Konstant Design</strong><br>
+              4023 S West Shore Blvd<br>
+              Tampa, FL 33611<br>
+              <a href="mailto:mike@konstantdesign.com" style="color:#a8c8e8;text-decoration:none">mike@konstantdesign.com</a>
+            </div>
+          </div>
         </div>
         <div>
           <div class="footer-col-title">Garments</div>
@@ -2163,17 +2171,25 @@ footer{background:#111;padding:56px 32px 28px}
           <span class="footer-link" onclick="goPDP('64000')">Gildan 64000 Softstyle Tee</span>
           <span class="footer-link" onclick="goPDP('18500')">Gildan 18500 Heavy Hoodie</span>
           <span class="footer-link" onclick="goPDP('SF500')">Gildan SF500 Softstyle Hoodie</span>
+          <span class="footer-link" onclick="goShop('')">View All Products</span>
         </div>
         <div>
           <div class="footer-col-title">Company</div>
-          <span class="footer-link">About Hunto</span>
-          <span class="footer-link">How It Works</span>
-          <span class="footer-link">Contact</span>
-          <span class="footer-link">KonstantDesign.com</span>
+          <span class="footer-link" onclick="showAboutPage()">About Hunto</span>
+          <span class="footer-link" onclick="showAboutPage()">How It Works</span>
+          <span class="footer-link" onclick="showAboutPage()">Contact Us</span>
+          <a href="https://konstantdesign.com" target="_blank" class="footer-link" style="text-decoration:none">KonstantDesign.com</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Support</div>
+          <span class="footer-link" onclick="showAboutPage()">FAQ</span>
+          <span class="footer-link" onclick="showWishlistPage()">Saved Items</span>
+          <span class="footer-link" onclick="showAboutPage()">Shipping Info</span>
+          <span class="footer-link" onclick="showAboutPage()">Returns</span>
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Powered by KonstantDesign</span>
+        <span class="footer-copy">© 2026 Hunto · A <a href="https://konstantdesign.com" target="_blank" style="color:#a8c8e8;text-decoration:none">Konstant Design</a> Brand · Tampa, FL</span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -3874,6 +3890,134 @@ footer{background:#111;padding:56px 32px 28px}
   </div>
 
 </div>
+</div>
+
+<!-- ████ ABOUT / HOW IT WORKS / CONTACT PAGE ████ -->
+<div id="page-about" class="page">
+  <div style="max-width:900px;margin:0 auto;padding:48px 24px">
+
+    <!-- Back link -->
+    <button onclick="goHome()" style="background:none;border:none;color:#0071ce;font-size:14px;font-weight:600;cursor:pointer;padding:0;font-family:'DM Sans',sans-serif;margin-bottom:24px">← Back to Home</button>
+
+    <!-- Hero -->
+    <div style="text-align:center;margin-bottom:56px">
+      <div style="font-size:56px;font-weight:900;font-family:'Outfit',sans-serif;color:#111;margin-bottom:8px">hunto</div>
+      <div style="font-size:18px;color:#555;font-weight:500;max-width:600px;margin:0 auto;line-height:1.6">Custom apparel, made simple. Design your own shirts, hoodies, and more with AI-powered tools and premium in-house printing.</div>
+    </div>
+
+    <!-- About Section -->
+    <div style="margin-bottom:48px">
+      <h2 style="font-size:28px;font-weight:800;color:#111;font-family:'Space Grotesk',sans-serif;margin-bottom:16px">About Hunto</h2>
+      <div style="font-size:15px;color:#555;line-height:1.8">
+        <p style="margin-bottom:16px">Hunto is a custom apparel platform built by <strong>Konstant Design</strong> in Tampa, Florida. We believe everyone should be able to create professional-quality custom clothing without design skills, minimum orders, or weeks of waiting.</p>
+        <p style="margin-bottom:16px">Our AI-powered design studio lets you create stunning artwork in seconds — just describe what you want, and we generate print-ready designs instantly. Upload your own logos, choose from clipart, or add custom text. Place your design on real Gildan blanks and see exactly how it'll look before you order.</p>
+        <p>Every order is printed in-house using premium printing technology for vibrant, long-lasting results. We ship within 48 hours, and there are no minimums — order one shirt or one thousand.</p>
+      </div>
+    </div>
+
+    <!-- How It Works -->
+    <div style="margin-bottom:48px">
+      <h2 style="font-size:28px;font-weight:800;color:#111;font-family:'Space Grotesk',sans-serif;margin-bottom:24px">How It Works</h2>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
+        <div style="background:#f5f7fa;border-radius:16px;padding:24px;border:1.5px solid #e8e8e8">
+          <div style="font-size:32px;margin-bottom:12px">1</div>
+          <div style="font-size:17px;font-weight:800;color:#111;margin-bottom:8px">Pick Your Garment</div>
+          <p style="font-size:14px;color:#888;line-height:1.6">Browse thousands of styles from top brands — t-shirts, hoodies, polos, tank tops, outerwear, kids sizes, and more. Choose your color and sizes.</p>
+        </div>
+        <div style="background:#f5f7fa;border-radius:16px;padding:24px;border:1.5px solid #e8e8e8">
+          <div style="font-size:32px;margin-bottom:12px">2</div>
+          <div style="font-size:17px;font-weight:800;color:#111;margin-bottom:8px">Design It</div>
+          <p style="font-size:14px;color:#888;line-height:1.6">Use our AI to generate custom artwork from a text description. Or upload your own logo, choose from clipart, or add text. Drag, resize, and position your design on the shirt.</p>
+        </div>
+        <div style="background:#f5f7fa;border-radius:16px;padding:24px;border:1.5px solid #e8e8e8">
+          <div style="font-size:32px;margin-bottom:12px">3</div>
+          <div style="font-size:17px;font-weight:800;color:#111;margin-bottom:8px">We Print It</div>
+          <p style="font-size:14px;color:#888;line-height:1.6">Your order goes straight to our in-house production facility in Tampa. We use premium printing technology for vibrant, wash-resistant results on every garment.</p>
+        </div>
+        <div style="background:#f5f7fa;border-radius:16px;padding:24px;border:1.5px solid #e8e8e8">
+          <div style="font-size:32px;margin-bottom:12px">4</div>
+          <div style="font-size:17px;font-weight:800;color:#111;margin-bottom:8px">Fast Shipping</div>
+          <p style="font-size:14px;color:#888;line-height:1.6">Standard orders ship within 48 hours. Rush production available for next-day shipping. Full tracking included. Free shipping on every order.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- What We Offer -->
+    <div style="margin-bottom:48px">
+      <h2 style="font-size:28px;font-weight:800;color:#111;font-family:'Space Grotesk',sans-serif;margin-bottom:16px">What Makes Hunto Different</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="padding:16px 20px;background:#f0f7ff;border-radius:12px;font-size:15px"><strong style="color:#0071ce">No Minimums</strong> — Order as few as 1 shirt</div>
+        <div style="padding:16px 20px;background:#f0f7ff;border-radius:12px;font-size:15px"><strong style="color:#0071ce">AI Design Studio</strong> — Generate art from text</div>
+        <div style="padding:16px 20px;background:#f0f7ff;border-radius:12px;font-size:15px"><strong style="color:#0071ce">Free Shipping</strong> — On every single order</div>
+        <div style="padding:16px 20px;background:#f0f7ff;border-radius:12px;font-size:15px"><strong style="color:#0071ce">48hr Shipping</strong> — Rush available for next-day</div>
+        <div style="padding:16px 20px;background:#f0f7ff;border-radius:12px;font-size:15px"><strong style="color:#0071ce">Real Brands</strong> — Gildan, Next Level, Bella+Canvas</div>
+        <div style="padding:16px 20px;background:#f0f7ff;border-radius:12px;font-size:15px"><strong style="color:#0071ce">Group Orders</strong> — Volume discounts up to 15%</div>
+        <div style="padding:16px 20px;background:#f0f7ff;border-radius:12px;font-size:15px"><strong style="color:#0071ce">Virtual Try-On</strong> — See it on you with AR</div>
+        <div style="padding:16px 20px;background:#f0f7ff;border-radius:12px;font-size:15px"><strong style="color:#0071ce">In-House Printing</strong> — Quality controlled, Tampa FL</div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div style="margin-bottom:48px">
+      <h2 style="font-size:28px;font-weight:800;color:#111;font-family:'Space Grotesk',sans-serif;margin-bottom:16px">Frequently Asked Questions</h2>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <details style="background:#f9f9f9;border-radius:12px;padding:16px 20px;border:1px solid #e8e8e8;cursor:pointer">
+          <summary style="font-size:15px;font-weight:700;color:#222">How long does shipping take?</summary>
+          <p style="font-size:14px;color:#666;margin-top:10px;line-height:1.6">Standard orders ship within 48 hours of placement. Delivery typically takes 3-5 business days after shipping. Rush production is available for an additional $15 — we ship within 24 hours.</p>
+        </details>
+        <details style="background:#f9f9f9;border-radius:12px;padding:16px 20px;border:1px solid #e8e8e8;cursor:pointer">
+          <summary style="font-size:15px;font-weight:700;color:#222">Is there a minimum order?</summary>
+          <p style="font-size:14px;color:#666;margin-top:10px;line-height:1.6">No! You can order as few as 1 shirt. We also offer volume discounts for group orders — 5% off at 10+ items, 10% off at 25+, and 15% off at 50+ items.</p>
+        </details>
+        <details style="background:#f9f9f9;border-radius:12px;padding:16px 20px;border:1px solid #e8e8e8;cursor:pointer">
+          <summary style="font-size:15px;font-weight:700;color:#222">What printing method do you use?</summary>
+          <p style="font-size:14px;color:#666;margin-top:10px;line-height:1.6">We use premium in-house printing technology that produces vibrant, full-color designs that are soft to the touch and resistant to fading, cracking, and peeling — even after many washes.</p>
+        </details>
+        <details style="background:#f9f9f9;border-radius:12px;padding:16px 20px;border:1px solid #e8e8e8;cursor:pointer">
+          <summary style="font-size:15px;font-weight:700;color:#222">Can I upload my own design or logo?</summary>
+          <p style="font-size:14px;color:#666;margin-top:10px;line-height:1.6">Yes! You can upload PNG, JPG, or SVG files directly in the design studio. We also offer AI-powered background removal to clean up your images. Or use our AI art generator to create something new.</p>
+        </details>
+        <details style="background:#f9f9f9;border-radius:12px;padding:16px 20px;border:1px solid #e8e8e8;cursor:pointer">
+          <summary style="font-size:15px;font-weight:700;color:#222">What brands do you carry?</summary>
+          <p style="font-size:14px;color:#666;margin-top:10px;line-height:1.6">We carry thousands of styles from top brands including Gildan, Next Level, Bella+Canvas, Comfort Colors, Champion, Hanes, and many more. All sourced from authorized distributors.</p>
+        </details>
+        <details style="background:#f9f9f9;border-radius:12px;padding:16px 20px;border:1px solid #e8e8e8;cursor:pointer">
+          <summary style="font-size:15px;font-weight:700;color:#222">Do you offer returns?</summary>
+          <p style="font-size:14px;color:#666;margin-top:10px;line-height:1.6">Since each item is custom printed to order, we cannot accept returns for buyer's remorse. However, if there's a defect in printing or the wrong item was sent, we'll reprint or refund — just contact us within 7 days of delivery.</p>
+        </details>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div style="margin-bottom:48px">
+      <h2 style="font-size:28px;font-weight:800;color:#111;font-family:'Space Grotesk',sans-serif;margin-bottom:16px">Contact Us</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div style="background:#f5f7fa;border-radius:16px;padding:24px;border:1.5px solid #e8e8e8">
+          <div style="font-size:15px;font-weight:700;color:#111;margin-bottom:12px">Visit Us</div>
+          <div style="font-size:15px;color:#555;line-height:1.8">
+            <strong>Konstant Design</strong><br>
+            4023 S West Shore Blvd<br>
+            Tampa, FL 33611
+          </div>
+        </div>
+        <div style="background:#f5f7fa;border-radius:16px;padding:24px;border:1.5px solid #e8e8e8">
+          <div style="font-size:15px;font-weight:700;color:#111;margin-bottom:12px">Get In Touch</div>
+          <div style="font-size:15px;color:#555;line-height:1.8">
+            <a href="mailto:mike@konstantdesign.com" style="color:#0071ce;text-decoration:none;font-weight:600">mike@konstantdesign.com</a><br>
+            <a href="https://konstantdesign.com" target="_blank" style="color:#0071ce;text-decoration:none;font-weight:600">konstantdesign.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center;padding:40px;background:linear-gradient(135deg,#0071ce,#004a8f);border-radius:20px;color:#fff">
+      <div style="font-size:24px;font-weight:800;margin-bottom:8px;font-family:'Space Grotesk',sans-serif">Ready to create?</div>
+      <div style="font-size:15px;opacity:.85;margin-bottom:20px">Start designing your custom apparel in minutes.</div>
+      <button onclick="openStudio(null)" style="padding:16px 40px;background:#fff;color:#0071ce;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif">Start Designing</button>
+    </div>
+
+  </div>
 </div>
 
 <!-- ████ WISHLIST / SAVED PAGE ████ -->
@@ -7839,6 +7983,15 @@ function shopOpenPDP(p){
 
 function shopDesignNow(styleId){
   shopOpenProduct(styleId).then(()=>{setTimeout(()=>openPDPStudio(),200);});
+}
+
+// ═══════ ABOUT PAGE ═══════
+function showAboutPage(){
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  var pg = document.getElementById('page-about');
+  if(pg) pg.classList.add('active');
+  window.scrollTo(0,0);
+  closeMobileMenu();
 }
 
 // ═══════ GROUP ORDER ═══════
