@@ -8720,10 +8720,13 @@ function saveStudioSession(){
       }
       layers.push(layer);
     });
+    // Save the FULL product and color objects so restore doesn't depend on PRODUCTS array
     var session = {
-      productId: sState.product ? sState.product.id : '',
-      productStyleId: sState.product ? sState.product.styleId : '',
-      colorName: sState.color ? (sState.color.n || sState.color.name) : '',
+      product: sState.product ? {id:sState.product.id, name:sState.product.name, styleId:sState.product.styleId,
+        brand:sState.product.brand, price:sState.product.price, image:sState.product.image,
+        colors:sState.product.colors, sizes:sState.product.sizes, base_category:sState.product.base_category} : null,
+      color: sState.color ? {n:sState.color.n||sState.color.name, name:sState.color.name||sState.color.n,
+        hex:sState.color.hex, front:sState.color.front, back:sState.color.back, swatch:sState.color.swatch} : null,
       size: sState.sz || 'M',
       view: sView || 'front',
       layers: layers,
@@ -8740,24 +8743,16 @@ function restoreStudioSession(){
     var session = JSON.parse(raw);
     // Expire after 24 hours
     if(Date.now() - session.savedAt > 86400000){ localStorage.removeItem('hunto_studio_session'); openStudio(null); return; }
-    // Find the product
-    var product = null;
-    if(session.productStyleId){
-      product = PRODUCTS.find(function(p){ return p.styleId == session.productStyleId; });
-    }
-    if(!product && session.productId){
-      product = PRODUCTS.find(function(p){ return p.id === session.productId; });
-    }
-    if(!product){ openStudio(null); return; }
-    sState.product = product;
-    // Find the color
-    if(session.colorName && product.colors){
-      var color = product.colors.find(function(c){ return (c.n||c.name) === session.colorName; });
-      if(color) sState.color = color;
-      else sState.color = product.colors[0];
-    }
+    // Use the saved product directly — no lookup needed
+    if(!session.product){ openStudio(null); return; }
+    sState.product = session.product;
+    sState.color = session.color || (session.product.colors && session.product.colors[0]) || sState.color;
     sState.sz = session.size || 'M';
     sView = session.view || 'front';
+    // Also add to PRODUCTS array so studio functions can find it
+    if(!PRODUCTS.find(function(p){ return p.id === session.product.id; })){
+      PRODUCTS.push(session.product);
+    }
     showPage('studio');
     initStudio();
     // Restore layers after studio is initialized
