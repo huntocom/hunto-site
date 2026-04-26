@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.1 -->
+<!-- v5.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1570,7 +1570,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v5.1</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v5.2</span>
   </div>
 </div>
 
@@ -2200,7 +2200,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v5.1</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v5.2</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2706,7 +2706,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v5.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v5.2</span>
   </div>
 
   <div class="studio-body">
@@ -4447,12 +4447,50 @@ function updateGuideColors(){
   wrap.classList.toggle('dark-garment', dark);
 }
 
-function isCurrentProductHoodie(){
+// Hoodie subtype detection — different photo perspectives need different guide positions
+// S&S baseCategory values: "Fleece - Core - Hood", "Fleece - Premium - Hood" (pullovers),
+// "Fleece - Core - Full Zip", "Fleece - Premium - Full Zip" (zip-ups),
+// plus quarter-zips in Outerwear/Fleece categories
+function getHoodieSubtype(){
   var p = sState.product;
-  if(!p) return false;
+  if(!p) return null;
   var cat = (p.base_category || p.baseCategory || '').toLowerCase();
-  var name = (p.name || '').toLowerCase();
-  return cat.includes('hood') || name.includes('hoodie') || name.includes('hooded') || p.id === '18500';
+  var name = (p.name || p.title || '').toLowerCase();
+  var sn = (p.style_number || p.styleNumber || '').toString();
+  // Quarter-zip: no hood, smaller collar — treat more like a regular shirt
+  if(name.includes('quarter zip') || name.includes('quarter-zip') || name.includes('1/4 zip') || name.includes('1/4-zip') || cat.includes('quarter zip')){
+    return 'quarter-zip';
+  }
+  // Full-zip hoodie: zipper splits the chest, different neckline
+  // Gildan 18600 is the canonical full-zip hoodie
+  if(sn === '18600' || sn === '18600FL' || sn === '18600B' ||
+     cat.includes('full zip') || name.includes('full-zip') || name.includes('full zip')){
+    if(cat.includes('hood') || name.includes('hoodie') || name.includes('hooded')){
+      return 'full-zip-hoodie';
+    }
+    // Full zip but no hood = jacket-like
+    return 'full-zip';
+  }
+  // Pullover hoodie: hood visible at top, kangaroo pocket in middle
+  // Gildan 18500 is the canonical pullover hoodie
+  if(sn === '18500' || sn === '18500B' || sn === '18500FL' ||
+     cat.includes('hood') || name.includes('hoodie') || name.includes('hooded')){
+    return 'pullover-hoodie';
+  }
+  return null;
+}
+
+function isCurrentProductHoodie(){
+  var sub = getHoodieSubtype();
+  return sub === 'pullover-hoodie' || sub === 'full-zip-hoodie';
+}
+
+function isCurrentProductFullZipHoodie(){
+  return getHoodieSubtype() === 'full-zip-hoodie';
+}
+
+function isCurrentProductQuarterZip(){
+  return getHoodieSubtype() === 'quarter-zip';
 }
 
 function isCurrentProductJacket(){
@@ -4460,7 +4498,7 @@ function isCurrentProductJacket(){
   if(!p) return false;
   var cat = (p.base_category || p.baseCategory || '').toLowerCase();
   var name = (p.name || '').toLowerCase();
-  return (cat.includes('outerwear') || cat.includes('jacket') || name.includes('jacket') || name.includes('windbreaker') || name.includes('shell')) && !isCurrentProductHoodie();
+  return (cat.includes('outerwear') || cat.includes('jacket') || name.includes('jacket') || name.includes('windbreaker') || name.includes('shell')) && !isCurrentProductHoodie() && !isCurrentProductQuarterZip();
 }
 
 function isYouthProduct(){
@@ -5283,15 +5321,25 @@ function sSetView(v){
   const pab = document.getElementById("print-area-back");
   if(paf) paf.style.display = v==="front" ? "" : "none";
   if(pab) pab.style.display = v==="back"  ? "" : "none";
-  // Adjust guides based on garment type
-  var isHoodie = isCurrentProductHoodie();
+  // Adjust guides based on garment type and hoodie subtype
+  // Pullover hoodie: hood at top pushes print area down, kangaroo pocket limits bottom
+  // Full-zip hoodie: zipper splits chest, print area narrower on front, back similar to pullover
+  // Quarter-zip: small collar, no hood — almost like a regular shirt
+  var hoodieType = getHoodieSubtype();
   var isJacket = isCurrentProductJacket();
 
   if(v==="back"){
     var backAdult = document.getElementById('guide-b-adult');
     if(backAdult){
-      if(isHoodie){
-        backAdult.style.top = '44%'; backAdult.style.height = '26%';
+      if(hoodieType === 'pullover-hoodie'){
+        // Pullover back: hood bunches at top, start below hood fold
+        backAdult.style.top = '42%'; backAdult.style.height = '28%';
+      } else if(hoodieType === 'full-zip-hoodie'){
+        // Full-zip back: hood folds slightly differently, similar to pullover
+        backAdult.style.top = '40%'; backAdult.style.height = '28%';
+      } else if(hoodieType === 'quarter-zip'){
+        // Quarter-zip back: no hood, just a small collar — close to t-shirt
+        backAdult.style.top = '20%'; backAdult.style.height = '38%';
       } else if(isJacket){
         backAdult.style.top = '28%'; backAdult.style.height = '36%';
       } else {
@@ -5303,16 +5351,32 @@ function sSetView(v){
     var frontAdult = document.getElementById('guide-f-adult');
     var frontCrest = document.getElementById('guide-f-crest');
     if(frontAdult){
-      if(isHoodie){
-        frontAdult.style.top = '40%'; frontAdult.style.height = '24%';
+      if(hoodieType === 'pullover-hoodie'){
+        // Pullover front: below drawstrings, above kangaroo pocket
+        frontAdult.style.top = '38%'; frontAdult.style.height = '22%';
+        frontAdult.style.width = '41%';
+      } else if(hoodieType === 'full-zip-hoodie'){
+        // Full-zip front: zipper splits chest, narrower usable area, slightly higher than pullover
+        frontAdult.style.top = '36%'; frontAdult.style.height = '24%';
+        frontAdult.style.width = '35%';
+      } else if(hoodieType === 'quarter-zip'){
+        // Quarter-zip: collar is small, almost like a crewneck
+        frontAdult.style.top = '26%'; frontAdult.style.height = '30%';
+        frontAdult.style.width = '41%';
       } else if(isJacket){
         frontAdult.style.top = '28%'; frontAdult.style.height = '30%';
+        frontAdult.style.width = '41%';
       } else {
         frontAdult.style.top = '23%'; frontAdult.style.height = '33%';
+        frontAdult.style.width = '41%';
       }
     }
     if(frontCrest){
-      frontCrest.style.top = isHoodie ? '40%' : isJacket ? '28%' : '23%';
+      if(hoodieType === 'pullover-hoodie') frontCrest.style.top = '38%';
+      else if(hoodieType === 'full-zip-hoodie') frontCrest.style.top = '36%';
+      else if(hoodieType === 'quarter-zip') frontCrest.style.top = '26%';
+      else if(isJacket) frontCrest.style.top = '28%';
+      else frontCrest.style.top = '23%';
     }
   }
   // Show/hide image AND text layers per side
@@ -11243,12 +11307,47 @@ async function buildGarmentWithDesign(){
   ctx.drawImage(proxyImg, 0, 0, c.width, c.height);
 
   // Calculate the print area on the actual product photo
-  // Standard S&S product photos: chest area is roughly centered,
-  // ~40% width, starting ~28% from top, ~38% tall
-  var printX = c.width * 0.30;  // left edge of print area
-  var printY = c.height * 0.28; // top edge of print area
-  var printW = c.width * 0.40;  // width of print area
-  var printH = c.height * 0.35; // height of print area
+  // Adjust per garment type — hoodies have hood/pocket that shift the printable zone
+  var renderHoodieType = getHoodieSubtype();
+  var renderIsJacket = isCurrentProductJacket();
+  var printX, printY, printW, printH;
+  if(renderHoodieType === 'pullover-hoodie'){
+    // Pullover: hood pushes print down, kangaroo pocket limits bottom
+    printX = c.width * 0.30;
+    printY = sView === 'back' ? c.height * 0.38 : c.height * 0.36;
+    printW = c.width * 0.40;
+    printH = c.height * 0.25;
+  } else if(renderHoodieType === 'full-zip-hoodie'){
+    // Full-zip: zipper narrows the front, back similar to pullover
+    if(sView === 'front'){
+      printX = c.width * 0.32;
+      printY = c.height * 0.34;
+      printW = c.width * 0.36;
+      printH = c.height * 0.26;
+    } else {
+      printX = c.width * 0.30;
+      printY = c.height * 0.36;
+      printW = c.width * 0.40;
+      printH = c.height * 0.26;
+    }
+  } else if(renderHoodieType === 'quarter-zip'){
+    // Quarter-zip: small collar, close to t-shirt positioning
+    printX = c.width * 0.30;
+    printY = c.height * 0.26;
+    printW = c.width * 0.40;
+    printH = c.height * 0.34;
+  } else if(renderIsJacket){
+    printX = c.width * 0.30;
+    printY = c.height * 0.28;
+    printW = c.width * 0.40;
+    printH = c.height * 0.32;
+  } else {
+    // Standard t-shirt / crewneck
+    printX = c.width * 0.30;
+    printY = c.height * 0.28;
+    printW = c.width * 0.40;
+    printH = c.height * 0.35;
+  }
 
   // Draw ALL design layers into the print area
   var hasDesign = false;
