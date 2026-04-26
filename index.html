@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3.0 -->
+<!-- v3.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1565,7 +1565,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v3.0</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v3.1</span>
   </div>
 </div>
 
@@ -2200,7 +2200,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v3.0</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v3.1</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2694,6 +2694,10 @@ footer{background:#111;padding:56px 32px 28px}
     <button class="stbtn blue" onclick="goStep2()" style="margin-left:8px;height:38px;padding:0 20px;font-size:13px;border-radius:6px">Add to Cart</button>
     <!-- Mobile-only: Save + Next in topbar -->
     <div class="mobile-studio-actions">
+      <button class="mob-save-btn" onclick="studioGoBack()" title="Back to Shop" style="font-size:13px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        <span>Shop</span>
+      </button>
       <button class="mob-save-btn" onclick="showSaveDesignPrompt(function(){})" title="Save">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
@@ -2702,7 +2706,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v3.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v3.1</span>
   </div>
 
   <div class="studio-body">
@@ -3847,9 +3851,9 @@ footer{background:#111;padding:56px 32px 28px}
       <span style="color:#0071ce;font-weight:700" id="s-price-each2">$28.00 ea</span>
       &nbsp;·&nbsp; No minimum &nbsp;·&nbsp; Ships in 48hrs
     </div>
-    <button class="s-bot-btn" onclick="goHome()">
+    <button class="s-bot-btn" onclick="studioGoBack()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back
+      Shop
     </button>
     <button class="s-bot-btn" onclick="saveCurrentDesign()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
@@ -4433,6 +4437,14 @@ function openPDPStudio(){
   clearStudioLayers();
   showPage("studio");
   initStudio();
+}
+
+function studioGoBack(){
+  if(sState.hasDesign){
+    if(!confirm('You have an unsaved design. Leave the studio?')) return;
+  }
+  showPage('shop');
+  shopLoadCatalog();
 }
 
 function clearStudioLayers(){
@@ -9521,22 +9533,26 @@ function saveCurrentDesign(){
   if(designs.length > 20) designs.pop();
   setSavedDesigns(designs);
 
-  sNtf('Design saved! Find it in your Saved Designs anytime.');
+  // Show post-save modal with options
+  showPostSaveModal(design.name);
+}
 
-  // Show a one-time tip about saved designs
-  var tipShown = localStorage.getItem('hunto_save_tip_shown');
-  if(!tipShown){
-    localStorage.setItem('hunto_save_tip_shown', '1');
-    setTimeout(function(){
-      var tip = document.createElement('div');
-      tip.style.cssText = 'position:fixed;bottom:80px;right:20px;z-index:9500;background:#fff;border-radius:14px;padding:16px 20px;box-shadow:0 8px 30px rgba(0,0,0,.2);max-width:300px;font-family:DM Sans,sans-serif;animation:fadeIn .3s';
-      tip.innerHTML = '<div style="font-size:15px;font-weight:700;color:#111;margin-bottom:6px">Design saved!</div>'
-        + '<div style="font-size:14px;color:#666;line-height:1.5;margin-bottom:12px">Your designs are saved on this device. Come back anytime to continue editing or order.</div>'
-        + '<button onclick="this.parentElement.remove()" style="padding:8px 16px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">Got it</button>';
-      document.body.appendChild(tip);
-      setTimeout(function(){ if(tip.parentElement) tip.remove(); }, 10000);
-    }, 500);
-  }
+function showPostSaveModal(designName){
+  var old = document.getElementById('post-save-modal');
+  if(old) old.remove();
+  var modal = document.createElement('div');
+  modal.id = 'post-save-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px';
+  modal.innerHTML = ''
+    + '<div style="background:#fff;border-radius:16px;max-width:400px;width:100%;padding:28px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.25)">'
+    + '<div style="font-size:36px;margin-bottom:12px">&#10003;</div>'
+    + '<div style="font-size:20px;font-weight:800;color:#111;margin-bottom:6px">Design Saved!</div>'
+    + '<div style="font-size:14px;color:#888;margin-bottom:24px;line-height:1.5">"' + (designName||'My Design') + '" has been saved to your designs.</div>'
+    + '<button onclick="document.getElementById(\'post-save-modal\').remove()" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;margin-bottom:8px">Continue Editing</button>'
+    + '<button onclick="document.getElementById(\'post-save-modal\').remove();showPage(\'shop\');shopLoadCatalog()" style="width:100%;padding:14px;background:#f5f5f5;color:#333;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;margin-bottom:8px">Browse More Products</button>'
+    + '<button onclick="document.getElementById(\'post-save-modal\').remove();openDesigns()" style="width:100%;padding:10px;background:none;border:none;font-size:13px;color:#0071ce;cursor:pointer;font-family:DM Sans,sans-serif;font-weight:600">View Saved Designs</button>'
+    + '</div>';
+  document.body.appendChild(modal);
 }
 
 function openDesigns(){
@@ -9577,26 +9593,86 @@ function loadDesign(id){
   if(!d) return;
   closeDesigns();
 
-  // Load the product
-  const product = PRODUCTS.find(p=>p.id===d.product?.id)||PRODUCTS[0];
-  const color = product.colors.find(c=>c.n===d.color?.n)||product.colors[0];
-  sState.product = product;
-  sState.color = color;
+  // Use the saved product/color directly (preserves S&S data)
+  if(d.product && d.product.id){
+    sState.product = d.product;
+    if(!PRODUCTS.find(function(p){ return p.id === d.product.id; })){
+      PRODUCTS.push(d.product);
+    }
+  } else {
+    sState.product = PRODUCTS[0];
+  }
+  sState.color = d.color || (sState.product.colors && sState.product.colors[0]) || sState.color;
+
+  // Clear old layers before loading
+  clearStudioLayers();
+  window._sessionRestored = true; // prevent draft modal from firing
 
   showPage('studio');
   initStudio();
 
-  setTimeout(()=>{
-    // Restore layers
-    const wrap = document.getElementById('s-shirt-wrap');
-    if(wrap && d.layers?.length){
-      d.layers.forEach(layer=>{
-        const div = document.createElement('div');
-        div.innerHTML = layer.html;
-        const el = div.firstElementChild;
-        if(el) wrap.appendChild(el);
-      });
-    }
+  setTimeout(function(){
+    var wrap = document.getElementById('s-shirt-wrap');
+    if(!wrap || !d.layers || !d.layers.length){ sNtf('✓ Design loaded — "' + d.name + '"'); return; }
+
+    d.layers.forEach(function(layer){
+      if(layer.type === 'image'){
+        // Extract src from saved HTML
+        var tmp = document.createElement('div');
+        tmp.innerHTML = layer.html;
+        var savedEl = tmp.firstElementChild;
+        if(!savedEl) return;
+        var img = savedEl.querySelector('img');
+        var src = img ? img.src : '';
+        if(!src) return;
+
+        layerCounter++;
+        var elId = 'layer-' + layerCounter;
+        var side = layer.side || 'front';
+        sLayers[side] = sLayers[side] || [];
+        sLayers[side].push({id:elId, src:src, type:'image'});
+
+        // Create proper interactive element with saved dimensions
+        var dz = document.createElement('div');
+        dz.id = elId; dz.dataset.side = side; dz.dataset.type = 'image';
+        dz.style.cssText = 'position:absolute;z-index:'+(3+layerCounter)+';cursor:move;outline:2px dashed transparent;transition:outline-color .15s;';
+        // Restore saved position/size
+        if(savedEl.style.width) dz.style.width = savedEl.style.width;
+        if(savedEl.style.height) dz.style.height = savedEl.style.height;
+        if(savedEl.style.left) dz.style.left = savedEl.style.left;
+        if(savedEl.style.top) dz.style.top = savedEl.style.top;
+        if(savedEl.style.transform) dz.style.transform = savedEl.style.transform;
+        dz.innerHTML = '<img src="'+src+'" style="width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;">';
+        wrap.appendChild(dz);
+        makeLayerDraggable(dz); makeLayerResizable(dz, elId); makeLayerRotatable(dz, elId);
+        dz.addEventListener('click', function(e){ e.stopPropagation(); selectLayer(elId); });
+        dz.addEventListener('touchend', function(e){ if(!e.target.closest('.corner-handle')){ e.stopPropagation(); selectLayer(elId); } }, {passive:true});
+        addPinchResize(dz, elId);
+        if(side !== sView) dz.style.display = 'none';
+      } else if(layer.type === 'text'){
+        var tmp2 = document.createElement('div');
+        tmp2.innerHTML = layer.html;
+        var txtEl = tmp2.firstElementChild;
+        if(!txtEl) return;
+
+        layerCounter++;
+        var txtId = 'layer-' + layerCounter;
+        var txtSide = layer.side || 'front';
+        var dz2 = document.createElement('div');
+        dz2.id = txtId; dz2.dataset.side = txtSide; dz2.dataset.type = 'text';
+        dz2.className = txtEl.className || '';
+        dz2.style.cssText = txtEl.style.cssText || 'position:absolute;z-index:'+(3+layerCounter)+';cursor:move;padding:4px 8px;white-space:nowrap;';
+        dz2.textContent = txtEl.textContent;
+        wrap.appendChild(dz2);
+        makeLayerDraggable(dz2); makeLayerResizable(dz2, txtId); makeLayerRotatable(dz2, txtId);
+        dz2.addEventListener('click', function(e){ e.stopPropagation(); selectLayer(txtId); });
+        if(txtSide !== sView) dz2.style.display = 'none';
+      }
+    });
+
+    sState.hasDesign = true;
+    updateFloatPills();
+    historySnapshot();
     sNtf('✓ Design loaded — "' + d.name + '"');
   }, 400);
 }
