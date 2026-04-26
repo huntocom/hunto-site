@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v6.8 -->
+<!-- v7.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -99,7 +99,9 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .mobile-menu-close{
   align-self:flex-end;font-size:26px;
   background:none;border:none;color:#333;
-  margin-bottom:16px;
+  margin-bottom:16px;width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
 }
 .mobile-nav-link{
   padding:14px 16px;font-size:16px;
@@ -107,6 +109,8 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
   border-radius:12px;border:none;
   background:none;text-align:left;
   border-bottom:1px solid #f0f0f0;
+  min-height:44px;cursor:pointer;
+  width:100%;
 }
 .mobile-nav-link:hover{background:#f5f5f5}
 
@@ -254,33 +258,33 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
   position:absolute;top:12px;left:12px;
   background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
   border-radius:8px;padding:3px 10px;
-  font-size:10px;font-weight:700;
+  font-size:13px;font-weight:700;
   text-transform:uppercase;letter-spacing:.08em;color:#888;z-index:3;
 }
 .pcard-tag.premium{color:#0071ce}
 .pcard-body{padding:28px 24px;display:flex;flex-direction:column}
-.pcard-sku{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#ccc;margin-bottom:5px}
+.pcard-sku{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#ccc;margin-bottom:5px}
 .pcard-name{font-size:20px;font-weight:800;color:#111;letter-spacing:-.5px;margin-bottom:5px;line-height:1.2}
-.pcard-spec{font-size:12px;color:#aaa;font-weight:400;margin-bottom:4px;line-height:1.5}
-.pcard-fit{font-size:11px;color:#ccc;font-weight:400;margin-bottom:18px}
+.pcard-spec{font-size:13px;color:#aaa;font-weight:400;margin-bottom:4px;line-height:1.5}
+.pcard-fit{font-size:13px;color:#ccc;font-weight:400;margin-bottom:18px}
 .pcard-colors{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px}
 .pcdot{
-  width:17px;height:17px;border-radius:4px;
+  width:28px;height:28px;border-radius:6px;
   cursor:pointer;border:2px solid transparent;
   transition:all .12s;flex-shrink:0;
 }
 .pcdot:hover{transform:scale(1.2)}
 .pcdot.on{border-color:#0071ce;transform:scale(1.1)}
-.pcard-cname{font-size:11px;font-weight:500;color:#bbb;margin-bottom:18px}
+.pcard-cname{font-size:13px;font-weight:500;color:#bbb;margin-bottom:18px}
 .pcard-sizes{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:20px}
-.pcard-sz{padding:3px 8px;font-size:10px;font-weight:600;color:#bbb;border:1.5px solid #eee;border-radius:6px}
+.pcard-sz{padding:6px 10px;font-size:13px;font-weight:600;color:#bbb;border:1.5px solid #eee;border-radius:6px;min-height:44px;display:inline-flex;align-items:center}
 .pcard-footer{margin-top:auto;display:flex;align-items:center;justify-content:space-between}
 .pcard-price{font-size:28px;font-weight:900;color:#111;letter-spacing:-1px}
-.pcard-price-sub{font-size:11px;color:#bbb;font-weight:500;margin-top:1px}
+.pcard-price-sub{font-size:13px;color:#bbb;font-weight:500;margin-top:1px}
 .pcard-btn{
-  height:40px;padding:0 20px;
+  height:44px;padding:0 20px;
   background:#0071ce;color:#fff;border:none;
-  border-radius:10px;font-size:13px;font-weight:700;
+  border-radius:10px;font-size:14px;font-weight:700;
   transition:all .15s;white-space:nowrap;
 }
 .pcard-btn:hover{background:#005baa;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,113,206,.3)}
@@ -292,7 +296,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .review-card{background:#f0f7ff;border-radius:16px;padding:28px;border:1px solid #f3e8ff}
 .review-stars{color:#f59e0b;font-size:15px;letter-spacing:-1px;margin-bottom:12px}
 .review-text{font-size:14px;color:#444;line-height:1.7;font-style:italic;margin-bottom:18px;font-weight:400}
-.review-author{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em}
+.review-author{font-size:13px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em}
 
 /* CTA BAND */
 .cta-band{
@@ -317,19 +321,19 @@ footer{background:#111;padding:56px 32px 28px}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
 .footer-logo{margin-bottom:12px;font-family:'Outfit',sans-serif;font-size:34px;font-weight:700;color:#fff;letter-spacing:-1.5px;line-height:1}
 .footer-tagline{font-size:14px;color:#555;line-height:1.7;max-width:280px;font-weight:400}
-.footer-col-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#444;margin-bottom:14px}
-.footer-link{display:block;font-size:14px;color:#555;text-decoration:none;margin-bottom:10px;cursor:pointer;transition:color .15s;font-weight:400}
+.footer-col-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#444;margin-bottom:14px}
+.footer-link{display:block;font-size:14px;color:#555;text-decoration:none;margin-bottom:10px;cursor:pointer;transition:color .15s;font-weight:400;min-height:44px;display:flex;align-items:center}
 .footer-link:hover{color:#999}
 .footer-bottom{border-top:1px solid #222;padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.footer-copy{font-size:11px;color:#444;font-weight:400}
+.footer-copy{font-size:13px;color:#444;font-weight:400}
 .footer-legal{display:flex;gap:20px}
-.footer-legal span{font-size:11px;color:#444;cursor:pointer;transition:color .15s}
+.footer-legal span{font-size:13px;color:#444;cursor:pointer;transition:color .15s;min-height:44px;display:inline-flex;align-items:center}
 .footer-legal span:hover{color:#888}
 
 /* FOOTER PAGE MODAL */
 .fp-overlay{position:fixed;inset:0;z-index:10002;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .fp-modal{background:#fff;border-radius:16px;max-width:780px;width:100%;padding:48px 44px 56px;box-shadow:0 24px 80px rgba(0,0,0,.3);position:relative;margin:40px auto}
-.fp-close{position:absolute;top:16px;right:18px;background:none;border:none;font-size:26px;color:#999;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .15s,color .15s}
+.fp-close{position:absolute;top:16px;right:18px;background:none;border:none;font-size:26px;color:#999;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .15s,color .15s}
 .fp-close:hover{background:#f0f0f0;color:#333}
 .fp-title{font-size:32px;font-weight:900;color:#111;font-family:'Space Grotesk','Outfit',sans-serif;margin-bottom:8px;letter-spacing:-.5px}
 .fp-subtitle{font-size:15px;color:#888;margin-bottom:32px;line-height:1.6}
@@ -399,7 +403,7 @@ footer{background:#111;padding:56px 32px 28px}
 }
 .pdp-arrow-btn{
   position:absolute;right:14px;top:50%;transform:translateY(-50%);
-  width:38px;height:38px;background:#fff;border-radius:50%;
+  width:44px;height:44px;background:#fff;border-radius:50%;
   border:1px solid #e0e0e0;display:flex;align-items:center;justify-content:center;
   cursor:pointer;font-size:15px;color:#555;
   box-shadow:0 2px 8px rgba(0,0,0,.08);transition:all .15s;
@@ -415,7 +419,7 @@ footer{background:#111;padding:56px 32px 28px}
 .pdp-subtitle{font-size:15px;color:#888;margin-bottom:28px;font-weight:400;line-height:1.5}
 
 /* Style selector */
-.pdp-field-label{font-size:13px;font-weight:700;color:#333;margin-bottom:10px}
+.pdp-field-label{font-size:14px;font-weight:700;color:#333;margin-bottom:10px}
 .style-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
 .style-opt{
   border:2px solid #e8e8e8;border-radius:14px;
@@ -424,14 +428,14 @@ footer{background:#111;padding:56px 32px 28px}
 .style-opt:hover{border-color:#bbb}
 .style-opt.on{border-color:#0071ce;background:#f0f7ff}
 .style-opt-name{font-size:17px;font-weight:800;color:#111;margin-bottom:4px}
-.style-opt-desc{font-size:12px;color:#888;line-height:1.4;margin-bottom:6px}
+.style-opt-desc{font-size:13px;color:#888;line-height:1.4;margin-bottom:6px}
 .style-opt-badge{
   display:inline-block;background:#f5f5f5;
   border-radius:4px;padding:2px 8px;
-  font-size:10px;font-weight:700;color:#888;margin-bottom:4px;
+  font-size:13px;font-weight:700;color:#888;margin-bottom:4px;
 }
 .style-opt.on .style-opt-badge{background:#e8f3ff;color:#0071ce}
-.style-opt-price{font-size:12px;font-weight:600;color:#aaa}
+.style-opt-price{font-size:13px;font-weight:600;color:#aaa}
 
 /* Color picker */
 .pdp-color-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
@@ -439,7 +443,7 @@ footer{background:#111;padding:56px 32px 28px}
 .pdp-color-label{font-size:15px;font-weight:700;color:#111;text-transform:uppercase}
 .pdp-color-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
 .pdp-cdot{
-  width:32px;height:32px;border-radius:8px;
+  width:38px;height:38px;border-radius:8px;
   cursor:pointer;border:2.5px solid transparent;
   transition:all .12s;flex-shrink:0;position:relative;
 }
@@ -474,9 +478,9 @@ footer{background:#111;padding:56px 32px 28px}
 }
 .ship-icon{font-size:24px}
 .ship-label{font-size:13px;font-weight:700;color:#111;margin-bottom:2px}
-.ship-date{font-size:12px;color:#888}
+.ship-date{font-size:13px;color:#888}
 .pdp-trust{display:flex;flex-wrap:wrap;gap:12px;padding-top:16px;border-top:1px solid #f0f0f0}
-.pdp-trust-item{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#888}
+.pdp-trust-item{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:500;color:#888}
 .pdp-check{color:#22c55e;font-size:13px;font-weight:700}
 
 /* ══════════════════════════════════════════
@@ -604,11 +608,11 @@ footer{background:#111;padding:56px 32px 28px}
   flex-shrink:0;background:#f4f4f4;
 }
 .s-panel-title{font-size:15px;font-weight:700;color:#222;letter-spacing:-.02em}
-.s-panel-sub{font-size:12px;color:#939393;margin-top:2px;font-weight:400}
+.s-panel-sub{font-size:13px;color:#939393;margin-top:2px;font-weight:400}
 .s-panel-x{font-size:20px;color:#939393;cursor:pointer;font-weight:400;line-height:1;background:none;border:none;padding:0 2px}
 .s-panel-x:hover{color:#222}
 .s-panel-body{padding:16px 20px}
-.s-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#939393;margin-bottom:8px;margin-top:16px}
+.s-label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#939393;margin-bottom:8px;margin-top:16px}
 .s-label:first-child{margin-top:0}
 
 /* Garment cards */
@@ -619,7 +623,7 @@ footer{background:#111;padding:56px 32px 28px}
 .s-gcard:hover{border-color:#bfbfbf}
 .s-gcard.on{border-color:#0071ce;background:#fff}
 .s-gcard-name{font-size:14px;font-weight:600;color:#222;margin-bottom:2px}
-.s-gcard-sub{font-size:11px;color:#939393;font-weight:400}
+.s-gcard-sub{font-size:13px;color:#939393;font-weight:400}
 .s-gcard-price{font-size:15px;font-weight:700;color:#222;margin-top:5px}
 
 /* AI panel */
@@ -636,9 +640,10 @@ footer{background:#111;padding:56px 32px 28px}
 .ai-ta::placeholder{color:#bfbfbf}
 .ai-chips{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
 .ai-chip{
-  padding:5px 12px;border:1.5px solid #e0e0e0;
-  border-radius:4px;font-size:11px;font-weight:600;
+  padding:8px 14px;border:1.5px solid #e0e0e0;
+  border-radius:4px;font-size:13px;font-weight:600;
   color:#939393;cursor:pointer;transition:all .15s;background:#fff;
+  min-height:44px;display:inline-flex;align-items:center;
 }
 .ai-chip:hover{border-color:#0071ce;color:#0071ce}
 .tpl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
@@ -671,14 +676,15 @@ footer{background:#111;padding:56px 32px 28px}
 .upload-zone:hover{border-color:#0071ce;background:#f8fbff}
 .upload-zone-icon{font-size:30px;margin-bottom:8px}
 .upload-zone-title{font-size:13px;font-weight:600;color:#222;margin-bottom:3px}
-.upload-zone-sub{font-size:11px;color:#939393}
+.upload-zone-sub{font-size:13px;color:#939393}
 
 /* Sizes */
 .s-sizes{display:flex;flex-wrap:wrap;gap:5px}
 .s-sz{
-  padding:6px 11px;border:2px solid #e0e0e0;
-  border-radius:4px;font-size:12px;font-weight:600;
+  padding:8px 12px;border:2px solid #e0e0e0;
+  border-radius:4px;font-size:13px;font-weight:600;
   color:#939393;background:#fff;cursor:pointer;transition:all .15s;
+  min-height:44px;display:inline-flex;align-items:center;
 }
 .s-sz.on{background:#0071ce;border-color:#0071ce;color:#fff}
 .s-sz:hover:not(.on){border-color:#bfbfbf;color:#222}
@@ -686,11 +692,11 @@ footer{background:#111;padding:56px 32px 28px}
 /* Placement */
 .s-placements{display:flex;flex-direction:column;gap:5px}
 .s-plc{
-  padding:9px 14px;border:2px solid #e0e0e0;
-  border-radius:6px;font-size:12px;font-weight:600;color:#939393;
+  padding:10px 14px;border:2px solid #e0e0e0;
+  border-radius:6px;font-size:13px;font-weight:600;color:#939393;
   cursor:pointer;transition:all .15s;
   display:flex;align-items:center;gap:9px;background:#fff;
-  font-family:'DM Sans',sans-serif;
+  font-family:'DM Sans',sans-serif;min-height:44px;
 }
 .s-plc::before{content:'';width:7px;height:7px;border-radius:50%;border:2px solid #d9d9d9;flex-shrink:0;transition:all .15s}
 .s-plc.on{border-color:#0071ce;color:#0071ce;background:#fff}
@@ -700,20 +706,20 @@ footer{background:#111;padding:56px 32px 28px}
 /* Color panel */
 .s-color-dots{display:flex;flex-wrap:wrap;gap:5px}
 .s-cdot{
-  width:24px;height:24px;border-radius:4px;
+  width:32px;height:32px;border-radius:6px;
   cursor:pointer;border:2px solid transparent;
   transition:all .12s;flex-shrink:0;
 }
 .s-cdot:hover{transform:scale(1.15)}
 .s-cdot.on{border-color:#0071ce;transform:scale(1.1);box-shadow:0 0 0 1px #0071ce}
-.s-color-current{font-size:11px;font-weight:600;color:#939393;text-transform:uppercase;letter-spacing:.06em;margin-top:7px}
+.s-color-current{font-size:13px;font-weight:600;color:#939393;text-transform:uppercase;letter-spacing:.06em;margin-top:7px}
 .view-btns{display:flex;gap:5px;margin-bottom:12px}
 .vbtn{
-  flex:1;padding:7px;border:2px solid #e0e0e0;
-  border-radius:4px;font-size:11px;font-weight:600;
+  flex:1;padding:10px;border:2px solid #e0e0e0;
+  border-radius:4px;font-size:13px;font-weight:600;
   color:#939393;cursor:pointer;background:#fff;
   transition:all .15s;text-transform:capitalize;
-  font-family:'DM Sans',sans-serif;
+  font-family:'DM Sans',sans-serif;min-height:44px;
 }
 .vbtn.on{background:#0071ce;border-color:#0071ce;color:#fff}
 
@@ -727,7 +733,7 @@ footer{background:#111;padding:56px 32px 28px}
 }
 .keith-toggle:hover{border-color:#bfbfbf;color:#222}
 .keith-toggle.on{border-color:#22c55e;color:#16a34a;background:#f0fdf4}
-.keith-sub{font-size:11px;font-weight:400;color:#939393;margin-top:3px}
+.keith-sub{font-size:13px;font-weight:400;color:#939393;margin-top:3px}
 
 /* Canvas — neutral gray like CustomInk */
 .s-canvas{
@@ -766,7 +772,7 @@ footer{background:#111;padding:56px 32px 28px}
 }
 .s-dzone.dk img{mix-blend-mode:screen}
 .s-dzone{background:transparent !important}
-.s-dzone-hint{font-size:10px;font-weight:600;color:rgba(0,0,0,.25);text-align:center;line-height:1.8;text-transform:uppercase;letter-spacing:.06em;pointer-events:none}
+.s-dzone-hint{font-size:13px;font-weight:600;color:rgba(0,0,0,.25);text-align:center;line-height:1.8;text-transform:uppercase;letter-spacing:.06em;pointer-events:none}
 
 /* Floating action pills — welcome overlay on shirt */
 .float-pills{
@@ -805,6 +811,14 @@ footer{background:#111;padding:56px 32px 28px}
 .ch-edit{bottom:-15px;left:-15px;background:#0071ce}
 .ch-forward{top:-15px;right:-15px;background:#fff}
 .ch-backward{bottom:-15px;right:-15px;background:#fff}
+@media(max-width:768px){
+  .corner-handle{width:44px;height:44px;border-radius:50%}
+  .corner-handle svg{width:18px;height:18px}
+  .ch-delete{top:-22px;left:-22px}
+  .ch-edit{bottom:-22px;left:-22px}
+  .ch-forward{top:-22px;right:-22px}
+  .ch-backward{bottom:-22px;right:-22px}
+}
 
 /* Product modal — full-screen on mobile, centered on desktop */
 .product-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10000;overflow:auto;-webkit-overflow-scrolling:touch}
@@ -812,7 +826,7 @@ footer{background:#111;padding:56px 32px 28px}
 .product-modal-hdr{padding:16px 20px;border-bottom:1px solid #f0f0f0;display:flex;align-items:flex-start;gap:12px}
 .product-modal-search{width:100%;padding:10px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box}
 .product-modal-search:focus{border-color:#0071ce}
-.product-modal-close{width:36px;height:36px;border-radius:50%;border:none;background:#f0f0f0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#555}
+.product-modal-close{width:44px;height:44px;border-radius:50%;border:none;background:#f0f0f0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#555}
 .product-modal-body{display:grid;grid-template-columns:200px 1fr}
 .product-modal-cats-wrap{border-right:1px solid #f0f0f0;padding:12px 0;max-height:600px;overflow-y:auto}
 .product-modal-cats{display:flex;flex-direction:column}
@@ -858,7 +872,7 @@ footer{background:#111;padding:56px 32px 28px}
 .co-submit:disabled{opacity:.5;cursor:not-allowed}
 .co-trust{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-size:13px;font-weight:600;color:#16a34a}
 .co-badges{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;flex-wrap:wrap}
-.co-badge{font-size:11px;font-weight:700;color:#555;background:#f5f5f5;padding:3px 8px;border-radius:4px;border:1px solid #e0e0e0}
+.co-badge{font-size:13px;font-weight:700;color:#555;background:#f5f5f5;padding:3px 8px;border-radius:4px;border:1px solid #e0e0e0}
 .co-delivery{background:#f0fdf4;border-radius:8px;padding:12px 16px;margin-top:16px}
 .co-delivery-title{font-size:14px;font-weight:700;color:#16a34a;margin-bottom:4px}
 .co-delivery-date{font-size:13px;color:#555}
@@ -884,7 +898,7 @@ footer{background:#111;padding:56px 32px 28px}
 .cart-item-name{font-size:14px;font-weight:700;color:#222;margin-bottom:2px}
 .cart-item-detail{font-size:13px;color:#888;margin-bottom:4px}
 .cart-item-price{font-size:15px;font-weight:700;color:#222}
-.cart-item-remove{font-size:12px;color:#dc2626;cursor:pointer;background:none;border:none;font-weight:600;padding:0;margin-top:4px}
+.cart-item-remove{font-size:13px;color:#dc2626;cursor:pointer;background:none;border:none;font-weight:600;padding:0;margin-top:4px;min-height:44px;display:inline-flex;align-items:center}
 @media(max-width:768px){
   .cart-drawer-panel{width:100%}
 }
@@ -904,8 +918,8 @@ footer{background:#111;padding:56px 32px 28px}
 .social-proof-toast .sp-icon{width:40px;height:40px;border-radius:10px;background:#f0f7ff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .social-proof-toast .sp-text{font-size:13px;color:#333;line-height:1.4}
 .social-proof-toast .sp-text strong{font-weight:700;color:#111}
-.social-proof-toast .sp-time{font-size:11px;color:#aaa;margin-top:2px}
-.social-proof-toast .sp-close{position:absolute;top:6px;right:8px;background:none;border:none;font-size:14px;color:#ccc;cursor:pointer;padding:2px}
+.social-proof-toast .sp-time{font-size:13px;color:#aaa;margin-top:2px}
+.social-proof-toast .sp-close{position:absolute;top:2px;right:2px;background:none;border:none;font-size:16px;color:#ccc;cursor:pointer;padding:2px;width:44px;height:44px;display:flex;align-items:center;justify-content:center}
 @media(max-width:768px){
   .social-proof-toast{bottom:72px;left:10px;right:10px;max-width:none}
 }
@@ -914,7 +928,7 @@ footer{background:#111;padding:56px 32px 28px}
 .print-guides{pointer-events:none}
 /* Default guides hidden — only show during drag */
 .guide-zone{pointer-events:none;box-sizing:border-box;border:1px dashed transparent !important}
-.guide-zone .guide-label{color:transparent !important;font-size:9px;font-weight:700;letter-spacing:.03em}
+.guide-zone .guide-label{color:transparent !important;font-size:13px;font-weight:700;letter-spacing:.03em}
 .guide-zone.guide-crest{border-color:transparent !important}
 .guide-zone.visible{border-color:rgba(0,113,206,.5) !important}
 .guide-zone.visible .guide-label{color:rgba(0,113,206,.7) !important}
@@ -985,7 +999,7 @@ footer{background:#111;padding:56px 32px 28px}
   height:68px;background:#fff;border-top:1px solid #e0e0e0;
   display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0;
 }
-.s-bottom-info{flex:1;font-size:12px;color:#aaa;font-weight:500;line-height:1.5}
+.s-bottom-info{flex:1;font-size:13px;color:#aaa;font-weight:500;line-height:1.5}
 .s-bottom-info strong{color:#555;font-weight:700;font-size:13px}
 .s-bot-btn{
   height:46px;padding:0 22px;
@@ -1009,7 +1023,7 @@ footer{background:#111;padding:56px 32px 28px}
 .dzone-label{
   position:absolute;
   bottom:-20px;left:50%;transform:translateX(-50%);
-  font-size:10px;font-weight:600;color:rgba(0,113,206,.6);
+  font-size:13px;font-weight:600;color:rgba(0,113,206,.6);
   white-space:nowrap;letter-spacing:.04em;text-transform:uppercase;
   pointer-events:none;
 }
@@ -1068,22 +1082,22 @@ footer{background:#111;padding:56px 32px 28px}
 }
 .shop-card:hover .shop-card-img{transform:scale(1.04)}
 .shop-card-body{padding:14px}
-.shop-card-brand{font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.shop-card-brand{font-size:13px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
 .shop-card-name{font-size:15px;font-weight:700;color:#111;margin-bottom:8px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .shop-card-colors{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
-.shop-color-dot{width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.08);flex-shrink:0}
+.shop-color-dot{width:22px;height:22px;border-radius:4px;border:1px solid rgba(0,0,0,.08);flex-shrink:0}
 .shop-card-footer{display:flex;align-items:center;justify-content:space-between}
 .shop-card-price{font-size:16px;font-weight:900;color:#111;letter-spacing:-.5px}
 .shop-card-btn{
-  height:32px;padding:0 14px;
+  height:44px;padding:0 16px;
   background:#0071ce;color:#fff;
   border:none;border-radius:8px;
-  font-size:12px;font-weight:700;
+  font-size:13px;font-weight:700;
   cursor:pointer;font-family:'DM Sans',sans-serif;
   transition:all .15s;white-space:nowrap;
 }
 .shop-card-btn:hover{background:#005baa}
-.wishlist-btn{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,.9);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:3;transition:all .15s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.wishlist-btn{position:absolute;top:6px;right:6px;width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,.9);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:3;transition:all .15s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .wishlist-btn:hover{background:#fff;transform:scale(1.15)}
 .wishlist-btn.saved{color:#ec4899;background:rgba(236,72,153,.1)}
 .wishlist-btn:not(.saved){color:#ccc}
@@ -1127,7 +1141,7 @@ footer{background:#111;padding:56px 32px 28px}
   .mobile-hdr-menu{display:flex}
   .main-header{padding:0 12px;height:52px;gap:8px;overflow:visible}
   .hdr-actions{gap:8px}
-  .mobile-hdr-menu{width:36px;height:36px}
+  .mobile-hdr-menu{width:44px;height:44px}
   .hdr-logo{font-size:30px !important}
   .hdr-search{flex:1;max-width:none}
   .hdr-search input{font-size:14px;padding:9px 14px 9px 36px;border-radius:24px}
@@ -1138,7 +1152,7 @@ footer{background:#111;padding:56px 32px 28px}
   #preview-grid{grid-template-columns:1fr !important;gap:12px !important}
   /* Trust bar — 2x2 on mobile */
   #hp-trust-bar{grid-template-columns:1fr 1fr !important;gap:12px !important}
-  #hp-trust-bar span{font-size:11px !important}
+  #hp-trust-bar span{font-size:13px !important}
 
   /* ═══════════════════════════════════════
      MOBILE SEARCH BAR — full width strip
@@ -1206,13 +1220,13 @@ footer{background:#111;padding:56px 32px 28px}
   .shop-card{display:grid !important;grid-template-columns:120px 1fr;height:auto !important}
   .shop-card-img{width:120px;height:120px;object-fit:contain;border-radius:10px 0 0 10px}
   .shop-card-body{padding:12px}
-  .shop-card-name{font-size:13px;white-space:normal;line-height:1.3;margin-bottom:6px}
-  .shop-card-brand{font-size:10px;margin-bottom:3px}
+  .shop-card-name{font-size:14px;white-space:normal;line-height:1.3;margin-bottom:6px}
+  .shop-card-brand{font-size:13px;margin-bottom:3px}
   .shop-card-colors{gap:3px;margin-bottom:8px}
-  .shop-color-dot{width:14px;height:14px}
+  .shop-color-dot{width:24px;height:24px;border-radius:5px}
   .shop-card-footer{flex-direction:column;align-items:flex-start;gap:8px}
   .shop-card-price{font-size:14px}
-  .shop-card-btn{height:32px;padding:0 14px;font-size:12px;width:100%;border-radius:8px}
+  .shop-card-btn{height:44px;padding:0 14px;font-size:14px;width:100%;border-radius:8px}
   /* Mobile filter button */
   #shop-mobile-filter-btn{display:flex}
 
@@ -1256,26 +1270,27 @@ footer{background:#111;padding:56px 32px 28px}
   .mob-save-btn{
     display:flex; flex-direction:column; align-items:center; gap:1px;
     background:none; border:none; cursor:pointer;
-    font-family:'DM Sans',sans-serif; font-size:9px; font-weight:700; color:#555;
+    font-family:'DM Sans',sans-serif; font-size:13px; font-weight:700; color:#555;
     padding:4px 8px; border-radius:8px; flex-shrink:0;
+    min-width:44px; min-height:44px; justify-content:center;
   }
   .mob-next-btn{
-    height:34px; padding:0 14px;
+    height:44px; padding:0 18px;
     background:#0071ce; color:#fff; border:none;
-    border-radius:17px; font-size:13px; font-weight:800;
+    border-radius:22px; font-size:14px; font-weight:800;
     cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; flex-shrink:0;
   }
   /* Steps */
   .studio-steps{flex:1; gap:4px; overflow:hidden}
   .sstep{padding-right:4px}
   .sstep-num{
-    width:22px; height:22px; font-size:10px; border-radius:50%;
+    width:28px; height:28px; font-size:13px; border-radius:50%;
     background:#e0e0e0; color:#888;
     display:flex; align-items:center; justify-content:center;
     font-weight:800; flex-shrink:0;
   }
   .sstep.active .sstep-num{background:#0071ce; color:#fff}
-  .sstep-label{font-size:8px; font-weight:700; color:#bbb; text-transform:uppercase; letter-spacing:.03em; white-space:nowrap; overflow:hidden; max-width:80px; text-overflow:ellipsis}
+  .sstep-label{font-size:13px; font-weight:700; color:#bbb; text-transform:uppercase; letter-spacing:.03em; white-space:nowrap; overflow:hidden; max-width:80px; text-overflow:ellipsis}
   .sstep:not(.active) .sstep-label{display:none}  /* only show label for active step on small screens */
   .sstep.active .sstep-label{color:#0071ce}
   .sstep-div{width:10px; height:2px; background:#e0e0e0; flex-shrink:0}
@@ -1355,7 +1370,7 @@ footer{background:#111;padding:56px 32px 28px}
   }
   .s-ibtn-icon{width:47px !important; height:47px !important; border-radius:0 !important; background:transparent !important; margin:-.2rem 0 -1rem !important}
   .s-ibtn-icon svg{width:24px !important; height:24px !important; stroke:#fff !important; fill:transparent !important}
-  .s-ibtn-label{font-size:11px !important; font-weight:500 !important; color:#fff !important; margin-top:7px !important; letter-spacing:0 !important; line-height:12px !important}
+  .s-ibtn-label{font-size:13px !important; font-weight:500 !important; color:#fff !important; margin-top:7px !important; letter-spacing:0 !important; line-height:14px !important}
   .s-ibtn-sep{display:none}
   .s-ibtn.on{background:rgba(255,255,255,.12)}
   .s-ibtn.on .s-ibtn-label{color:#fff !important; font-weight:600 !important}
@@ -1389,13 +1404,22 @@ footer{background:#111;padding:56px 32px 28px}
   .s-canvas > div[style*="position:absolute;left:14px"]{display:none !important}
 
   /* ── stbtn ── */
-  .stbtn{height:30px; padding:0 8px; font-size:11px}
-  .stbtn.blue{height:34px; padding:0 12px; font-size:12px}
+  .stbtn{height:44px; padding:0 12px; font-size:13px}
+  .stbtn.blue{height:44px; padding:0 16px; font-size:14px}
   /* ═══════════════════════════════════════
      MARQUEE
   ═══════════════════════════════════════ */
   .marquee-wrap{padding:8px 0}
-  .mqi{font-size:12px}
+  .mqi{font-size:13px}
+
+  /* ═══════════════════════════════════════
+     TOUCH TARGETS & TEXT — mobile minimum 44px / 13px
+  ═══════════════════════════════════════ */
+  .s-cdot{width:36px;height:36px;border-radius:6px}
+  .pdp-cdot{width:44px;height:44px}
+  .s-panel-x{width:44px;height:44px;font-size:22px;display:flex;align-items:center;justify-content:center}
+  .shop-cat-pill{min-height:44px;display:inline-flex;align-items:center;font-size:14px}
+  .shop-brand-check{min-height:44px;font-size:14px}
 
   /* ═══════════════════════════════════════
      FOOTER
@@ -1419,10 +1443,10 @@ footer{background:#111;padding:56px 32px 28px}
   .s-panel{max-height:42vh}
   .s-ibtn{min-width:58px}
   .s-ibtn-icon svg{width:22px !important; height:22px !important}
-  .s-ibtn-label{font-size:10px !important}
+  .s-ibtn-label{font-size:13px !important}
   .studio-topbar{height:42px;padding:0 8px}
-  .stbtn{height:28px;padding:0 6px;font-size:10px}
-  .stbtn.blue{height:30px;padding:0 10px;font-size:11px}
+  .stbtn{height:44px;padding:0 10px;font-size:13px}
+  .stbtn.blue{height:44px;padding:0 14px;font-size:13px}
   .pcard-img-area{min-height:160px;padding:16px}
   .footer-grid{grid-template-columns:1fr;gap:20px}
   .ship-cards{grid-template-columns:1fr}
@@ -1460,8 +1484,8 @@ footer{background:#111;padding:56px 32px 28px}
 .design-card-img{aspect-ratio:1;background:#f5f7fa;display:flex;align-items:center;justify-content:center;position:relative}
 .design-card-body{padding:12px}
 .design-card-name{font-size:13px;font-weight:700;color:#111;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.design-card-meta{font-size:11px;color:#aaa;font-weight:500}
-.design-card-del{position:absolute;top:8px;right:8px;width:24px;height:24px;background:rgba(0,0,0,.5);border-radius:50%;border:none;color:#fff;font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center}
+.design-card-meta{font-size:13px;color:#aaa;font-weight:500}
+.design-card-del{position:absolute;top:4px;right:4px;width:44px;height:44px;background:rgba(0,0,0,.5);border-radius:50%;border:none;color:#fff;font-size:16px;cursor:pointer;display:none;align-items:center;justify-content:center}
 .design-card:hover .design-card-del{display:flex}
 </style>
   <!-- ML Background Removal — ESM module -->
@@ -1517,9 +1541,9 @@ footer{background:#111;padding:56px 32px 28px}
 .search-result-img{width:44px;height:44px;border-radius:8px;object-fit:contain;background:#f8f8f8;flex-shrink:0}
 .search-result-info{flex:1;min-width:0}
 .search-result-name{font-size:13px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.search-result-brand{font-size:11px;color:#aaa;font-weight:500;margin-top:2px}
-.search-result-price{font-size:12px;font-weight:700;color:#0071ce;flex-shrink:0}
-.search-cat-label{padding:8px 16px 4px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.1em;background:#f8f8f8}
+.search-result-brand{font-size:13px;color:#aaa;font-weight:500;margin-top:2px}
+.search-result-price{font-size:13px;font-weight:700;color:#0071ce;flex-shrink:0}
+.search-cat-label{padding:8px 16px 4px;font-size:13px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.1em;background:#f8f8f8}
 .search-view-all{display:block;text-align:center;padding:13px;font-size:13px;font-weight:700;color:#0071ce;cursor:pointer;border-top:1px solid #f0f0f0}
 .search-view-all:hover{background:#f0f7ff}
 
@@ -1546,15 +1570,15 @@ footer{background:#111;padding:56px 32px 28px}
 
 /* ── Mobile studio topbar elements (hidden on desktop) ── */
 .mobile-studio-actions{display:none;align-items:center;gap:8px;flex-shrink:0}
-.mob-save-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;color:#555;padding:4px 8px;border-radius:8px}
+.mob-save-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#555;padding:4px 8px;border-radius:8px;min-width:44px;min-height:44px;justify-content:center}
 .mob-save-btn:hover{background:#f5f5f5}
 .mob-next-btn{height:36px;padding:0 16px;background:#0071ce;color:#fff;border:none;border-radius:18px;font-size:13px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
 /* Mobile ROTATE button — hidden on desktop */
 .mobile-rotate-btn{display:none;position:absolute;right:10px;top:12px;z-index:10;flex-direction:column;align-items:center;gap:2px;background:rgba(255,255,255,.95);border:none;border-radius:10px;padding:8px 10px 6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0;font-weight:700;color:#333;letter-spacing:0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .mobile-rotate-btn:active{background:#e8e8e8;transform:scale(1.05)}
-.mobile-rotate-btn .rotate-label{display:block;font-size:10px;font-weight:700;color:#333;margin-top:2px;text-transform:capitalize}
+.mobile-rotate-btn .rotate-label{display:block;font-size:13px;font-weight:700;color:#333;margin-top:2px;text-transform:capitalize}
 /* SHARE button — bottom right of canvas, hidden on desktop */
-.mobile-share-btn{display:none;position:absolute;right:10px;bottom:16px;z-index:10;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,.95);border:1.5px solid #e0e0e0;border-radius:12px;padding:10px 8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:800;color:#333;letter-spacing:.04em;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+.mobile-share-btn{display:none;position:absolute;right:10px;bottom:16px;z-index:10;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,.95);border:1.5px solid #e0e0e0;border-radius:12px;padding:10px 8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:800;color:#333;letter-spacing:.04em;box-shadow:0 2px 12px rgba(0,0,0,.12);min-width:44px;min-height:44px}
 .mobile-share-btn:active{background:#f0f0f0}
 
 /* ── Mobile-only elements ── */
@@ -1613,7 +1637,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v6.8</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v7.0</span>
   </div>
 </div>
 
@@ -2065,31 +2089,31 @@ footer{background:#111;padding:56px 32px 28px}
   <!-- HOW IT WORKS -->
   <div class="hp-how" style="max-width:1300px;margin:0 auto;padding:64px 32px">
     <div style="text-align:center;margin-bottom:48px">
-      <div style="font-size:12px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">The Process</div>
+      <div style="font-size:13px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">The Process</div>
       <h2 style="font-size:clamp(28px,3vw,40px);font-weight:700;color:#1a1a1a;letter-spacing:-1px;font-family:'Space Grotesk',sans-serif">Four steps. One shirt.</h2>
     </div>
     <div class="hp-steps" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
       <div style="text-align:center;padding:32px 24px;background:#f5f7fa;border-radius:20px;border:1.5px solid #e8e8e8">
         <div style="width:52px;height:52px;background:#0071ce;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">👕</div>
-        <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 01</div>
+        <div style="font-size:13px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 01</div>
         <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">Pick your garment</div>
         <p style="font-size:13px;color:#888;line-height:1.6">Choose from thousands of styles — tees, hoodies, polos, outerwear and more.</p>
       </div>
       <div style="text-align:center;padding:32px 24px;background:#f5f7fa;border-radius:20px;border:1.5px solid #e8e8e8">
         <div style="width:52px;height:52px;background:#0071ce;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">✦</div>
-        <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 02</div>
+        <div style="font-size:13px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 02</div>
         <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">Generate your design</div>
         <p style="font-size:13px;color:#888;line-height:1.6">Type any idea. Our AI creates print-ready artwork instantly. Or upload your own.</p>
       </div>
       <div style="text-align:center;padding:32px 24px;background:#f5f7fa;border-radius:20px;border:1.5px solid #e8e8e8">
         <div style="width:52px;height:52px;background:#0071ce;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">🖨️</div>
-        <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 03</div>
+        <div style="font-size:13px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 03</div>
         <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">We print it</div>
         <p style="font-size:13px;color:#888;line-height:1.6">Premium in-house printing delivers vibrant, long-lasting results on any garment.</p>
       </div>
       <div style="text-align:center;padding:32px 24px;background:#f5f7fa;border-radius:20px;border:1.5px solid #e8e8e8">
         <div style="width:52px;height:52px;background:#0071ce;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">📦</div>
-        <div style="font-size:11px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 04</div>
+        <div style="font-size:13px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Step 04</div>
         <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:8px">You wear it</div>
         <p style="font-size:13px;color:#888;line-height:1.6">Standard shipping with full tracking. Free shipping on every order.</p>
       </div>
@@ -2243,7 +2267,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v6.8</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v7.0</span></span>
         <div class="footer-legal"><span onclick="showFooterPage('privacy')">Privacy</span><span onclick="showFooterPage('terms')">Terms</span><span onclick="showFooterPage('shipping')">Shipping</span></div>
       </div>
     </div>
@@ -2281,13 +2305,13 @@ footer{background:#111;padding:56px 32px 28px}
 
         <!-- Brand filter -->
         <div style="margin-bottom:20px">
-          <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Brand</div>
+          <div style="font-size:13px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Brand</div>
           <div id="shop-brands" style="display:flex;flex-direction:column;gap:6px"></div>
         </div>
 
         <!-- Price filter -->
         <div style="margin-bottom:20px">
-          <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Price Range</div>
+          <div style="font-size:13px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Price Range</div>
           <div style="display:flex;flex-direction:column;gap:6px">
             <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;cursor:pointer">
               <input type="radio" name="shop-price" value="" checked onchange="shopFilterPrice('')" style="accent-color:#0071ce"> All prices
@@ -2366,8 +2390,8 @@ footer{background:#111;padding:56px 32px 28px}
           <div style="text-align:center;opacity:.15;font-size:clamp(28px,4vw,52px);font-weight:900;letter-spacing:-.02em;line-height:1.1;color:#000">YOUR<br>DESIGN<br>HERE</div>
         </div>
         <!-- Nav arrows -->
-        <button onclick="pdView('front')" id="pdv-f" style="position:absolute;bottom:16px;left:16px;padding:6px 14px;border:1.5px solid #e8e8e8;border-radius:20px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:#0071ce;transition:all .15s">FRONT</button>
-        <button onclick="pdView('back')" id="pdv-b" style="position:absolute;bottom:16px;left:88px;padding:6px 14px;border:1.5px solid #e8e8e8;border-radius:20px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:#555;transition:all .15s">BACK</button>
+        <button onclick="pdView('front')" id="pdv-f" style="position:absolute;bottom:16px;left:16px;padding:8px 16px;border:1.5px solid #e8e8e8;border-radius:20px;background:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:#0071ce;transition:all .15s;min-height:44px">FRONT</button>
+        <button onclick="pdView('back')" id="pdv-b" style="position:absolute;bottom:16px;left:100px;padding:8px 16px;border:1.5px solid #e8e8e8;border-radius:20px;background:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:#555;transition:all .15s;min-height:44px">BACK</button>
       </div>
     </div>
 
@@ -2392,7 +2416,7 @@ footer{background:#111;padding:56px 32px 28px}
           <span style="font-size:13px;font-weight:700;color:#333">Color:</span>
           <div id="pdp-swatch" style="width:20px;height:20px;border-radius:4px;border:1px solid #ddd;background:#fff"></div>
           <span id="pdp-cname" style="font-size:13px;font-weight:700;color:#111"></span>
-          <span id="pdp-color-count" style="font-size:12px;color:#aaa;font-weight:500"></span>
+          <span id="pdp-color-count" style="font-size:13px;color:#aaa;font-weight:500"></span>
         </div>
         <div id="pdp-colors" style="display:flex;flex-wrap:wrap;gap:5px;max-height:200px;overflow-y:auto;padding:4px 0"></div>
       </div>
@@ -2434,13 +2458,13 @@ footer{background:#111;padding:56px 32px 28px}
 
       <!-- Quantity pricing table -->
       <div style="margin-top:20px;background:#f5f7fa;border-radius:14px;padding:16px;display:none" id="pdp-qty-table">
-        <div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Volume Pricing</div>
+        <div style="font-size:13px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Volume Pricing</div>
         <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center">
-          <div><div style="font-size:11px;color:#aaa">1+</div><div id="pdp-price-1" style="font-size:14px;font-weight:800;color:#111"></div></div>
-          <div><div style="font-size:11px;color:#aaa">6+</div><div id="pdp-price-6" style="font-size:14px;font-weight:800;color:#111"></div></div>
-          <div><div style="font-size:11px;color:#aaa">12+</div><div id="pdp-price-12" style="font-size:14px;font-weight:800;color:#111"></div></div>
-          <div><div style="font-size:11px;color:#aaa">24+</div><div id="pdp-price-24" style="font-size:14px;font-weight:800;color:#111"></div></div>
-          <div><div style="font-size:11px;color:#aaa">50+</div><div id="pdp-price-50" style="font-size:14px;font-weight:800;color:#0071ce"></div></div>
+          <div><div style="font-size:13px;color:#aaa">1+</div><div id="pdp-price-1" style="font-size:14px;font-weight:800;color:#111"></div></div>
+          <div><div style="font-size:13px;color:#aaa">6+</div><div id="pdp-price-6" style="font-size:14px;font-weight:800;color:#111"></div></div>
+          <div><div style="font-size:13px;color:#aaa">12+</div><div id="pdp-price-12" style="font-size:14px;font-weight:800;color:#111"></div></div>
+          <div><div style="font-size:13px;color:#aaa">24+</div><div id="pdp-price-24" style="font-size:14px;font-weight:800;color:#111"></div></div>
+          <div><div style="font-size:13px;color:#aaa">50+</div><div id="pdp-price-50" style="font-size:14px;font-weight:800;color:#0071ce"></div></div>
         </div>
       </div>
     </div>
@@ -2513,11 +2537,11 @@ footer{background:#111;padding:56px 32px 28px}
         Checkout →
       </button>
       <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;flex-wrap:wrap">
-        <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">VISA</span>
-        <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">MC</span>
-        <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">AMEX</span>
-        <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">PayPal</span>
-        <span style="font-size:10px;font-weight:700;color:#555;background:#f5f5f5;padding:2px 6px;border-radius:3px;border:1px solid #e0e0e0">Apple Pay</span>
+        <span style="font-size:13px;font-weight:700;color:#555;background:#f5f5f5;padding:4px 8px;border-radius:3px;border:1px solid #e0e0e0">VISA</span>
+        <span style="font-size:13px;font-weight:700;color:#555;background:#f5f5f5;padding:4px 8px;border-radius:3px;border:1px solid #e0e0e0">MC</span>
+        <span style="font-size:13px;font-weight:700;color:#555;background:#f5f5f5;padding:4px 8px;border-radius:3px;border:1px solid #e0e0e0">AMEX</span>
+        <span style="font-size:13px;font-weight:700;color:#555;background:#f5f5f5;padding:4px 8px;border-radius:3px;border:1px solid #e0e0e0">PayPal</span>
+        <span style="font-size:13px;font-weight:700;color:#555;background:#f5f5f5;padding:4px 8px;border-radius:3px;border:1px solid #e0e0e0">Apple Pay</span>
       </div>
       <div style="text-align:center;margin-top:8px;font-size:12px;color:#16a34a;font-weight:600">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -2538,15 +2562,15 @@ footer{background:#111;padding:56px 32px 28px}
     <div id="group-create-view" style="padding:24px">
       <p style="font-size:14px;color:#888;line-height:1.5;margin-bottom:20px">Create a group order and share the link. Each person picks their own size — you handle the checkout.</p>
       <div style="margin-bottom:12px">
-        <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Your Name</label>
+        <label style="font-size:13px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Your Name</label>
         <input id="group-org-name" type="text" placeholder="Team captain name" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
       </div>
       <div style="margin-bottom:12px">
-        <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Your Email</label>
+        <label style="font-size:13px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Your Email</label>
         <input id="group-org-email" type="email" placeholder="your@email.com" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'">
       </div>
       <div style="margin-bottom:16px">
-        <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Message to Team (optional)</label>
+        <label style="font-size:13px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Message to Team (optional)</label>
         <textarea id="group-org-msg" placeholder="Hey team! Pick your sizes..." style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box;resize:none;height:60px" onfocus="this.style.borderColor='#0071ce'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
       </div>
       <button onclick="createGroupOrder()" id="group-create-btn" style="width:100%;height:48px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
@@ -2559,7 +2583,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div style="font-size:18px;font-weight:700;color:#222;margin-bottom:8px">Group Order Created!</div>
       <p style="font-size:14px;color:#888;margin-bottom:16px">Share this link with your team. Each person picks their size.</p>
       <div style="background:#f5f7fa;border-radius:8px;padding:12px;margin-bottom:16px;word-break:break-all">
-        <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:4px">Share Link</div>
+        <div style="font-size:13px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:4px">Share Link</div>
         <div id="group-share-url" style="font-size:14px;font-weight:600;color:#0071ce"></div>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:16px">
@@ -2567,21 +2591,21 @@ footer{background:#111;padding:56px 32px 28px}
         <button onclick="shareGroupLink()" style="flex:1;height:44px;background:#fff;color:#0071ce;border:2px solid #0071ce;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Share</button>
       </div>
       <div style="font-size:24px;font-weight:900;color:#222;letter-spacing:4px;margin-bottom:4px" id="group-code-display"></div>
-      <div style="font-size:12px;color:#888">Order Code</div>
+      <div style="font-size:13px;color:#888">Order Code</div>
     </div>
     <!-- Join group order (for participants) -->
     <div id="group-join-view" style="display:none;padding:24px">
       <div id="group-join-info" style="margin-bottom:16px"></div>
       <div style="margin-bottom:12px">
-        <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Your Name</label>
+        <label style="font-size:13px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Your Name</label>
         <input id="group-join-name" type="text" placeholder="Your name" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box">
       </div>
       <div style="margin-bottom:12px">
-        <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Your Email</label>
+        <label style="font-size:13px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px">Your Email</label>
         <input id="group-join-email" type="email" placeholder="your@email.com" style="width:100%;padding:12px 14px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box">
       </div>
       <div style="margin-bottom:16px">
-        <label style="font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:8px">Pick Your Sizes</label>
+        <label style="font-size:13px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:8px">Pick Your Sizes</label>
         <div id="group-join-sizes" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
       </div>
       <button onclick="joinGroupOrder()" id="group-join-btn" style="width:100%;height:48px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
@@ -2631,7 +2655,7 @@ footer{background:#111;padding:56px 32px 28px}
     <div style="font-size:22px;font-weight:700;margin-bottom:8px">Virtual Try-On</div>
     <div style="font-size:15px;opacity:.6;line-height:1.5">Upload a photo of yourself and our AI will show you wearing your custom shirt</div>
     <div style="font-size:13px;opacity:.4;margin-top:12px">Powered by AI · Takes ~15-20 seconds</div>
-    <div style="font-size:12px;opacity:.35;margin-top:6px">Works best with graphic/image designs. Text-only designs may vary.</div>
+    <div style="font-size:13px;opacity:.35;margin-top:6px">Works best with graphic/image designs. Text-only designs may vary.</div>
   </div>
   <!-- Processing overlay -->
   <div id="tryon-processing" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.7);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:10005">
@@ -2642,7 +2666,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div style="margin-bottom:16px;width:100%;height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden">
         <div id="tryon-progress" style="height:100%;background:#0071ce;border-radius:3px;width:0%;transition:width .5s"></div>
       </div>
-      <div style="font-size:12px;opacity:.35;line-height:1.5">This is an AI-generated preview — not an exact representation. Colors and placement may vary. Your actual print will match your design exactly.</div>
+      <div style="font-size:13px;opacity:.35;line-height:1.5">This is an AI-generated preview — not an exact representation. Colors and placement may vary. Your actual print will match your design exactly.</div>
     </div>
   </div>
 </div>
@@ -2732,7 +2756,7 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
     <div class="studio-price" id="s-price" onclick="goStep2()" title="Click to add quantities">
       <div style="font-size:18px;font-weight:700;color:#222;letter-spacing:-.02em" id="s-price-each">$22.00 ea</div>
-      <div id="s-price-sub" style="font-size:11px;color:#939393;font-weight:500">0 items</div>
+      <div id="s-price-sub" style="font-size:13px;color:#939393;font-weight:500">0 items</div>
     </div>
     <button class="stbtn blue" onclick="goStep2()" style="margin-left:8px;height:38px;padding:0 20px;font-size:13px;border-radius:6px">Add to Cart</button>
     <!-- Mobile-only: Save + Next in topbar -->
@@ -2749,7 +2773,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v6.8</span>
+    <span style="font-size:13px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v7.0</span>
   </div>
 
   <div class="studio-body">
@@ -2820,7 +2844,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div id="sp-products">
         <div class="s-panel-hdr">
           <div>
-            <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Products</div>
+            <div style="font-size:13px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Products</div>
             <div class="s-panel-title">Manage Your Products</div>
             <div class="s-panel-sub">Select product and manage colors</div>
           </div>
@@ -2843,7 +2867,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div id="sp-text" style="display:none">
         <div class="s-panel-hdr">
           <div>
-            <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Text Editor</div>
+            <div style="font-size:13px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Text Editor</div>
             <div class="s-panel-title">Edit Your Text</div>
           </div>
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
@@ -2862,27 +2886,27 @@ footer{background:#111;padding:56px 32px 28px}
             <!-- Center -->
             <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtCenterOnShirt()">
               <div style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s" onmouseover="this.style.borderColor='#0071ce'" onmouseout="this.style.borderColor='#e8e8e8'">⊕</div>
-              <span style="font-size:9px;font-weight:700;color:#999">Center</span>
+              <span style="font-size:13px;font-weight:700;color:#999">Center</span>
             </div>
             <!-- Bold -->
             <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtToggle('bold')">
               <div id="txt-bold-btn" style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;transition:all .15s">B</div>
-              <span style="font-size:9px;font-weight:700;color:#999">Bold</span>
+              <span style="font-size:13px;font-weight:700;color:#999">Bold</span>
             </div>
             <!-- Italic -->
             <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtToggle('italic')">
               <div id="txt-italic-btn" style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-style:italic;font-family:Georgia,serif;transition:all .15s">I</div>
-              <span style="font-size:9px;font-weight:700;color:#999">Italic</span>
+              <span style="font-size:13px;font-weight:700;color:#999">Italic</span>
             </div>
             <!-- Flip -->
             <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtFlipSelected()">
               <div style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s" onmouseover="this.style.borderColor='#0071ce'" onmouseout="this.style.borderColor='#e8e8e8'">⇌</div>
-              <span style="font-size:9px;font-weight:700;color:#999">Flip</span>
+              <span style="font-size:13px;font-weight:700;color:#999">Flip</span>
             </div>
             <!-- CAPS -->
             <div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="txtToggle('upper')">
               <div id="txt-upper-btn" style="width:38px;height:38px;border:1.5px solid #e8e8e8;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;letter-spacing:.04em;transition:all .15s">AA</div>
-              <span style="font-size:9px;font-weight:700;color:#999">Caps</span>
+              <span style="font-size:13px;font-weight:700;color:#999">Caps</span>
             </div>
           </div>
 
@@ -2936,7 +2960,7 @@ footer{background:#111;padding:56px 32px 28px}
           <div id="txt-color-wrap" style="display:block;margin-bottom:8px">
             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px" id="txt-color-swatches"></div>
             <div style="display:flex;align-items:center;gap:8px">
-              <span style="font-size:11px;font-weight:600;color:#bbb">Custom:</span>
+              <span style="font-size:13px;font-weight:600;color:#bbb">Custom:</span>
               <input type="color" id="txt-color-custom" value="#111111" oninput="txtSetColor(this.value)"
                 style="width:32px;height:32px;border:1.5px solid #e8e8e8;border-radius:6px;cursor:pointer;padding:2px">
             </div>
@@ -3014,7 +3038,7 @@ footer{background:#111;padding:56px 32px 28px}
       <div id="sp-ai" style="display:none">
         <div class="s-panel-hdr">
           <div>
-            <div style="font-size:10px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Art Powered by AI</div>
+            <div style="font-size:13px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Art Powered by AI</div>
             <div class="s-panel-title" id="ai-panel-title">Add Art</div>
           </div>
           <button class="s-panel-x" onclick="sClosePanel()">×</button>
@@ -3037,17 +3061,17 @@ footer{background:#111;padding:56px 32px 28px}
               <span class="ai-chip" onclick="setP('vintage american eagle bold')">Eagle</span>
             </div>
             <button class="ai-gen-btn" id="ai-gen-btn" onclick="aiGen()">✦ Generate</button>
-            <div style="font-size:11px;color:#999;line-height:1.4;margin-top:8px;text-align:center">Do not generate copyrighted or trademarked characters, logos, or designs. You are responsible for ensuring your design does not infringe on others' intellectual property.</div>
+            <div style="font-size:13px;color:#999;line-height:1.4;margin-top:8px;text-align:center">Do not generate copyrighted or trademarked characters, logos, or designs. You are responsible for ensuring your design does not infringe on others' intellectual property.</div>
 
             <!-- Results grid -->
             <div id="ai-results" style="display:none;margin-top:16px">
-              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#333;margin-bottom:10px">AI Images &nbsp;<span style="background:#0071ce;color:#fff;font-size:9px;padding:2px 6px;border-radius:20px;font-weight:700">AI</span></div>
+              <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#333;margin-bottom:10px">AI Images &nbsp;<span style="background:#0071ce;color:#fff;font-size:13px;padding:2px 6px;border-radius:20px;font-weight:700">AI</span></div>
               <div id="ai-results-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
             </div>
 
             <!-- Clipart section -->
             <div id="ai-clipart-section" style="display:none;margin-top:20px">
-              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#333;margin-bottom:10px">Clipart Results</div>
+              <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#333;margin-bottom:10px">Clipart Results</div>
               <div id="ai-clipart-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
             </div>
           </div>
@@ -3072,19 +3096,19 @@ footer{background:#111;padding:56px 32px 28px}
                   <div id="ai-thumb-normal" style="border-radius:8px;overflow:hidden;border:2px solid #0071ce;background:#f5f5f5;aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin-bottom:4px">
                     <img id="ai-thumb-normal-img" src="" style="width:100%;height:100%;object-fit:contain">
                   </div>
-                  <div style="font-size:11px;font-weight:700;color:#0071ce">Normal</div>
+                  <div style="font-size:13px;font-weight:700;color:#0071ce">Normal</div>
                 </div>
                 <div id="ai-filter-single" onclick="aiSetFilter('single')" style="cursor:pointer;text-align:center">
                   <div style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;background:#f5f5f5;aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin-bottom:4px">
                     <img id="ai-thumb-single-img" src="" style="width:100%;height:100%;object-fit:contain;filter:grayscale(1) sepia(0.3) contrast(1.4)">
                   </div>
-                  <div style="font-size:11px;font-weight:600;color:#888">Single Color</div>
+                  <div style="font-size:13px;font-weight:600;color:#888">Single Color</div>
                 </div>
                 <div id="ai-filter-bw" onclick="aiSetFilter('bw')" style="cursor:pointer;text-align:center">
                   <div style="border-radius:8px;overflow:hidden;border:2px solid #e8e8e8;background:#f5f5f5;aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin-bottom:4px">
                     <img id="ai-thumb-bw-img" src="" style="width:100%;height:100%;object-fit:contain;filter:grayscale(1) contrast(1.8)">
                   </div>
-                  <div style="font-size:11px;font-weight:600;color:#888">Black/White</div>
+                  <div style="font-size:13px;font-weight:600;color:#888">Black/White</div>
                 </div>
               </div>
             </div>
@@ -6252,7 +6276,7 @@ function showUploadModal(fileName){
   modal.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px';
   modal.innerHTML = ''
     + '<div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:28px;box-shadow:0 24px 60px rgba(0,0,0,.25);position:relative">'
-    + '<button onclick="document.getElementById(\'upload-modal\').remove()" style="position:absolute;top:12px;right:14px;background:#e8e8e8;border:none;width:28px;height:28px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#666">x</button>'
+    + '<button onclick="document.getElementById(\'upload-modal\').remove()" style="position:absolute;top:8px;right:8px;background:#e8e8e8;border:none;width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#666">x</button>'
     + '<div style="font-size:16px;font-weight:800;color:#0071ce;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Upload Files</div>'
     + '<div style="font-size:14px;color:#333;margin-bottom:20px;line-height:1.5">Don\'t worry, we double check everything to ensure your design prints perfectly.</div>'
     + '<div style="background:#f5f7fa;border-radius:10px;padding:14px 16px;margin-bottom:20px">'
@@ -6267,7 +6291,7 @@ function showUploadModal(fileName){
     + '</div>'
     + '<div style="border-top:1px solid #eee;padding-top:16px">'
     + '<div style="font-size:14px;font-weight:800;color:#222;margin-bottom:6px">Copyright & Trademark Notice</div>'
-    + '<div style="font-size:12px;color:#666;line-height:1.5">You agree and confirm that you own or have the necessary rights to use the images, logos, text, and/or trademarks in your design and indemnify Hunto.</div>'
+    + '<div style="font-size:13px;color:#666;line-height:1.5">You agree and confirm that you own or have the necessary rights to use the images, logos, text, and/or trademarks in your design and indemnify Hunto.</div>'
     + '</div>'
     + '</div>';
   document.body.appendChild(modal);
@@ -6500,11 +6524,12 @@ function selectLayer(id){
   }
   dz.style.outline = "2px solid rgba(0,113,206,.5)";
   dz.style.outlineOffset = "3px";
-  // On mobile: show overlay toolbar only (no panel). On desktop: open edit panel too.
+  // On mobile: show overlay toolbar + auto-show bottom edit bar. On desktop: open edit panel too.
   if(window.innerWidth <= 768){
     buildCanvasOverlay(id);
     var rzh = document.getElementById("rzh-"+id);
     if(rzh) rzh.style.display = "block";
+    showMobileEditBar(id);
   } else {
     showLayerToolbar(id);
   }
@@ -6673,6 +6698,9 @@ function hideLayerToolbar(){
   // Clean up corner handles
   document.querySelectorAll('.corner-handle').forEach(h => h.remove());
   document.querySelectorAll('[data-type]').forEach(el => { if(el._cleanupHandles) el._cleanupHandles(); });
+  // Clean up mobile edit bar
+  var meb = document.getElementById('mobile-edit-bar');
+  if(meb) meb.remove();
 }
 
 // ── Edit Artwork Panel Functions ──────────────────────
@@ -8836,7 +8864,7 @@ function txtPlace(){
   ensureLayersVisible();
 }
 
-// Mobile compact edit bar — thin strip above iconbar, doesn't block shirt
+// Mobile edit toolbar — slides up from bottom when layer selected on mobile
 function showMobileEditBar(id){
   var old = document.getElementById('mobile-edit-bar');
   if(old) old.remove();
@@ -8850,32 +8878,83 @@ function showMobileEditBar(id){
   var rmbgOn = el.dataset.rmbgApplied === 'true';
   var curSize = Math.round((el.offsetWidth||220)/220*100);
   var curRot = parseInt(el.dataset.rotation||'0');
+  var isText = el.dataset.type === 'text';
 
   var bar = document.createElement('div');
   bar.id = 'mobile-edit-bar';
-  bar.style.cssText = 'position:fixed;bottom:64px;left:0;right:0;z-index:9998;background:rgba(30,30,30,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:8px 12px;display:flex;flex-direction:column;gap:6px;';
+  bar.style.cssText = 'position:fixed;bottom:64px;left:0;right:0;z-index:9998;background:rgba(20,20,20,.95);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px;border-top:1px solid rgba(255,255,255,.15);transform:translateY(100%);animation:mebSlideUp .2s ease forwards;';
 
-  bar.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:4px 0 12px">'
-    + '<span style="font-size:12px;font-weight:700;color:#fff;width:50px;flex-shrink:0">Size</span>'
-    + '<input type="range" id="meb-size" min="30" max="180" value="'+Math.min(180,curSize)+'" style="flex:1;accent-color:#0071ce;height:8px;border-radius:4px" oninput="mebApply(\''+id+'\')">'
-    + '<span id="meb-size-val" style="font-size:12px;font-weight:700;color:#0071ce;width:36px;text-align:right">'+curSize+'%</span>'
-    + '</div>'
-    + '<div style="display:flex;align-items:center;gap:8px;padding:4px 0">'
-    + '<span style="font-size:12px;font-weight:700;color:#fff;width:50px;flex-shrink:0">Rotate</span>'
-    + '<input type="range" id="meb-rotate" min="-180" max="180" value="'+curRot+'" style="flex:1;accent-color:#0071ce;height:8px;border-radius:4px" oninput="mebApply(\''+id+'\')">'
-    + '<span id="meb-rot-val" style="font-size:12px;font-weight:700;color:#0071ce;width:32px;text-align:right">'+curRot+'°</span>'
-    + '</div>'
-    + '<div style="display:flex;align-items:center;gap:8px">'
-    + '<button id="meb-rmbg-btn" onclick="mebToggleRmbg(\''+id+'\')" style="flex:1;height:38px;border-radius:6px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;'+(rmbgOn?'background:#0071ce;color:#fff':'background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)')+'">'
-    + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>'
-    + (rmbgOn ? 'BG Removed ✓' : 'Remove Background')
-    + '</button>'
-    + '<button onclick="document.getElementById(\'mobile-edit-bar\').remove()" style="height:38px;padding:0 16px;background:rgba(255,255,255,.15);border:none;border-radius:6px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif">Done</button>'
+  // Action buttons row — labeled buttons
+  var actionsRow = '<div style="display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px;-webkit-overflow-scrolling:touch">';
+
+  // Remove BG (images only)
+  if(!isText){
+    actionsRow += '<button id="meb-rmbg-btn" onclick="mebToggleRmbg(\''+id+'\')" style="min-width:0;flex:1;height:44px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s;white-space:nowrap;padding:0 10px;'+(rmbgOn?'background:#0071ce;color:#fff':'background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)')+'">'
+      + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>'
+      + (rmbgOn ? 'BG Removed' : 'Remove BG')
+      + '</button>';
+  }
+
+  // Duplicate
+  actionsRow += '<button onclick="window.eaCurrentLayerId=\''+id+'\';eaDuplicate();var m=document.getElementById(\'mobile-edit-bar\');if(m)m.remove();" style="flex:1;height:44px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;padding:0 10px">'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>'
+    + 'Duplicate</button>';
+
+  // Center
+  actionsRow += '<button onclick="window.eaCurrentLayerId=\''+id+'\';eaCenter();mebRefreshSliders(\''+id+'\');" style="flex:1;height:44px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;padding:0 10px">'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>'
+    + 'Center</button>';
+
+  // Delete
+  actionsRow += '<button onclick="removeLayer(\''+id+'\')" style="flex:0 0 auto;height:44px;border-radius:8px;border:1.5px solid #fca5a5;background:rgba(220,38,38,.15);font-size:13px;font-weight:700;color:#fca5a5;cursor:pointer;font-family:DM Sans,sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;padding:0 14px">'
+    + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fca5a5" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>'
+    + 'Delete</button>';
+
+  actionsRow += '</div>';
+
+  // Size slider
+  var sizeRow = '<div style="display:flex;align-items:center;gap:8px;padding:2px 0">'
+    + '<span style="font-size:13px;font-weight:700;color:#fff;width:52px;flex-shrink:0">Size</span>'
+    + '<input type="range" id="meb-size" min="30" max="180" value="'+Math.min(180,curSize)+'" style="flex:1;accent-color:#0071ce;height:6px;border-radius:4px" oninput="mebApply(\''+id+'\')">'
+    + '<span id="meb-size-val" style="font-size:13px;font-weight:700;color:#0071ce;width:40px;text-align:right">'+curSize+'%</span>'
     + '</div>';
+
+  // Rotate slider
+  var rotateRow = '<div style="display:flex;align-items:center;gap:8px;padding:2px 0">'
+    + '<span style="font-size:13px;font-weight:700;color:#fff;width:52px;flex-shrink:0">Rotate</span>'
+    + '<input type="range" id="meb-rotate" min="-180" max="180" value="'+curRot+'" style="flex:1;accent-color:#0071ce;height:6px;border-radius:4px" oninput="mebApply(\''+id+'\')">'
+    + '<span id="meb-rot-val" style="font-size:13px;font-weight:700;color:#0071ce;width:40px;text-align:right">'+curRot+'°</span>'
+    + '</div>';
+
+  // Done button
+  var doneRow = '<div style="display:flex;justify-content:flex-end;padding:2px 0 0">'
+    + '<button onclick="deselectAllLayers()" style="height:44px;padding:0 24px;background:#0071ce;border:none;border-radius:8px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif">Done</button>'
+    + '</div>';
+
+  bar.innerHTML = actionsRow + sizeRow + rotateRow + doneRow;
+
+  // Inject slide-up animation
+  if(!document.getElementById('meb-anim-style')){
+    var animStyle = document.createElement('style');
+    animStyle.id = 'meb-anim-style';
+    animStyle.textContent = '@keyframes mebSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}';
+    document.head.appendChild(animStyle);
+  }
 
   document.body.appendChild(bar);
 }
 
+// Refresh slider display after programmatic moves (e.g. Center)
+function mebRefreshSliders(id){
+  var el = document.getElementById(id);
+  if(!el) return;
+  var ss = document.getElementById('meb-size');
+  var sv = document.getElementById('meb-size-val');
+  if(ss && sv){
+    var cur = Math.round((el.offsetWidth||220)/220*100);
+    ss.value = cur; sv.textContent = cur+'%';
+  }
+}
 function mebApply(id){
   var el = document.getElementById(id);
   if(!el) return;
@@ -9916,7 +9995,7 @@ function showPostSaveModal(designName){
     + '<div style="font-size:14px;color:#888;margin-bottom:24px;line-height:1.5">"' + (designName||'My Design') + '" has been saved to your designs.</div>'
     + '<button onclick="document.getElementById(\'post-save-modal\').remove()" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;margin-bottom:8px">Continue Editing</button>'
     + '<button onclick="document.getElementById(\'post-save-modal\').remove();showPage(\'shop\');shopLoadCatalog()" style="width:100%;padding:14px;background:#f5f5f5;color:#333;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;margin-bottom:8px">Browse More Products</button>'
-    + '<button onclick="document.getElementById(\'post-save-modal\').remove();openDesigns()" style="width:100%;padding:10px;background:none;border:none;font-size:13px;color:#0071ce;cursor:pointer;font-family:DM Sans,sans-serif;font-weight:600">View Saved Designs</button>'
+    + '<button onclick="document.getElementById(\'post-save-modal\').remove();openDesigns()" style="width:100%;padding:14px;background:none;border:none;font-size:14px;color:#0071ce;cursor:pointer;font-family:DM Sans,sans-serif;font-weight:600;min-height:44px">View Saved Designs</button>'
     + '</div>';
   document.body.appendChild(modal);
 }
@@ -10993,8 +11072,9 @@ function buildStep2(){
       const active = qty > 0;
       let h = '<div style="text-align:center">';
       h += '<div style="font-size:9px;font-weight:700;color:#666;margin-bottom:3px">'+sz+'</div>';
-      h += '<input type="number" min="0" max="999" value="'+(qty||0)+'" ';
+      h += '<input type="number" inputmode="numeric" min="0" max="999" value="'+(qty>0?qty:'')+'" placeholder="-" ';
       h += 'data-pidx="'+pidx+'" data-sz="'+sz+'" ';
+      h += 'onfocus="this.select()" ';
       h += 'oninput="step2SetQty(parseInt(this.dataset.pidx),this.dataset.sz,parseInt(this.value)||0)" ';
       h += 'style="width:38px;height:38px;padding:0;border:'+(active?'2px solid #0071ce':'1px solid #ddd')+';border-radius:6px;font-size:13px;font-weight:700;text-align:center;font-family:DM Sans,sans-serif;color:#111;background:'+(active?'#f0f7ff':'#fff')+';outline:none;-moz-appearance:textfield">';
       if(up) h += '<div style="font-size:8px;color:#aaa;margin-top:2px">+$'+up+'</div>';
@@ -11915,7 +11995,7 @@ async function openGroupJoinModal(code){
       grid.innerHTML = sizes.map(function(s){
         return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border:1.5px solid #e0e0e0;border-radius:8px">'
           + '<span style="font-size:15px;font-weight:700;color:#222">'+s+'</span>'
-          + '<input type="number" id="group-sz-'+s+'" min="0" value="0" style="width:50px;padding:6px;border:1.5px solid #e0e0e0;border-radius:6px;font-size:14px;text-align:center;font-family:DM Sans,sans-serif">'
+          + '<input type="number" inputmode="numeric" id="group-sz-'+s+'" min="0" value="" placeholder="-" onfocus="this.select()" style="width:50px;padding:6px;border:1.5px solid #e0e0e0;border-radius:6px;font-size:14px;text-align:center;font-family:DM Sans,sans-serif">'
           + '</div>';
       }).join('');
     }
@@ -12049,14 +12129,14 @@ function showSaveDesignPrompt(onContinue){
   modal.innerHTML = ''
     + '<div style="background:#fff;border-radius:16px;max-width:380px;width:100%;padding:28px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.25)">'
     + '<div style="font-size:20px;font-weight:800;color:#222;margin-bottom:6px">Save Your Design</div>'
-    + '<div style="font-size:13px;color:#888;margin-bottom:20px;line-height:1.5">Enter your email and we\'ll save your design. Come back anytime to finish.</div>'
+    + '<div style="font-size:14px;color:#888;margin-bottom:20px;line-height:1.5">Enter your email and we\'ll save your design. Come back anytime to finish.</div>'
     + '<input id="save-design-email" type="email" placeholder="your@email.com" '
     + 'style="width:100%;padding:14px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:DM Sans,sans-serif;outline:none;box-sizing:border-box;margin-bottom:12px" '
     + 'onfocus="this.style.borderColor=\'#0071ce\'" onblur="this.style.borderColor=\'#e0e0e0\'">'
     + '<button id="save-design-btn" onclick="handleSaveDesign()" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;margin-bottom:8px">'
     + 'Save Design'
     + '</button>'
-    + '<button onclick="this.closest(\'#save-modal\').remove()" style="width:100%;padding:10px;background:none;border:none;font-size:13px;color:#939393;cursor:pointer;font-family:DM Sans,sans-serif">'
+    + '<button onclick="this.closest(\'#save-modal\').remove()" style="width:100%;padding:14px;background:none;border:none;font-size:14px;color:#939393;cursor:pointer;font-family:DM Sans,sans-serif;min-height:44px">'
     + 'Not now'
     + '</button>'
     + '</div>';
@@ -12166,12 +12246,12 @@ function checkForSavedDraft(){
     modal.innerHTML = ''
       + '<div style="background:#fff;border-radius:16px;max-width:380px;width:100%;padding:28px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.25)">'
       + '<div style="font-size:20px;font-weight:800;color:#222;margin-bottom:6px">Welcome Back!</div>'
-      + '<div style="font-size:13px;color:#888;margin-bottom:6px;line-height:1.5">You have an unsaved design'+(data.product?.name?' on a <strong>'+data.product.name+'</strong>':'')+'.</div>'
-      + '<div style="font-size:12px;color:#bbb;margin-bottom:20px">'+data.layers.length+' design element'+(data.layers.length>1?'s':'')+'</div>'
+      + '<div style="font-size:14px;color:#888;margin-bottom:6px;line-height:1.5">You have an unsaved design'+(data.product?.name?' on a <strong>'+data.product.name+'</strong>':'')+'.</div>'
+      + '<div style="font-size:13px;color:#bbb;margin-bottom:20px">'+data.layers.length+' design element'+(data.layers.length>1?'s':'')+'</div>'
       + '<button onclick="restoreDraft();this.closest(\'#resume-modal\').remove()" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;margin-bottom:8px">'
       + 'Continue Designing'
       + '</button>'
-      + '<button onclick="clearDesignFresh();this.closest(\'#resume-modal\').remove()" style="width:100%;padding:10px;background:none;border:none;font-size:13px;color:#939393;cursor:pointer;font-family:DM Sans,sans-serif">'
+      + '<button onclick="clearDesignFresh();this.closest(\'#resume-modal\').remove()" style="width:100%;padding:14px;background:none;border:none;font-size:14px;color:#939393;cursor:pointer;font-family:DM Sans,sans-serif;min-height:44px">'
       + 'Start Fresh'
       + '</button>'
       + '</div>';
