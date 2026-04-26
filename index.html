@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v6.1 -->
+<!-- v6.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1603,7 +1603,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v6.1</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v6.2</span>
   </div>
 </div>
 
@@ -2233,7 +2233,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v6.1</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v6.2</span></span>
         <div class="footer-legal"><span onclick="showFooterPage('privacy')">Privacy</span><span onclick="showFooterPage('terms')">Terms</span><span onclick="showFooterPage('shipping')">Shipping</span></div>
       </div>
     </div>
@@ -2739,7 +2739,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v6.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v6.2</span>
   </div>
 
   <div class="studio-body">
@@ -3744,7 +3744,7 @@ footer{background:#111;padding:56px 32px 28px}
           <!-- FRONT guidelines -->
           <div id="print-area-front" class="print-guides" style="position:absolute;inset:0;z-index:2;pointer-events:none;">
             <!-- Adult full front — top edge ~3" below neckline -->
-            <div class="guide-zone guide-adult" id="guide-f-adult" style="width:41%;height:40%;top:23%;left:50%;transform:translateX(-50%);position:absolute;"></div>
+            <div class="guide-zone guide-adult" id="guide-f-adult" style="width:46%;height:48%;top:22%;left:50%;transform:translateX(-50%);position:absolute;"></div>
             <!-- Left chest / crest — flush in top-right corner of Adult box (viewer's right = wearer's left) -->
             <div class="guide-zone guide-crest" id="guide-f-crest" style="width:14%;height:14%;top:23%;right:29.5%;position:absolute;">
               <span class="guide-label" style="position:absolute;top:-14px;right:0;white-space:nowrap">Left Chest</span>
@@ -3753,7 +3753,7 @@ footer{background:#111;padding:56px 32px 28px}
           <!-- BACK guidelines -->
           <div id="print-area-back" class="print-guides" style="position:absolute;inset:0;z-index:2;pointer-events:none;display:none;">
             <!-- Adult full back — top at 50% from top of neckline -->
-            <div class="guide-zone guide-adult" id="guide-b-adult" style="width:41%;height:40%;top:18%;left:50%;transform:translateX(-50%);position:absolute;"></div>
+            <div class="guide-zone guide-adult" id="guide-b-adult" style="width:46%;height:50%;top:16%;left:50%;transform:translateX(-50%);position:absolute;"></div>
           </div>
           <!-- Draggable design elements -->
           <div id="s-dzone-front" style="position:absolute;z-index:3;display:none;cursor:move;"></div>
@@ -5376,7 +5376,7 @@ function sSetView(v){
       } else if(isJacket){
         backAdult.style.top = '28%'; backAdult.style.height = '36%';
       } else {
-        backAdult.style.top = '18%'; backAdult.style.height = '40%';
+        backAdult.style.top = '16%'; backAdult.style.height = '50%'; backAdult.style.width = '46%';
       }
     }
   }
@@ -5400,8 +5400,8 @@ function sSetView(v){
         frontAdult.style.top = '28%'; frontAdult.style.height = '30%';
         frontAdult.style.width = '41%';
       } else {
-        frontAdult.style.top = '23%'; frontAdult.style.height = '40%';
-        frontAdult.style.width = '41%';
+        frontAdult.style.top = '22%'; frontAdult.style.height = '48%';
+        frontAdult.style.width = '46%';
       }
     }
     if(frontCrest){
