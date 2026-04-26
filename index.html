@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v4.6 -->
+<!-- v4.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -869,10 +869,10 @@ footer{background:#111;padding:56px 32px 28px}
 
 /* Print area guide zones — always visible like Rush Order Tees */
 .print-guides{pointer-events:none}
-/* Default guides for light garments */
-.guide-zone{pointer-events:none;box-sizing:border-box;border:1px dashed rgba(0,0,0,.2) !important}
-.guide-zone .guide-label{color:rgba(0,0,0,.35) !important;font-size:9px;font-weight:700;letter-spacing:.03em}
-.guide-zone.guide-crest{border-color:rgba(0,0,0,.2) !important}
+/* Default guides hidden — only show during drag */
+.guide-zone{pointer-events:none;box-sizing:border-box;border:1px dashed transparent !important}
+.guide-zone .guide-label{color:transparent !important;font-size:9px;font-weight:700;letter-spacing:.03em}
+.guide-zone.guide-crest{border-color:transparent !important}
 .guide-zone.guide-youth{border:none !important}
 .guide-zone.guide-youth .guide-label{color:transparent !important}
 .guide-zone.visible{border-color:rgba(0,113,206,.5) !important}
@@ -880,9 +880,9 @@ footer{background:#111;padding:56px 32px 28px}
 .guide-zone.guide-crest.visible{border-color:rgba(0,180,100,.5) !important}
 .guide-zone.guide-crest.visible .guide-label{color:rgba(0,180,100,.7) !important}
 /* Light guides for dark garments */
-.dark-garment .guide-zone{border-color:rgba(255,255,255,.5) !important}
-.dark-garment .guide-zone .guide-label{color:rgba(255,255,255,.65) !important}
-.dark-garment .guide-zone.guide-crest{border-color:rgba(255,255,255,.5) !important}
+.dark-garment .guide-zone{border-color:transparent !important}
+.dark-garment .guide-zone .guide-label{color:transparent !important}
+.dark-garment .guide-zone.guide-crest{border-color:transparent !important}
 .dark-garment .guide-zone.visible{border-color:rgba(100,200,255,.6) !important}
 .dark-garment .guide-zone.visible .guide-label{color:rgba(100,200,255,.7) !important}
 .dark-garment .guide-zone.guide-crest.visible{border-color:rgba(100,255,180,.6) !important}
@@ -1572,7 +1572,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v4.6</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v4.7</span>
   </div>
 </div>
 
@@ -2202,7 +2202,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v4.6</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v4.7</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2708,7 +2708,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v4.6</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v4.7</span>
   </div>
 
   <div class="studio-body">
@@ -6422,8 +6422,6 @@ function selectLayer(id){
   }
   dz.style.outline = "2px solid rgba(0,113,206,.5)";
   dz.style.outlineOffset = "3px";
-  // Show print area guides when layer is selected
-  showDragGuides(dz);
   // On mobile: show overlay toolbar only (no panel). On desktop: open edit panel too.
   if(window.innerWidth <= 768){
     buildCanvasOverlay(id);
@@ -7023,11 +7021,24 @@ function showDragGuides(el){
   pa.querySelectorAll('.guide-zone').forEach(function(gz){
     gz.classList.add('visible');
   });
+  // Show print area hint
+  var hint = document.getElementById('s-print-hint');
+  if(!hint){
+    hint = document.createElement('div');
+    hint.id = 's-print-hint';
+    hint.style.cssText = 'position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:100;background:rgba(0,0,0,.55);color:#fff;font-size:13px;font-weight:600;padding:6px 16px;border-radius:8px;pointer-events:none;font-family:DM Sans,sans-serif;white-space:nowrap';
+    hint.textContent = 'Keep design within the print area';
+    var wrap = document.getElementById('s-shirt-wrap');
+    if(wrap) wrap.appendChild(hint);
+  }
+  hint.style.display = 'block';
 }
 function hideDragGuides(){
   document.querySelectorAll('.guide-zone').forEach(function(gz){
     gz.classList.remove('visible');
   });
+  var hint = document.getElementById('s-print-hint');
+  if(hint) hint.style.display = 'none';
 }
 
 function makeLayerDraggable(dz){
