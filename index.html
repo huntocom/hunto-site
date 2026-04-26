@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.9 -->
+<!-- v6.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1603,7 +1603,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v5.9</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v6.0</span>
   </div>
 </div>
 
@@ -2233,7 +2233,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v5.9</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v6.0</span></span>
         <div class="footer-legal"><span onclick="showFooterPage('privacy')">Privacy</span><span onclick="showFooterPage('terms')">Terms</span><span onclick="showFooterPage('shipping')">Shipping</span></div>
       </div>
     </div>
@@ -2739,7 +2739,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v5.9</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v6.0</span>
   </div>
 
   <div class="studio-body">
@@ -6859,6 +6859,15 @@ function eaToggleRmbg(){
         img3.style.opacity='1';
         img3.style.mixBlendMode='normal';
         img3.style.filter='drop-shadow(0 1px 3px rgba(0,0,0,.15))';
+        // Re-fit layer to new aspect ratio after bg removal
+        var probe = new Image();
+        probe.onload = function(){
+          var oldW = el.offsetWidth;
+          var newRatio = probe.naturalWidth / probe.naturalHeight;
+          var newH = Math.round(oldW / newRatio);
+          el.style.height = newH + 'px';
+        };
+        probe.src = cleanUrl;
       }
       el.dataset.rmbgApplied='true';
       ['normal','single','bw'].forEach(function(f){ const t=document.getElementById('ea-thumb-'+f); if(t) t.src=cleanUrl; });
