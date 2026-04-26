@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v31.3 -->
+<!-- v31.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1551,7 +1551,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v31.3</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v31.4</span>
   </div>
 </div>
 
@@ -2186,7 +2186,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v31.3</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v31.4</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2688,7 +2688,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v31.3</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v31.4</span>
   </div>
 
   <div class="studio-body">
@@ -2962,38 +2962,7 @@ footer{background:#111;padding:56px 32px 28px}
 
           <!-- ── SCREEN 1: Generate ── -->
           <div id="ai-screen-1" style="padding:14px 16px">
-            <!-- Popular Designs -->
-            <div style="margin-bottom:14px">
-              <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#333;margin-bottom:8px">Popular Designs</div>
-              <div class="tpl-grid">
-                <div class="tpl-card" style="background:linear-gradient(135deg,#1e7a46,#0d3d23)" onclick="setTemplate('bold team sports logo, athletic jersey number design, dynamic action pose')">
-                  <span class="tpl-card-icon">🏆</span><span class="tpl-card-name">Sports</span>
-                </div>
-                <div class="tpl-card" style="background:linear-gradient(135deg,#7c3aed,#3b0764)" onclick="setTemplate('rock band concert poster art, electric guitar with neon lights, music festival vibes')">
-                  <span class="tpl-card-icon">🎵</span><span class="tpl-card-name">Music</span>
-                </div>
-                <div class="tpl-card" style="background:linear-gradient(135deg,#d97706,#7c2d12)" onclick="setTemplate('cute illustrated animal portrait, colorful pet artwork, detailed fur and expressive eyes')">
-                  <span class="tpl-card-icon">🐾</span><span class="tpl-card-name">Animals</span>
-                </div>
-                <div class="tpl-card" style="background:linear-gradient(135deg,#e11d48,#881337)" onclick="setTemplate('funny meme cartoon character, humorous pop art style, bold comic text and bright colors')">
-                  <span class="tpl-card-icon">😂</span><span class="tpl-card-name">Funny</span>
-                </div>
-                <div class="tpl-card" style="background:linear-gradient(135deg,#1d4ed8,#1e3a5f)" onclick="setTemplate('clean professional corporate logo, modern minimalist business design, elegant typography')">
-                  <span class="tpl-card-icon">💼</span><span class="tpl-card-name">Business</span>
-                </div>
-                <div class="tpl-card" style="background:linear-gradient(135deg,#b45309,#78350f)" onclick="setTemplate('vintage retro distressed design, classic Americana style, worn texture with faded colors')">
-                  <span class="tpl-card-icon">🕰️</span><span class="tpl-card-name">Vintage</span>
-                </div>
-                <div class="tpl-card" style="background:linear-gradient(135deg,#059669,#064e3b)" onclick="setTemplate('beautiful nature landscape scene, mountains and sunset, watercolor flowers and leaves')">
-                  <span class="tpl-card-icon">🌿</span><span class="tpl-card-name">Nature</span>
-                </div>
-                <div class="tpl-card" style="background:linear-gradient(135deg,#6d28d9,#4c1d95)" onclick="setTemplate('epic gaming character illustration, esports team logo, neon cyberpunk pixel art style')">
-                  <span class="tpl-card-icon">🎮</span><span class="tpl-card-name">Gaming</span>
-                </div>
-              </div>
-            </div>
-
-            <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:6px">Or describe your own design:</div>
+            <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:6px">Describe your design:</div>
             <textarea class="ai-ta" id="ai-prompt" placeholder="e.g. neon wolf howling at the moon, cyberpunk style..." style="margin-bottom:8px"></textarea>
             <!-- Prompt history -->
             <div id="ai-prev-prompts" style="margin-bottom:10px;display:flex;flex-wrap:wrap;gap:5px"></div>
@@ -6755,11 +6724,11 @@ function reindexLayers(els){
 function moveLayerUp(id){
   const layers = getAllLayersSorted();
   const idx = layers.findIndex(el => el.id === id);
-  if(idx < 0 || idx === layers.length - 1) return; // already on top
-  // Swap with the layer above
+  if(idx <= 0) return; // already at bottom
+  // Swap with the layer below
   const tmp = layers[idx];
-  layers[idx] = layers[idx + 1];
-  layers[idx + 1] = tmp;
+  layers[idx] = layers[idx - 1];
+  layers[idx - 1] = tmp;
   reindexLayers(layers);
   document.querySelectorAll("[id^='lm-']").forEach(m => m.style.display = "none");
 }
@@ -6767,11 +6736,11 @@ function moveLayerUp(id){
 function moveLayerDown(id){
   const layers = getAllLayersSorted();
   const idx = layers.findIndex(el => el.id === id);
-  if(idx <= 0) return; // already at bottom
-  // Swap with the layer below
+  if(idx < 0 || idx === layers.length - 1) return; // already on top
+  // Swap with the layer above
   const tmp = layers[idx];
-  layers[idx] = layers[idx - 1];
-  layers[idx - 1] = tmp;
+  layers[idx] = layers[idx + 1];
+  layers[idx + 1] = tmp;
   reindexLayers(layers);
   document.querySelectorAll("[id^='lm-']").forEach(m => m.style.display = "none");
 }
