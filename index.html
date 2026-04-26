@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3.8 -->
+<!-- v3.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1565,7 +1565,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v3.8</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v3.9</span>
   </div>
 </div>
 
@@ -2195,7 +2195,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v3.8</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v3.9</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2701,7 +2701,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v3.8</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v3.9</span>
   </div>
 
   <div class="studio-body">
@@ -4434,6 +4434,14 @@ function openPDPStudio(){
   initStudio();
 }
 
+function isCurrentProductHoodie(){
+  var p = sState.product;
+  if(!p) return false;
+  var cat = (p.base_category || p.baseCategory || '').toLowerCase();
+  var name = (p.name || '').toLowerCase();
+  return cat.includes('hood') || name.includes('hoodie') || name.includes('hooded') || p.id === '18500';
+}
+
 function studioGoBack(){
   if(sState.hasDesign){
     if(!confirm('You have an unsaved design. Leave the studio?')) return;
@@ -5236,6 +5244,20 @@ function sSetView(v){
   const pab = document.getElementById("print-area-back");
   if(paf) paf.style.display = v==="front" ? "" : "none";
   if(pab) pab.style.display = v==="back"  ? "" : "none";
+  // Adjust guides for hoodies — front neckline is lower, back must clear the hood
+  var isHoodie = isCurrentProductHoodie();
+  if(v==="back"){
+    var backAdult = document.getElementById('guide-b-adult');
+    var backYouth = document.getElementById('guide-b-youth');
+    if(backAdult){ backAdult.style.top = isHoodie ? '32%' : '18%'; backAdult.style.height = isHoodie ? '34%' : '40%'; }
+    if(backYouth) backYouth.style.top = isHoodie ? '34%' : '20%';
+  }
+  if(v==="front"){
+    var frontAdult = document.getElementById('guide-f-adult');
+    var frontCrest = document.getElementById('guide-f-crest');
+    if(frontAdult) frontAdult.style.top = isHoodie ? '28%' : '23%';
+    if(frontCrest) frontCrest.style.top = isHoodie ? '28%' : '23%';
+  }
   // Show/hide image AND text layers per side
   document.querySelectorAll("[data-type='image'],[data-type='text']").forEach(el => {
     el.style.display = el.dataset.side === v ? "block" : "none";
