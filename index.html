@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v2.3 -->
+<!-- v2.4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1553,7 +1553,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v2.3</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v2.4</span>
   </div>
 </div>
 
@@ -2188,7 +2188,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v2.3</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v2.4</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2690,7 +2690,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v2.3</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v2.4</span>
   </div>
 
   <div class="studio-body">
@@ -7021,7 +7021,13 @@ function clearCurrentDesign(){
   sLayers[side] = [];
   // Also remove text layers on this side
   document.querySelectorAll('.txt-layer[data-side="'+side+'"]').forEach(el => el.remove());
-  if(!hasAnyDesign()) sState.hasDesign = false;
+  if(!hasAnyDesign()){
+    sState.hasDesign = false;
+    localStorage.removeItem('hunto_studio_session');
+    localStorage.removeItem('hunto_draft');
+  } else {
+    saveStudioSession();
+  }
   updateFloatPills();
 }
 
@@ -7179,6 +7185,8 @@ function historyStartOver(){
   textLayerCount = 0;
   historyStack = [];
   historyIndex = -1;
+  localStorage.removeItem('hunto_studio_session');
+  localStorage.removeItem('hunto_draft');
   updateFloatPills();
   deselectAllLayers();
   hideLayerToolbar();
