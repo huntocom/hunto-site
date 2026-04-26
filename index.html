@@ -6184,7 +6184,7 @@ function addImageLayer(side, id, src){
     const dz = document.createElement("div");
     dz.id = id; dz.dataset.side = side; dz.dataset.type = "image";
     dz.style.cssText = "position:absolute;z-index:"+(3+layerCounter)+";width:"+layerW+"px;height:"+layerH+"px;left:"+initLeft+"px;top:"+initTop+"px;cursor:move;outline:2px dashed transparent;transition:outline-color .15s;";
-    dz.innerHTML = '<img src="'+src+'" style="width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;">';
+    dz.innerHTML = '<img src="'+src+'" style="width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;">';
     wrap.appendChild(dz);
     makeLayerDraggable(dz); makeLayerResizable(dz, id); makeLayerRotatable(dz, id);
     dz.addEventListener("click", function(e){ e.stopPropagation(); selectLayer(id); });
@@ -11541,12 +11541,24 @@ function checkForSavedDraft(){
       + '<button onclick="restoreDraft();this.closest(\'#resume-modal\').remove()" style="width:100%;padding:14px;background:#0071ce;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;margin-bottom:8px">'
       + 'Continue Designing'
       + '</button>'
-      + '<button onclick="localStorage.removeItem(\'hunto_draft\');this.closest(\'#resume-modal\').remove()" style="width:100%;padding:10px;background:none;border:none;font-size:13px;color:#939393;cursor:pointer;font-family:DM Sans,sans-serif">'
+      + '<button onclick="clearDesignFresh();this.closest(\'#resume-modal\').remove()" style="width:100%;padding:10px;background:none;border:none;font-size:13px;color:#939393;cursor:pointer;font-family:DM Sans,sans-serif">'
       + 'Start Fresh'
       + '</button>'
       + '</div>';
     document.body.appendChild(modal);
   } catch(e){ localStorage.removeItem('hunto_draft'); }
+}
+
+function clearDesignFresh(){
+  localStorage.removeItem('hunto_draft');
+  localStorage.removeItem('hunto_studio_session');
+  var wrap = document.getElementById('s-shirt-wrap');
+  if(wrap) wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){ el.remove(); });
+  sLayers = {front:[], back:[]};
+  sState.hasDesign = false;
+  layerCounter = 0;
+  updateFloatPills();
+  hideLayerToolbar();
 }
 
 function restoreDraft(){
