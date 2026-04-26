@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v6.0 -->
+<!-- v6.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1603,7 +1603,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v6.0</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v6.1</span>
   </div>
 </div>
 
@@ -2233,7 +2233,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v6.0</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v6.1</span></span>
         <div class="footer-legal"><span onclick="showFooterPage('privacy')">Privacy</span><span onclick="showFooterPage('terms')">Terms</span><span onclick="showFooterPage('shipping')">Shipping</span></div>
       </div>
     </div>
@@ -2739,7 +2739,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v6.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v6.1</span>
   </div>
 
   <div class="studio-body">
@@ -9279,6 +9279,7 @@ function restoreStudioSession(){
       PRODUCTS.push(session.product);
     }
     showPage('studio');
+    window._sessionRestored = true; // set BEFORE initStudio so checkForSavedDraft skips
     initStudio();
     // Restore layers after studio is initialized
     setTimeout(function(){
@@ -9341,7 +9342,6 @@ function restoreStudioSession(){
         }
       });
       sState.hasDesign = true;
-      window._sessionRestored = true; // prevent duplicate restore from draft modal
       updateFloatPills();
       sNtf('Design restored from your last session');
     }, 500);
