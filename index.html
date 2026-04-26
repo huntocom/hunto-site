@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v4.2 -->
+<!-- v4.3 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1565,7 +1565,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v4.2</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v4.3</span>
   </div>
 </div>
 
@@ -2195,7 +2195,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v4.2</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v4.3</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2701,7 +2701,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v4.2</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v4.3</span>
   </div>
 
   <div class="studio-body">
@@ -3706,7 +3706,7 @@ footer{background:#111;padding:56px 32px 28px}
           <!-- FRONT guidelines -->
           <div id="print-area-front" class="print-guides" style="position:absolute;inset:0;z-index:2;pointer-events:none;">
             <!-- Adult full front — top edge ~3" below neckline -->
-            <div class="guide-zone guide-adult" id="guide-f-adult" style="width:41%;height:40%;top:23%;left:50%;transform:translateX(-50%);position:absolute;">
+            <div class="guide-zone guide-adult" id="guide-f-adult" style="width:41%;height:33%;top:23%;left:50%;transform:translateX(-50%);position:absolute;">
               <span class="guide-label" style="position:absolute;top:-14px;left:0;white-space:nowrap">Adult</span>
             </div>
             <!-- Youth full front (hidden by default, shown on drag) -->
@@ -4440,6 +4440,30 @@ function isCurrentProductHoodie(){
   var cat = (p.base_category || p.baseCategory || '').toLowerCase();
   var name = (p.name || '').toLowerCase();
   return cat.includes('hood') || name.includes('hoodie') || name.includes('hooded') || p.id === '18500';
+}
+
+function isCurrentProductJacket(){
+  var p = sState.product;
+  if(!p) return false;
+  var cat = (p.base_category || p.baseCategory || '').toLowerCase();
+  var name = (p.name || '').toLowerCase();
+  return (cat.includes('outerwear') || cat.includes('jacket') || name.includes('jacket') || name.includes('windbreaker') || name.includes('shell')) && !isCurrentProductHoodie();
+}
+
+function isYouthProduct(){
+  var p = sState.product;
+  if(!p) return false;
+  var cat = (p.base_category || p.baseCategory || '').toLowerCase();
+  if(cat.includes('youth') || cat.includes('kid')) return true;
+  var sizes = p.sizes || [];
+  var youthCodes = ['YXS','YS','YM','YL','YXL','XS'];
+  for(var i=0;i<sizes.length;i++){
+    var s = (typeof sizes[i]==='string' ? sizes[i] : (sizes[i].name||sizes[i].code||'')).toUpperCase();
+    for(var j=0;j<youthCodes.length;j++){
+      if(s === youthCodes[j]) return true;
+    }
+  }
+  return false;
 }
 
 function studioGoBack(){
@@ -5244,19 +5268,52 @@ function sSetView(v){
   const pab = document.getElementById("print-area-back");
   if(paf) paf.style.display = v==="front" ? "" : "none";
   if(pab) pab.style.display = v==="back"  ? "" : "none";
-  // Adjust guides for hoodies — front neckline is lower, back must clear the hood
+  // Adjust guides based on garment type
   var isHoodie = isCurrentProductHoodie();
+  var isJacket = isCurrentProductJacket();
+  var isYouth = isYouthProduct();
+
+  // Hide/show youth guides based on product
+  var fyouth = document.getElementById('guide-f-youth');
+  var byouth = document.getElementById('guide-b-youth');
+  if(fyouth) fyouth.style.display = isYouth ? '' : 'none';
+  if(byouth) byouth.style.display = isYouth ? '' : 'none';
+
   if(v==="back"){
     var backAdult = document.getElementById('guide-b-adult');
-    var backYouth = document.getElementById('guide-b-youth');
-    if(backAdult){ backAdult.style.top = isHoodie ? '32%' : '18%'; backAdult.style.height = isHoodie ? '34%' : '40%'; }
-    if(backYouth) backYouth.style.top = isHoodie ? '34%' : '20%';
+    if(backAdult){
+      if(isHoodie){
+        backAdult.style.top = '32%'; backAdult.style.height = '34%';
+      } else if(isJacket){
+        backAdult.style.top = '28%'; backAdult.style.height = '36%';
+      } else {
+        backAdult.style.top = '18%'; backAdult.style.height = '40%';
+      }
+    }
+    if(byouth && isYouth){
+      byouth.style.top = isHoodie ? '34%' : '20%';
+      byouth.style.height = '28%'; byouth.style.width = '28%';
+    }
   }
   if(v==="front"){
     var frontAdult = document.getElementById('guide-f-adult');
     var frontCrest = document.getElementById('guide-f-crest');
-    if(frontAdult) frontAdult.style.top = isHoodie ? '28%' : '23%';
-    if(frontCrest) frontCrest.style.top = isHoodie ? '28%' : '23%';
+    if(frontAdult){
+      if(isHoodie){
+        frontAdult.style.top = '28%'; frontAdult.style.height = '28%';
+      } else if(isJacket){
+        frontAdult.style.top = '28%'; frontAdult.style.height = '30%';
+      } else {
+        frontAdult.style.top = '23%'; frontAdult.style.height = '33%';
+      }
+    }
+    if(frontCrest){
+      frontCrest.style.top = isHoodie ? '28%' : isJacket ? '28%' : '23%';
+    }
+    if(fyouth && isYouth){
+      fyouth.style.top = isHoodie ? '30%' : '25%';
+      fyouth.style.height = '26%'; fyouth.style.width = '28%';
+    }
   }
   // Show/hide image AND text layers per side
   document.querySelectorAll("[data-type='image'],[data-type='text']").forEach(el => {
