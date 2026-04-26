@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v1.1 -->
+<!-- v1.2 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1551,7 +1551,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v1.1</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v1.2</span>
   </div>
 </div>
 
@@ -2186,7 +2186,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v1.1</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v1.2</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2688,7 +2688,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v1.1</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v1.2</span>
   </div>
 
   <div class="studio-body">
@@ -3203,7 +3203,6 @@ footer{background:#111;padding:56px 32px 28px}
             <div class="upload-zone-sub" style="margin-top:3px">Min 1500px for best print quality</div>
           </div>
           <input type="file" id="s-file" accept="image/*" style="display:none" onchange="handleUpload(event)">
-          <div style="font-size:11px;color:#999;line-height:1.4;margin-top:8px;padding:0 4px">By uploading, you confirm you own or have permission to use this content. You are solely responsible for any copyright or trademark claims.</div>
 
           <!-- Upload preview -->
           <div id="upload-preview" style="display:none;margin-top:12px;border:1.5px solid #e8e8e8;border-radius:12px;overflow:hidden">
@@ -6010,30 +6009,91 @@ function handleUpload(e){
   e.target.value = ''; // reset so same file can be re-uploaded
 }
 
+function showUploadModal(fileName){
+  var old = document.getElementById('upload-modal');
+  if(old) old.remove();
+  var modal = document.createElement('div');
+  modal.id = 'upload-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px';
+  modal.innerHTML = ''
+    + '<div style="background:#fff;border-radius:16px;max-width:420px;width:100%;padding:28px;box-shadow:0 24px 60px rgba(0,0,0,.25);position:relative">'
+    + '<button onclick="document.getElementById(\'upload-modal\').remove()" style="position:absolute;top:12px;right:14px;background:#e8e8e8;border:none;width:28px;height:28px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#666">x</button>'
+    + '<div style="font-size:16px;font-weight:800;color:#0071ce;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Upload Files</div>'
+    + '<div style="font-size:14px;color:#333;margin-bottom:20px;line-height:1.5">Don\'t worry, we double check everything to ensure your design prints perfectly.</div>'
+    + '<div style="background:#f5f7fa;border-radius:10px;padding:14px 16px;margin-bottom:20px">'
+    + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'
+    + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
+    + '<span style="font-size:13px;font-weight:600;color:#333;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1" id="upload-modal-filename">' + fileName + '</span>'
+    + '</div>'
+    + '<div style="background:#e0e0e0;border-radius:20px;height:10px;overflow:hidden">'
+    + '<div id="upload-modal-bar" style="height:100%;background:linear-gradient(90deg,#4fc3f7,#0071ce);border-radius:20px;width:0%;transition:width .3s ease"></div>'
+    + '</div>'
+    + '<div id="upload-modal-status" style="text-align:center;font-size:13px;font-weight:600;color:#0071ce;margin-top:8px">Processing...</div>'
+    + '</div>'
+    + '<div style="border-top:1px solid #eee;padding-top:16px">'
+    + '<div style="font-size:14px;font-weight:800;color:#222;margin-bottom:6px">Copyright & Trademark Notice</div>'
+    + '<div style="font-size:12px;color:#666;line-height:1.5">You agree and confirm that you own or have the necessary rights to use the images, logos, text, and/or trademarks in your design and indemnify Hunto.</div>'
+    + '</div>'
+    + '</div>';
+  document.body.appendChild(modal);
+}
+
+function animateUploadBar(steps, onDone){
+  var bar = document.getElementById('upload-modal-bar');
+  var status = document.getElementById('upload-modal-status');
+  var i = 0;
+  function next(){
+    if(i >= steps.length){ if(onDone) onDone(); return; }
+    var step = steps[i]; i++;
+    if(bar) bar.style.width = step.pct + '%';
+    if(status) status.textContent = step.label;
+    setTimeout(next, step.dur);
+  }
+  next();
+}
+
 function processUploadedFile(f){
   if(!f.type.startsWith('image/')){ sNtf('Please upload an image file (PNG, JPG, SVG)'); return; }
   if(f.size > 15*1024*1024){ sNtf('File too large — max 15MB'); return; }
+
+  showUploadModal(f.name);
+
+  var steps = [
+    {pct:30, label:'Reading file...', dur:400},
+    {pct:60, label:'Detecting Colors', dur:500},
+    {pct:85, label:'Optimizing for print...', dur:400},
+    {pct:100, label:'Complete!', dur:300}
+  ];
+
   const r = new FileReader();
   r.onload = function(ev){
     uploadRawBase64 = ev.target.result;
     uploadProcessedBase64 = ev.target.result;
 
-    // ── Place immediately on shirt (competitor-style) ──
-    applyDesign(uploadRawBase64);
-    sState.hasDesign = true;
-    sNtf('✓ Artwork placed — use the Edit panel to adjust');
+    animateUploadBar(steps, function(){
+      // ── Place on shirt after progress completes ──
+      applyDesign(uploadRawBase64);
+      sState.hasDesign = true;
 
-    // Update upload preview in panel too
-    const prev = document.getElementById('upload-preview');
-    const prevImg = document.getElementById('upload-preview-img');
-    if(prev && prevImg){ prev.style.display='block'; prevImg.src=uploadRawBase64; }
+      // Update upload preview in panel too
+      const prev = document.getElementById('upload-preview');
+      const prevImg = document.getElementById('upload-preview-img');
+      if(prev && prevImg){ prev.style.display='block'; prevImg.src=uploadRawBase64; }
 
-    // Reset toggles
-    ['upload-rmbg','upload-single','upload-bw'].forEach(function(id){
-      const cb = document.getElementById(id);
-      if(cb) cb.checked = false;
+      // Reset toggles
+      ['upload-rmbg','upload-single','upload-bw'].forEach(function(id){
+        const cb = document.getElementById(id);
+        if(cb) cb.checked = false;
+      });
+      uploadSyncToggles();
+
+      // Close modal after a beat
+      setTimeout(function(){
+        var m = document.getElementById('upload-modal');
+        if(m) m.remove();
+        sNtf('Artwork placed — use the Edit panel to adjust');
+      }, 600);
     });
-    uploadSyncToggles();
   };
   r.readAsDataURL(f);
 }
