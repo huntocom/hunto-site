@@ -1,4 +1,21 @@
 {
+  "name": "hunto-site",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:ui": "npx playwright test --ui",
+    "test:debug": "npx playwright test --debug",
+    "test:studio-layers": "npx playwright test tests/studio-layers.spec.js",
+    "test:studio-views": "npx playwright test tests/studio-views.spec.js",
+    "test:studio-clear": "npx playwright test tests/studio-clear.spec.js",
+    "test:upload-flow": "npx playwright test tests/upload-flow.spec.js",
+    "test:checkout-flow": "npx playwright test tests/checkout-flow.spec.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  },
   "dependencies": {
     "playwright": "^1.59.1"
   }

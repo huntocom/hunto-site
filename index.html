@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v2.5 -->
+<!-- v2.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1055,6 +1055,18 @@ footer{background:#111;padding:56px 32px 28px}
 
 @media(max-width:768px){
 
+  /* Prevent iOS input zoom */
+  input, textarea, select { font-size:16px !important; }
+
+  /* Minimum touch targets */
+  .shop-card-btn { height:44px !important; font-size:14px !important; }
+  .wishlist-btn { width:44px !important; height:44px !important; }
+  .product-modal-close { width:44px !important; height:44px !important; }
+  .mob-next-btn { height:44px !important; }
+
+  /* Panel overflow fix */
+  .rsp-inner, .qsp-inner { max-width:100% !important; }
+
   /* ═══════════════════════════════════════
      HEADER — compact like RushOrderTees
   ═══════════════════════════════════════ */
@@ -1553,7 +1565,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v2.5</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v2.6</span>
   </div>
 </div>
 
@@ -2188,7 +2200,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v2.5</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v2.6</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2690,7 +2702,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v2.5</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v2.6</span>
   </div>
 
   <div class="studio-body">
@@ -4309,7 +4321,7 @@ function sRemoveProduct(idx){
   sApplyTint(); sUpdateAll();
 }
 let sView = "front";
-const sLayers = {front:[], back:[]};
+let sLayers = {front:[], back:[]};
 let layerCounter = 0;
 let activePanelId = "products";
 let studioInited = false;
@@ -4761,8 +4773,8 @@ function pdView(v){
 function initStudio(){
   // Check if this is an S&S product with real photos
   const ssColor = sState.color;
-  const ssFront = ssColor?.front || ssColor?.front;
-  const ssBack  = ssColor?.back  || ssColor?.back;
+  const ssFront = ssColor?.front || '';
+  const ssBack  = ssColor?.back  || '';
 
   // Set thumbnails
   document.getElementById("sth-f-img").src = ssFront || IMG_F;
@@ -6871,6 +6883,19 @@ function showDragGuides(el){
     }
   });
 }
+function showBoundingWarning(show){
+  var w = document.getElementById('s-bound-warn');
+  if(!w && show){
+    w = document.createElement('div');
+    w.id = 's-bound-warn';
+    w.style.cssText = 'position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:100;background:rgba(220,38,38,.9);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:8px;pointer-events:none;font-family:DM Sans,sans-serif;white-space:nowrap';
+    w.textContent = 'Design is outside print area';
+    var wrap = document.getElementById('s-shirt-wrap');
+    if(wrap) wrap.appendChild(w);
+  }
+  if(w) w.style.display = show ? 'block' : 'none';
+}
+
 function hideDragGuides(){
   document.querySelectorAll('.guide-zone').forEach(function(gz){
     gz.classList.remove('visible','outside');
@@ -8909,6 +8934,7 @@ function restoreStudioSession(){
         }
       });
       sState.hasDesign = true;
+      window._sessionRestored = true; // prevent duplicate restore from draft modal
       updateFloatPills();
       sNtf('Design restored from your last session');
     }, 500);
@@ -9680,7 +9706,7 @@ function goToCheckoutPage(){
       fetch(SERVER+'/cart/save', {method:'POST', headers:{'Content-Type':'application/json'},
         body:JSON.stringify({email:email, customerName:(document.getElementById('co2-fname')||{}).value||'',
           productName:p.name||'', productId:p.id||'', colorName:sState&&sState.color?sState.color.n:'',
-          totalUnits:orderState?orderState.totalUnits:1, estimatedTotal:orderState?orderState.grandTotal:0})
+          totalUnits:orderState?orderState.totalUnits:1, estimatedTotal:orderState?orderState.grand:0})
       }).catch(function(){});
     }
   }, 5000);
@@ -11597,13 +11623,18 @@ window.addEventListener('beforeunload', function(e){
     var snapshot = getDesignSnapshot();
     snapshot.email = localStorage.getItem('hunto_email') || '';
     localStorage.setItem('hunto_draft', JSON.stringify(snapshot));
-    e.preventDefault();
-    e.returnValue = '';
+    // Only block navigation if user is on the studio page
+    var studioPage = document.getElementById('page-studio');
+    if(studioPage && studioPage.classList.contains('active')){
+      e.preventDefault();
+      e.returnValue = '';
+    }
   }
 });
 
 // Check for saved draft on studio open
 function checkForSavedDraft(){
+  if(window._sessionRestored) return; // session restore already handled layers
   var draft = localStorage.getItem('hunto_draft');
   if(!draft) return;
   try {
@@ -11883,20 +11914,32 @@ async function renderMockupSide(side, canvasId){
   if(wrap){
     const wRect = wrap.getBoundingClientRect();
     const scaleX = size/wRect.width, scaleY = size/wRect.height;
-    const layers = wrap.querySelectorAll("[data-type='image'][data-side='"+side+"']");
+    const layers = wrap.querySelectorAll("[data-type='image'][data-side='"+side+"'],[data-type='text'][data-side='"+side+"']");
     for(const layer of layers){
       const lRect = layer.getBoundingClientRect();
       const lx = (lRect.left-wRect.left)*scaleX;
       const ly = (lRect.top-wRect.top)*scaleY;
       const lw = lRect.width*scaleX, lh = lRect.height*scaleY;
-      const layerImg = layer.querySelector('img');
-      if(layerImg?.src){
-        try {
-          const di = new Image();
-          di.crossOrigin='anonymous';
-          await new Promise(r=>{di.onload=r;di.onerror=r;di.src=layerImg.src;});
-          if(di.width){ ctx.save(); ctx.globalCompositeOperation='multiply'; ctx.drawImage(di,lx,ly,lw,lh); ctx.restore(); }
-        } catch(e){}
+      if(layer.dataset.type === 'text'){
+        // Render text layer
+        ctx.save();
+        var cs = window.getComputedStyle(layer);
+        var fSize = parseFloat(cs.fontSize) * scaleX;
+        ctx.font = (cs.fontWeight||'400') + ' ' + fSize + 'px ' + (cs.fontFamily||'DM Sans, sans-serif');
+        ctx.fillStyle = cs.color || '#111';
+        ctx.textBaseline = 'top';
+        ctx.fillText(layer.textContent, lx, ly);
+        ctx.restore();
+      } else {
+        const layerImg = layer.querySelector('img');
+        if(layerImg?.src){
+          try {
+            const di = new Image();
+            di.crossOrigin='anonymous';
+            await new Promise(r=>{di.onload=r;di.onerror=r;di.src=layerImg.src;});
+            if(di.width){ ctx.save(); ctx.globalCompositeOperation='multiply'; ctx.drawImage(di,lx,ly,lw,lh); ctx.restore(); }
+          } catch(e){}
+        }
       }
     }
     // Draw jersey template on back
@@ -11924,7 +11967,7 @@ async function placeOrder(){
   if(ipBox2 && !ipBox2.checked){ sNtf('Please confirm you have the rights to use your designs'); return; }
 
   const btn = document.getElementById('place-order-btn');
-  btn.disabled=true; btn.textContent='Submitting...';
+  if(btn){ btn.disabled=true; btn.textContent='Submitting...'; }
 
   const p = sState.product;
   const c = sState.color;
