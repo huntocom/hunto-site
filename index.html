@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v1.5 -->
+<!-- v1.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1551,7 +1551,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v1.5</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v1.6</span>
   </div>
 </div>
 
@@ -2186,7 +2186,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v1.5</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v1.6</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2688,7 +2688,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v1.5</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v1.6</span>
   </div>
 
   <div class="studio-body">
@@ -6213,23 +6213,21 @@ function addImageLayer(side, id, src){
 
   function placeLayer(natW, natH){
     const nat = (natW && natH) ? natW/natH : 1;
-    // Size layer to fit the image tightly — no wasted space
-    const maxW = Math.round(wrapW * 0.85);
-    const maxH = Math.round(wrapH * 0.65);
+    // Default size fits inside the adult print zone guide (41% x 38%, top 28%)
+    const maxW = Math.round(wrapW * 0.41);
+    const maxH = Math.round(wrapH * 0.38);
     var layerW, layerH;
     if(nat >= 1){
-      // Wide or square image — fit to max width
       layerW = maxW;
       layerH = Math.round(layerW / nat);
       if(layerH > maxH){ layerH = maxH; layerW = Math.round(layerH * nat); }
     } else {
-      // Tall/portrait image — fit to max height
       layerH = maxH;
       layerW = Math.round(layerH * nat);
       if(layerW > maxW){ layerW = maxW; layerH = Math.round(layerW / nat); }
     }
     const initLeft = Math.round((wrapW - layerW) / 2);
-    const initTop  = Math.round((wrapH - layerH) / 2 * 0.85);
+    const initTop  = Math.round(wrapH * 0.28);
     const dz = document.createElement("div");
     dz.id = id; dz.dataset.side = side; dz.dataset.type = "image";
     dz.style.cssText = "position:absolute;z-index:"+(3+layerCounter)+";width:"+layerW+"px;height:"+layerH+"px;left:"+initLeft+"px;top:"+initTop+"px;cursor:move;outline:2px dashed transparent;transition:outline-color .15s;";
@@ -8842,16 +8840,24 @@ function restoreStudioSession(){
           var id = layer.id || ('layer-' + layerCounter);
           var side = layer.side || 'front';
           sLayers[side].push({id:id, src:layer.src, type:'image'});
-          addImageLayer(side, id, layer.src);
-          // Restore position
-          var el = document.getElementById(id);
-          if(el){
-            if(layer.left) el.style.left = layer.left;
-            if(layer.top) el.style.top = layer.top;
-            if(layer.width) el.style.width = layer.width;
-            if(layer.height) el.style.height = layer.height;
-            if(layer.transform) el.style.transform = layer.transform;
-            if(side !== sView) el.style.display = 'none';
+          // Create element directly with saved dimensions — don't use addImageLayer which recalculates size
+          var wrap = document.getElementById('s-shirt-wrap');
+          if(wrap){
+            var dz = document.createElement('div');
+            dz.id = id; dz.dataset.side = side; dz.dataset.type = 'image';
+            dz.style.cssText = 'position:absolute;z-index:'+(3+layerCounter)+';cursor:move;outline:2px dashed transparent;transition:outline-color .15s;';
+            if(layer.width) dz.style.width = layer.width;
+            if(layer.height) dz.style.height = layer.height;
+            if(layer.left) dz.style.left = layer.left;
+            if(layer.top) dz.style.top = layer.top;
+            if(layer.transform) dz.style.transform = layer.transform;
+            dz.innerHTML = '<img src="'+layer.src+'" style="width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;">';
+            wrap.appendChild(dz);
+            makeLayerDraggable(dz); makeLayerResizable(dz, id); makeLayerRotatable(dz, id);
+            dz.addEventListener('click', function(e){ e.stopPropagation(); selectLayer(id); });
+            dz.addEventListener('touchend', function(e){ if(!e.target.closest('.corner-handle')){ e.stopPropagation(); selectLayer(id); } }, {passive:true});
+            addPinchResize(dz, id);
+            if(side !== sView) dz.style.display = 'none';
           }
         } else if(layer.type === 'text' && layer.text){
           layerCounter++;
