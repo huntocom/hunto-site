@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.7 -->
+<!-- v5.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1570,7 +1570,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v5.7</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v5.8</span>
   </div>
 </div>
 
@@ -2200,7 +2200,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v5.7</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v5.8</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2706,7 +2706,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v5.7</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v5.8</span>
   </div>
 
   <div class="studio-body">
@@ -4902,7 +4902,7 @@ function initStudio(){
   shirtEl.src = ssPhoto || styleImg || getShirtPhotoUrl(sState.product.id, sState.color?.n||"", "front");
   shirtEl.onerror = ()=>{ shirtEl.src = styleImg || IMG_F; };
   sUpdateAll();
-  updateGuideColors();
+  sSetView(sView || 'front'); // initialize print guides and garment photo for current product
   // Check for saved draft on studio open
   setTimeout(checkForSavedDraft, 500);
 }
