@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v2.9 -->
+<!-- v3.0 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1565,7 +1565,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v2.9</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v3.0</span>
   </div>
 </div>
 
@@ -2200,7 +2200,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v2.9</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v3.0</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2702,7 +2702,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v2.9</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v3.0</span>
   </div>
 
   <div class="studio-body">
@@ -4412,9 +4412,10 @@ async function goPDP(id){
 }
 function openStudio(id){
   if(id){
-    // Specific product requested — go straight to studio
+    // Specific product requested — clear old design and start fresh
     sState.product = PRODUCTS.find(p=>p.id===id)||PRODUCTS[0];
     sState.color   = sState.product.colors[0];
+    clearStudioLayers();
     showPage("studio");
     initStudio();
   } else {
@@ -4429,8 +4430,18 @@ function openPDPStudio(){
   sState.product = pdpState.product;
   sState.color   = pdpState.color || pdpState.product.colors[0];
   sState.view    = "front";
+  clearStudioLayers();
   showPage("studio");
   initStudio();
+}
+
+function clearStudioLayers(){
+  var wrap = document.getElementById('s-shirt-wrap');
+  if(wrap) wrap.querySelectorAll('[data-type="image"],[data-type="text"]').forEach(function(el){ el.remove(); });
+  sLayers = {front:[], back:[]};
+  sState.hasDesign = false;
+  layerCounter = 0;
+  localStorage.removeItem('hunto_studio_session');
 }
 
 // ════════════════════════════════
