@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.8 -->
+<!-- v5.9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -304,7 +304,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 /* FOOTER */
 footer{background:#111;padding:56px 32px 28px}
 .footer-inner{max-width:1100px;margin:0 auto}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:40px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
 .footer-logo{margin-bottom:12px;font-family:'Outfit',sans-serif;font-size:34px;font-weight:700;color:#fff;letter-spacing:-1.5px;line-height:1}
 .footer-tagline{font-size:14px;color:#555;line-height:1.7;max-width:280px;font-weight:400}
 .footer-col-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#444;margin-bottom:14px}
@@ -315,6 +315,39 @@ footer{background:#111;padding:56px 32px 28px}
 .footer-legal{display:flex;gap:20px}
 .footer-legal span{font-size:11px;color:#444;cursor:pointer;transition:color .15s}
 .footer-legal span:hover{color:#888}
+
+/* FOOTER PAGE MODAL */
+.fp-overlay{position:fixed;inset:0;z-index:10002;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.fp-modal{background:#fff;border-radius:16px;max-width:780px;width:100%;padding:48px 44px 56px;box-shadow:0 24px 80px rgba(0,0,0,.3);position:relative;margin:40px auto}
+.fp-close{position:absolute;top:16px;right:18px;background:none;border:none;font-size:26px;color:#999;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .15s,color .15s}
+.fp-close:hover{background:#f0f0f0;color:#333}
+.fp-title{font-size:32px;font-weight:900;color:#111;font-family:'Space Grotesk','Outfit',sans-serif;margin-bottom:8px;letter-spacing:-.5px}
+.fp-subtitle{font-size:15px;color:#888;margin-bottom:32px;line-height:1.6}
+.fp-h2{font-size:22px;font-weight:800;color:#111;font-family:'Space Grotesk',sans-serif;margin:32px 0 12px;letter-spacing:-.3px}
+.fp-h3{font-size:17px;font-weight:700;color:#222;margin:20px 0 8px}
+.fp-p{font-size:15px;color:#555;line-height:1.8;margin-bottom:14px}
+.fp-ul{margin:0 0 16px 20px;padding:0}
+.fp-ul li{font-size:15px;color:#555;line-height:1.8;margin-bottom:6px}
+.fp-card{background:#f5f7fa;border-radius:14px;padding:24px;border:1.5px solid #e8e8e8;margin-bottom:14px}
+.fp-card-title{font-size:17px;font-weight:800;color:#111;margin-bottom:8px}
+.fp-card-text{font-size:14px;color:#666;line-height:1.7}
+.fp-step-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:#0071ce;color:#fff;border-radius:50%;font-size:16px;font-weight:800;margin-right:12px;flex-shrink:0}
+.fp-step{display:flex;align-items:flex-start;margin-bottom:20px}
+.fp-step-content{flex:1}
+.fp-faq-q{background:#f9f9fb;border-radius:12px;padding:16px 20px;border:1px solid #e8e8e8;cursor:pointer;margin-bottom:10px}
+.fp-faq-q summary{font-size:15px;font-weight:700;color:#222;list-style:none}
+.fp-faq-q summary::-webkit-details-marker{display:none}
+.fp-faq-q summary::before{content:'+';display:inline-block;width:22px;font-size:18px;font-weight:700;color:#0071ce;flex-shrink:0}
+.fp-faq-q[open] summary::before{content:'\2212'}
+.fp-faq-q p{font-size:14px;color:#666;margin-top:10px;line-height:1.7;padding-left:22px}
+.fp-contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.fp-divider{border:none;border-top:1px solid #eee;margin:28px 0}
+@media(max-width:600px){
+  .fp-modal{padding:28px 20px 36px;margin:12px auto;border-radius:12px}
+  .fp-title{font-size:24px}
+  .fp-contact-grid{grid-template-columns:1fr}
+  .fp-overlay{padding:8px}
+}
 
 /* ══════════════════════════════════════════
    PRODUCT DETAIL PAGE (PDP)
@@ -1570,7 +1603,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v5.8</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v5.9</span>
   </div>
 </div>
 
@@ -2172,7 +2205,7 @@ footer{background:#111;padding:56px 32px 28px}
               <strong style="color:#ccc">Hunto</strong><br>
               4023 S West Shore Blvd<br>
               Tampa, FL 33611<br>
-              <span style="color:#a8c8e8;cursor:pointer" onclick="showAboutPage()">Contact Us</span>
+              <span style="color:#a8c8e8;cursor:pointer" onclick="showFooterPage('contact')">Contact Us</span>
             </div>
           </div>
         </div>
@@ -2186,22 +2219,22 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
         <div>
           <div class="footer-col-title">Company</div>
-          <span class="footer-link" onclick="showAboutPage()">About Hunto</span>
-          <span class="footer-link" onclick="showAboutPage()">How It Works</span>
-          <span class="footer-link" onclick="showAboutPage()">Contact Us</span>
-          <span class="footer-link" onclick="showAboutPage()">FAQ</span>
+          <span class="footer-link" onclick="showFooterPage('about')">About Hunto</span>
+          <span class="footer-link" onclick="showFooterPage('howitworks')">How It Works</span>
+          <span class="footer-link" onclick="showFooterPage('contact')">Contact Us</span>
+          <span class="footer-link" onclick="showFooterPage('faq')">FAQ</span>
         </div>
         <div>
           <div class="footer-col-title">Support</div>
-          <span class="footer-link" onclick="showAboutPage()">FAQ</span>
+          <span class="footer-link" onclick="showFooterPage('faq')">FAQ</span>
           <span class="footer-link" onclick="showWishlistPage()">Saved Items</span>
-          <span class="footer-link" onclick="showAboutPage()">Shipping Info</span>
-          <span class="footer-link" onclick="showAboutPage()">Returns</span>
+          <span class="footer-link" onclick="showFooterPage('shipping')">Shipping Info</span>
+          <span class="footer-link" onclick="showFooterPage('returns')">Returns</span>
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v5.8</span></span>
-        <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v5.9</span></span>
+        <div class="footer-legal"><span onclick="showFooterPage('privacy')">Privacy</span><span onclick="showFooterPage('terms')">Terms</span><span onclick="showFooterPage('shipping')">Shipping</span></div>
       </div>
     </div>
   </footer>
@@ -2706,7 +2739,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v5.8</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v5.9</span>
   </div>
 
   <div class="studio-body">
@@ -8311,6 +8344,177 @@ function showAboutPage(){
   closeMobileMenu();
 }
 
+// ═══════ FOOTER PAGE MODAL ═══════
+function showFooterPage(page){
+  if(typeof closeMobileMenu==='function') closeMobileMenu();
+  var existing = document.getElementById('fp-overlay');
+  if(existing) existing.remove();
+
+  var pages = {
+    about: {
+      title: 'About Hunto',
+      subtitle: 'Custom apparel, powered by AI. Made in Tampa, FL.',
+      html: '<div class="fp-p">Hunto is a custom apparel company based in Tampa, Florida, built by the team at Konstant Design. We set out to solve a simple problem: getting custom-printed clothing should be easy, affordable, and fun.</div>'
+        + '<div class="fp-p">Our AI-powered design studio lets anyone create professional-quality artwork in seconds. Just describe what you want, upload your own logo, or browse clipart. Place your design on real garments from brands like Gildan, Bella+Canvas, Comfort Colors, and Champion, then see exactly how it will look before you order.</div>'
+        + '<div class="fp-h2">In-House Printing</div>'
+        + '<div class="fp-p">Every order is printed in-house at our Tampa facility using screen printing and direct-to-garment (DTG) technology. This means vibrant, long-lasting prints with fast turnaround and complete quality control from start to finish.</div>'
+        + '<div class="fp-h2">No Minimums. Free Shipping.</div>'
+        + '<div class="fp-p">Whether you need one shirt or one thousand, we have you covered. There are no minimum order quantities, and every order ships free with full tracking included.</div>'
+        + '<div class="fp-h2">Our Mission</div>'
+        + '<div class="fp-p">We believe everyone deserves access to high-quality custom apparel without the hassle of design skills, bulk order requirements, or long wait times. Hunto combines cutting-edge AI tools with premium in-house printing to make custom clothing accessible to everyone.</div>'
+        + '<hr class="fp-divider">'
+        + '<div style="font-size:14px;color:#888;line-height:1.7"><strong style="color:#555">Hunto</strong> &middot; A Konstant Design Company<br>4023 S West Shore Blvd, Tampa, FL 33611<br><a href="mailto:orders@konstantdesign.com" style="color:#0071ce;text-decoration:none">orders@konstantdesign.com</a></div>'
+    },
+    howitworks: {
+      title: 'How It Works',
+      subtitle: 'From idea to custom apparel in 4 simple steps.',
+      html: '<div class="fp-step"><span class="fp-step-num">1</span><div class="fp-step-content"><div class="fp-h3">Browse Products</div><div class="fp-p">Explore thousands of garments from trusted brands like Gildan, Bella+Canvas, Comfort Colors, Champion, Hanes, and more. Choose from t-shirts, hoodies, long sleeves, polos, outerwear, and kids sizes. Pick your color and sizes.</div></div></div>'
+        + '<div class="fp-step"><span class="fp-step-num">2</span><div class="fp-step-content"><div class="fp-h3">Design with AI or Upload</div><div class="fp-p">Use our AI art generator to create stunning designs from a text description. Or upload your own artwork (PNG, JPG, SVG). Add custom text, browse clipart, and use our background removal tool. Drag, resize, and position everything exactly where you want it.</div></div></div>'
+        + '<div class="fp-step"><span class="fp-step-num">3</span><div class="fp-step-content"><div class="fp-h3">Review &amp; Order</div><div class="fp-p">Preview your design on the garment, choose your sizes and quantities, and check out securely. No account required. Volume discounts available for group orders.</div></div></div>'
+        + '<div class="fp-step"><span class="fp-step-num">4</span><div class="fp-step-content"><div class="fp-h3">We Print &amp; Ship</div><div class="fp-p">Your order goes straight to our in-house production facility in Tampa, FL. We print using premium screen printing and DTG technology for vibrant, wash-resistant results. Then we ship it to you with full tracking — free on every order.</div></div></div>'
+        + '<hr class="fp-divider">'
+        + '<div style="text-align:center"><button onclick="document.getElementById(\'fp-overlay\').remove();openStudio(null)" style="padding:16px 40px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:DM Sans,sans-serif">Start Designing Now</button></div>'
+    },
+    faq: {
+      title: 'Frequently Asked Questions',
+      subtitle: 'Everything you need to know about ordering custom apparel from Hunto.',
+      html: '<details class="fp-faq-q"><summary>What is the minimum order quantity?</summary><p>There is no minimum order. You can order as few as one shirt. We also offer volume discounts for larger orders — the more you order, the more you save.</p></details>'
+        + '<details class="fp-faq-q"><summary>What printing methods do you use?</summary><p>We use screen printing and direct-to-garment (DTG) printing, depending on the design and order size. Both methods produce vibrant, long-lasting prints that are soft to the touch and resistant to fading, cracking, and peeling.</p></details>'
+        + '<details class="fp-faq-q"><summary>How long does shipping take?</summary><p>All orders include free standard shipping with full tracking. Standard delivery typically arrives within 7\u201312 business days after your order is placed (including production time). Rush production is available for an additional fee if you need it sooner.</p></details>'
+        + '<details class="fp-faq-q"><summary>Can I use my own artwork?</summary><p>Yes! You can upload PNG, JPG, or SVG files directly in our design studio. We also offer AI-powered background removal to clean up your images instantly.</p></details>'
+        + '<details class="fp-faq-q"><summary>What file format should I use for my artwork?</summary><p>We recommend PNG files with a transparent background for the best results. JPG and SVG files also work well. For best print quality, use images at least 2000px wide.</p></details>'
+        + '<details class="fp-faq-q"><summary>Do you offer rush orders?</summary><p>Yes, rush production is available for an additional fee. This prioritizes your order in our production queue for faster turnaround. Select the rush option during checkout.</p></details>'
+        + '<details class="fp-faq-q"><summary>What garment brands do you carry?</summary><p>We carry thousands of styles from top brands including Gildan, Bella+Canvas, Comfort Colors, Champion, Hanes, Next Level, and many more. All garments are sourced from authorized distributors.</p></details>'
+        + '<details class="fp-faq-q"><summary>Can I order just one shirt?</summary><p>Absolutely! There are no minimums at Hunto. Order one shirt or one thousand — we print every order with the same quality and care.</p></details>'
+        + '<details class="fp-faq-q"><summary>How do I save my design?</summary><p>Use the Save button in the design studio to save your work. Your design is stored in your browser so you can come back and continue editing anytime.</p></details>'
+        + '<details class="fp-faq-q"><summary>What if I\'m not happy with my order?</summary><p>Your satisfaction matters to us. Since each item is custom printed, we cannot accept returns for change of mind. However, if there is a defect in printing or the wrong item was sent, contact us within 7 days of delivery and we will reprint your order at no cost.</p></details>'
+        + '<details class="fp-faq-q"><summary>Do you offer group or bulk orders?</summary><p>Yes! We offer volume discounts for group orders. The more you order, the bigger the discount. We also have a Group Order tool that lets you share a link with your team so everyone can pick their own size.</p></details>'
+        + '<details class="fp-faq-q"><summary>Can I print on both sides of the garment?</summary><p>Yes, our design studio supports both front and back printing. You can place different designs on each side of the garment.</p></details>'
+    },
+    shipping: {
+      title: 'Shipping Policy',
+      subtitle: 'Free standard shipping on every order. No exceptions.',
+      html: '<div class="fp-h2">Free Standard Shipping</div>'
+        + '<div class="fp-p">Every order placed on Hunto includes free standard shipping to addresses within the United States. No minimum order value required.</div>'
+        + '<div class="fp-h2">Production Time</div>'
+        + '<div class="fp-p">Since every item is custom printed to order, please allow time for production before shipping. Standard production typically takes 3\u20137 business days. Rush production is available for an additional fee.</div>'
+        + '<div class="fp-h2">Delivery Timeframes</div>'
+        + '<div class="fp-card"><div class="fp-card-title">Standard Shipping</div><div class="fp-card-text">Free on all orders. Delivery typically within 7\u201312 business days after order placement (includes production time). Full tracking included.</div></div>'
+        + '<div class="fp-card"><div class="fp-card-title">Rush Production</div><div class="fp-card-text">Available for an additional fee. Prioritizes your order in our production queue for faster turnaround. Select this option at checkout.</div></div>'
+        + '<div class="fp-h2">Order Tracking</div>'
+        + '<div class="fp-p">Every order includes a tracking number. You will receive an email with tracking information once your order has shipped.</div>'
+        + '<div class="fp-h2">Shipping Restrictions</div>'
+        + '<div class="fp-p">We currently ship within the United States only. For international shipping inquiries, please contact us at <a href="mailto:orders@konstantdesign.com" style="color:#0071ce;text-decoration:none">orders@konstantdesign.com</a>.</div>'
+    },
+    returns: {
+      title: 'Return Policy',
+      subtitle: 'Our commitment to quality and your satisfaction.',
+      html: '<div class="fp-h2">Custom Products</div>'
+        + '<div class="fp-p">Because every item is custom printed to your specifications, we are unable to accept returns or exchanges for change of mind, incorrect size selection, or design preferences. Please review your design carefully in the studio preview before placing your order.</div>'
+        + '<div class="fp-h2">Quality Guarantee</div>'
+        + '<div class="fp-p">We stand behind our work. If you receive an item with any of the following issues, we will reprint your order at no cost:</div>'
+        + '<ul class="fp-ul"><li>Defective or misprinted design</li><li>Wrong garment or color shipped</li><li>Wrong size shipped</li><li>Damaged during shipping</li><li>Significant color variation from the digital proof</li></ul>'
+        + '<div class="fp-h2">How to Report an Issue</div>'
+        + '<div class="fp-p">Contact us within <strong>7 days of delivery</strong> at <a href="mailto:orders@konstantdesign.com" style="color:#0071ce;text-decoration:none">orders@konstantdesign.com</a> with your order number and photos of the issue. We will review your claim and respond within 1\u20132 business days.</div>'
+        + '<div class="fp-h2">Reprints</div>'
+        + '<div class="fp-p">If your claim is approved, we will reprint and reship your order at no additional cost. In rare cases where a reprint is not possible, we will issue a full refund.</div>'
+        + '<div class="fp-h2">Cancellations</div>'
+        + '<div class="fp-p">Orders may be cancelled within 2 hours of placement, provided production has not yet begun. Contact us immediately at <a href="mailto:orders@konstantdesign.com" style="color:#0071ce;text-decoration:none">orders@konstantdesign.com</a> to request a cancellation.</div>'
+    },
+    privacy: {
+      title: 'Privacy Policy',
+      subtitle: 'How we collect, use, and protect your information.',
+      html: '<div class="fp-p" style="color:#888;font-size:13px">Last updated: April 2026</div>'
+        + '<div class="fp-h2">Information We Collect</div>'
+        + '<div class="fp-p">When you use Hunto, we may collect the following information:</div>'
+        + '<ul class="fp-ul"><li><strong>Personal Information:</strong> Name, email address, shipping address, and phone number when you place an order or contact us.</li><li><strong>Payment Information:</strong> Payment details are processed securely by our payment processor (Square). We do not store your full credit card number on our servers.</li><li><strong>Design Data:</strong> Designs you create in our studio may be temporarily stored to enable features like saving and restoring your work.</li><li><strong>Usage Data:</strong> We collect anonymous analytics data about how you interact with our site to improve the user experience.</li></ul>'
+        + '<div class="fp-h2">How We Use Your Information</div>'
+        + '<ul class="fp-ul"><li>To process and fulfill your orders</li><li>To communicate with you about your order status</li><li>To provide customer support</li><li>To improve our products, services, and website</li><li>To send promotional emails (only with your consent; you can unsubscribe anytime)</li></ul>'
+        + '<div class="fp-h2">Third-Party Services</div>'
+        + '<div class="fp-p">We use the following third-party services to operate our business:</div>'
+        + '<ul class="fp-ul"><li><strong>Square</strong> — Secure payment processing</li><li><strong>S&amp;S Activewear</strong> — Product catalog and garment sourcing</li><li><strong>Netlify</strong> — Website hosting</li><li><strong>Railway</strong> — Backend server hosting</li></ul>'
+        + '<div class="fp-p">These services have their own privacy policies. We only share the minimum information necessary to complete your transaction.</div>'
+        + '<div class="fp-h2">Cookies</div>'
+        + '<div class="fp-p">We use cookies and local storage to remember your preferences, save your shopping cart, and provide a better browsing experience. You can disable cookies in your browser settings, though some features may not work properly.</div>'
+        + '<div class="fp-h2">Data Security</div>'
+        + '<div class="fp-p">We implement appropriate security measures to protect your personal information. All data transmitted between your browser and our servers is encrypted using SSL/TLS. Payment information is handled entirely by Square\'s PCI-compliant infrastructure.</div>'
+        + '<div class="fp-h2">Your Rights</div>'
+        + '<div class="fp-p">You have the right to request access to, correction of, or deletion of your personal data. To exercise these rights, contact us at <a href="mailto:orders@konstantdesign.com" style="color:#0071ce;text-decoration:none">orders@konstantdesign.com</a>.</div>'
+        + '<div class="fp-h2">We Do Not Sell Your Data</div>'
+        + '<div class="fp-p">We do not sell, trade, or rent your personal information to third parties. Your data is used solely for the purposes described in this policy.</div>'
+        + '<div class="fp-h2">Changes to This Policy</div>'
+        + '<div class="fp-p">We may update this policy from time to time. Changes will be posted on this page with an updated revision date.</div>'
+        + '<hr class="fp-divider">'
+        + '<div class="fp-p">Questions? Contact us at <a href="mailto:orders@konstantdesign.com" style="color:#0071ce;text-decoration:none">orders@konstantdesign.com</a></div>'
+    },
+    terms: {
+      title: 'Terms of Service',
+      subtitle: 'The terms governing your use of Hunto.',
+      html: '<div class="fp-p" style="color:#888;font-size:13px">Last updated: April 2026</div>'
+        + '<div class="fp-h2">Acceptance of Terms</div>'
+        + '<div class="fp-p">By accessing or using Hunto (the "Site"), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Site.</div>'
+        + '<div class="fp-h2">Use of the Site</div>'
+        + '<div class="fp-p">You may use the Site to browse products, create custom designs, and place orders. You agree to provide accurate and complete information when placing orders and creating an account.</div>'
+        + '<div class="fp-h2">Intellectual Property</div>'
+        + '<div class="fp-p">By uploading artwork or designs, you represent that you have the right to use that content and that it does not infringe on any third party\'s intellectual property rights. Hunto is not responsible for verifying the ownership of uploaded designs. If you submit copyrighted, trademarked, or otherwise protected content without authorization, you assume full legal responsibility.</div>'
+        + '<div class="fp-h2">AI-Generated Content</div>'
+        + '<div class="fp-p">Designs created using our AI art generator are generated based on your text prompts. You may use AI-generated designs for personal or commercial purposes on products ordered through Hunto. We do not guarantee that AI-generated content is unique or free of resemblance to existing works.</div>'
+        + '<div class="fp-h2">Orders and Pricing</div>'
+        + '<div class="fp-p">All prices are listed in US dollars. We reserve the right to change prices at any time. Orders are subject to acceptance and availability. We may refuse or cancel any order at our discretion.</div>'
+        + '<div class="fp-h2">Custom Products</div>'
+        + '<div class="fp-p">All products are custom printed to order. Please refer to our <span style="color:#0071ce;cursor:pointer;text-decoration:underline" onclick="showFooterPage(\'returns\')">Return Policy</span> for information on returns and reprints.</div>'
+        + '<div class="fp-h2">Limitation of Liability</div>'
+        + '<div class="fp-p">To the fullest extent permitted by law, Hunto and its affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Site or any products purchased. Our total liability for any claim shall not exceed the amount you paid for the specific product giving rise to the claim.</div>'
+        + '<div class="fp-h2">Indemnification</div>'
+        + '<div class="fp-p">You agree to indemnify and hold harmless Hunto, Konstant Design LLC, and their officers, employees, and agents from any claims, liabilities, damages, or expenses arising from your use of the Site, your designs, or your violation of these Terms.</div>'
+        + '<div class="fp-h2">Governing Law</div>'
+        + '<div class="fp-p">These Terms are governed by the laws of the State of Florida, without regard to conflict of law principles. Any disputes arising under these Terms shall be resolved in the courts located in Hillsborough County, Florida.</div>'
+        + '<div class="fp-h2">Changes to Terms</div>'
+        + '<div class="fp-p">We may update these Terms at any time. Continued use of the Site after changes constitutes acceptance of the revised Terms.</div>'
+        + '<hr class="fp-divider">'
+        + '<div class="fp-p">Questions about these terms? Contact us at <a href="mailto:orders@konstantdesign.com" style="color:#0071ce;text-decoration:none">orders@konstantdesign.com</a></div>'
+    },
+    contact: {
+      title: 'Contact Us',
+      subtitle: 'We\'d love to hear from you.',
+      html: '<div class="fp-contact-grid">'
+        + '<div class="fp-card"><div class="fp-card-title">Our Location</div><div class="fp-card-text"><strong>Hunto</strong><br>A Konstant Design Company<br>4023 S West Shore Blvd<br>Tampa, FL 33611</div></div>'
+        + '<div class="fp-card"><div class="fp-card-title">Email</div><div class="fp-card-text">For orders, questions, or support:<br><a href="mailto:orders@konstantdesign.com" style="color:#0071ce;text-decoration:none;font-weight:600">orders@konstantdesign.com</a><br><br>We typically respond within 1 business day.</div></div>'
+        + '</div>'
+        + '<div class="fp-h2">Send Us a Message</div>'
+        + '<form onsubmit="submitContactForm(event);return false" style="display:flex;flex-direction:column;gap:12px;max-width:480px">'
+        + '<input id="cf-name" placeholder="Your Name *" required style="padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:15px;font-family:DM Sans,sans-serif;box-sizing:border-box">'
+        + '<input id="cf-email" type="email" placeholder="Your Email *" required style="padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:15px;font-family:DM Sans,sans-serif;box-sizing:border-box">'
+        + '<textarea id="cf-message" placeholder="How can we help? *" required rows="5" style="padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:15px;font-family:DM Sans,sans-serif;resize:vertical;box-sizing:border-box"></textarea>'
+        + '<button type="submit" id="cf-btn" style="padding:14px;background:#0071ce;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;width:180px">Send Message</button>'
+        + '<div id="cf-msg" style="display:none;padding:10px;border-radius:8px;font-size:14px;font-weight:600;text-align:center"></div>'
+        + '</form>'
+        + '<hr class="fp-divider">'
+        + '<div class="fp-h2">Business Hours</div>'
+        + '<div class="fp-p">Monday \u2013 Friday: 9:00 AM \u2013 5:00 PM EST<br>Saturday \u2013 Sunday: Closed<br><br>Online ordering is available 24/7.</div>'
+    }
+  };
+
+  var pg = pages[page];
+  if(!pg) return;
+
+  var overlay = document.createElement('div');
+  overlay.id = 'fp-overlay';
+  overlay.className = 'fp-overlay';
+  overlay.onclick = function(e){ if(e.target === overlay) overlay.remove(); };
+
+  var modal = document.createElement('div');
+  modal.className = 'fp-modal';
+  modal.innerHTML = '<button class="fp-close" onclick="document.getElementById(\'fp-overlay\').remove()" aria-label="Close">&times;</button>'
+    + '<div class="fp-title">' + pg.title + '</div>'
+    + '<div class="fp-subtitle">' + pg.subtitle + '</div>'
+    + pg.html;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  overlay.scrollTop = 0;
+}
+
 // ═══════ CONTACT FORM ═══════
 async function submitContactForm(e){
   e.preventDefault();
@@ -11986,7 +12190,7 @@ function restoreDraft(){
       el.querySelectorAll('.corner-handle').forEach(function(h){ h.remove(); });
       wrap.appendChild(el);
       if(l.type === 'image'){
-        makeLayerDraggable(el); makeLayerResizable(el, l.id);
+        makeLayerDraggable(el); makeLayerResizable(el, l.id); makeLayerRotatable(el, l.id);
         el.addEventListener('click', function(e){ e.stopPropagation(); selectLayer(l.id); });
         el.addEventListener('touchend', function(e){ if(!e.target.closest('.corner-handle')){ e.stopPropagation(); selectLayer(l.id); } }, {passive:true});
         addPinchResize(el, l.id);
@@ -12009,6 +12213,7 @@ function restoreDraft(){
 
     sState.hasDesign = true;
     updateFloatPills();
+    sSetView(sView || 'front');
     historySnapshot();
     sNtf('Design restored!');
   } catch(e){ console.warn('Restore draft failed:', e); }
