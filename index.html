@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v4.4 -->
+<!-- v4.5 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -882,9 +882,9 @@ footer{background:#111;padding:56px 32px 28px}
 .guide-zone.outside{border-color:rgba(255,80,80,.7) !important}
 .guide-zone.outside .guide-label{color:rgba(255,80,80,.8) !important}
 /* Light guides for dark garments */
-.dark-garment .guide-zone{border-color:rgba(255,255,255,.35) !important}
-.dark-garment .guide-zone .guide-label{color:rgba(255,255,255,.5) !important}
-.dark-garment .guide-zone.guide-crest{border-color:rgba(255,255,255,.35) !important}
+.dark-garment .guide-zone{border-color:rgba(255,255,255,.5) !important}
+.dark-garment .guide-zone .guide-label{color:rgba(255,255,255,.65) !important}
+.dark-garment .guide-zone.guide-crest{border-color:rgba(255,255,255,.5) !important}
 .dark-garment .guide-zone.visible{border-color:rgba(100,200,255,.6) !important}
 .dark-garment .guide-zone.visible .guide-label{color:rgba(100,200,255,.7) !important}
 .dark-garment .guide-zone.guide-crest.visible{border-color:rgba(100,255,180,.6) !important}
@@ -1574,7 +1574,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v4.4</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v4.5</span>
   </div>
 </div>
 
@@ -2204,7 +2204,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v4.4</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v4.5</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2710,7 +2710,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v4.4</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v4.5</span>
   </div>
 
   <div class="studio-body">
@@ -4880,6 +4880,7 @@ function initStudio(){
   shirtEl.src = ssPhoto || styleImg || getShirtPhotoUrl(sState.product.id, sState.color?.n||"", "front");
   shirtEl.onerror = ()=>{ shirtEl.src = styleImg || IMG_F; };
   sUpdateAll();
+  updateGuideColors();
   // Check for saved draft on studio open
   setTimeout(checkForSavedDraft, 500);
 }
