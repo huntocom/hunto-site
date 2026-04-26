@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v4.5 -->
+<!-- v4.6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -879,8 +879,6 @@ footer{background:#111;padding:56px 32px 28px}
 .guide-zone.visible .guide-label{color:rgba(0,113,206,.7) !important}
 .guide-zone.guide-crest.visible{border-color:rgba(0,180,100,.5) !important}
 .guide-zone.guide-crest.visible .guide-label{color:rgba(0,180,100,.7) !important}
-.guide-zone.outside{border-color:rgba(255,80,80,.7) !important}
-.guide-zone.outside .guide-label{color:rgba(255,80,80,.8) !important}
 /* Light guides for dark garments */
 .dark-garment .guide-zone{border-color:rgba(255,255,255,.5) !important}
 .dark-garment .guide-zone .guide-label{color:rgba(255,255,255,.65) !important}
@@ -1574,7 +1572,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v4.5</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v4.6</span>
   </div>
 </div>
 
@@ -2204,7 +2202,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v4.5</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v4.6</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2710,7 +2708,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v4.5</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v4.6</span>
   </div>
 
   <div class="studio-body">
@@ -7022,39 +7020,14 @@ function showDragGuides(el){
   var side = (el.dataset.side||sView)==='back'?'back':'front';
   var pa = document.getElementById('print-area-'+side);
   if(!pa) return;
-  // Use the inner image for bounds check, not the edit box/handles
-  var innerImg = el.querySelector('img');
-  var elRect = (innerImg || el).getBoundingClientRect();
-  // Add tolerance (8px) so outline/handles don't trigger false "outside" warnings
-  var tol = 8;
   pa.querySelectorAll('.guide-zone').forEach(function(gz){
     gz.classList.add('visible');
-    var gzRect = gz.getBoundingClientRect();
-    var outside = (elRect.left+tol)<gzRect.left||(elRect.top+tol)<gzRect.top||(elRect.right-tol)>gzRect.right||(elRect.bottom-tol)>gzRect.bottom;
-    if(gz.classList.contains('guide-adult')){
-      gz.classList.toggle('outside', outside);
-      showBoundingWarning(outside);
-    }
   });
 }
-function showBoundingWarning(show){
-  var w = document.getElementById('s-bound-warn');
-  if(!w && show){
-    w = document.createElement('div');
-    w.id = 's-bound-warn';
-    w.style.cssText = 'position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:100;background:rgba(220,38,38,.9);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:8px;pointer-events:none;font-family:DM Sans,sans-serif;white-space:nowrap';
-    w.textContent = 'Design is outside print area';
-    var wrap = document.getElementById('s-shirt-wrap');
-    if(wrap) wrap.appendChild(w);
-  }
-  if(w) w.style.display = show ? 'block' : 'none';
-}
-
 function hideDragGuides(){
   document.querySelectorAll('.guide-zone').forEach(function(gz){
-    gz.classList.remove('visible','outside');
+    gz.classList.remove('visible');
   });
-  showBoundingWarning(false);
 }
 
 function makeLayerDraggable(dz){
