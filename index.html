@@ -6184,7 +6184,7 @@ function addImageLayer(side, id, src){
     const dz = document.createElement("div");
     dz.id = id; dz.dataset.side = side; dz.dataset.type = "image";
     dz.style.cssText = "position:absolute;z-index:"+(3+layerCounter)+";width:"+layerW+"px;height:"+layerH+"px;left:"+initLeft+"px;top:"+initTop+"px;cursor:move;outline:2px dashed transparent;transition:outline-color .15s;";
-    dz.innerHTML = '<img src="'+src+'" style="width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;">';
+    dz.innerHTML = '<img src="'+src+'" style="width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;">';
     wrap.appendChild(dz);
     makeLayerDraggable(dz); makeLayerResizable(dz, id); makeLayerRotatable(dz, id);
     dz.addEventListener("click", function(e){ e.stopPropagation(); selectLayer(id); });
