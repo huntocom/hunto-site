@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3.7 -->
+<!-- v3.8 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1565,7 +1565,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v3.7</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v3.8</span>
   </div>
 </div>
 
@@ -2048,111 +2048,106 @@ footer{background:#111;padding:56px 32px 28px}
     </div>
   </div>
 
-  <!-- CUSTOMER PHOTO COLLAGE — 2 rows, mixed sizes, static -->
-  <div style="background:#fff;padding:60px 24px 40px">
+  <!-- SOCIAL PROOF — unified reviews + photo mosaic -->
+  <div style="background:#f5f7fa;padding:72px 24px 64px">
     <div style="max-width:1300px;margin:0 auto">
-      <div style="text-align:center;margin-bottom:36px">
-        <div style="font-size:13px;font-weight:700;color:#0071ce;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Real Orders. Real People.</div>
-        <h2 style="font-size:clamp(26px,3vw,40px);font-weight:700;color:#1a1a1a;letter-spacing:-.5px;font-family:'Space Grotesk',sans-serif">Our customers showing off their custom apparel</h2>
+
+      <!-- Heading -->
+      <div style="text-align:center;margin-bottom:44px">
+        <h2 style="font-size:clamp(28px,3.2vw,42px);font-weight:800;color:#1a1a1a;letter-spacing:-.5px;margin:0 0 12px;font-family:'Space Grotesk',sans-serif">Customers Love Us</h2>
+        <div style="display:inline-flex;align-items:center;gap:8px;font-size:15px;color:#555">
+          <span style="font-weight:700;color:#1a1a1a">5.0</span>
+          <span style="color:#f5a623;font-size:18px;letter-spacing:2px">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span>from 56 Google reviews</span>
+        </div>
       </div>
+
+      <!-- Photo Mosaic -->
       <style>
-        .photo-mosaic{display:grid;gap:10px}
-        .photo-mosaic img{width:100%;height:100%;object-fit:cover;border-radius:10px;transition:transform .25s,box-shadow .25s;cursor:pointer}
-        .photo-mosaic img:hover{transform:scale(1.03);box-shadow:0 8px 28px rgba(0,0,0,.18)}
-        .mosaic-row-1{grid-template-columns:2fr 1fr 1fr 1.5fr 1fr;height:240px}
-        .mosaic-row-2{grid-template-columns:1fr 1.5fr 1fr 2fr 1fr 1fr;height:220px;margin-top:10px}
+        .sp-mosaic{display:grid;gap:10px}
+        .sp-mosaic img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+        .sp-row-1{grid-template-columns:2fr 1fr 1fr 1.5fr 1fr;height:240px}
+        .sp-row-2{grid-template-columns:1fr 1.5fr 1fr 2fr 1fr 1fr;height:220px;margin-top:10px}
         @media(max-width:768px){
-          .mosaic-row-1{grid-template-columns:1fr 1fr 1fr;height:140px}
-          .mosaic-row-2{grid-template-columns:1fr 1fr 1fr;height:130px}
+          .sp-row-1{grid-template-columns:1fr 1fr 1fr;height:140px}
+          .sp-row-2{grid-template-columns:1fr 1fr 1fr;height:130px}
         }
         @media(max-width:480px){
-          .mosaic-row-1{grid-template-columns:1fr 1fr;height:120px}
-          .mosaic-row-2{grid-template-columns:1fr 1fr;height:110px}
+          .sp-row-1{grid-template-columns:1fr 1fr;height:120px}
+          .sp-row-2{grid-template-columns:1fr 1fr;height:110px}
         }
       </style>
-      <!-- Row 1: 5 images, varying widths -->
-      <div class="photo-mosaic mosaic-row-1">
-        <img src="REVIEW/review3.webp" alt="Customer work" loading="lazy">
-        <img src="REVIEW/review8.webp" alt="Customer work" loading="lazy">
-        <img src="REVIEW/review15.webp" alt="Customer work" loading="lazy">
-        <img src="REVIEW/review21.webp" alt="Customer work" loading="lazy">
-        <img src="REVIEW/review6.webp" alt="Customer work" loading="lazy">
+      <div class="sp-mosaic sp-row-1">
+        <img src="REVIEW/review3.webp" alt="Customer custom apparel order" loading="lazy">
+        <img src="REVIEW/review8.webp" alt="Customer custom apparel order" loading="lazy">
+        <img src="REVIEW/review15.webp" alt="Customer custom apparel order" loading="lazy">
+        <img src="REVIEW/review21.webp" alt="Customer custom apparel order" loading="lazy">
+        <img src="REVIEW/review6.webp" alt="Customer custom apparel order" loading="lazy">
       </div>
-      <!-- Row 2: 6 images, varying widths -->
-      <div class="photo-mosaic mosaic-row-2">
-        <img src="REVIEW/review14.webp" alt="Customer work" loading="lazy">
-        <img src="REVIEW/review9.webp" alt="Customer work" loading="lazy">
-        <img src="REVIEW/review2.webp" alt="Customer work" loading="lazy">
-        <img src="REVIEW/review18.webp" alt="Customer work" loading="lazy">
-        <img src="REVIEW/review5.webp" alt="Customer work" loading="lazy">
-        <img src="REVIEW/review12.webp" alt="Customer work" loading="lazy">
+      <div class="sp-mosaic sp-row-2">
+        <img src="REVIEW/review14.webp" alt="Customer custom apparel order" loading="lazy">
+        <img src="REVIEW/review9.webp" alt="Customer custom apparel order" loading="lazy">
+        <img src="REVIEW/review2.webp" alt="Customer custom apparel order" loading="lazy">
+        <img src="REVIEW/review18.webp" alt="Customer custom apparel order" loading="lazy">
+        <img src="REVIEW/review5.webp" alt="Customer custom apparel order" loading="lazy">
+        <img src="REVIEW/review12.webp" alt="Customer custom apparel order" loading="lazy">
       </div>
-    </div>
-  </div>
 
-  <!-- REVIEW CAROUSEL -->
-  <div class="hp-review-carousel" style="background:#f5f7fa;padding:64px 24px">
-    <div style="max-width:1300px;margin:0 auto">
-      <div style="text-align:center;margin-bottom:40px">
-        <h2 style="font-size:clamp(26px,3vw,40px);font-weight:700;color:#1a1a1a;letter-spacing:-.5px;margin-bottom:8px;font-family:'Space Grotesk',sans-serif">Customers Love Us</h2>
-        <p style="font-size:15px;color:#555;margin:0">5.0 stars from 56 Google reviews</p>
-      </div>
-      <div style="position:relative">
-        <!-- Left Arrow -->
-        <button onclick="document.getElementById('reviewTrack').scrollBy({left:-340,behavior:'smooth'})" style="position:absolute;left:-18px;top:50%;transform:translateY(-50%);z-index:2;width:48px;height:48px;border-radius:50%;border:1px solid #ddd;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;color:#333;transition:box-shadow .2s" aria-label="Previous reviews">&#8249;</button>
-        <!-- Review Track -->
-        <div id="reviewTrack" style="display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:8px 4px">
-          <!-- Review 1 -->
-          <div style="flex:0 0 calc(33.333% - 14px);min-width:280px;scroll-snap-align:start;background:#fff;border-radius:16px;border:1px solid #e8e8e8;padding:32px 28px;box-shadow:0 2px 12px rgba(0,0,0,.06)">
-            <div style="color:#f5a623;font-size:18px;margin-bottom:14px">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <p style="font-size:15px;line-height:1.6;color:#333;margin:0 0 20px 0">&ldquo;We&rsquo;ve used Hunto for our event shirts for TOPPS Lake Conroe, and they are hands down amazing to work with. They go above and beyond every time. Communication is easy, they&rsquo;re super organized, and they always make sure our shirts arrive with plenty of time before our show.&rdquo;</p>
-            <div style="font-size:15px;font-weight:700;color:#1a1a1a">Amy Winn</div>
-            <div style="font-size:13px;color:#888;margin-top:4px">Verified Google Review</div>
-          </div>
-          <!-- Review 2 -->
-          <div style="flex:0 0 calc(33.333% - 14px);min-width:280px;scroll-snap-align:start;background:#fff;border-radius:16px;border:1px solid #e8e8e8;padding:32px 28px;box-shadow:0 2px 12px rgba(0,0,0,.06)">
-            <div style="color:#f5a623;font-size:18px;margin-bottom:14px">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <p style="font-size:15px;line-height:1.6;color:#333;margin:0 0 20px 0">&ldquo;I have used several shirt places and these are the best shirts I have had made. The design team was easy to work with and they got me exactly what I wanted. The design stands out and looks and feels good on the shirts. I highly recommend using them.&rdquo;</p>
-            <div style="font-size:15px;font-weight:700;color:#1a1a1a">Matthew Risinger</div>
-            <div style="font-size:13px;color:#888;margin-top:4px">Verified Google Review</div>
-          </div>
-          <!-- Review 3 -->
-          <div style="flex:0 0 calc(33.333% - 14px);min-width:280px;scroll-snap-align:start;background:#fff;border-radius:16px;border:1px solid #e8e8e8;padding:32px 28px;box-shadow:0 2px 12px rgba(0,0,0,.06)">
-            <div style="color:#f5a623;font-size:18px;margin-bottom:14px">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <p style="font-size:15px;line-height:1.6;color:#333;margin:0 0 20px 0">&ldquo;Hunto did an excellent job on our T-shirts and hoodies. Easy process and quick responding. Highly recommended!&rdquo;</p>
-            <div style="font-size:15px;font-weight:700;color:#1a1a1a">Tyler Carter</div>
-            <div style="font-size:13px;color:#888;margin-top:4px">Verified Google Review</div>
-          </div>
-          <!-- Review 4 -->
-          <div style="flex:0 0 calc(33.333% - 14px);min-width:280px;scroll-snap-align:start;background:#fff;border-radius:16px;border:1px solid #e8e8e8;padding:32px 28px;box-shadow:0 2px 12px rgba(0,0,0,.06)">
-            <div style="color:#f5a623;font-size:18px;margin-bottom:14px">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <p style="font-size:15px;line-height:1.6;color:#333;margin:0 0 20px 0">&ldquo;Hunto has taken care of our merch needs for the last 3 years. They&rsquo;re the best!&rdquo;</p>
-            <div style="font-size:15px;font-weight:700;color:#1a1a1a">Melissa M</div>
-            <div style="font-size:13px;color:#888;margin-top:4px">Verified Google Review</div>
-          </div>
-          <!-- Review 5 -->
-          <div style="flex:0 0 calc(33.333% - 14px);min-width:280px;scroll-snap-align:start;background:#fff;border-radius:16px;border:1px solid #e8e8e8;padding:32px 28px;box-shadow:0 2px 12px rgba(0,0,0,.06)">
-            <div style="color:#f5a623;font-size:18px;margin-bottom:14px">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <p style="font-size:15px;line-height:1.6;color:#333;margin:0 0 20px 0">&ldquo;Been dealing with these guys since 2007 and they are by far the best people to deal with! Year after year they don&rsquo;t disappoint!&rdquo;</p>
-            <div style="font-size:15px;font-weight:700;color:#1a1a1a">Nick Fotiades</div>
-            <div style="font-size:13px;color:#888;margin-top:4px">Verified Google Review</div>
+      <!-- Review Cards -->
+      <style>
+        .sp-reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+        .sp-review-card{background:#fff;border-radius:16px;padding:32px 28px;border:1px solid #e8e8e8;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+        .sp-review-card .sp-stars{color:#f5a623;font-size:18px;margin-bottom:16px;letter-spacing:2px}
+        .sp-review-card .sp-text{font-size:15px;line-height:1.7;color:#333;margin:0 0 24px}
+        .sp-review-card .sp-author{display:flex;align-items:center;gap:12px}
+        .sp-review-card .sp-avatar{width:40px;height:40px;border-radius:50%;background:#0071ce;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0}
+        .sp-review-card .sp-name{font-size:15px;font-weight:700;color:#1a1a1a}
+        .sp-review-card .sp-label{font-size:13px;color:#888;margin-top:2px}
+        @media(max-width:768px){
+          .sp-reviews{grid-template-columns:1fr}
+        }
+      </style>
+      <div class="sp-reviews">
+        <!-- Amy -->
+        <div class="sp-review-card">
+          <div class="sp-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="sp-text">&ldquo;We&rsquo;ve used Hunto for our event shirts for TOPPS Lake Conroe, and they are hands down amazing to work with. They go above and beyond every time. Communication is easy, they&rsquo;re super organized, and they always make sure our shirts arrive with plenty of time before our show.&rdquo;</p>
+          <div class="sp-author">
+            <div class="sp-avatar">A</div>
+            <div>
+              <div class="sp-name">Amy Winn</div>
+              <div class="sp-label">Google Review</div>
+            </div>
           </div>
         </div>
-        <!-- Right Arrow -->
-        <button onclick="document.getElementById('reviewTrack').scrollBy({left:340,behavior:'smooth'})" style="position:absolute;right:-18px;top:50%;transform:translateY(-50%);z-index:2;width:48px;height:48px;border-radius:50%;border:1px solid #ddd;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;color:#333;transition:box-shadow .2s" aria-label="Next reviews">&#8250;</button>
+        <!-- Matthew -->
+        <div class="sp-review-card">
+          <div class="sp-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="sp-text">&ldquo;I have used several shirt places and these are the best shirts I have had made. The design team was easy to work with and they got me exactly what I wanted. The design stands out and looks and feels good on the shirts. I highly recommend using them.&rdquo;</p>
+          <div class="sp-author">
+            <div class="sp-avatar">M</div>
+            <div>
+              <div class="sp-name">Matthew Risinger</div>
+              <div class="sp-label">Google Review</div>
+            </div>
+          </div>
+        </div>
+        <!-- Tyler -->
+        <div class="sp-review-card">
+          <div class="sp-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="sp-text">&ldquo;Hunto did an excellent job on our T-shirts and hoodies. Easy process and quick responding. Highly recommended!&rdquo;</p>
+          <div class="sp-author">
+            <div class="sp-avatar">T</div>
+            <div>
+              <div class="sp-name">Tyler Carter</div>
+              <div class="sp-label">Google Review</div>
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
-  <style>
-    #reviewTrack::-webkit-scrollbar{display:none}
-    @media(max-width:768px){
-      .hp-review-carousel button[aria-label="Previous reviews"],
-      .hp-review-carousel button[aria-label="Next reviews"]{width:44px;height:44px;font-size:20px}
-      .hp-review-carousel button[aria-label="Previous reviews"]{left:-8px}
-      .hp-review-carousel button[aria-label="Next reviews"]{right:-8px}
-      #reviewTrack>div{flex:0 0 calc(100% - 16px)!important;min-width:0!important}
-    }
-  </style>
   <!-- CTA BAND -->
   <div class="cta-band">
     <h2>Your idea is one<br>prompt away.</h2>
@@ -2200,7 +2195,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v3.7</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v3.8</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2706,7 +2701,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v3.7</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v3.8</span>
   </div>
 
   <div class="studio-body">
