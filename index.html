@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5.6 -->
+<!-- v5.7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1570,7 +1570,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v5.6</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v5.7</span>
   </div>
 </div>
 
@@ -1648,8 +1648,8 @@ footer{background:#111;padding:56px 32px 28px}
       <button onclick="goShop('Fleece - Core - Crew')">Crewnecks</button>
       <button onclick="goShop('Fleece - Premium - Hood')">Premium Hoodies</button>
       <button onclick="goShop('Fleece - Premium - Crew')">Premium Crewnecks</button>
-      <button onclick="goShop('Fleece - Full Zip')">Zip Up Hoodies</button>
-      <button onclick="goShop('Fleece - Quarter')">Quarter Zip Ups</button>
+      <button onclick="goShop('Fleece','full zip')">Zip Up Hoodies</button>
+      <button onclick="goShop('Fleece','quarter zip')">Quarter Zip Ups</button>
       <div class="mega-dropdown-sep"></div>
       <button onclick="goShopGender('ladies','Fleece')">Women's Sweatshirts</button>
       <button onclick="goShopGender('youth','Fleece')">Kids Sweatshirts</button>
@@ -2200,7 +2200,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v5.6</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v5.7</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2706,7 +2706,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v5.6</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v5.7</span>
   </div>
 
   <div class="studio-body">
@@ -7948,7 +7948,7 @@ function goShopGender(gender, subcat){
   saveShopState();
 }
 
-async function goShop(category) {
+async function goShop(category, search) {
   showPage("shop");
   document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("on"));
   const genderCats = ['ladies','mens','youth','toddler'];
@@ -7957,16 +7957,15 @@ async function goShop(category) {
   if(isGender){
     shopState.gender   = category.toLowerCase();
     shopState.category = "";
-    shopState.search   = "";
+    shopState.search   = search || "";
   } else if(category === 'Safety'){
-    // S&S doesn't have a "Safety" category — search for hi-vis instead
     shopState.gender   = "";
     shopState.category = "";
     shopState.search   = "hi-vis";
   } else {
     shopState.gender   = "";
     shopState.category = category || "";
-    shopState.search   = "";
+    shopState.search   = search || "";
   }
   shopState.brand = "";
   const searchEl = document.getElementById("shop-search");
