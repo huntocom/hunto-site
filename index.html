@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v4.0 -->
+<!-- v4.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1565,7 +1565,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Free Shipping</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v4.0</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v4.1</span>
   </div>
 </div>
 
@@ -2195,7 +2195,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v4.0</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v4.1</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2701,7 +2701,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v4.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v4.1</span>
   </div>
 
   <div class="studio-body">
@@ -4745,7 +4745,7 @@ function pdPickColor(name){
   const styleImg=pdpState.product?.image||"";
   const ch=c?.h||c?.hex||"#ffffff";
   const frontImg=c?.front||c?.back||styleImg||IMG_F;
-  const backImg=c?.back||c?.front||styleImg||IMG_B;
+  const backImg=c?.back||IMG_B;
   const img=document.getElementById("pdp-img");
   const tint=document.getElementById("pdp-tint");
 
@@ -5268,12 +5268,28 @@ function sSetView(v){
   const img=document.getElementById("s-shirt");
   img.style.mixBlendMode="normal";
   img.style.opacity="1";
-  const c = sProducts[sActiveIdx]?.color || sState.color; // was missing — caused front/back to not switch
-  const ssPhoto = v==="back" ? (c?.back||c?.front) : (c?.front||c?.back);
+  const c = sProducts[sActiveIdx]?.color || sState.color;
+  // If no back photo exists, use tinted silhouette instead of misleading front photo
+  const ssPhoto = v==="back" ? (c?.back||null) : (c?.front||c?.back);
   const styleImg = sState.product?.image;
-  const photoUrl = ssPhoto || styleImg || getShirtPhotoUrl(sState.product.id, c?.n||c?.name, v);
+  const photoUrl = ssPhoto || (v==="back" ? IMG_B : null) || styleImg || getShirtPhotoUrl(sState.product.id, c?.n||c?.name, v);
   img.src = photoUrl;
-  img.onerror=()=>{ img.src = styleImg || (v==="back"?IMG_B:IMG_F); };
+  img.onerror=()=>{ img.src = v==="back"?IMG_B:IMG_F; };
+  // Show notice when back photo is unavailable
+  var backNotice = document.getElementById('s-back-notice');
+  if(v==="back" && !c?.back){
+    if(!backNotice){
+      backNotice = document.createElement('div');
+      backNotice.id = 's-back-notice';
+      backNotice.style.cssText = 'position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:5;background:rgba(0,0,0,.6);color:#fff;font-size:13px;font-weight:600;padding:6px 16px;border-radius:8px;pointer-events:none;font-family:DM Sans,sans-serif;white-space:nowrap';
+      backNotice.textContent = 'Back photo unavailable — design placement still works';
+      var wrap = document.getElementById('s-shirt-wrap');
+      if(wrap) wrap.appendChild(backNotice);
+    }
+    backNotice.style.display = 'block';
+  } else if(backNotice){
+    backNotice.style.display = 'none';
+  }
   // Jersey Mode: sync side dropdown and re-render if needed
   if(jerseyMode){
     const sideEl = document.getElementById('nn-side');
