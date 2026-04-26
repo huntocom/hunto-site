@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v1.0 -->
+<!-- v1.1 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1551,7 +1551,7 @@ footer{background:#111;padding:56px 32px 28px}
     <span>No Minimums</span>
     <span>·</span>
     <span>Ships in 48hrs</span>
-    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v1.0</span>
+    <span style="margin-left:8px;color:#999;font-size:11px;font-weight:700">v1.1</span>
   </div>
 </div>
 
@@ -2186,7 +2186,7 @@ footer{background:#111;padding:56px 32px 28px}
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v1.0</span></span>
+        <span class="footer-copy">© 2026 Hunto · Tampa, FL · <span style="color:#555;font-size:11px">v1.1</span></span>
         <div class="footer-legal"><span>Privacy</span><span>Terms</span><span>Shipping</span></div>
       </div>
     </div>
@@ -2688,7 +2688,7 @@ footer{background:#111;padding:56px 32px 28px}
       </button>
       <button class="mob-next-btn" onclick="goStep2()">Next →</button>
     </div>
-    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v1.0</span>
+    <span style="font-size:10px;color:#999;font-weight:700;margin-left:4px" class="mobile-version-tag">v1.1</span>
   </div>
 
   <div class="studio-body">
@@ -2976,6 +2976,7 @@ footer{background:#111;padding:56px 32px 28px}
               <span class="ai-chip" onclick="setP('vintage american eagle bold')">Eagle</span>
             </div>
             <button class="ai-gen-btn" id="ai-gen-btn" onclick="aiGen()">✦ Generate</button>
+            <div style="font-size:11px;color:#999;line-height:1.4;margin-top:8px;text-align:center">Do not generate copyrighted or trademarked characters, logos, or designs. You are responsible for ensuring your design does not infringe on others' intellectual property.</div>
 
             <!-- Results grid -->
             <div id="ai-results" style="display:none;margin-top:16px">
@@ -3202,6 +3203,7 @@ footer{background:#111;padding:56px 32px 28px}
             <div class="upload-zone-sub" style="margin-top:3px">Min 1500px for best print quality</div>
           </div>
           <input type="file" id="s-file" accept="image/*" style="display:none" onchange="handleUpload(event)">
+          <div style="font-size:11px;color:#999;line-height:1.4;margin-top:8px;padding:0 4px">By uploading, you confirm you own or have permission to use this content. You are solely responsible for any copyright or trademark claims.</div>
 
           <!-- Upload preview -->
           <div id="upload-preview" style="display:none;margin-top:12px;border:1.5px solid #e8e8e8;border-radius:12px;overflow:hidden">
@@ -4114,6 +4116,12 @@ footer{background:#111;padding:56px 32px 28px}
             <!-- Populated by JS -->
           </div>
         </div>
+
+        <!-- IP Disclaimer Checkbox -->
+        <label style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;cursor:pointer;padding:12px;background:#f8f8f8;border-radius:10px;border:1.5px solid #e8e8e8">
+          <input type="checkbox" id="co2-ip-agree" style="margin-top:2px;width:18px;height:18px;flex-shrink:0;accent-color:#0071ce;cursor:pointer">
+          <span style="font-size:12px;color:#555;line-height:1.5">I confirm that I own or have permission to use all designs in this order. I understand that hunto.com is not responsible for any copyright or trademark infringement, and I accept full responsibility for the content of my order.</span>
+        </label>
 
         <!-- Place Order Button -->
         <button class="co-submit" onclick="submitCheckoutOrder()" id="co2-submit-btn">PLACE ORDER →</button>
@@ -9881,6 +9889,8 @@ async function submitCheckoutOrder(){
   if(!fname.trim()||!lname.trim()){ sNtf('Please enter your name'); return; }
   if(!address.trim()){ sNtf('Please enter your address'); return; }
   if(!city.trim()||!state||!zip.trim()){ sNtf('Please complete your address'); return; }
+  var ipBox = document.getElementById('co2-ip-agree');
+  if(ipBox && !ipBox.checked){ sNtf('Please confirm you have the rights to use your designs'); return; }
 
   var btn = document.getElementById('co2-submit-btn');
   var btn2 = document.getElementById('co2-submit');
@@ -11807,6 +11817,8 @@ async function placeOrder(){
   const name = document.getElementById('order-name')?.value?.trim();
   const email = document.getElementById('order-email')?.value?.trim();
   if(!name||!email){ alert('Please enter your name and email address.'); return; }
+  var ipBox2 = document.getElementById('order-ip-agree');
+  if(ipBox2 && !ipBox2.checked){ sNtf('Please confirm you have the rights to use your designs'); return; }
 
   const btn = document.getElementById('place-order-btn');
   btn.disabled=true; btn.textContent='Submitting...';
@@ -12056,6 +12068,10 @@ window.addEventListener('load', updateDeliveryDates);
       </div>
 
       <!-- Submit -->
+      <label style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;cursor:pointer;padding:12px;background:#f8f8f8;border-radius:10px;border:1.5px solid #e8e8e8">
+        <input type="checkbox" id="order-ip-agree" style="margin-top:2px;width:18px;height:18px;flex-shrink:0;accent-color:#0071ce;cursor:pointer">
+        <span style="font-size:12px;color:#555;line-height:1.5">I confirm that I own or have permission to use all designs in this order. I understand that hunto.com is not responsible for any copyright or trademark infringement, and I accept full responsibility for the content of my order.</span>
+      </label>
       <button id="place-order-btn" onclick="placeOrder()" style="width:100%;height:56px;background:#0071ce;color:#fff;border:none;border-radius:16px;font-size:17px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 16px rgba(0,113,206,.3);transition:all .2s">
         Place Order →
       </button>
