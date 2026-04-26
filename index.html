@@ -11761,9 +11761,12 @@ async function renderMockups(){
 async function renderMockupSide(side, canvasId){
   const canvas = document.getElementById(canvasId);
   if(!canvas) return;
-  const size = 500;
-  canvas.width = size; canvas.height = size;
+  const size = 1024;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = size * dpr; canvas.height = size * dpr;
+  canvas.style.width = '100%';
   const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
   ctx.fillStyle='#f5f7fa'; ctx.fillRect(0,0,size,size);
 
   // Draw shirt image
@@ -11807,15 +11810,15 @@ async function renderMockupSide(side, canvasId){
       const font = document.getElementById('nn-font')?.value||"'Bebas Neue',sans-serif";
       ctx.textAlign='center';
       ctx.fillStyle = nnColor||'#111111';
-      ctx.font = `900 80px ${font}`;
+      ctx.font = `900 164px ${font}`;
       ctx.fillText('NAME', size/2, size*0.35);
-      ctx.font = `900 180px ${font}`;
+      ctx.font = `900 368px ${font}`;
       ctx.fillText('00', size/2, size*0.72);
     }
   }
 
-  // Store as base64 for order submission
-  orderState[side+'Render'] = canvas.toDataURL('image/jpeg', 0.85);
+  // Store as base64 for order submission — PNG for crisp quality
+  orderState[side+'Render'] = canvas.toDataURL('image/png');
 }
 
 // ── Place Order ────────────────────────────────────────
